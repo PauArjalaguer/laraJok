@@ -104,6 +104,8 @@ class Matches extends Model
             ->select('seasons.seasonName','idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2', 'localResult', 'visitorResult')
             // ->where('idSeason', 135)
             ->where('idGroup', $idGroup)
+          //  ->orderBy('idRound', 'asc')
+           ->orderByRaw('CONVERT(idRound, SIGNED) asc')
             ->orderBy('matchDate', 'asc')
             ->orderBy('matchHour', 'asc')
 

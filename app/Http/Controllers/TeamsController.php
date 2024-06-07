@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 class TeamsController extends Controller
 {
     public static function teamFormat($string){
+
         $string = str_replace("PHC","",$string);
         $string = str_replace("ES MOU","",$string);
         $string = str_replace("CLUB HOQUEI","CH",$string);
@@ -16,6 +17,7 @@ class TeamsController extends Controller
         $string = str_replace("PHC","",$string);
         $string = str_replace("CLUB PATIN","CP",$string);
         $string = str_replace("CLUB ESPORTIU OLESA","CLUB OLESA",$string);
+        $string= ucwords(mb_strtolower($string));
         return $string;
     }
 }

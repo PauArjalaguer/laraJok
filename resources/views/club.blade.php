@@ -21,7 +21,7 @@
                                      p-5 capitalize flex  ">
             <div class="w-full">
                 <!--  <Link href={`/equip/${team.idTeam}/${encodeURIComponent(team.teamName)}`}> {team.teamName.toLowerCase()} {team.categoryName}</Link> -->
-                <a href="/equip/{{$team->idTeam}}/{{urlencode($team->teamName)}}">{{mb_strtolower($team->teamName)}} {{$team->categoryName}} </a>
+                <a href="/equip/{{$team->idTeam}}/{{urlencode($team->teamName)}}">{{App\Http\Controllers\TeamsController::teamFormat($team->teamName)}} {{$team->categoryName}} </a>
             </div>
 
         </div>

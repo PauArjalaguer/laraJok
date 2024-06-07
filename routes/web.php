@@ -9,7 +9,7 @@ use App\Models\Merchandisings;
 use App\Models\Teams;
 use App\Models\Players;
 use App\Models\Phases;
-
+use App\Models\Classifications;
 
 Route::get('/', function () {
     return view(
@@ -63,7 +63,25 @@ Route::get('/jugador/{id}/{label}', function ($id) {
             'playerMatchesList' => Matches::matchesListFromIdPlayer($id),
             'merchandisingList' => Merchandisings::all(),
             'playerStats' => Players::playerStats($id),
-          //  'seasonsList'=>Leagues::select('seasons.idSeason','seasons.seasonName')->join('seasons','seasons.idSeason',"=",'seasons.idSeason')->distinct()->get(),
+
+        ]
+    );
+});
+
+
+Route::get('/competicio/{id}/{label}', function ($id) {
+    return view(
+        'competicio',
+        [
+            'leaguesList' => Leagues::leaguesList(),
+            'clubsList' => Clubs::clubsList(),
+            'merchandisingList' => Merchandisings::all(),
+            'matchesList' => Matches::matchesListFromIdLeague($id),
+            'classification' => Classifications::join('teams', 'teams.idTeam', '=', 'classifications.idTeam')->where('idGroup', $id)->orderBy('points', 'desc')->orderBy('position', 'asc')->get(),
+            'bestGoalsMade' => Classifications::join('teams', 'teams.idTeam', '=', 'classifications.idTeam')->join('clubs as club', 'club.idClub', 'teams.idClub')->where('idGroup', $id)->select('teamName', 'goalsMade', 'clubImage', 'teams.idTeam')->orderBy('goalsMade', 'desc')->limit(1)->get(),
+            'leastGoalsReceived' => Classifications::join('teams', 'teams.idTeam', '=', 'classifications.idTeam')->join('clubs as club', 'club.idClub', 'teams.idClub')->where('idGroup', $id)->select('teamName', 'goalsReceived', 'clubImage', 'teams.idTeam')->orderBy('goalsReceived', 'asc', 'clubImage')->limit(1)->get(),
+
+
         ]
     );
 });
