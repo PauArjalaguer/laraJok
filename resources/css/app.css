@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.navLogo{
+    font-family: "Comfortaa", sans-serif;
+}
