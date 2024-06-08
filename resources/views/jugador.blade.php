@@ -36,7 +36,7 @@
             $counter++;
             @endphp
             @endforeach
-           
+
         </div>
         <div id="season0">
             @php
@@ -51,7 +51,8 @@
             @endif
             <div class="mb-2 shadow-md  shadow-slate-700">
                 <div class="bg-slate-700 text-center w-full  border-[1px] border-b-[0px] border-slate-500  ">
-                    <span class="text-white font-bold text-xs ">{{$match->leagueName}} | {{$match->seasonName}}</span>
+                    <a class="text-white font-bold text-xs" href="/competicio/{{$match->idGroup}}/{{urlencode($match->leagueName)}}">{{$match->leagueName}} | {{$match->seasonName}}</a>
+
                 </div>
                 <div class="bg-white w-full h-full  border-solid   hover:bg-slate-50 transition-all   flex text-sm items-center">
                     <div class="p-4 w-5/12 text-left text-xs md:text-sm ">
@@ -61,7 +62,7 @@
                     <div class="p-4 w-2/12 text-center bg-slate-400 text-gray-800   h-full">
                         <span class="text-[10px] lg:text-sm">{{ \Carbon\Carbon::parse($match->matchDate)->format('d-m')}} {{ \Carbon\Carbon::parse($match->matchHour)->format('H:i')}}</span>
                         <br>
-                        <span class="hidden md:block w-full text-[10px] lg:text-sm">Jornada {{$match->idRound}}</span>
+                        <span class="hidden md:block w-full text-[10px] lg:text-sm"> {{strlen($match->idRound)>2 ? '' : 'Jornada ' }} {{$match->idRound}}</span>
                         <span class="text-white font-bold md:text-lg">{{$match->localResult}} - {{$match->visitorResult}}</span>
                     </div>
                     <div class="p-4 w-5/12 text-right  text-xs md:text-sm">
@@ -83,7 +84,7 @@
         <div class="w-full flex justify-center  ">
             <a href="/jugador/{{$playerInfo[0]->idPlayer}}/{{urlencode($playerInfo[0]->playerName)}}">
                 <!-- <img class='p-10 ' src='http://ronaldmottram.co.nz/wp-content/uploads/2019/01/default-user-icon-8-300x300.jpg' /> -->
-                 <img class='p-10' src="http://clubolesapati.cat/images/dynamic/playersImages/{{$playerInfo[0]->idPlayer}}.jpg" onerror="this.onerror=null;this.src='http://ronaldmottram.co.nz/wp-content/uploads/2019/01/default-user-icon-8-300x300.jpg';" /> 
+                <img class='p-10' src="http://clubolesapati.cat/images/dynamic/playersImages/{{$playerInfo[0]->idPlayer}}.jpg" onerror="this.onerror=null;this.src='http://ronaldmottram.co.nz/wp-content/uploads/2019/01/default-user-icon-8-300x300.jpg';" />
             </a>
         </div>
         <div>

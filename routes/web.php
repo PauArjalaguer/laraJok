@@ -33,9 +33,10 @@ Route::get('/equip/{id}/{label}', function ($id) {
                 $q->from('matches')->select('idGroup')->where('idLocal', '=', $id)->orwhere('idVisitor',  $id)->toSql();
             })->orderBy('startDate', 'desc')->get(),
             'teamInfo' => Teams::join('clubs', 'clubs.idClub', '=', 'teams.idClub')->join('categories', 'categories.idCategory', '=', 'teams.idCategory')->where('idTeam', $id)->get(),
-            'playersList' => Players::distinct("playerName")->select('players.idPlayer', 'playerName')->join("player_match", "player_match.idPlayer", "=", "players.idPlayer")->where('idTeam', $id)->whereIn('player_match.idMatch', function ($q) use ($id) {
-                $q->from('matches')->select('idMatch')->where('idLocal', '=', $id)->orwhere('idVisitor',  $id)->toSql();
-            })->get()
+            'playersList' => Players::distinct("playerName")->select('players.idPlayer', 'playerName')->join("player_match", "player_match.idPlayer", "=", "players.idPlayer")
+                ->where('idTeam', $id)->whereIn('player_match.idMatch', function ($q) use ($id) {
+                    $q->from('matches')->select('idMatch')->where('idLocal', '=', $id)->orwhere('idVisitor',  $id)->toSql();
+                })->get()
         ]
     );
 });
@@ -46,7 +47,8 @@ Route::get('/club/{id}/{label}', function ($id) {
         [
             'leaguesList' => Leagues::leaguesList(),
             'clubsList' => Clubs::clubsList(),
-            'teamsList' => Teams::join('categories', 'categories.idCategory', '=', 'teams.idCategory')->join('seasons', 'teams.idSeason', '=', 'seasons.idSeason')->where('idClub', $id)->orderby('seasonName', 'desc')->orderby('categories.idCategory', 'asc')->get(),
+            'teamsList' => Teams::join('categories', 'categories.idCategory', '=', 'teams.idCategory')->join('seasons', 'teams.idSeason', '=', 'seasons.idSeason')
+            ->where('idClub', $id)->orderby('seasonName', 'desc')->orderby('categories.idCategory', 'asc')->orderby('teams.teamName', 'asc')->get(),
             'clubInfo' => Clubs::where('idClub', $id)->get(),
             'merchandisingList' => Merchandisings::all(),
         ]
