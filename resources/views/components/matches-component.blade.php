@@ -7,7 +7,7 @@
              <img class="hidden md:inline w-2/12  max-h-12 max-w-12 mx-2" src={{$matchArray->clubImage1}}>
              <a href="/equip/{{$matchArray->idLocal}}/{{urlencode($matchArray->localTeam)}}">{{App\Http\Controllers\TeamsController::teamFormat($matchArray->localTeam)}}</a>
          </div>
-         <div class="p-4 w-2/12 text-center bg-slate-400 text-gray-800   h-full">
+         <div class="py-4 px-2 w-2/12 text-center bg-slate-400 text-gray-800   h-full">
              <span class="text-[10px] lg:text-sm">{{ \Carbon\Carbon::parse($matchArray->matchDate)->format('d-m')}} {{ \Carbon\Carbon::parse($matchArray->matchHour)->format('H:i')}}</span>
              <br>
              <span class="hidden md:block w-full text-[10px] lg:text-sm"> {{strlen($matchArray->idRound)>2 ? '' : 'Jornada ' }} {{$matchArray->idRound}}</span>

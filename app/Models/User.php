@@ -48,7 +48,7 @@ class User extends Authenticatable
 
     public static function updateUserSavedData($idItem, $category)
     {
-        $idUser=  Auth::user() ? Auth::user()->id : 0;
+        $idUser =  Auth::user() ? Auth::user()->id : 0;
         $count = DB::table('usersaved')
             ->where('idUser', $idUser)
             ->where('category', $category)
@@ -68,14 +68,28 @@ class User extends Authenticatable
         }
     }
 
-    public static function userSavedData(){
-       
-        $idUser=  Auth::user() ? Auth::user()->id : 0;
-       
-        $results = DB::table('usersaved')->where('idUser',$idUser)
-        ->leftJoin('phases','usersaved.idItem','phases.idGroup')
-        ->leftJoin('teams','usersaved.idItem','teams.idTeam')
-        ->leftJoin('players','usersaved.idItem','players.idPlayer')->get();
+    public static function userSavedData()
+    {
+
+        $idUser =  Auth::user() ? Auth::user()->id : 0;
+
+        $results = DB::table('usersaved')->where('idUser', $idUser)
+            ->leftJoin('phases', 'usersaved.idItem', 'phases.idGroup')
+            ->leftJoin('teams', 'usersaved.idItem', 'teams.idTeam')
+            ->leftJoin('clubs', 'usersaved.idItem', 'clubs.idClub')
+            ->leftJoin('players', 'usersaved.idItem', 'players.idPlayer')->get();
         return $results;
+    }
+
+    public static function checkIfSaved($category, $idItem)
+    {
+        $idUser =  Auth::user() ? Auth::user()->id : 0;
+        $count = DB::table('usersaved')
+            ->where('idUser', $idUser)
+            ->where('category', $category)
+            ->where('idItem', $idItem)
+            ->count();
+
+            return $count;
     }
 }

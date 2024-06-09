@@ -14,7 +14,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-   
     return view(
         'main',
         [
@@ -29,8 +28,8 @@ Route::get('/', function () {
 
 Route::get(
     '/desa/{item}/{id}',
-    function ($item,$id) {
-       
+    function ($item, $id) {
+
         User::updateUserSavedData($id, $item);
         return redirect('/');
     }
@@ -50,7 +49,8 @@ Route::get('/equip/{id}/{label}', function ($id) {
             'playersList' => Players::distinct("playerName")->select('players.idPlayer', 'playerName')->join("player_match", "player_match.idPlayer", "=", "players.idPlayer")
                 ->where('idTeam', $id)->whereIn('player_match.idMatch', function ($q) use ($id) {
                     $q->from('matches')->select('idMatch')->where('idLocal', '=', $id)->orwhere('idVisitor',  $id)->toSql();
-                })->get()
+                })->get(),
+            'checkIfSaved' => User::checkIfSaved('equip', $id)
         ]
     );
 });
@@ -67,6 +67,7 @@ Route::get('/club/{id}/{label}', function ($id) {
                 ->where('idClub', $id)->orderby('seasonName', 'desc')->orderby('categories.idCategory', 'asc')->orderby('teams.teamName', 'asc')->get(),
             'clubInfo' => Clubs::where('idClub', $id)->get(),
             'merchandisingList' => Merchandisings::all(),
+            'checkIfSaved'=>User::checkIfSaved('club',$id)
         ]
     );
 });
@@ -81,7 +82,8 @@ Route::get('/jugador/{id}/{label}', function ($id) {
             'playerMatchesList' => Matches::matchesListFromIdPlayer($id),
             'merchandisingList' => Merchandisings::all(),
             'playerStats' => Players::playerStats($id),
-
+            'checkIfSaved' => User::checkIfSaved('jugador', $id),
+            
         ]
     );
 });
@@ -99,7 +101,8 @@ Route::get('/competicio/{id}/{label}', function ($id) {
             'bestGoalsMade' => Classifications::join('teams', 'teams.idTeam', '=', 'classifications.idTeam')->join('clubs as club', 'club.idClub', 'teams.idClub')->where('idGroup', $id)->select('teamName', 'goalsMade', 'clubImage', 'teams.idTeam')->orderBy('goalsMade', 'desc')->limit(1)->get(),
             'leastGoalsReceived' => Classifications::join('teams', 'teams.idTeam', '=', 'classifications.idTeam')->join('clubs as club', 'club.idClub', 'teams.idClub')->where('idGroup', $id)->select('teamName', 'goalsReceived', 'clubImage', 'teams.idTeam')->orderBy('goalsReceived', 'asc', 'clubImage')->limit(1)->get(),
             'maxGoalsPerLeague' => Leagues::maxGoalsPerLeague($id),
-            'totalPlayed' => Leagues::totalPlayed($id)
+            'totalPlayed' => Leagues::totalPlayed($id),
+            'checkIfSaved'=>User::checkIfSaved('competicio',$id)
 
 
         ]
@@ -109,6 +112,7 @@ Route::get('/competicio/{id}/{label}', function ($id) {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
+   // return redirect()->route('main');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -116,5 +120,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/logout', function () {
+    Auth::logout();
+    return redirect()->route('main');
+})->name('logout');
 
 require __DIR__ . '/auth.php';
