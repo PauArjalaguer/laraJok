@@ -8,19 +8,30 @@
             leagueContainer[i].style.display = 'none';
             leagueButton[i].style.backgroundColor = 'rgb(51 65 85 / 1)';
         }
-      
+
         document.getElementById("league_" + league).style.display = "block";
         document.getElementById(league + "_button").style.backgroundColor = "rgb(08 23 43 / 1)";
 
     }
 </script>
+
 <div class="w-full text-slate-700 text-xl my-4 font-bold pb-2 border-b border-slate-400">
-    <svg class="inline w-6 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+    <!--  <svg class="inline w-6 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
-    </svg>
+    </svg> -->
+    <a href="/desa/competicio/{{$matchesList[0]->idGroup}}"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline w-6 hover:text-slate-500 cursor-pointer">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+        </svg>
+    </a>
     {{$matchesList[0]->leagueName}}
 </div>
+
+<div class="bg-slate-700 w-full my-2">
+    <div class="bg-slate-500 w-[{{$totalPlayed['percentage_played']}}%] py-2 px-6 font-bold text-white">{{$totalPlayed['percentage_played']}} % jugat</div>
+
+</div>
 <div class='w-full lg:flex  '>
+
     <div class='{{ count($classification)>0  ?  "w-full lg:w-1/2  lg:pr-2 mb-2" : "hidden"}}'>
         <div class='bg-slate-700 w-full  border-solid border-[1px]  border-b-[0px]  border-slate-400 shadow-md    transition-all shadow-slate-100 flex text-white'>
             <div class='p-4 w-1/12 text-center '>&nbsp;</div>
@@ -69,11 +80,22 @@
                     <br />{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->goalsReceived : ''}} gols
                 </div>
             </div>
+            <div class="font-bold bg-slate-700 p-2 text-white border-[1px] border-b-[0px] border-slate-500 mt-2 shadow-md shadow-slate-700">Golejadors </div>
+            @foreach($maxGoalsPerLeague as $player)
+            <div class='bg-white w-full  border-solid border-t-[1px] border-slate-400 shadow-md  hover:bg-slate-50 transition-all shadow-slate-700 flex'>
+
+                <div class='p-2 md:p-4 w-11/12 border-r-[1px] text-left  text-xs md:text-sm '>
+                    <a href="/jugador/{{$player->idPlayer}}/{{urlencode($player->playerName)}}">{{App\Http\Controllers\TeamsController::teamFormat($player->playerName)}}</a>
+                </div>
+                <div class='p-2 md:p-4 w-1/12 text-center border-r-[1px] text-xs md:text-sm '>{{$player->goals}}</div>
+
+            </div>
+            @endforeach
         </div>
 
     </div>
 
-    <div class='{{ count($classification)>0  ?   "w-full lg:w-1/2  lg:pr-2 " : "w-full" }}'>
+    <div class='{{ count($classification)>0  ?   "w-full lg:w-1/2  lg:pl-2 " : "w-full" }}'>
         <div class='flex justify-stretch flex-wrap'>
             @php
             $currentRound=0;
@@ -109,27 +131,7 @@
         <div id=league_{{str_replace(" ","",$match->idRound)}} class='leagueContainer @if ($counter!=1) hidden @endif'>
             <div class='block rounded-t-xl my-2 text-slate-700 font-bold hidden'>{{$match->seasonName}}</div>
             @endif
-            <div class="mb-2 shadow-md  shadow-slate-700 mt-2">
-                <div class="bg-slate-700 text-center w-full  border-[1px] border-b-[0px] border-slate-500  ">
-                    <a class="text-white font-bold text-xs" href="/competicio/{{$match->idGroup}}/{{urlencode($match->leagueName)}}">{{$match->leagueName}} | {{$match->seasonName}}</a>
-                </div>
-                <div class="bg-white w-full h-full  border-solid   hover:bg-slate-50 transition-all   flex text-sm items-center">
-                    <div class="p-4 w-5/12 text-left text-xs md:text-sm ">
-                        <img class="hidden md:inline w-2/12  max-h-12 max-w-12 mx-2" src={{$match->clubImage1}}>
-                        <a href="/equip/{{$match->idLocal}}/{{urlencode($match->localTeam)}}">{{App\Http\Controllers\TeamsController::teamFormat($match->localTeam)}}</a>
-                    </div>
-                    <div class="p-4 w-2/12 text-center bg-slate-400 text-gray-800   h-full">
-                        <span class="text-[10px] lg:text-sm">{{ \Carbon\Carbon::parse($match->matchDate)->format('d-m')}} {{ \Carbon\Carbon::parse($match->matchHour)->format('H:i')}}</span>
-                        <br>
-                        <span class="hidden md:block w-full text-[10px] lg:text-sm"> {{strlen($match->idRound)>2 ? '' : 'Jornada ' }} {{$match->idRound}}</span>
-                        <span class="text-white font-bold md:text-lg">{{$match->localResult}} - {{$match->visitorResult}}</span>
-                    </div>
-                    <div class="p-4 w-5/12 text-right  text-xs md:text-sm">
-                        <a href="/equip/{{$match->idVisitor}}/{{urlencode($match->visitorTeam)}}">{{App\Http\Controllers\TeamsController::teamFormat($match->visitorTeam)}}</a>
-                        <img class="hidden md:inline w-2/12  max-h-12 max-w-12  mx-2" src={{$match->clubImage2}}>
-                    </div>
-                </div>
-            </div>
+            <x-matches-component :matchArray="$match" />
             @php
             $currentRound=$match->idRound;
             $counter++;
@@ -138,6 +140,8 @@
 
             @endforeach
         </div>
+
+
         <div class="clear-both"></div>
     </div>
 </div>

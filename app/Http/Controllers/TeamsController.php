@@ -17,7 +17,9 @@ class TeamsController extends Controller
         $string = str_replace("PHC","",$string);
         $string = str_replace("CLUB PATIN","CP",$string);
         $string = str_replace("CLUB ESPORTIU OLESA","CLUB OLESA",$string);
-        $string= ucwords(mb_strtolower($string));
+        $string = str_replace("PREVINTEGRAL","",$string);
+      
+        $string=  mb_convert_case(mb_strtolower($string),MB_CASE_TITLE);
         return $string;
     }
 }

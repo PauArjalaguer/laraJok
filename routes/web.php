@@ -10,20 +10,34 @@ use App\Models\Teams;
 use App\Models\Players;
 use App\Models\Phases;
 use App\Models\Classifications;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
+   
     return view(
         'main',
         [
             'clubsList' => Clubs::clubsList(), 'leaguesList' => Leagues::leaguesList(),
             'matchesListNext' => Matches::matchesListNext(),
             'matchesListLastWithResults' => Matches::matchesListLastWithResults(),
-            'merchandisingList' => Merchandisings::inRandomOrder()->get()
+            'merchandisingList' => Merchandisings::inRandomOrder()->get(),
+            'userSavedData' => User::userSavedData()
         ]
     );
-});
+})->name("main");
+
+Route::get(
+    '/desa/{item}/{id}',
+    function ($item,$id) {
+       
+        User::updateUserSavedData($id, $item);
+        return redirect('/');
+    }
+)->middleware(['auth', 'verified']);
 
 Route::get('/equip/{id}/{label}', function ($id) {
+    $user = Auth::user();
     return view(
         'equip',
         [
@@ -41,6 +55,8 @@ Route::get('/equip/{id}/{label}', function ($id) {
     );
 });
 
+
+
 Route::get('/club/{id}/{label}', function ($id) {
     return view(
         'club',
@@ -48,7 +64,7 @@ Route::get('/club/{id}/{label}', function ($id) {
             'leaguesList' => Leagues::leaguesList(),
             'clubsList' => Clubs::clubsList(),
             'teamsList' => Teams::join('categories', 'categories.idCategory', '=', 'teams.idCategory')->join('seasons', 'teams.idSeason', '=', 'seasons.idSeason')
-            ->where('idClub', $id)->orderby('seasonName', 'desc')->orderby('categories.idCategory', 'asc')->orderby('teams.teamName', 'asc')->get(),
+                ->where('idClub', $id)->orderby('seasonName', 'desc')->orderby('categories.idCategory', 'asc')->orderby('teams.teamName', 'asc')->get(),
             'clubInfo' => Clubs::where('idClub', $id)->get(),
             'merchandisingList' => Merchandisings::all(),
         ]
@@ -82,11 +98,14 @@ Route::get('/competicio/{id}/{label}', function ($id) {
             'classification' => Classifications::join('teams', 'teams.idTeam', '=', 'classifications.idTeam')->where('idGroup', $id)->orderBy('points', 'desc')->orderBy('position', 'asc')->get(),
             'bestGoalsMade' => Classifications::join('teams', 'teams.idTeam', '=', 'classifications.idTeam')->join('clubs as club', 'club.idClub', 'teams.idClub')->where('idGroup', $id)->select('teamName', 'goalsMade', 'clubImage', 'teams.idTeam')->orderBy('goalsMade', 'desc')->limit(1)->get(),
             'leastGoalsReceived' => Classifications::join('teams', 'teams.idTeam', '=', 'classifications.idTeam')->join('clubs as club', 'club.idClub', 'teams.idClub')->where('idGroup', $id)->select('teamName', 'goalsReceived', 'clubImage', 'teams.idTeam')->orderBy('goalsReceived', 'asc', 'clubImage')->limit(1)->get(),
+            'maxGoalsPerLeague' => Leagues::maxGoalsPerLeague($id),
+            'totalPlayed' => Leagues::totalPlayed($id)
 
 
         ]
     );
 });
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');

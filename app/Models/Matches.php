@@ -57,14 +57,15 @@ class Matches extends Model
     {
         $matchesFromTomorrow = DB::table('matches')
             ->join('leagues', 'matches.idLeague', '=', 'leagues.idLeague')
-            ->join('categories', 'leagues.idCategory', 'categories.idCategory')
+            ->leftJoin('categories', 'leagues.idCategory', 'categories.idCategory')
             ->join('teams', 'matches.idLocal', '=', 'teams.idTeam')
             ->join('teams as t2', 'matches.idVisitor', '=', 't2.idTeam')
             ->join('clubs as club1', 'club1.idClub', 'teams.idClub')
             ->join('clubs as club2', 'club2.idClub', 't2.idClub')
             ->join('seasons', 'seasons.idSeason', 'leagues.idSeason')
-            ->select('seasons.seasonName', 'matches.idGroup', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2')
-            ->where('matchDate', date("Y-m-d", strtotime('tomorrow')))
+            ->select('seasons.seasonName', 'localResult', 'visitorResult', 'matches.idGroup', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2')
+            ->whereNull('localResult')
+            ->where('matchDate', '>',date("Y-m-d", strtotime('yesterday')))
             ->orderBy('matchDate', 'asc')
             ->orderBy('matchHour', 'asc')
             ->limit(5)
@@ -83,8 +84,7 @@ class Matches extends Model
             ->join('clubs as club2', 'club2.idClub', 't2.idClub')
             ->join('seasons', 'seasons.idSeason', 'leagues.idSeason')
             ->select('seasons.seasonName', 'matches.idGroup', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2', 'localResult', 'visitorResult')
-            // ->where('idSeason', 135)
-            ->where('localResult', '<>', '', 'and')
+             ->where('localResult', '<>', '', 'and')
             ->orderBy('matchDate', 'desc')
             ->orderBy('matchHour', 'desc')
             ->limit(5)
@@ -102,10 +102,10 @@ class Matches extends Model
             ->join('clubs as club2', 'club2.idClub', 't2.idClub')
             ->join('seasons', 'seasons.idSeason', 'leagues.idSeason')
             ->select('seasons.seasonName', 'matches.idGroup', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2', 'localResult', 'visitorResult')
-            // ->where('idSeason', 135)
             ->where('idGroup', $idGroup)
-            //  ->orderBy('idRound', 'asc')
+          
             ->orderByRaw('CONVERT(idRound, SIGNED) asc')
+            ->orderBy('idRound','asc')
             ->orderBy('matchDate', 'asc')
             ->orderBy('matchHour', 'asc')
 
@@ -125,12 +125,10 @@ class Matches extends Model
             ->join('clubs as club2', 'club2.idClub', 't2.idClub')
             ->join('player_match', 'matches.idMatch', "=", 'player_match.idMatch')
             ->join('seasons', 'seasons.idSeason', 'leagues.idSeason')
-            ->select('seasons.seasonName', 'matches.idGroup','idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2', 'localResult', 'visitorResult')
-
+            ->select('seasons.seasonName', 'matches.idGroup', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2', 'localResult', 'visitorResult')
             ->where("player_match.idPlayer", $idPlayer)
             ->orderBy('matchDate', 'desc')
             ->orderBy('matchHour', 'asc')
-
             ->get();
 
         return $matchesListFromIdPlayer;

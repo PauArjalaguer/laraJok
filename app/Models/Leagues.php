@@ -21,4 +21,39 @@ class Leagues extends Model
             return $leaguesList;
         });
     }
+
+    public static function maxGoalsPerLeague($idLeague)
+    {
+        $results = DB::table('player_match as pm')
+            ->select(
+                DB::raw('SUM(goals) AS goals'),
+                'pm.idPlayer',
+                DB::raw('(SELECT playerName FROM players WHERE idPlayer = pm.idPlayer LIMIT 1) AS playerName')
+            )
+            ->join('matches as m', 'm.idMatch', '=', 'pm.idMatch')
+            ->where('m.idGroup', $idLeague)
+            ->groupBy('pm.idPlayer')
+            ->orderBy('goals', 'DESC')
+            ->limit(5)
+            ->get();
+        return $results;
+    }
+
+    public static function totalPlayed($idLeague)
+    {
+        $totalMatches = \App\Models\Matches::where('idGroup', $idLeague)->count();
+
+        $playedMatches = \App\Models\Matches::where('idGroup', $idLeague)
+            ->whereNotNull('localResult')
+            ->count();
+
+        $percentagePlayed = $totalMatches > 0 ? ($playedMatches / $totalMatches) * 100 : 0;
+
+        $result = [
+            'total' => $totalMatches,
+            'played' => $playedMatches,
+            'percentage_played' => round($percentagePlayed),
+        ];
+        return $result;
+    }
 }

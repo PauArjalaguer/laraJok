@@ -6,7 +6,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
+
 
 class User extends Authenticatable
 {
@@ -42,4 +45,37 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public static function updateUserSavedData($idItem, $category)
+    {
+        $idUser=  Auth::user() ? Auth::user()->id : 0;
+        $count = DB::table('usersaved')
+            ->where('idUser', $idUser)
+            ->where('category', $category)
+            ->where('idItem', $idItem)
+            ->count();
+
+        if ($count == 1) {
+            DB::table('usersaved')->where('idUser', $idUser)
+                ->where('category', $category)
+                ->where('idItem', $idItem)->delete();
+        } else {
+            DB::table('usersaved')->updateOrInsert(
+                // Valores de las claves
+                ['idUser' => $idUser, 'category' => $category, 'idItem' => $idItem],
+                ['toDelete' => 0],
+            );
+        }
+    }
+
+    public static function userSavedData(){
+       
+        $idUser=  Auth::user() ? Auth::user()->id : 0;
+       
+        $results = DB::table('usersaved')->where('idUser',$idUser)
+        ->leftJoin('phases','usersaved.idItem','phases.idGroup')
+        ->leftJoin('teams','usersaved.idItem','teams.idTeam')
+        ->leftJoin('players','usersaved.idItem','players.idPlayer')->get();
+        return $results;
+    }
 }
