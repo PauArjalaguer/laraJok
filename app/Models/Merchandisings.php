@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Merchandisings extends Model
 {
     use HasFactory;
+
+    public static function merchandisingReturnFiveRandomItems()
+    {
+        return Merchandisings::inRandomOrder()->limit(5)->get();
+    }
 }

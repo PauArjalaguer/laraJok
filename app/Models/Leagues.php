@@ -22,22 +22,7 @@ class Leagues extends Model
         });
     }
 
-    public static function maxGoalsPerLeague($idLeague)
-    {
-        $results = DB::table('player_match as pm')
-            ->select(
-                DB::raw('SUM(goals) AS goals'),
-                'pm.idPlayer',
-                DB::raw('(SELECT playerName FROM players WHERE idPlayer = pm.idPlayer LIMIT 1) AS playerName')
-            )
-            ->join('matches as m', 'm.idMatch', '=', 'pm.idMatch')
-            ->where('m.idGroup', $idLeague)
-            ->groupBy('pm.idPlayer')
-            ->orderBy('goals', 'DESC')
-            ->limit(5)
-            ->get();
-        return $results;
-    }
+   
 
     public static function totalPlayed($idLeague)
     {

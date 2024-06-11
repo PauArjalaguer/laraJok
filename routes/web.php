@@ -1,118 +1,36 @@
 <?php
 
+use App\Http\Controllers\ClubsController;
+use App\Http\Controllers\CompeticioController;
+use App\Http\Controllers\MainController;
+use App\Http\Controllers\MerchandisingsController;
+use App\Http\Controllers\PlayersController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TeamsController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Clubs;
 use App\Models\Leagues;
 use App\Models\Matches;
 use App\Models\Merchandisings;
-use App\Models\Teams;
 use App\Models\Players;
-use App\Models\Phases;
 use App\Models\Classifications;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/', function () {
-    return view(
-        'main',
-        [
-            'clubsList' => Clubs::clubsList(), 'leaguesList' => Leagues::leaguesList(),
-            'matchesListNext' => Matches::matchesListNext(),
-            'matchesListLastWithResults' => Matches::matchesListLastWithResults(),
-            'merchandisingList' => Merchandisings::inRandomOrder()->get(),
-            'userSavedData' => User::userSavedData()
-        ]
-    );
-})->name("main");
+Route::get('/', [MainController::class, 'index'])->name("main");
+Route::get('/equip/{id}/{label}', [TeamsController::class, 'index']);
+Route::get('/club/{id}/{label}', [ClubsController::class, 'index']);
+Route::get('/jugador/{id}/{label}', [PlayersController::class, 'index']);
+Route::get('/competicio/{id}/{label}', [CompeticioController::class, 'index']);
+Route::get('/acta/{id}/{label}', [CompeticioController::class, 'acta']);
+Route::get('/desa/{item}/{id}', [UserController::class, 'store'])->middleware(['auth', 'verified']);
 
-Route::get(
-    '/desa/{item}/{id}',
-    function ($item, $id) {
-
-        User::updateUserSavedData($id, $item);
-        return redirect('/');
-    }
-)->middleware(['auth', 'verified']);
-
-Route::get('/equip/{id}/{label}', function ($id) {
-    $user = Auth::user();
-    return view(
-        'equip',
-        [
-            'leaguesList' => Leagues::leaguesList(), 'merchandisingList' => Merchandisings::all(),
-            'clubsList' => Clubs::clubsList(),
-            'teamLeaguesList' => Phases::whereIn('idGroup', function ($q) use ($id) {
-                $q->from('matches')->select('idGroup')->where('idLocal', '=', $id)->orwhere('idVisitor',  $id)->toSql();
-            })->orderBy('startDate', 'desc')->get(),
-            'teamInfo' => Teams::join('clubs', 'clubs.idClub', '=', 'teams.idClub')->join('categories', 'categories.idCategory', '=', 'teams.idCategory')->where('idTeam', $id)->get(),
-            'playersList' => Players::distinct("playerName")->select('players.idPlayer', 'playerName')->join("player_match", "player_match.idPlayer", "=", "players.idPlayer")
-                ->where('idTeam', $id)->whereIn('player_match.idMatch', function ($q) use ($id) {
-                    $q->from('matches')->select('idMatch')->where('idLocal', '=', $id)->orwhere('idVisitor',  $id)->toSql();
-                })->get(),
-            'checkIfSaved' => User::checkIfSaved('equip', $id)
-        ]
-    );
-});
-
-
-
-Route::get('/club/{id}/{label}', function ($id) {
-    return view(
-        'club',
-        [
-            'leaguesList' => Leagues::leaguesList(),
-            'clubsList' => Clubs::clubsList(),
-            'teamsList' => Teams::join('categories', 'categories.idCategory', '=', 'teams.idCategory')->join('seasons', 'teams.idSeason', '=', 'seasons.idSeason')
-                ->where('idClub', $id)->orderby('seasonName', 'desc')->orderby('categories.idCategory', 'asc')->orderby('teams.teamName', 'asc')->get(),
-            'clubInfo' => Clubs::where('idClub', $id)->get(),
-            'merchandisingList' => Merchandisings::all(),
-            'checkIfSaved'=>User::checkIfSaved('club',$id)
-        ]
-    );
-});
-
-Route::get('/jugador/{id}/{label}', function ($id) {
-    return view(
-        'jugador',
-        [
-            'leaguesList' => Leagues::leaguesList(),
-            'clubsList' => Clubs::clubsList(),
-            'playerInfo' => Players::where('idPlayer', $id)->get(),
-            'playerMatchesList' => Matches::matchesListFromIdPlayer($id),
-            'merchandisingList' => Merchandisings::all(),
-            'playerStats' => Players::playerStats($id),
-            'checkIfSaved' => User::checkIfSaved('jugador', $id),
-            
-        ]
-    );
-});
-
-
-Route::get('/competicio/{id}/{label}', function ($id) {
-    return view(
-        'competicio',
-        [
-            'leaguesList' => Leagues::leaguesList(),
-            'clubsList' => Clubs::clubsList(),
-            'merchandisingList' => Merchandisings::all(),
-            'matchesList' => Matches::matchesListFromIdLeague($id),
-            'classification' => Classifications::join('teams', 'teams.idTeam', '=', 'classifications.idTeam')->where('idGroup', $id)->orderBy('points', 'desc')->orderBy('position', 'asc')->get(),
-            'bestGoalsMade' => Classifications::join('teams', 'teams.idTeam', '=', 'classifications.idTeam')->join('clubs as club', 'club.idClub', 'teams.idClub')->where('idGroup', $id)->select('teamName', 'goalsMade', 'clubImage', 'teams.idTeam')->orderBy('goalsMade', 'desc')->limit(1)->get(),
-            'leastGoalsReceived' => Classifications::join('teams', 'teams.idTeam', '=', 'classifications.idTeam')->join('clubs as club', 'club.idClub', 'teams.idClub')->where('idGroup', $id)->select('teamName', 'goalsReceived', 'clubImage', 'teams.idTeam')->orderBy('goalsReceived', 'asc', 'clubImage')->limit(1)->get(),
-            'maxGoalsPerLeague' => Leagues::maxGoalsPerLeague($id),
-            'totalPlayed' => Leagues::totalPlayed($id),
-            'checkIfSaved'=>User::checkIfSaved('competicio',$id)
-
-
-        ]
-    );
-});
-
+Route::get("/merchandising", [MerchandisingsController::class, 'index']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-   // return redirect()->route('main');
+    // return redirect()->route('main');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

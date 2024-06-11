@@ -26,8 +26,9 @@
     {{$matchesList[0]->leagueName}}
 </div>
 
-<div class="bg-slate-700 w-full my-2">
-    <div class="bg-slate-500 w-[{{$totalPlayed['percentage_played']}}%] py-2 px-6 font-bold text-white">{{$totalPlayed['percentage_played']}} % jugat</div>
+<div class="bg-slate-300 w-full my-2">
+ 
+    <div class="bg-slate-900 w-[{{$totalPlayed['percentage_played']}}%] py-2 px-6 font-bold text-white">{{$totalPlayed['percentage_played']}} % jugat</div>
 
 </div>
 <div class='w-full lg:flex  '>

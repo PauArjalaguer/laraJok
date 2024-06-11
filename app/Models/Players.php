@@ -9,7 +9,14 @@ use Illuminate\Support\Facades\DB;
 class Players extends Model
 {
     use HasFactory;
-
+    public static function playersByIdTeam($id)
+    {
+        $result = Players::distinct("playerName")->select('players.idPlayer', 'playerName')->join("player_match", "player_match.idPlayer", "=", "players.idPlayer")->orderBy('playerName', 'asc')
+            ->where('idTeam', $id)->whereIn('player_match.idMatch', function ($q) use ($id) {
+                $q->from('matches')->select('idMatch')->where('idLocal', '=', $id)->orwhere('idVisitor',  $id)->toSql();
+            })->get();
+        return $result;
+    }
 
     public static function playerStats($id)
     {
@@ -29,6 +36,21 @@ class Players extends Model
             ->get();
         return $results;
     }
-
+    public static function maxGoalsPerLeague($idLeague)
+    {
+        $results = DB::table('player_match as pm')
+            ->select(
+                DB::raw('SUM(goals) AS goals'),
+                'pm.idPlayer',
+                DB::raw('(SELECT playerName FROM players WHERE idPlayer = pm.idPlayer LIMIT 1) AS playerName')
+            )
+            ->join('matches as m', 'm.idMatch', '=', 'pm.idMatch')
+            ->where('m.idGroup', $idLeague)
+            ->groupBy('pm.idPlayer')
+            ->orderBy('goals', 'DESC')
+            ->limit(5)
+            ->get();
+        return $results;
+    }
    
 }
