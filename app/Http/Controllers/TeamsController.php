@@ -44,10 +44,12 @@ class TeamsController extends Controller
             $string = str_replace("SANT JOSEP SANT SADURNI", "SANT JOSEP", $string);
             $string = str_replace("RENOVABLES", "", $string);
             $string = str_replace("PHC", "", $string);
+            $string = str_replace("JOIERIA", "JOI", $string);
             $string = str_replace("CLUB PATIN", "CP", $string);
             $string = str_replace("CLUB PATÍ", "CP", $string);
             $string = str_replace("CLUB ESPORTIU OLESA", "CLUB OLESA", $string);
             $string = str_replace("PREVINTEGRAL", "", $string);
+            $string = str_replace("UNIO ESPORTIVA", "UE", $string);
         }
         $string =  mb_convert_case(mb_strtolower($string), MB_CASE_TITLE);
         return $string;

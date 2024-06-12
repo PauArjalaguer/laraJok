@@ -2,13 +2,13 @@
 @section('content')
 <div class="w-full text-slate-700 text-xl my-4 font-bold pb-2 border-b border-slate-400 flex">
     <div class="lg:w-1/2 inline">
-        {{$matchGetInfoById[0]->groupName}} - {{$matchGetInfoById[0]->idRound}}
+       <a href="/competicio/{{$matchGetInfoById[0]->idGroup}}/{{urlencode($matchGetInfoById[0]->groupName)}}"> {{$matchGetInfoById[0]->groupName}}</a> - {{$matchGetInfoById[0]->idRound}}
     </div>
     <div class="w-1/2 inline text-right ">
         {{ \Carbon\Carbon::parse($matchGetInfoById[0]->matchDate)->format('d-m-Y')}} {{ \Carbon\Carbon::parse($matchGetInfoById[0]->matchHour)->format('H:i')}}
     </div>
 </div>
-{{-- @dump( $matchGetInfoById )  --}}
+
 <div class="clear-both">&nbsp;</div>
 <div class="w-full  ">
 

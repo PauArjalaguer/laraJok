@@ -16,7 +16,7 @@ class Leagues extends Model
         $ttl = 6000;
         return Cache::remember($cacheKey, $ttl, function () {
             $leaguesList = Leagues::join('seasons', 'leagues.idSeason', '=', 'seasons.idSeason')->join('phases', 'phases.idLeague', '=', 'leagues.idLeague')
-                ->select('phases.idGroup as value', DB::raw("CONCAT(' ',groupName,' (',seasonName,')') AS label"))->orderby('leagues.idSeason', 'desc')
+                ->select('phases.idGroup as value', DB::raw("CONCAT(' ',groupName,' (',seasonName,')') AS label"))->where('phases.numberofmatches','!=', 0)->orderby('leagues.idSeason', 'desc')
                 ->orderby('leagues.idCategory', 'asc')->get();
             return $leaguesList;
         });

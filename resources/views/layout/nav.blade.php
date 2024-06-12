@@ -13,7 +13,7 @@
             <li class="block lg:inline p-2 cursor-pointer font-bold text-sm md:text-base">Notícies</li>
             <li class=" block lg:inline  p-2 cursor-pointer font-bold text-sm md:text-base"><a href="/merchandising">Merchandising</a></li>
             <li class="hidden  p-2 cursor-pointer font-bold text-sm md:text-base">Contacte</li>
-          
+
             <li class="inline p-2 cursor-pointer font-bold inline" onClick="(()=>{this.style.display='none'; document.getElementById('searchBar').style.display='inline'})()">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 inline">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -24,7 +24,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 inline">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
-          
+
             </div>
             @if (!Auth::check())
             <li class="inline p-2 cursor-pointer font-bold bg-slate-700 rounded-xl text-white">
@@ -103,58 +103,53 @@
         return new Promise(resolve => setTimeout(resolve, ms));
 
     }
+    var timeout = null;
     const search = (value) => {
-        console.log(value + " netejo formulari")
-        sleep(500).then(() => {
+        clearTimeout(timeout);
+
+        timeout = setTimeout(function() {
 
 
-            if (value.length >= 2) {
 
-                document.getElementById('search').style.display = 'block';
-                document.getElementById('searchValue').innerHTML = value;
-                console.log(value);
-                fetch("http://larajok.test/api/search/teams/" + value)
-                    .then(response => {
-                        document.getElementById('searchReturn').innerHTML = "";
-                        console.log(value + " netejo formulari")
-                        return response.json()
+            document.getElementById('search').style.display = 'block';
+            document.getElementById('searchValue').innerHTML = value;
+            console.log(value);
+            fetch("http://larajok.test/api/search/teams/" + value)
+                .then(response => {
+                    document.getElementById('searchReturn').innerHTML = "";
+                    console.log(value + " netejo formulari")
+                    return response.json()
+                })
+                .then(data => {
+                    document.getElementById('searchReturn').innerHTML = "";
+                    document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='block w-full m-2 font-bold'>" + data.length + " equips</div>");
+                    // console.log(data);
+                    data.map((team) => {
+                        console.log(team);
+                        document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='p-1 w-1/4'><div class='bg-slate-200 rounded-xl p-4 cursor-pointer' ><a class='text-sm' href='/equip/" + team.idTeam + "/" + team.teamName + "'>" + (team.teamName + " " + team.categoryName).substr(0,36) + "</a></div></div>")
                     })
-                    .then(data => {
-                        document.getElementById('searchReturn').innerHTML = "";
-                        document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='block w-full m-2 font-bold'>" + data.length + " equips</div>");
-                        // console.log(data);
-                        data.map((team) => {
-                            console.log(team);
-                            document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='p-1 w-1/4'><div class='bg-slate-200 rounded-xl p-4 cursor-pointer' ><a href='/equip/" + team.idTeam + "/" + team.teamName + "'>" + team.teamName + " " + team.categoryName + "</a></div></div>")
-                        })
 
-                    });
-                /* fetch("http://larajok.test/api/search/clubs/" + value)
-                 .then(response => {
-                     return response.json()
-                 })
-                 .then(data => {
-                     console.log(data)
-                 })*/
-                fetch("http://larajok.test/api/search/players/" + value)
-                    .then(response => {
-                        return response.json()
+                });
+            /* fetch("http://larajok.test/api/search/clubs/" + value)
+             .then(response => {
+                 return response.json()
+             })
+             .then(data => {
+                 console.log(data)
+             })*/
+            fetch("http://larajok.test/api/search/players/" + value)
+                .then(response => {
+                    return response.json()
+                })
+                .then(data => {
+                    document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='block w-full m-2 font-bold'>" + data.length + " jugadors</div>");
+                    data.map((player) => {
+
+                        document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='p-1 w-1/4'><div class='bg-slate-200 rounded-xl p-4 cursor-pointer' ><a  class='text-sm'  href='/jugador/" + player.idPlayer + "/" + player.playerName + "'>" + player.playerName.substr(0,36) + "</a></div></div>")
                     })
-                    .then(data => {
-                        document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='block w-full m-2 font-bold'>" + data.length + " jugadors</div>");
-                        data.map((player) => {
 
-                            document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='p-1 w-1/4'><div class='bg-slate-200 rounded-xl p-4 cursor-pointer' ><a href='/jugador/" + player.idPlayer + "/" + player.playerName + "'>" + player.playerName + "</a></div></div>")
-                        })
-
-                    });
-
-
-
-            } else {
-                document.getElementById('search').style.display = 'none';
-            }
-        });
+                });
+        }, 500);
     }
 
 </script>
