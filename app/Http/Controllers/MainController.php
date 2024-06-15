@@ -6,6 +6,7 @@ use App\Models\Clubs;
 use App\Models\Leagues;
 use App\Models\Matches;
 use App\Models\Merchandisings;
+use App\Models\News;
 use App\Models\User;
 
 use Illuminate\Http\Request;
@@ -22,7 +23,9 @@ class MainController extends Controller
                 'matchesListNext' => Matches::matchesListNext(),
                 'matchesListLastWithResults' => Matches::matchesListLastWithResults(),
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
-                'userSavedData' => User::userSavedData()
+                'userSavedData' => User::userSavedData(),
+                'newsListTop'=>News::orderBy('newsDateTime','desc')->limit(4)->get()
+                
             ]
         );
     }

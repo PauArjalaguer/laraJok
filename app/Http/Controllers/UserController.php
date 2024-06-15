@@ -13,6 +13,6 @@ class UserController extends Controller
         $id = $request->id;
         $item = $request->item;
         User::updateUserSavedData($id, $item);
-        return redirect('/');
+        return redirect('/'.$item.'/'.$id.'/'.$id);
     }
 }

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @vite('resources/css/app.css')
-    <title>Jok.cat</title>
+    <title>@yield('title')</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
@@ -20,7 +20,7 @@
 
 <body class="antialiased">
     <div id="container" class="min-h-screen">
-        <div class="w-full md:w-3/4 p-2 md:p-0 mx-auto my-0 ">
+        <div class="w-full lg:w-3/4 p-2 lg:p-0 mx-auto my-0 ">
             @include('layout.nav')
             @include('layout.select-section')
             @yield('content')

@@ -19,7 +19,7 @@ class MerchandisingsController extends Controller
         [
             'clubsList' => Clubs::clubsList(),
             'leaguesList' => Leagues::leaguesList(),                  
-            'merchandisingListAll' => Merchandisings::all(),
+            'merchandisingListAll' => Merchandisings::orderBy('assetName','asc')->get(),
             'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
             'userSavedData' => User::userSavedData()
         ]

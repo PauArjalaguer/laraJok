@@ -1,22 +1,21 @@
 @extends('layout.mainlayout')
+@section('title',$teamInfo[0]->teamName." :: JOK.cat ")
 @section('content')
 
-<div class="w-full text-slate-700 text-xl my-4 font-bold pb-2 border-b border-slate-400">
+<div class="w-full text-slate-700 text-xl mb-4 font-bold pb-2 border-b border-slate-400">
     <a href="/desa/equip/{{$teamInfo[0]->idTeam}}">
-
-
-        <svg xmlns="http://www.w3.org/2000/svg" fill={{$checkIfSaved==1 ? 'currentColor':'none'}} viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline w-6 hover:text-slate-500 cursor-pointer {{$checkIfSaved==1 ? 'text-red-600':''}}">
+        <svg xmlns="http://www.w3.org/2000/svg" fill={{$checkIfSaved==1 ? 'currentColor':'none'}} viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline w-6 cursor-pointer {{$checkIfSaved==1 ? 'text-red-800':''}}">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-        </svg></a>
+        </svg>
+    </a>
     {{App\Http\Controllers\TeamsController::teamFormat($teamInfo[0]->teamName)}}
 </div>
 <div class='md:flex '>
-
     <div class="w-full md:w-2/3 ">
         <h1 class='{{ count($playersList)>0  ?  "font-bold text-slate-700 pb-4 md:text-xl" : "hidden"}}'>Plantilla</h1>
         @foreach ($playersList as $player)
         <div class="bg-white w-full  border-solid border-t-[1px] border-slate-400 shadow-md  hover:bg-slate-50 transition-all shadow-slate-700 flex  items-center 
-                                     p-5 capitalize flex ">
+                                     p-4 capitalize flex ">
             <div class="w-full">
                 <a href="/jugador/{{$player->idPlayer}}/{{urlencode($player->playerName)}}">
                     {{mb_strtolower($player->playerName)}} </a>

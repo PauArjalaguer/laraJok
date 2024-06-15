@@ -1,4 +1,5 @@
 @extends('layout.mainlayout')
+@section('title',$matchGetInfoById[0]->teamName."-".$matchGetInfoById[0]->teamName2." :: JOK.cat ")
 @section('content')
 <div class="w-full text-slate-700 text-xl my-4 font-bold pb-2 border-b border-slate-400 flex">
     <div class="lg:w-1/2 inline">

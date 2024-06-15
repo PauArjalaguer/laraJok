@@ -1,4 +1,5 @@
 @extends('layout.mainlayout')
+@section('title',$matchesList[0]->leagueName." :: JOK.cat ")
 @section('content')
 <script>
     const leagueShow = (league) => {
@@ -13,13 +14,12 @@
         document.getElementById(league + "_button").style.backgroundColor = "rgb(08 23 43 / 1)";
 
     }
+
 </script>
 
-<div class="w-full text-slate-700 text-xl my-4 font-bold pb-2 border-b border-slate-400">
-    <!--  <svg class="inline w-6 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
-    </svg> -->
-    <a href="/desa/competicio/{{$matchesList[0]->idGroup}}"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline w-6 hover:text-slate-500 cursor-pointer {{$checkIfSaved==1 ? 'text-red-800':''}}">
+<div class="w-full text-slate-700 text-xl mb-4 font-bold pb-2 border-b border-slate-400">
+    <a href="/desa/competicio/{{$matchesList[0]->idGroup}}">
+        <svg xmlns="http://www.w3.org/2000/svg" fill={{$checkIfSaved==1 ? 'currentColor':'none'}} viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline w-6 cursor-pointer {{$checkIfSaved==1 ? 'text-red-800':''}}">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
         </svg>
     </a>
@@ -27,8 +27,8 @@
 </div>
 
 <div class="bg-slate-300 w-full my-2">
- 
-    
+
+
     <div class="bg-slate-900 py-2 px-6 font-bold text-white" style='width:{{$totalPlayed['percentage_played']}}%'>{{$totalPlayed['percentage_played']}} % jugat</div>
 
 </div>
@@ -56,13 +56,13 @@
 
         </div>
         @endforeach
-        <div class=" mt-2 ">
-            <div class="font-bold bg-slate-700 p-2 text-white border-[1px] border-b-[0px] border-slate-500  shadow-md shadow-slate-700 ">Equip més golejador</div>
-            <div class="flex bg-white items-center  border-[1px]  border-slate-500 shadow-md shadow-slate-700">
+        <div class="mt-2">
+            <div class="font-bold bg-slate-700 p-2 text-white border-[1px] border-b-[0px] border-slate-500 shadow-md shadow-slate-700 ">Equip més golejador</div>
+            <div class="text-sm flex bg-white items-center border-[1px]  border-slate-500 shadow-md shadow-slate-700">
                 <div class="p-2 w-1/12 ">
                     <img src={{ count($bestGoalsMade)>0 ? $bestGoalsMade[0]->clubImage:'' }} class="max-h-8 max-w-8 md:max-h-12 md:max-w-12  " />
                 </div>
-                <div class="p-2 w-11/12 ml-2">
+                <div class="p-2 w-11/12 ml-2 ">
                     <a href="/equip/{{count($bestGoalsMade)>0 ? $bestGoalsMade[0]->idTeam : ''}}/{{count($bestGoalsMade)>0 ? urlencode($bestGoalsMade[0]->teamName ) :''}}">
                         <span class="font-bold">{{count($bestGoalsMade)>0 ? App\Http\Controllers\TeamsController::teamFormat($bestGoalsMade[0]->teamName) : ''}}</span>
                     </a>
@@ -71,11 +71,11 @@
             </div>
             <div class="font-bold bg-slate-700 p-2 text-white border-[1px] border-b-[0px] border-slate-500 mt-2 shadow-md shadow-slate-700">Equip menys golejat </div>
             <div class="flex bg-white items-center border-[1px]  border-slate-500 shadow-md shadow-slate-700">
-                <div class="p-2 w-1/12 ">
+                <div class="p-2 w-1/12  ">
                     <a href="/equip/{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->idTeam  : ''}}/{{count($leastGoalsReceived) ? urlencode($leastGoalsReceived[0]->teamName) : ''}}">
                         <img src={{count($leastGoalsReceived)>0 ?  $leastGoalsReceived[0]->clubImage : ''}} class="max-h-8 max-w-8 md:max-h-12 md:max-w-12  " />
                 </div>
-                <div class="p-2 w-11/12 ml-2">
+                <div class="p-2 w-11/12 ml-2 text-sm">
                     <a href="/equip/{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->idTeam : ''}}/{{count($leastGoalsReceived)>0 ? urlencode($leastGoalsReceived[0]->teamName) :''}}">
                         <span class="font-bold">{{count($leastGoalsReceived)>0 ? App\Http\Controllers\TeamsController::teamFormat($leastGoalsReceived[0]->teamName) : ''}}</span>
                     </a>
@@ -133,7 +133,7 @@
         <div id=league_{{str_replace(" ","",$match->idRound)}} class='leagueContainer @if ($counter!=1) hidden @endif'>
             <div class='block rounded-t-xl my-2 text-slate-700 font-bold hidden'>{{$match->seasonName}}</div>
             @endif
-            <x-matches-component :matchArray="$match" />
+            <x-matches-component :match="$match" />
             @php
             $currentRound=$match->idRound;
             $counter++;
