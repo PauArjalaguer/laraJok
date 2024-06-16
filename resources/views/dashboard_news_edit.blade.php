@@ -1,5 +1,4 @@
 <x-app-layout>
-
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Editar notícia
@@ -50,7 +49,7 @@
                 //console.log(response.success);
                 document.getElementById('newsImage').value = "images/"+response.success;
 
-                document.getElementById("newsForm").submit();
+              //  document.getElementById("newsForm").submit();
             }
 
         };

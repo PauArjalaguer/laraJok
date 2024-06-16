@@ -13,7 +13,7 @@ class Leagues extends Model
     public static function leaguesList()
     {
         $cacheKey = 'leaguesList';
-        $ttl = 6000;
+        $ttl = 60000;
         return Cache::remember($cacheKey, $ttl, function () {
             $leaguesList = Leagues::join('seasons', 'leagues.idSeason', '=', 'seasons.idSeason')->join('phases', 'phases.idLeague', '=', 'leagues.idLeague')
                 ->select('phases.idGroup as value', DB::raw("CONCAT(' ',groupName,' (',seasonName,')') AS label"))->where('phases.numberofmatches','!=', 0)->orderby('leagues.idSeason', 'desc')

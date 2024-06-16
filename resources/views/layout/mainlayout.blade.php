@@ -16,6 +16,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
+      @cookieconsentscripts
 </head>
 
 <body class="antialiased">
@@ -26,9 +27,9 @@
             @yield('content')
 
         </div>
-        <footer class="w-full justify-center pb-4 sticky top-[100vh] bg-slate-900">
+        <footer class="w-full justify-center  sticky top-[100vh] bg-slate-900">
             @include('layout.merchandising')
-            <div class="flex w-full justify-center pt-14 pb-4 bg-slate-900">
+            <div class="flex w-full justify-center py-8 ">
                 <div class="w-3/4 flex">
                     <div class="w-1/3 text-white text-left"><span class="jok">JOK.cat</span><br>http://www.jok.cat<br>jok@jok.cat</div>
                     <div class="w-1/3 text-white">&nbsp;</div>
@@ -37,6 +38,7 @@
             </div>
         </footer>
     </div>
+    @cookieconsentview
 </body>
 
 </html>

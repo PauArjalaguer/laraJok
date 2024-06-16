@@ -29,7 +29,9 @@
 <div class="bg-slate-300 w-full my-2">
 
 
-    <div class="bg-slate-900 py-2 px-6 font-bold text-white" style='width:{{$totalPlayed['percentage_played']}}%'>{{$totalPlayed['percentage_played']}} % jugat</div>
+    <div id="percent" class="bg-slate-900  text-slate-300 py-2 font-bold transition-all ease-in" style='width:0%'>
+      <span id="percentPlace" class='  px-6 text-slate-300 '> &nbsp;</span>
+    <span id="percentText" class='hidden  px-6 text-white '> {{$totalPlayed['percentage_played']}} % jugat</span></div>
 
 </div>
 <div class='w-full lg:flex  '>
@@ -64,7 +66,7 @@
                 </div>
                 <div class="p-2 w-11/12 ml-2 ">
                     <a href="/equip/{{count($bestGoalsMade)>0 ? $bestGoalsMade[0]->idTeam : ''}}/{{count($bestGoalsMade)>0 ? urlencode($bestGoalsMade[0]->teamName ) :''}}">
-                        <span class="font-bold">{{count($bestGoalsMade)>0 ? App\Http\Controllers\TeamsController::teamFormat($bestGoalsMade[0]->teamName) : ''}}</span>
+                           <span class="font-bold">{{count($bestGoalsMade)>0 ? App\Http\Controllers\TeamsController::teamFormat($bestGoalsMade[0]->teamName) : ''}}</span>
                     </a>
                     <br />{{count($bestGoalsMade)>0 ? $bestGoalsMade[0]->goalsMade : ''}} gols
                 </div>
@@ -147,4 +149,15 @@
         <div class="clear-both"></div>
     </div>
 </div>
+
+<script>
+    setTimeout(() => {
+        document.getElementById("percent").style.width = {{$totalPlayed['percentage_played']}} + "%";
+ setTimeout(() => {
+            document.getElementById("percentPlace").style.display="none";
+          document.getElementById("percentText").style.display="block";
+ },200);
+    }, 900);
+
+</script>
 @endsection

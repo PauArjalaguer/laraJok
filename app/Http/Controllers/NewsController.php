@@ -34,7 +34,7 @@ class NewsController extends Controller
         $id = $request->id;
 
         return view(
-            'news-detail',
+            'news_detail',
             [
                 'clubsList' => Clubs::clubsList(),
                 'leaguesList' => Leagues::leaguesList(),
@@ -46,11 +46,19 @@ class NewsController extends Controller
     }
     public function create()
     {
+        $query = DB::table('news')->insertGetId([
+           
+            'newsTitle' => '.',
+           
+
+        ]);
+        $idNews = $query;
+        return to_route('dasahboard.news.edit',$idNews);
     }
     public function edit($new)
 
     {
-        return view('dashboardNewsEdit', ['news' => News::where('idNew', $new)->get()]);
+        return view('dashboard_news_edit', ['news' => News::where('idNew', $new)->get()]);
     }
 
     public function update(Request $request, News $new)
@@ -72,9 +80,7 @@ class NewsController extends Controller
     }
     public function delete($id)
     {
-
-        
-         News::where('idNew', $id)->delete();
+        News::where('idNew', $id)->delete();
         return to_route('dashboard.news')->with('status', 'Noticia eliminada');
     }
 }

@@ -13,4 +13,9 @@ class Merchandisings extends Model
     {
         return Merchandisings::inRandomOrder()->limit(5)->get();
     }
+
+    public static function merchandisingReturnCategories()
+    {
+        return Merchandisings::select('assetCategory')->distinct()->get();
+    }
 }

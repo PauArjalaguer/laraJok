@@ -7,13 +7,13 @@
                 <div class="shrink-0 flex items-center">
                     <h1><a href="/" class="webtitle font-['Comfortaa'] text-bold text-4xl text-slate-700 font-bold">JOK.cat</a></h1>
                 </div>
-  
+
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <!--  <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link> -->
-                 
+
                     <x-nav-link :href="route('main')" :active="request()->routeIs('main')">
                         Tornar a Web
                     </x-nav-link>
@@ -21,7 +21,7 @@
                     <x-nav-link :href="route('dashboard.news')" :active="request()->routeIs('dashboard.news')">
                         Noticies
                     </x-nav-link>
-                     <x-nav-link :href="route('dashboard/merchandising')" :active="request()->routeIs('dashboard/merchandising')">
+                    <x-nav-link :href="route('dashboard.merchandising')" :active="request()->routeIs('dashboard.merchandising')">
                         Merchandising
                     </x-nav-link>
                     @endif
@@ -78,6 +78,13 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('dashboard.news')" :active="request()->routeIs('dashboard.news')">
+                Noticies
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('dashboard.merchandising')" :active="request()->routeIs('dashboard.merchandising')">
+                Merchandising
             </x-responsive-nav-link>
         </div>
 

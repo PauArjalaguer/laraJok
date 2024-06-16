@@ -17,18 +17,17 @@
         @endphp
         @foreach($teamsList as $team)
         @if ($currentSeason!=$team->seasonName)
-        <div class='block rounded-t-xl my-2 text-slate-700 font-bold'>{{$team->seasonName}}</div>
+        <div class="block rounded-t-xl my-2 text-slate-700 font-bold">{{$team->seasonName}}</div>
         @endif
         <!--  <div class='block rounded-t-xl my-2 text-slate-700 font-bold'>{{$team->seasonName}}</div> -->
         <div class="bg-white cursor-pointer w-full  border-solid border-t-[1px] border-slate-400 shadow-md  hover:bg-slate-300 transition-all  duration-500 shadow-slate-700 flex  items-center 
                                      p-4 capitalize flex  ">
             <div class="w-full">
-
                 <a href="/equip/{{$team->idTeam}}/{{urlencode($team->teamName)}}">
                     <img onerror="this.style.display='none'" class='w-1/12  inline md:hidden  mix-blend-multiply' src={{$clubInfo[0]->clubImage}} /> {{App\Http\Controllers\TeamsController::teamFormat($team->teamName)}}
-                    {{$team->categoryName}} </a>
+                    {{$team->categoryName}}
+                </a>
             </div>
-
         </div>
         @php
         $currentSeason=$team->seasonName;
