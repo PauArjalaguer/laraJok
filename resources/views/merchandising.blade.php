@@ -2,16 +2,17 @@
 @section('title',"Merchandising :: JOK.cat ")
 @section('content')
 
-<div class="w-full text-slate-700 text-xl mb-4 font-bold pb-2 border-b border-slate-400">
+<div class="w-full text-slate-700 text-xl mb-2 font-bold  border-b border-slate-400">
 
     Merchandising
 </div>
 <div class='flex flex-wrap'>
-    @foreach($merchandisingReturnCategories as $category)
-    <div class="p-2 bg-slate-200  inline  rounded-xl mr-1 text-[12px] md:text-sm flex  flex-col items-end cursor-pointer" onClick="showCategory('{{$category->assetCategory}}')">{{$category->assetCategory}}</div>
+    <div class='border-b border-slate-300 flex w-full pb-2'>
+        @foreach($merchandisingReturnCategories as $category)
+        <div class="p-2 bg-slate-200  inline  rounded-xl mr-1 text-[12px] md:text-sm flex  flex-col items-end cursor-pointer" onClick="showCategory('{{$category->assetCategory}}')">{{$category->assetCategory}}</div>
 
-    @endforeach
-
+        @endforeach
+    </div>
     @php
     $currentType="a";
     $counter=0;
