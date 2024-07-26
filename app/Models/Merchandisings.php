@@ -11,11 +11,11 @@ class Merchandisings extends Model
 
     public static function merchandisingReturnFiveRandomItems()
     {
-        return Merchandisings::inRandomOrder()->limit(5)->get();
+        return Merchandisings::inRandomOrder()->limit(12)->get();
     }
 
     public static function merchandisingReturnCategories()
     {
-        return Merchandisings::select('assetCategory')->distinct()->get();
+        return Merchandisings::select('assetCategory')->whereNotNull('assetCategory')->distinct()->get();
     }
 }

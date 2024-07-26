@@ -1,5 +1,5 @@
 <nav class="flex">
-    <div class="py-4 lg:py-4 w-2/12">
+    <div class="py-2 lg:py-2 w-2/12">
         <h1><a href="/" class="webtitle font-['Comfortaa'] text-bold text-2xl md:text-4xl text-slate-700 font-bold">JOK.cat</a></h1>
     </div>
 
@@ -9,7 +9,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
         </div>
-        <ul class="p-2 block  hidden lg:inline" id="menu">
+        <ul class="pt-2 block  hidden lg:inline" id="menu">
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/noticies">Notícies</a></li>
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/merchandising">Merchandising</a></li>
             <li class="lg:p-2 cursor-pointer font-bold text-base hidden ">Contacte</li>
@@ -37,9 +37,9 @@
                 </a>
             </li>
             @else
-            <li class="block lg:inline  mt-4 p-2 cursor-pointer font-bold border-solid border-2 border-slate-700 rounded-xl text-slate-700 text-center">
+            <li class="block lg:inline mt-4 p-2 cursor-pointer font-bold border-solid border-2 border-slate-700 rounded-xl text-slate-700 text-center mb-5">
                 <a href='/dashboard' class='inline'>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 inline my-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 inline my-">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                     </svg> {{Auth::user()->name}} | </a> <a href='/logout'><span class="font-bold text-slate-900 ">Sortir</span>
                 </a>
@@ -50,7 +50,7 @@
     </div>
 </nav>
 @if (!Auth::check())
-<div class="flex rounded-xl mt-2 bg-slate-200 p-2 px-4" id='userSavedDataBanner'>
+<div class="flex rounded-xl my-1 bg-slate-200 p-2 px-4" id='userSavedDataBanner'>
     <div class="w-11/12">
         <h1 class="font-bold font-sm md:text-xl text-slate-700"><a href="/register" class='text-slate-900'>Registra't</a> o <a href="/login" class='text-slate-900'>accedeix</a> per a guardar els teus accessos directes.</h1>
     </div>

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,7 +24,6 @@
             @include('layout.nav')
             @include('layout.select-section')
             @yield('content')
-
         </div>
         <footer class="w-full justify-center  sticky top-[100vh] bg-slate-900">
             @include('layout.merchandising')

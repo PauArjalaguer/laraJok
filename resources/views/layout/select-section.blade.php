@@ -1,10 +1,15 @@
 <section id="selectSection" class="flex mb-2">
-    <div class="w-1/2 md:w-2/3 border-solid border-[1px] border-slate-400">
+    <div class="w-1/2 md:w-2/3 border-solid border border-slate-400">
         <div class="w-full md:p-2 text-xs lg:text-base text-gray-700">
+         
             <select aria-label="Selecciona una competició" class="w-full border-0" onChange="handleLeagueChange(this.options[this.selectedIndex].value,this.options[this.selectedIndex].innerHTML)">
                 <option>Busca una competició</option>
                 @foreach( $leaguesList as $league)
-                <option value={{$league->value}}>{{$league->label}}</option>
+                <option value={{$league->value}}>@php         
+                if(strpos($league->label,'Grup únic')){echo $league->leagueName." ".$league->label;} 
+                    else{ 
+                        echo $league->label;}@endphp
+                        </option>
                 @endforeach
             </select>
         </div>
@@ -16,8 +21,7 @@
                 @foreach( $clubsList as $club)
                 <option value={{$club->value}}>{{$club->label}}</option>
                 @endforeach
-            </select>
-       
+            </select>       
         </div>
     </div>
 </section>
@@ -27,8 +31,6 @@
     }
     const handleLeagueChange = (value, label) => {
         window.location.href = "/competicio/" + value + "/" + encodeURIComponent(label);
-
-
     }
 
 </script>

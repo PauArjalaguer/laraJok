@@ -16,13 +16,11 @@ class Leagues extends Model
         $ttl = 60000;
         return Cache::remember($cacheKey, $ttl, function () {
             $leaguesList = Leagues::join('seasons', 'leagues.idSeason', '=', 'seasons.idSeason')->join('phases', 'phases.idLeague', '=', 'leagues.idLeague')
-                ->select('phases.idGroup as value', DB::raw("CONCAT(' ',groupName,' (',seasonName,')') AS label"))->where('phases.numberofmatches','!=', 0)->orderby('leagues.idSeason', 'desc')
+                ->select('leagueName as leagueName','phases.idGroup as value', DB::raw("CONCAT(' ',groupName,' (',seasonName,')') AS label"))->where('phases.numberofmatches','!=', 0)->orderby('leagues.idSeason', 'desc')
                 ->orderby('leagues.idCategory', 'asc')->get();
             return $leaguesList;
         });
-    }
-
-   
+    }  
 
     public static function totalPlayed($idLeague)
     {

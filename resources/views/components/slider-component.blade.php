@@ -5,7 +5,8 @@
     @endphp
     @foreach($newsListTop as $news)
     <div id="slider{{$counter}}" class="rounded-xl relative mt-2 shadow-xl z-10 relative  w-full bg-cover bg-center flex justify-center items-center  overflow-hidden  transition-all duration-500  ease-in-out ">
-        <div class='bg-slate-100 w-full h-full  p-24 lg:p-56 transition-all duration-1000 ease-in-out transform bg-center bg-cover hover:scale-105 cursor-pointer' style="background-image: url({{$news->newsImage}}); display: block;">
+        <div class='bg-slate-100 w-full h-full  p-24 lg:p-56 transition-all duration-1000 ease-in-out transform bg-center bg-cover hover:scale-105 cursor-pointer'
+        style="background-image: url({{$news->newsImage}}); display: block;">
 
         </div>
         <div class="absolute flex flex-col justify-center items-center w-full text-xl font-black transition-all duration-500 ease-in-out transform text-gray-50 top-12 lg:top-48 ">

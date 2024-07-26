@@ -87,7 +87,6 @@
             <div class="font-bold bg-slate-700 p-2 text-white border-[1px] border-b-[0px] border-slate-500 mt-2 shadow-md shadow-slate-700">Golejadors </div>
             @foreach($maxGoalsPerLeague as $player)
             <div class='bg-white w-full  border-solid border-t-[1px] border-slate-400 shadow-md  hover:bg-slate-50 transition-all shadow-slate-700 flex'>
-
                 <div class='p-2 md:p-4 w-11/12 border-r-[1px] text-left  text-xs md:text-sm '>
                     <a href="/jugador/{{$player->idPlayer}}/{{urlencode($player->playerName)}}">{{App\Http\Controllers\TeamsController::teamFormat($player->playerName)}}</a>
                 </div>
@@ -140,8 +139,6 @@
             $currentRound=$match->idRound;
             $counter++;
             @endphp
-
-
             @endforeach
         </div>
 

@@ -9,9 +9,11 @@
 <div class='flex flex-wrap'>
     <div class='border-b border-slate-300 flex w-full pb-2'>
         @foreach($merchandisingReturnCategories as $category)
-        <div class="p-2 bg-slate-200  inline  rounded-xl mr-1 text-[12px] md:text-sm flex  flex-col items-end cursor-pointer" onClick="showCategory('{{$category->assetCategory}}')">{{$category->assetCategory}}</div>
+        <div class="p-2 bg-slate-200 rounded-xl mr-1 text-[12px] md:text-sm flex  cursor-pointer" ><span onClick="showCategory('{{$category->assetCategory}}')">{{$category->assetCategory}}</span> </div>
 
         @endforeach
+
+        <div class="p-2 bg-slate-300 rounded-xl mr-1 text-[12px] md:text-sm flex  cursor-pointer" ><span onClick="showAllCategories()">Totes</span></div>
     </div>
     @php
     $currentType="a";
@@ -61,10 +63,9 @@
 
     @endforeach
     const showCategory = (category) => {
-
+       
         let c = document.getElementsByClassName(category);
         for (let i = 0; i < c.length; i++) {
-
             c[i].style.display = "block";
             setTimeout(() => {
                 c[i].style.transform = "scale(1)";
@@ -72,9 +73,6 @@
             }, 100);
         }
         const hideCategories = categories.filter((element) => element != category);
-
-
-
 
         hideCategories.map((cat) => {
             let c = document.getElementsByClassName(cat);
@@ -87,9 +85,23 @@
                 }, 300);
             }
         });
+        
 
 
     }
-
+    const showAllCategories = ()=>{   
+    categories.map((cat) => {
+            let c = document.getElementsByClassName(cat);
+            console.log(c);
+            for (let i = 0; i < c.length; i++) {
+                c[i].style.display = "block";
+              
+                setTimeout(() => {
+                    c[i].style.transform = "scale(1)";
+                    c[i].style.opacity = "1";
+                }, 300);
+            }
+        });
+}
 </script>
 @endsection
