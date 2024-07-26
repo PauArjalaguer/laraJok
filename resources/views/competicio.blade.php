@@ -9,7 +9,6 @@
             leagueContainer[i].style.display = 'none';
             leagueButton[i].style.backgroundColor = 'rgb(51 65 85 / 1)';
         }
-
         document.getElementById("league_" + league).style.display = "block";
         document.getElementById(league + "_button").style.backgroundColor = "rgb(08 23 43 / 1)";
 
@@ -25,15 +24,13 @@
     </a>
     {{$matchesList[0]->groupName}}
 </div>
-
+@if ($totalPlayed['percentage_played']>0)
 <div class="bg-slate-300 w-full my-2">
-
-
     <div id="percent" class="bg-slate-900  text-slate-300 py-2 font-bold transition-all ease-in" style='width:0%'>
       <span id="percentPlace" class='  px-6 text-slate-300 '> &nbsp;</span>
     <span id="percentText" class='hidden  px-6 text-white '> {{$totalPlayed['percentage_played']}} % jugat</span></div>
-
 </div>
+@endif
 <div class='w-full lg:flex  '>
 
     <div class='{{ count($classification)>0  ?  "w-full lg:w-1/2  lg:pr-2 mb-2" : "hidden"}}'>
@@ -153,8 +150,8 @@
  setTimeout(() => {
             document.getElementById("percentPlace").style.display="none";
           document.getElementById("percentText").style.display="block";
- },200);
-    }, 900);
+ },500);
+    }, 1500);
 
 </script>
 @endsection
