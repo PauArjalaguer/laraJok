@@ -15,7 +15,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-      @cookieconsentscripts
+    
 </head>
 
 <body class="antialiased">
@@ -25,7 +25,7 @@
             @include('layout.select-section')
             @yield('content')
         </div>
-        <footer class="w-full justify-center  sticky top-[100vh] bg-slate-900">
+        <footer class="w-full justify-center  sticky top-[100vh] bg-neutral-900">
             @include('layout.merchandising')
             <div class="flex w-full justify-center py-8 ">
                 <div class="w-3/4 flex">
@@ -36,7 +36,7 @@
             </div>
         </footer>
     </div>
-    @cookieconsentview
+ 
 </body>
 
 </html>
