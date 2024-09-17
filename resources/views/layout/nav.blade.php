@@ -81,7 +81,7 @@
             document.getElementById('search').style.display = 'block';
             document.getElementById('searchValue').innerHTML = value;
             console.log(value);
-            fetch("http://jok.cat/api/search/teams/" + value)
+            fetch("https://jok.cat/api/search/teams/" + value)
                 .then(response => {
                     document.getElementById('searchReturn').innerHTML = "";
                     console.log(value + " netejo formulari")
