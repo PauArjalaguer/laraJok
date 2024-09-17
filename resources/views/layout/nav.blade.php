@@ -104,7 +104,7 @@
              .then(data => {
                  console.log(data)
              })*/
-            fetch("http://jok.cat/api/search/players/" + value)
+            fetch("https://jok.cat/api/search/players/" + value)
                 .then(response => {
                     return response.json()
                 })
