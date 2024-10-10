@@ -18,6 +18,7 @@
                     @endif
                     <form method="POST" action="/dashboard/news/save/{{ $news[0]->idNew}}" id="newsForm">
                         @csrf @method('PUT')
+                        <input type='hidden' name='website' id='website' value={{Auth::user()->idRole==2 ? 'efs_masquefa' : 'jok'}} />
                         <input type='hidden' name="idNew" id="idNew" value="{{$news[0]->idNew}}" />
                         <label to="newsTitle">Títol:</label>
 

@@ -47,6 +47,8 @@ Route::put('/dashboard/merchandising/save/{id}', [MerchandisingsController::clas
 Route::get('/dashboard/merchandising/delete/{id}', [MerchandisingsController::class,'delete'])->middleware(['auth', 'verified'])->name('dashboard.merchandising.delete');
 Route::get('/dashboard/merchandising', function () { return view('dashboard_merchandising',['merchandisingList'=>Merchandisings::orderBy('idAsset','desc')->get()]);})->middleware(['auth', 'verified'])->name('dashboard.merchandising');
 
+Route::get("/efsmasquefa", function (){ 
+    return view('masquefa_legal');});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -58,6 +60,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
 
 Route::get('/logout', function () {
     Auth::logout();

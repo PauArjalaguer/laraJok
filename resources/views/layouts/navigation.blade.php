@@ -17,10 +17,12 @@
                     <x-nav-link :href="route('main')" :active="request()->routeIs('main')">
                         Tornar a Web
                     </x-nav-link>
-                    @if(Auth::user()->idRole==1)
+                    @if(Auth::user()->idRole==1 || Auth::user()->idRole==2)
                     <x-nav-link :href="route('dashboard.news')" :active="request()->routeIs('dashboard.news')">
                         Noticies
                     </x-nav-link>
+                    @endif
+                    @if(Auth::user()->idRole==1)
                     <x-nav-link :href="route('dashboard.merchandising')" :active="request()->routeIs('dashboard.merchandising')">
                         Merchandising
                     </x-nav-link>

@@ -53,7 +53,7 @@ class NewsController extends Controller
 
         ]);
         $idNews = $query;
-        return to_route('dasahboard.news.edit',$idNews);
+        return to_route('dashboard.news.edit',$idNews);
     }
     public function edit($new)
 
@@ -71,10 +71,10 @@ class NewsController extends Controller
 
         DB::table('news')->upsert(
             [
-                'idNew' => $request->idNew, 'newsTitle' => $request->newsTitle, 'newsSubtitle' => $request->newsSubtitle, 'newsContent' => $request->newsContent, 'newsImage' => $request->newsImage
+                'idNew' => $request->idNew, 'website' => $request->website,'newsTitle' => $request->newsTitle, 'newsSubtitle' => $request->newsSubtitle, 'newsContent' => $request->newsContent, 'newsImage' => $request->newsImage
             ],
             ['idNew'],
-            ['newsTitle', 'newsSubtitle', 'newsContent', 'newsImage']
+            ['website','newsTitle', 'newsSubtitle', 'newsContent', 'newsImage']
         );
         return to_route('dashboard.news.edit', $request->idNew)->with('status', 'Noticia actualitzada');
     }
