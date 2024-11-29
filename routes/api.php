@@ -1,12 +1,16 @@
 <?php
 
+use App\Http\Controllers\ScrapingController;
 use App\Models\Clubs;
 use App\Models\Players;
 use App\Models\Teams;
 use App\Models\Leagues;
 use App\Models\News;
+use App\Models\Matches;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,18 +30,82 @@ Route::get("/search/clubs/{search}", function ($search) {
     return Clubs::where('clubName', 'like', '%' . $search . '%')->limit(100)->get();
 });
 Route::get("/search/players/{search}", function ($search) {
-    return Players::where('playerName', 'like', '%' . $search . '%')->limit(100)->orderBy('playerName', 'desc')->get();
+    return Players::where('playerName', 'like', '%' . $search . '%')
+        ->limit(100)
+        ->orderBy('playerName', 'desc')->get();
 });
 
 Route::get("/leagues", function () {
     return Leagues::all();
 });
-Route::get("/news/{website}", function ($website) {
-    return News::where('website', 'like', '%' . $website . '%')->limit(100)->orderBy('newsDateTime', 'desc')->get();
+ Route::get("/news/{website}/{top}", function ($website, $top) {
+    return News::select('idNew as id_new', 'newsDateTime as news_datetime', 'newsTitle as news_title', 'newsSubtitle as news_subtitle', 'newsContent as news_content', 'newsImage as news_image')
+        ->where('website', 'like', '%' . $website . '%')
+        ->limit($top)
+        ->orderBy('newsDateTime', 'desc')
+        ->get();
+}); 
+Route::get("/news/{website}/{top}", function ($website,$top) {
+    return News::where('website', 'like', '%' . $website . '%')->limit(100)->orderBy('newsDateTime', 'desc') ->orderBy('newsDateTime', 'desc') ->limit($top)->get();
 });
-Route::get("/news/{website}/{id}", function ($website,$id) {
+Route::get("/news/{website}/{id}", function ($website, $id) {
     return News::where('idNew',  $id)->get();
 });
+Route::get("main/matchesListNext/{top}", function ($top) {
+    return Matches::join('teams as t1', 't1.idTeam', '=', 'matches.idLocal')
+        ->join('clubs as c1', 't1.idClub', '=', 'c1.idClub')
+        ->join('teams as t2', 't2.idTeam', '=', 'matches.idVisitor')
+        ->join('clubs as c2', 't2.idClub', '=', 'c2.idClub')
+        ->join('phases', 'matches.idGroup', '=', 'phases.idGroup')
+        ->where(DB::raw("CONCAT(matchDate, ' ', matchHour)"), '<', now())
+        ->orderBy('matchDate')
+        ->orderBy('matchHour')
+        ->select('idMatch as id_match', 'groupName as group_name', 't1.teamName as local_name', 't2.teamName as visitor_name', 'c1.clubImage as local_image', 'c2.clubImage as visitor_image', 'matchDate as match_date', 'matchHour as match_hour')
+        ->limit($top)
+        ->get();
+});
+Route::get("main/matchesListLastWithResults/{top}", function ($top) {
+    return Matches::join('teams as t1', 't1.idTeam', '=', 'matches.idLocal')
+        ->join('clubs as c1', 't1.idClub', '=', 'c1.idClub')
+        ->join('teams as t2', 't2.idTeam', '=', 'matches.idVisitor')
+        ->join('clubs as c2', 't2.idClub', '=', 'c2.idClub')
+        ->join('phases', 'matches.idGroup', '=', 'phases.idGroup')
+        ->select('idMatch as id_match', 'groupName as group_name', 't1.teamName as local_name', 't2.teamName as visitor_name', 'c1.clubImage as local_image', 'c2.clubImage as visitor_image', 'matchDate as match_date', 'matchHour as match_hour', 'localResult as local_result', 'visitorResult as visitor_result')
+        ->whereNot('localResult', null)->orderBy('matchDate', 'desc')
+        ->orderBy('matchHour', 'desc')
+        ->limit($top)
+        ->get();
+});
+Route::get("clubs/clubsList", function () {
+    return Clubs::clubsList();
+});
+
+
+Route::get("scraping/fcb", function(){
+    return ScrapingController::scrapeFCBarcelona();
+});
+Route::get("scraping/reus", function(){
+    return ScrapingController::scrapeReus();
+});
+Route::get("scraping/palau", function(){
+    return ScrapingController::scrapePalau();
+});
+Route::get("scraping/cerdanyola", function(){
+    return ScrapingController::scrapeCerdanyola();
+});
+Route::get("scraping/regio", function(){
+    return ScrapingController::scrapeRegio();
+});
+Route::get("scraping/resultats", function(){
+    return ScrapingController::scrapeFecapaResults();
+});
+
+Route::get(
+    "clubs/clubInfo/{idClub}",
+    function ($idClub) {
+        return Clubs::where('idClub', '=', $idClub)->get();
+    }
+);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

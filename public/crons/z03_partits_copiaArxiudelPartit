@@ -1,0 +1,79 @@
+<?php
+header("Access-Control-Allow-Origin: *");
+
+?><html>
+
+<head>
+    <meta http-equiv="refresh" content="1115">
+    <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+</head>
+
+<body >
+    <div id="tab_modal_contenido_competicion" ></div>
+</body>
+
+</html>
+<script>
+    function parseLeague(idMatch, idLeague=2239) {
+        var ruta_files = 'http://www.server2.sidgad.es/';
+        var idc = idLeague;
+        var cliente = "fecapa";
+        var site_lang = "ca";
+        var tipo_stats = "";
+        var file = "fecapa_gr_" + idMatch + "_1.php";
+        
+        var path = ruta_files + cliente + '/' + file;
+       
+        var path ="http://www.server2.sidgad.es/fecapa/fecapa_gr_"+idMatch+"_1.php";
+        $('#tab_modal_contenido_competicion').load(path, {
+                idm:1,
+                idc: idLeague,               
+                idp:idMatch,
+                tab: "tab_ficha_resumen"
+               
+            },
+            function(response, status, xhr) {
+
+                if (status == 'success') {
+                    $.ajax({
+                        type: "POST",
+                        url: "http://clubolesapati.cat/crons/receiveData.php",
+                        crossDomain: true,
+                        beforeSend: function(xhr) {
+                            xhr.withCredentials = true;
+                        },
+                        data: {
+                            "type":"match",
+                            "idm": 1,
+                            "idc": idc,
+                            "idp": idMatch,
+                            "html": response
+                        }
+
+                    });
+                }
+            }
+        );
+    }
+
+    //
+    fetch("http://faltesdirectes.c1.is/API/apiTotsElsPartits.php")
+            .then(response => {
+                return response.json()
+            })
+            .then(data => {
+               data.forEach(element => {
+                if(element.idMatch.length<7){
+                parseLeague(element.idMatch);}
+                
+               });
+
+            })
+ /*    var leagues = [
+64524];
+
+    leagues.forEach((league) => {
+        parseLeague(league);
+    }) */
+   // setTimeout(()=> window.location.replace("jqLeaguesCron.html"),30000);
+</script>

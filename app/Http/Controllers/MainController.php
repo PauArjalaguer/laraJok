@@ -24,7 +24,7 @@ class MainController extends Controller
                 'matchesListLastWithResults' => Matches::matchesListLastWithResults(),
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
                 'userSavedData' => User::userSavedData(),
-                'newsListTop'=>News::orderBy('newsDateTime','desc')->limit(4)->get()
+                'newsListTop'=>News::orderBy('newsDateTime','desc')->where('website','jokcat')->limit(4)->get()
                 
             ]
         );

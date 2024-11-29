@@ -14,6 +14,7 @@ class News extends Model
         'newsTitle',
         'newsSubtitle',
         'newsContent',
-        'newsImage'
+        'newsImage',
+        'newsDatetime','externalLink'
     ];
 }

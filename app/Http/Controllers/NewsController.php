@@ -24,7 +24,7 @@ class NewsController extends Controller
                 'leaguesList' => Leagues::leaguesList(),
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
                 'userSavedData' => User::userSavedData(),
-                'newsListTop' => News::orderBy('newsDateTime', 'desc')->simplePaginate(5)
+                'newsListTop' => News::orderBy('newsDateTime', 'desc')->where('website','jokcat')->simplePaginate(5)
             ]
         );
     }

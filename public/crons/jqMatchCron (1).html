@@ -1,0 +1,76 @@
+<?php
+header("Access-Control-Allow-Origin: *");
+
+?>
+<html>
+
+<head>
+    <meta http-equiv="refresh" content="300">
+    <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+</head>
+
+<body style='background-color:#fff'>
+    <div id="tab_modal_contenido_competicion"></div>
+    <div id="leagueslist">aaa</div>
+</body>
+
+</html>
+<script>
+    function parseLeague(idLeague) {
+        var ruta_files = 'http://www.server2.sidgad.es/';
+        var idc = idLeague;
+        var cliente = "fecapa";
+        var site_lang = "ca";
+        var tipo_stats = "";
+        var file = "fecapa_cal_idc_" + idc + "_1.php";
+        document.getElementById("leagueslist").innerHTML += "<br />" + file;
+        var path = ruta_files + cliente + '/' + file;
+        $('#tab_modal_contenido_competicion').load(path, {
+            idc: idc,
+            tipo_stats: tipo_stats,
+            site_lang: site_lang
+        },
+            function (response, status, xhr) {
+
+                if (status == 'success') {
+                    $.ajax({
+                        type: "POST",
+                        url: "http://clubolesapati.cat/crons/receiveData.php",
+                        crossDomain: true,
+                        beforeSend: function (xhr) {
+                            xhr.withCredentials = true;
+                        },
+                        data: {
+                            "type": "league",
+                            "idc": idc,
+                            "html": response
+                        }
+
+                    });
+                }
+            }
+        );
+    }
+
+    //
+    /* 
+        var leagues = [2223, 2218, 2217, 2219, 2237, 2239, 2225, 2226, 2228,2584];
+    
+        leagues.forEach((league) => {
+            parseLeague(league);
+        }) */
+
+    fetch("http://faltesdirectes.c1.is/API/apiLligues.php")
+        .then(response => {
+            return response.json()
+        })
+        .then(data => {
+            data.forEach(element => {
+
+                parseLeague(element.idLeague);
+
+            });
+
+        })
+    //  setTimeout(()=> window.location.replace("jqMatchesCron.html"),30000);
+</script>
