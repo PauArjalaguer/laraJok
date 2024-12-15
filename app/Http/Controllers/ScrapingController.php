@@ -410,29 +410,124 @@ class ScrapingController extends Controller
         return $articles;
     }
 
+    public static function scrapeNoia()
+    {
+        $baseUrl = 'https://cenoia.com/';
+        $url = $baseUrl . 'category/actualitat/';
+        $html = self::getWebContent($url);
+        if (!$html) return response()->json(['error' => 'Failed to fetch content'], 500);
+
+        $xpath = self::getDOM($html);
+        $articles = [];
+        $newsDivs = $xpath->query(".//div[contains(@class, 'blog-post-repeat')]");
+        $contador = 0;
+        set_time_limit(1300);
+
+        foreach ($newsDivs as $div) {
+            if ($contador <= 15) {
+                set_time_limit(1300);
+
+                $title = $xpath->query(".//h3[contains(@class, 'post-title')]", $div)->item(0)->nodeValue;
+
+                echo "\n$title";
+                $link = $xpath->query(".//div[contains(@class, 'post-thumb')]", $div)->item(0)->childNodes[0]->getAttribute('href');
+                $image = $xpath->query(".//div[contains(@class, 'post-thumb')]", $div)->item(0)->childNodes[0]->childNodes[0]->getAttribute('src');
+                //->item(0)->getAttribute('src');
+
+
+                $date = $xpath->query(".//div[contains(@class, 'post-date')]", $div)->item(0)->nodeValue;
+
+                $date = str_replace("de ", "", $date);
+                $date = str_replace("d'", "", $date);
+                $d = explode(" ", $date);
+             
+                $monthNames = [
+                    'gener' => 1,
+                    'febrer' => 2,
+                    'març' => 3,
+                    'abril' => 4,
+                    'maig' => 5,
+                    'juny' => 6,
+                    'juliol' => 7,
+                    'agost' => 8,
+                    'setembre' => 9,
+                    'octubre' => 10,
+                    'novembre' => 11,
+                    'desembre' => 12
+                ];
+
+                $day = $d[0];
+                $month = $monthNames[strtolower($d[1])] ?? null;
+                $year = $d[2];
+                $date =  $year . "-" . $month . "-" . $day;
+              
+               
+                 
+                    $detail = self::getNoiaDetail($link);
+
+                    $articleData = [
+                        'title' => $title,
+                        'url' => $link,
+                        'date' => $date,
+                        'image' => $image,
+                        'content' => $detail['content']
+                    ];
+
+                    if (strlen($title) > 1) {
+                        if (self::saveArticle($articleData)) {
+                            $articles[] = $articleData;
+                        }
+                    }
+                $contador++;
+            }
+        }
+
+        return $articles;
+    }
+
+    protected static function getNoiaDetail($url)
+    {
+        $html = self::getWebContent($url);
+        if (!$html) return '';
+
+        $xpath = self::getDOM($html);
+        $textNoticia = "";
+
+     
+        $article = $xpath->query("//div[contains(@class, 'entry-content')]")->item(0);
+        if ($article) {
+            // echo "<pre>"; print_r($article);echo "</pre>";
+            $paragraphs = $xpath->query('.//p', $article);
+            foreach ($paragraphs as $paragraph) {
+                $textNoticia .= $paragraph->textContent . " \n\n";
+            }
+        }
+
+        return [ 'content' => trim($textNoticia)];
+    }
     public static function scrapeFecapaResults()
     {
         $games = [];
         $url = 'https://server2.sidgad.es/fecapa/00_fecapa_agenda_1.php';
-    
+
         $headers = [
             'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
             'Origin: http://www.hoqueipatins.fecapa.cat',
             'Referer: http://www.hoqueipatins.fecapa.cat/',
             'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
         ];
-        
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_POSTFIELDS, 'your_form_data_here');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        
+
         $htmlContent = curl_exec($ch);
         curl_close($ch);
-        
-        
+
+
         // Use DOMDocument to parse the HTML
         $dom = new \DOMDocument();
         @$dom->loadHTML($htmlContent, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
@@ -468,7 +563,7 @@ class ScrapingController extends Controller
                 $locationTd = $row->getElementsByTagName('td')->item(8);
                 $location = trim($locationTd->textContent);
 
-               /*  $games[] = [
+                /*  $games[] = [
                     'date' => $date,
                     'time' => $time,
                     'club1_id' => $club1,
@@ -477,7 +572,7 @@ class ScrapingController extends Controller
                     'result' => $result ?: null,
                     'location' => $location
                 ]; */
-             /*    if ($result && strpos($result, '-') !== false) {
+                /*    if ($result && strpos($result, '-') !== false) {
                     // Split result into local and visitor scores
                     list($localResult, $visitorResult) = explode('-', trim($result));
         
