@@ -35,11 +35,26 @@
         </div>
         @endforeach
     </div>
-    <div class="hidden md:w-1/3 md:flex justify-center items-start pt-12   ">
-        <a href="/club/{{$teamInfo[0]->idClub}}/{{urlencode($teamInfo[0]->clubName)}}">
-            <img class=' w-full p-8 pt-0  ' src={{$teamInfo[0]->clubImage}} />
-        </a>
-    </div>
+   {{--   --}}
+   
+   <div class="w-full px-0 md:w-1/3  md:pl-4  mt-4 md:mt-0   ">
+        <div class="hidden md:w-full md:flex justify-center items-start pt-12   ">
+            <a href="/club/{{$teamInfo[0]->idClub}}/{{urlencode($teamInfo[0]->clubName)}}">
+                <img class=' w-full p-8 pt-0  ' src={{$teamInfo[0]->clubImage}} />
+            </a>
+        </div>
+            <h1 class="text-slate-700 font-bold pb-4 md:text-xl">Golejadors</h1>
+            @foreach ($teamGoals as $goals)
+            @if($goals->goals!=0)
+            <div class="bg-white w-full  border-solid border-t-[1px] border-slate-400 shadow-md  hover:bg-slate-50 transition-all shadow-slate-700 flex  items-center  p-4 capitalize flex ">
+                <div class="w-11/12">
+                    <a href="/jugador/{{$goals->idPlayer}}/{{urlencode($goals->playerName)}}">{{mb_strtolower($goals->playerName)}} </a> 
+                </div>
+                <div class="w-1/12">{{$goals->goals}}</div>
+            </div>
+            @endif
+            @endforeach
+        </div>
 
     <div class="clear-both"></div>
 

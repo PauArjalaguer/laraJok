@@ -28,7 +28,8 @@ class TeamsController extends Controller
                 'clubsList' => Clubs::clubsList(),
                 'teamLeaguesList' => Teams::teamLeaguesList($id),
                 'teamInfo' => Teams::teamInfo($id),
-                'playersList' => Players::playersByIdTeam($id),
+                'teamGoals'=>Teams::teamGoals($id),
+                'playersList' => Players::playersByIdTeam($id),               
                 'checkIfSaved' => User::checkIfSaved('equip', $id),
                 'userSavedData' => User::userSavedData()
             ]
