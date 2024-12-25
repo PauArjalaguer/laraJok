@@ -2,18 +2,29 @@
 @section('title',$matchesList[0]->leagueName." :: JOK.cat ")
 @section('content')
 <script>
-    const leagueShow = (league) => {
+    let c=0;
+    const showActualRound = (date,counter)=>{      
+        const currentDate = new Date().toISOString().split('T')[0];
+        if(date>currentDate && c==0){            
+            c++;  
+            if(counter<10){                
+                counter="0"+String(counter);
+            }
+        leagueShow(counter);
+        }
+    }
+
+    const leagueShow = (league) => { console.log(league);
         var leagueContainer = document.getElementsByClassName("leagueContainer");
         var leagueButton = document.getElementsByClassName("leagueButton");
         for (i = 0; i < leagueContainer.length; i++) {
             leagueContainer[i].style.display = 'none';
-            leagueButton[i].style.backgroundColor = 'rgb(51 65 85 / 1)';
+            leagueButton[i].style.backgroundColor = 'rgb(64 64 64 / 1)';
         }
         document.getElementById("league_" + league).style.display = "block";
-        document.getElementById(league + "_button").style.backgroundColor = "rgb(08 23 43 / 1)";
-
+        document.getElementById(league + "_button").style.backgroundColor = "rgb(105 105 105 / 1)";
     }
-
+ 
 </script>
 
 <div class="w-full text-neutral-700 text-xl mb-4 font-bold pb-2 border-b border-neutral-400">
@@ -131,6 +142,7 @@
         <div id=league_{{str_replace(" ","",$match->idRound)}} class='leagueContainer @if ($counter!=1) hidden @endif'>
             <div class='block rounded-t-xl my-2 text-neutral-700 font-bold hidden'>{{$match->seasonName}}</div>
             @endif
+            <script>showActualRound('{{$match->matchDate}}',{{ $currentRound}})</script>
             <x-matches-component :match="$match" />
             @php
             $currentRound=$match->idRound;
@@ -147,10 +159,10 @@
 <script>
     setTimeout(() => {
         document.getElementById("percent").style.width = {{$totalPlayed['percentage_played']}} + "%";
- setTimeout(() => {
+        setTimeout(() => {
             document.getElementById("percentPlace").style.display="none";
-          document.getElementById("percentText").style.display="block";
- },500);
+            document.getElementById("percentText").style.display="block";
+        },500);
     }, 1500);
 
 </script>
