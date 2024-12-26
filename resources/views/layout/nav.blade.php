@@ -1,6 +1,6 @@
 <nav class="flex">
     <div class="py-2 lg:py-2 w-2/12">
-        <h1><a href="/" class="webtitle font-['Comfortaa'] text-bold text-2xl md:text-4xl text-neutral-700 font-bold">JOK.cat</a></h1>
+        <h1><a href="/" class="webtitle font-['Comfortaa'] text-bold text-2xl md:text-4xl bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 font-bold">JOK.cat</a></h1>
     </div>
 
     <div class="py-1 w-10/12 text-right text-neutral-700 bg-graeen-700 flex justify-end">

@@ -16,7 +16,7 @@
     }
 
 </script>
-<div class="w-full text-slate-700 text-xl mb-4 font-bold pb-2 border-b border-slate-400">
+<div class="w-full text-neutral-700 text-xl mb-4 font-bold pb-2 border-b border-neutral-400">
     <a href="/desa/jugador/{{$playerInfo[0]->idPlayer}}">
         <svg xmlns="http://www.w3.org/2000/svg" fill={{$checkIfSaved==1 ? 'currentColor':'none'}} viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline w-6 cursor-pointer {{$checkIfSaved==1 ? 'text-red-800':''}}">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
@@ -34,7 +34,7 @@
             @endphp
             @foreach($playerMatchesList as $match)
             @if ($currentSeason!=$match->seasonName)
-            <div id="{{$match->seasonName}}_button" class="block rounded-xl p-2 my-2 bg-slate-700 font-bold inline mr-2 text-white cursor-pointer leagueButton text-sm md:text-base" onClick="leagueShow('{{$match->seasonName}}')">{{$match->seasonName}}</div>
+            <div id="{{$match->seasonName}}_button" class="block rounded-xl p-2 my-2 bg-neutral-700 font-bold inline mr-2 text-white cursor-pointer leagueButton text-sm md:text-base" onClick="leagueShow('{{$match->seasonName}}')">{{$match->seasonName}}</div>
             @endif
             @php
             $currentSeason=$match->seasonName;
@@ -52,7 +52,7 @@
             @if ($currentSeason!=$match->seasonName)
         </div>
         <div id={{$match->seasonName}} class='leagueContainer @if ($counter!=0) hidden @endif'>
-            <div class='block rounded-t-xl my-2 text-slate-700 font-bold hidden'>{{$match->seasonName}}</div>
+            <div class='block rounded-t-xl my-2 text-neutral-700 font-bold hidden'>{{$match->seasonName}}</div>
             @endif
             <x-matches-component :match="$match" />
 
@@ -73,13 +73,13 @@
             </a>
         </div>
         <div>
-            <h1 class="text-slate-700 font-bold  text-xl pb-2 ">Estadístiques</h1>
+            <h1 class="text-neutral-700 font-bold  text-xl pb-2 ">Estadístiques</h1>
             @foreach($playerStats as $stats)
             <div class='mb-1'>
-                <div class='bg-slate-700 text-center w-full border-[1px] border-b-[0px] border-slate-500'>
+                <div class='bg-neutral-700 text-center w-full border-[1px] border-b-[0px] border-neutral-500'>
                     <span class='text-white font-bold text-xs'>{{$stats->seasonName}}</span>
                 </div>
-                <div class='bg-white w-full h-full  border-solid  shadow-md  hover:bg-slate-50 transition-all shadow-slate-700   items-center p-4'>
+                <div class='bg-white w-full h-full  border-solid  shadow-md  hover:bg-neutral-50 transition-all shadow-neutral-700   items-center p-4'>
                     <div><span class='font-bold'>Partits jugats:</span> {{$stats->match_count}}</div>
                     <div><span class='font-bold'>Gols:</span> {{$stats->total_goals}}</div>
                     <div><span class='font-bold'>Tarjetes blaves:</span> {{$stats->total_blue}}</div>

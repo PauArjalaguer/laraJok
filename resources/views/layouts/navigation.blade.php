@@ -5,7 +5,7 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <h1><a href="/" class="webtitle font-['Comfortaa'] text-bold text-4xl text-slate-700 font-bold">JOK.cat</a></h1>
+                    <h1><a href="/" class="webtitle font-['Comfortaa'] text-bold text-4xl text-neutral-700 font-bold">JOK.cat</a></h1>
                 </div>
 
                 <!-- Navigation Links -->
