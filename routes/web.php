@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\ClubsController;
 use App\Http\Controllers\CompeticioController;
 use App\Http\Controllers\FileUploadController;
@@ -30,6 +31,7 @@ Route::get("/merchandising", [MerchandisingsController::class, 'index']);
 
 Route::get("/noticies/detall/{id}/{label}", [NewsController::class, 'detall']);
 Route::get("/noticies", [NewsController::class, 'index']);
+Route::get("/agenda", [AgendaController::class, 'index']);
 
 //dashboard noticies
 Route::get('/dashboard/news/new/', [NewsController::class,'create'])->middleware(['auth', 'verified'])->name('dashboard.news.new');
@@ -63,9 +65,9 @@ Route::middleware('auth')->group(function () {
 
 
 
-Route::get('/logout', function () {
+/* Route::get('/logout', function () {
     Auth::logout();
     return redirect()->route('main');
-})->name('logout');
+})->name('logout'); */
 
 require __DIR__ . '/auth.php';
