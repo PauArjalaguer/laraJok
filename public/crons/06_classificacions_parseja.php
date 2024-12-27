@@ -41,8 +41,8 @@ function parseLeague($idLliga, $mysqli)
     foreach ($tableList as $classification) {
         if ($classification->previousElementSibling->attributes[0]->nodeValue == 'div_titulo_fase_idc') {
             $phaseName = utf8_decode($classification->previousElementSibling->nodeValue);
-            $res =  $mysqli->query("select idGroup from phases where groupName='" . $phaseName . "' and idLeague=$idLliga");
-            echo "<br />select idGroup from phases where groupName='" . $phaseName . "' and idLeague=$idLliga";
+            $res =  $mysqli->query("select idGroup from phases where TRIM(groupName)='" . trim($phaseName) . "' and idLeague=$idLliga");
+            echo "<br />select idGroup from phases where TRIM(groupName)='" . trim($phaseName) . "' and idLeague=$idLliga";
             $row = mysqli_fetch_assoc($res);
             echo "<br><br>Id Grup: " . $idGroup = $row['idGroup'];
         }
@@ -58,11 +58,11 @@ function parseLeague($idLliga, $mysqli)
                 $lost = $tr->childNodes[15]->nodeValue;
                 $gA = $tr->childNodes[17]->nodeValue;
                 $gC = $tr->childNodes[19]->nodeValue;
-                echo "<br />" . $position . " " . $idTeam . " - " . $teamName . " " . $points . " " . $played . " " . $won . " " . $draw . " " . $lost . " " . $gA . " " . $gC;
+                echo "<br />" . $position . " " . $idTeam . " - " . $teamName . " " . $points . " " . $played . " Guanyat " . $won . " Empatat " . $draw . " Perdut  " . $lost . " " . $gA . " " . $gC;
                 $idClassification = $idGroup . $idTeam;
                 $sql2 = "insert into classifications (idClassification,idTeam,points,position,played,won, draw, lost, goalsMade, goalsReceived, idLeague, idGroup) values 
                 ($idClassification,$idTeam,$points,$position,$played,$won, $draw, $lost, $gA, $gC, $idLliga, $idGroup) ON DUPLICATE KEY 
-                UPDATE  position=$position, won=$won, played=$played, lost=$lost, goalsMade=$gA, goalsReceived=$gC, points=$points, position=$position ";
+                UPDATE  position=$position, won=$won, draw=$draw, played=$played, lost=$lost, goalsMade=$gA, goalsReceived=$gC, points=$points, position=$position ";
                 echo $sql2;
                 if ($idTeam) {
                     $mysqli->query($sql2);
@@ -74,7 +74,7 @@ function parseLeague($idLliga, $mysqli)
         }
     }
 }
-$result =$result = $mysqli->query("select idLeague from leagues where idSeason=37  order by lastupdated desc, idLeague desc limit 0,10");
+$result =$result = $mysqli->query("select idLeague from leagues where idSeason=37  order by lastupdated desc, idLeague desc limit 0,100");
 while ($row = mysqli_fetch_array($result)) {
     //echo $row['idLeague']." - ";
     parseLeague($row['idLeague'], $mysqli);
@@ -83,4 +83,4 @@ while ($row = mysqli_fetch_array($result)) {
 //parseLeague(2228, $mysqli);
 ?>
 
-<script> setTimeout(() => window.location.replace("01_lligues_copiaIndexdeLligues.php"), 15000);</script>
+<script> setTimeout(() => window.location.replace("01_lligues_copiaIndexdeLligues.php"), 1115000);</script>

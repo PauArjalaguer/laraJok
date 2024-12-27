@@ -157,7 +157,7 @@ include("curl.php");
                                     $visitorClub = prepareidClub($visitorImage, $mysqli);
 
 
-                                    echo "\n\t<div class='bg-slate-100 border-l border-t border-slate-700 w-8/12 p-2 text-center'><img class='inline w-1/12' src='$localImage' /> $localTeam $idLocal - $visitorTeam $idVisitor <img src=' $visitorImage'  class='inline w-1/12'  /></div>";
+                                    echo "\n\t<div class='bg-slate-100 border-l border-t border-slate-700 w-8/12 p-2 text-center'><img width='25' class='inline w-1/12' src='$localImage' /> $localTeam $idLocal - $visitorTeam $idVisitor <img width='25' src=' $visitorImage'  class='inline w-1/12'  /></div>";
 
                                     $idMatch = str_replace("fichapartido_", "", $ch2->childNodes[27]->childNodes[1]->attributes[1]->nodeValue);
 
@@ -261,6 +261,6 @@ include("curl.php");
 </html>
 <?php 
 if($_GET['force']){
-    echo "<script>  setTimeout(() => location.reload(), 45000); </script>";
+    echo "<script>  setTimeout(() => location.reload(), 5000); </script>";
 }
 ?>
