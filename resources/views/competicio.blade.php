@@ -10,6 +10,10 @@
             if(counter<10){                
                 counter="0"+String(counter);
             }
+            console.log("counter="+counter);
+            if(counter=="00"){
+                counter="01";
+            }
         leagueShow(counter);
         }
     }
