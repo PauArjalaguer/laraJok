@@ -1,8 +1,14 @@
 @extends('layout.mainlayout')
 @section('title',"Agenda :: JOK.cat ")
 @section('content')
-
-<table class="w-full border-collapse bg-white shadow-sm">
+<input 
+type="text" 
+id="searchInput" 
+placeholder="Buscar a l' agenda..." 
+onkeyup="filterTable()" 
+style="margin-bottom: 10px; padding: 8px; width: 100%; border: 1px solid #999;"
+>
+<table class="w-full border-collapse bg-white shadow-sm" id="agenda">
     <thead>
         <tr class="bg-neutral-700">
           <th class="border border-gray-200 px-3 py-4 text-left text-sm font-semibold text-gray-50">Data</th>
@@ -31,5 +37,26 @@
 @endforeach
 </tbody>
 </table>
+<script>
+  function filterTable() {
+      // Obtener el valor del input de búsqueda
+      const searchValue = document.getElementById('searchInput').value.toLowerCase();
 
+      // Obtener todas las filas de la tabla
+      const rows = document.querySelectorAll('#agenda tbody tr');
+
+      // Iterar sobre cada fila
+      rows.forEach(row => {
+          const cells = row.querySelectorAll('td');
+          const rowText = Array.from(cells).map(cell => cell.textContent.toLowerCase()).join(' ');
+
+          // Mostrar u ocultar la fila según coincida con el texto de búsqueda
+          if (rowText.includes(searchValue)) {
+              row.classList.remove('hidden');
+          } else {
+              row.classList.add('hidden');
+          }
+      });
+  }
+</script>
 @endsection

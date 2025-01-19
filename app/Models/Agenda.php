@@ -24,7 +24,7 @@ class Agenda extends Model
             't1.idClub as localClubId',
             't2.idTeam as visitorTeamId',
             't2.teamName as visitorTeamName',
-            't2.idClub as visitorClubId',
+            't2.idClub as visitorClubId', 
             'm.updated',
         ])
         ->join('phases as p', 'p.idGroup', '=', 'm.idGroup')
@@ -32,6 +32,7 @@ class Agenda extends Model
         ->join('teams as t1', 't1.idTeam', '=', 'm.idLocal')
         ->join('teams as t2', 't2.idTeam', '=', 'm.idVisitor')
         ->where('l.idSeason', 37)
+        ->where('m.matchDate', '>=', date('Y-m-d'))
         ->orderBy('m.matchDate')
         ->orderBy('m.matchHour')
         ->get();
