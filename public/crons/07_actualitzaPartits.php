@@ -56,7 +56,7 @@
                             $query = "update matches set localResult=" . trim($result[0]) . ", visitorResult=" . trim($result[1]) . ", updated=now(),idMatch=$idMatch where matchDate='$matchDate' and idLocal=$idLocal and idVisitor=$idVisitor and idLeague=$idLeague";
                             echo "<br /><br /><br />" . $query;
                             $mysqli->query($query);
-                           // mail('pau.arjalaguer@gmail.com', 'Partit Enviat', "idlocal: $idLocal \nVisitor: $idVisitor\nLeague: $idLeague");
+                            mail('pau.arjalaguer@gmail.com', 'Partit Enviat', "idlocal: $idLocal \nVisitor: $idVisitor\nLeague: $idLeague");
                         }
                     }
                 }

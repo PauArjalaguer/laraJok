@@ -1,29 +1,18 @@
 <?php
 
 use App\Http\Controllers\ScrapingController;
+use App\Models\Agenda;
+use App\Models\Classifications;
 use App\Models\Clubs;
+use App\Models\Leagues;
+use App\Models\Matches;
+use App\Models\Merchandisings;
+use App\Models\News;
 use App\Models\Players;
 use App\Models\Teams;
-use App\Models\Leagues;
-use App\Models\News;
-use App\Models\Matches;
-use App\Models\Phases;
-
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
 
 Route::get("/search/teams/{search}", function ($search) {
     return Teams::join('categories', 'categories.idCategory', '=', 'teams.idCategory')->where('teamName', 'like', '%' . $search . '%')->limit(100)->orderBy('idTeam', 'desc')->get();
@@ -35,6 +24,16 @@ Route::get("/search/players/{search}", function ($search) {
     return Players::where('playerName', 'like', '%' . $search . '%')
         ->limit(100)
         ->orderBy('playerName', 'desc')->get();
+});
+Route::get("/search/{search}", function ($search) {
+    $teams = Teams::join('categories', 'categories.idCategory', '=', 'teams.idCategory')->where('teamName', 'like', '%' . $search . '%')->limit(100)->orderBy('idTeam', 'desc')->get();
+    $clubs = Clubs::where('clubName', 'like', '%' . $search . '%')->limit(100)->get();
+    $players = Players::where('playerName', 'like', '%' . $search . '%')
+        ->limit(100)
+        ->orderBy('playerName', 'desc')->get();
+    $leagues = Leagues::where('leagueName', 'like', '%' . $search . '%')->limit(100)->get();
+
+    return ['teams' => $teams, 'clubs' => $clubs, 'players' => $players, 'leagues' => $leagues];
 });
 
 Route::get("/leagues", function () {
@@ -54,29 +53,10 @@ Route::get("/new/{website}/{id}", function ($website, $id) {
     return News::where('idNew',  $id)->get();
 });
 Route::get("main/matchesListNext/{top}", function ($top) {
-    return Matches::join('teams as t1', 't1.idTeam', '=', 'matches.idLocal')
-        ->join('clubs as c1', 't1.idClub', '=', 'c1.idClub')
-        ->join('teams as t2', 't2.idTeam', '=', 'matches.idVisitor')
-        ->join('clubs as c2', 't2.idClub', '=', 'c2.idClub')
-        ->join('phases', 'matches.idGroup', '=', 'phases.idGroup')
-        ->where(DB::raw("CONCAT(matchDate, ' ', matchHour)"), '>', now())
-        ->orderBy('matchDate')
-        ->orderBy('matchHour')
-        ->select('idMatch', 'groupName', 't1.teamName as localName', 't2.teamName as visitorName', 'c1.clubImage as localImage', 'c2.clubImage as visitorImage', 'matchDate as matchDate', 'matchHour as matchHour')
-        ->limit($top)
-        ->get();
+    return Matches::matchesListNext();
 });
 Route::get("main/matchesListLastWithResults/{top}", function ($top) {
-    return Matches::join('teams as t1', 't1.idTeam', '=', 'matches.idLocal')
-        ->join('clubs as c1', 't1.idClub', '=', 'c1.idClub')
-        ->join('teams as t2', 't2.idTeam', '=', 'matches.idVisitor')
-        ->join('clubs as c2', 't2.idClub', '=', 'c2.idClub')
-        ->join('phases', 'matches.idGroup', '=', 'phases.idGroup')
-        ->select('idMatch', 'groupName', 't1.teamName as localNaame', 't2.teamName as visitorName', 'c1.clubImage as localImage', 'c2.clubImage as visitorImage', 'matchDate as matchDate', 'matchHour as matchHour', 'localResult as localResult', 'visitorResult as visitorResult')
-        ->whereNot('localResult', null)->orderBy('matchDate', 'desc')
-        ->orderBy('matchHour', 'desc')
-        ->limit($top)
-        ->get(); 
+    return Matches::matchesListLastWithResults();
 });
 Route::get("clubs/clubsList", function () {
     return Clubs::clubsList();
@@ -84,13 +64,36 @@ Route::get("clubs/clubsList", function () {
 Route::get("clubs/teamsList/{idClub}", function ($idClub) {
     return Teams::teamsByIdClub($idClub);
 });
-Route::get("team/{idTeam}",function($idTeam){
-    $teamInfo= Teams::teamInfo($idTeam);
+Route::get("team/{idTeam}", function ($idTeam) {
+    $teamInfo = Teams::teamInfo($idTeam);
     $playersList =   Players::playersByIdTeam($idTeam);
-    $teamsLeaguesList = Phases::whereIn('idGroup', function ($q) use ($idTeam) {
-        $q->from('matches')->select('idGroup')->where('idLocal', '=', $idTeam)->orwhere('idVisitor',  $idTeam)->toSql();
-    })->orderBy('startDate', 'desc')->get();
-    return ['teamInfo'=>$teamInfo,'playersList'=>$playersList,'teamLeaguesList'=>$teamsLeaguesList];
+    $teamsLeaguesList = Teams::teamLeaguesList($idTeam);
+    return ['teamInfo' => $teamInfo, 'playersList' => $playersList, 'teamLeaguesList' => $teamsLeaguesList];
+});
+Route::get("player/{idPlayer}", function ($idPlayer) {
+    $playerInfo =  Players::where('idPlayer', $idPlayer)->get();
+    $playerMatchesList = Matches::matchesListFromIdPlayer($idPlayer);
+    $playerStats = Players::playerStats($idPlayer);
+    return ['playerInfo' => $playerInfo, 'playerMatchesList' => $playerMatchesList, 'playerStats' => $playerStats];
+});
+Route::get("competicio/{idCompetition}", function ($idCompetition) {
+    $matchesList = Matches::matchesListFromIdLeague($idCompetition);
+    $classification = Classifications::classificationGetByIdGroup($idCompetition);
+    $bestGoalsMade = Classifications::classificationGetBestGoalsMadeByIdLeague($idCompetition);
+    $leastGoalsReceived = Classifications::classificationGetLeastGoalsReceived($idCompetition);
+    $maxGoalsPerLeague = Players::maxGoalsPerLeague($idCompetition);
+    $totalPlayed = Leagues::totalPlayed($idCompetition);
+    return ['matchesList' => $matchesList, 'classification' => $classification, 'bestGoalsMade' => $bestGoalsMade, 'leastGoalsReceived' => $leastGoalsReceived, 'maxGoalsPerLeague' => $maxGoalsPerLeague, 'totalPlayed' => $totalPlayed];
+});
+Route::get("competicio/acta/{idMatch}", function ($idMatch) {
+    $matchGetInfoById = Matches::matchGetInfoById($idMatch);
+    return ['matchGetInfoById' => $matchGetInfoById];
+});
+Route::get("merchandising", function () {
+    return Merchandisings::merchandisingReturnFiveRandomItems();
+});
+Route::get("agenda", function () {
+    return Agenda::get();
 });
 
 
@@ -112,6 +115,10 @@ Route::get("scraping/regio", function () {
 
 Route::get("scraping/noia", function () {
     return ScrapingController::scrapeNoia();
+});
+
+Route::get("scraping/congres", function () {
+    return ScrapingController::scrapeCongres();
 });
 Route::get("scraping/resultats", function () {
     return ScrapingController::scrapeFecapaResults();

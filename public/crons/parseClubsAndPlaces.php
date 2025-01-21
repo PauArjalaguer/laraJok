@@ -1,10 +1,13 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE  & ~E_WARNING);
-include("../cnx/c.php");
+include("cnx/c.php");
+include("curl.php");
 $dom   = new DOMDocument('1.0');
-$url = "http://clubolesapati.cat/crons/htmls/agenda/agenda.php";
+$url = "https://server2.sidgad.es/fecapa/00_fecapa_agenda_1.php";
+$curled = getCurl($url);
 $html = $dom->loadHTMLFile(mb_convert_encoding($url, 'HTML-ENTITIES', 'UTF-8'));
 
+$html = $dom->loadHTML($curled);
 $dom->preserveWhiteSpace = true;
 $xpath = new DomXPath($dom);
 $sel = $xpath->query("//select");
@@ -16,8 +19,11 @@ foreach ($sel[1]->childNodes as $clubs) {
         $idClub = $clubs->attributes[0]->nodeValue;
         $clubName = addslashes(utf8_decode($clubs->nodeValue));
         echo "<hr />$idClub $clubName";
+        try{
         $mysqli->query("insert into clubs (idClub, clubName) values (" . $idClub . ",'" . $clubName . "') ON DUPLICATE KEY UPDATE clubName='$clubName'");
-
+        }catch(Exception $e){
+            echo $e->getMessage();
+        }
     }
 }
 echo "PLACES";
@@ -45,4 +51,4 @@ foreach ($sel[4]->childNodes as $clubs) {
 
 // $mysqli->query("insert into leagues (idLeague, leagueName, idSeason) values (" . $idLliga . ",'" . $nomLliga . "'," . $idSeason . ") ON DUPLICATE KEY UPDATE leagueName='$nomLliga', idSeason=$idSeason");
 
-$mysqli->close();
+//$mysqli->close();
