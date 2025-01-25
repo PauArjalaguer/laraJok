@@ -15,15 +15,17 @@ class MainController extends Controller
 {
     public function index()
     {
+
+        $userSavedData = User::userSavedData();        
         return view(
             'main',
             [
                 'clubsList' => Clubs::clubsList(),
                 'leaguesList' => Leagues::leaguesList(),
-                'matchesListNext' => Matches::matchesListNext(),
-                'matchesListLastWithResults' => Matches::matchesListLastWithResults(),
+                'matchesListNext' => Matches::matchesListNext( $userSavedData),
+                'matchesListLastWithResults' => Matches::matchesListLastWithResults($userSavedData),
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
-                'userSavedData' => User::userSavedData(),
+                'userSavedData' =>  $userSavedData,
                 'newsListTop'=>News::orderBy('newsDateTime','desc')->where('website','jokcat')->limit(4)->get()
                 
             ]

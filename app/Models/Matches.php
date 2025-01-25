@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Matches extends Model
 {
@@ -15,50 +16,18 @@ class Matches extends Model
 
     ];
     protected $dateFormat = 'U';
-   /*  public static  function matchesListFromToday()
-    {
-        $matches = DB::table('matches')
-            ->join('leagues', 'matches.idLeague', '=', 'leagues.idLeague')
-            ->join('categories', 'leagues.idCategory', 'categories.idCategory')
-            ->join('teams', 'matches.idLocal', '=', 'teams.idTeam')
-            ->join('teams as t2', 'matches.idVisitor', '=', 't2.idTeam')
-            ->join('clubs as club1', 'club1.idClub', 'teams.idClub')
-            ->join('clubs as club2', 'club2.idClub', 't2.idClub')
-            ->join('seasons', 'seasons.idSeason', 'leagues.idSeason')
-            ->select('seasons.seasonName', 'leagues.idGroup', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2')
-            ->whereNull('localResult')
-            ->where('matchDate', date('Y/m/d'))
-            ->orderBy('matchDate', 'asc')
-            ->orderBy('matchHour', 'asc')
-            ->limit(5)
-            ->get();
-        return $matches;
-    }
-    public static  function matchesListFromTomorrow()
-    {
-        $matchesFromTomorrow = DB::table('matches')
-            ->join('leagues', 'matches.idLeague', '=', 'leagues.idLeague')
-            ->join('categories', 'leagues.idCategory', 'categories.idCategory')
-            ->join('teams', 'matches.idLocal', '=', 'teams.idTeam')
-            ->join('teams as t2', 'matches.idVisitor', '=', 't2.idTeam')
-            ->join('clubs as club1', 'club1.idClub', 'teams.idClub')
-            ->join('clubs as club2', 'club2.idClub', 't2.idClub')
-            ->join('seasons', 'seasons.idSeason', 'leagues.idSeason')
-            ->select('seasons.seasonName', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2')
-            ->whereNull('localResult')
-            ->where('matchDate', date("Y-m-d", strtotime('tomorrow')))
-            ->orderBy('matchDate', 'asc')
-            ->orderBy('matchHour', 'asc')
-            ->limit(5)
-            ->get();
-        return $matchesFromTomorrow;
-    } */
 
-    public static  function matchesListNext()
+
+     
+    public static  function matchesListNext($userSavedData)
     {
+
+        //dump($userSavedData);
+       $idsTeams=User::userTeamsSelected($userSavedData);
+       $idsGroups=User::userGroupsSelected($userSavedData);
         $cacheKey = 'matchesListNext';
-        $ttl = 3600;
-        return Cache::remember($cacheKey, $ttl, function () {
+        $ttl = 300;
+        //return Cache::remember($cacheKey, $ttl, function () use ($idsTeams) {
             $matchesListNext = DB::table('matches')
                 ->join('leagues', 'matches.idLeague', '=', 'leagues.idLeague')
                 ->leftJoin('categories', 'leagues.idCategory', 'categories.idCategory')
@@ -71,19 +40,29 @@ class Matches extends Model
                 ->select('seasons.seasonName', 'phases.groupName', 'localResult', 'visitorResult', 'matches.idGroup', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2')
                 ->whereNull('localResult')
                 ->where('matchDate', '>', date("Y-m-d", strtotime('yesterday')))
+                ->when(!empty($idsTeams), function ($query) use ($idsTeams) {
+                    return $query->where(function ($subQuery) use ($idsTeams) {
+                        $subQuery->whereIn('matches.idLocal', $idsTeams)
+                            ->orWhereIn('matches.idVisitor', $idsTeams);
+                    });
+                })
+                ->when(!empty($idsGroups), function ($query) use ($idsGroups) {
+                    return $query->orwhereIn('matches.idGroup',$idsGroups);
+                })
                 ->orderBy('matchDate', 'asc')
                 ->orderBy('matchHour', 'asc')
-                ->limit(5)
+                ->limit(10)
                 ->get();
             return $matchesListNext;
-        });
+       // });
     }
 
-    public static  function matchesListLastWithResults()
+    public static  function matchesListLastWithResults($userSavedData)
     {
+        $idsTeams=User::userTeamsSelected($userSavedData);
         $cacheKey = 'matchesListLastWithResults';
-        $ttl = 3600;
-        return Cache::remember($cacheKey, $ttl, function () {
+        $ttl = 300;
+        //return Cache::remember($cacheKey, $ttl, function ()  use ($idsTeams) {
             $matchesListLastWithResults = DB::table('matches')
                 ->join('leagues', 'matches.idLeague', '=', 'leagues.idLeague')
                 ->join('categories', 'leagues.idCategory', 'categories.idCategory')
@@ -95,12 +74,18 @@ class Matches extends Model
                 ->join("phases", "phases.idGroup", "=", "matches.idGroup")
                 ->select('seasons.seasonName', 'phases.groupName', 'matches.idGroup', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2', 'localResult', 'visitorResult')
                 ->where('localResult', '<>', '', 'and')
+                ->when(!empty($idsTeams), function ($query) use ($idsTeams) {
+                    return $query->where(function ($subQuery) use ($idsTeams) {
+                        $subQuery->whereIn('matches.idLocal', $idsTeams)
+                            ->orWhereIn('matches.idVisitor', $idsTeams);
+                    });
+                })
                 ->orderBy('matchDate', 'desc')
                 ->orderBy('matchHour', 'desc')
-                ->limit(5)
+                ->limit(10)
                 ->get();
             return $matchesListLastWithResults;
-        });
+       // });
     }
     public static  function matchesListFromIdLeague($idGroup)
     {
