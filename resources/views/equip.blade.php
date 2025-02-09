@@ -9,6 +9,9 @@
         </svg>
     </a>
     {{App\Http\Controllers\TeamsController::teamFormat($teamInfo[0]->teamName)}}
+  <span class="text-xs md:hidden "> - 
+    <a class='' href="/club/{{$teamInfo[0]->idClub}}/{{urlencode($teamInfo[0]->clubName)}}">{{$teamInfo[0]->clubName}}</a>
+  </span>
 </div>
 <div class='md:flex '>
     <div class="w-full md:w-2/3 ">
