@@ -92,4 +92,57 @@ class User extends Authenticatable
 
             return $count;
     }
+
+    public static function userTeamsSelected($userSavedData){
+        $idSeason = Leagues::orderBy("idSeason", "desc")->limit(1)->first()->idSeason;
+       
+        $idsTeams = [];
+        $idsTeams = collect($userSavedData)
+            ->where('category', 'equip')
+            ->pluck('idItem')
+            ->toArray();
+
+        $idsPlayers = collect($userSavedData)
+            ->where('category', 'jugador')
+            ->pluck('idItem')
+            ->toArray();
+
+        //Todo: fer la relació correctament       
+        foreach ($idsPlayers as $idPlayer) {          
+            $q = Matches::select("player_match.idTeam")->distinct("player_match.idTeam")->join("player_match", "matches.idMatch", "player_match.idMatch")
+                ->join("leagues", "leagues.idLeague", "matches.idLeague")
+                ->where("idPlayer", $idPlayer)
+                ->where("idSeason", $idSeason)
+                ->get();
+            foreach ($q as $team) {
+                array_push($idsTeams, $team->idTeam);
+            }
+        } 
+        $idsClubs = collect($userSavedData)
+            ->where('category', 'club')
+            ->pluck('idItem')
+            ->toArray();
+
+        foreach ($idsClubs as $idClub) {         
+            $q = Teams::select("idTeam")->distinct("idTeam")
+                ->where("idClub", $idClub)                
+                ->get();
+            foreach ($q as $team) {
+                array_push($idsTeams, $team->idTeam);
+            }
+        }
+        return $idsTeams;
+    }
+
+    public static function userGroupsSelected($userSavedData){
+      
+        $idsGroups = collect($userSavedData)
+            ->where('category', 'competicio')
+            ->pluck('idItem')
+            ->toArray();
+
+       
+      
+        return $idsGroups;
+    }
 }

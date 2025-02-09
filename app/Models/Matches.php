@@ -24,7 +24,7 @@ class Matches extends Model
 
         //dump($userSavedData);
        $idsTeams=User::userTeamsSelected($userSavedData);
-       $idsGroups=User::userGroupsSelected($userSavedData);
+     //  $idsGroups=User::userGroupsSelected($userSavedData);
         $cacheKey = 'matchesListNext';
         $ttl = 300;
         //return Cache::remember($cacheKey, $ttl, function () use ($idsTeams) {
@@ -46,9 +46,9 @@ class Matches extends Model
                             ->orWhereIn('matches.idVisitor', $idsTeams);
                     });
                 })
-                ->when(!empty($idsGroups), function ($query) use ($idsGroups) {
+                /* ->when(!empty($idsGroups), function ($query) use ($idsGroups) {
                     return $query->orwhereIn('matches.idGroup',$idsGroups);
-                })
+                }) */
                 ->orderBy('matchDate', 'asc')
                 ->orderBy('matchHour', 'asc')
                 ->limit(10)
@@ -114,7 +114,7 @@ class Matches extends Model
     {
         $matchesListFromIdPlayer = DB::table('matches')
             ->join('leagues', 'matches.idLeague', '=', 'leagues.idLeague')
-            ->join('categories', 'leagues.idCategory', 'categories.idCategory')
+            ->leftJoin('categories', 'leagues.idCategory', 'categories.idCategory')
             ->join('teams', 'matches.idLocal', '=', 'teams.idTeam')
             ->join('teams as t2', 'matches.idVisitor', '=', 't2.idTeam')
             ->join('clubs as club1', 'club1.idClub', 'teams.idClub')
