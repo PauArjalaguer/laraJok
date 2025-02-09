@@ -146,7 +146,9 @@
         <div id=league_{{str_replace(" ","",$match->idRound)}} class='leagueContainer @if ($counter!=1) hidden @endif'>
             <div class='block rounded-t-xl my-2 text-neutral-700 font-bold hidden'>{{$match->seasonName}}</div>
             @endif
+            @if(!$round)
             <script>showActualRound('{{$match->matchDate}}',{{ $currentRound}})</script>
+            @endif
             <x-matches-component :match="$match" />
             @php
             $currentRound=$match->idRound;
@@ -154,12 +156,14 @@
             @endphp
             @endforeach
         </div>
-
+       
 
         <div class="clear-both"></div>
     </div>
 </div>
-
+@if($round)
+<script>showActualRound('{{$match->matchDate}}',{{ $round}})</script>
+@endif
 <script>
     setTimeout(() => {
         document.getElementById("percent").style.width = {{$totalPlayed['percentage_played']}} + "%";

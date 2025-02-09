@@ -24,6 +24,7 @@ Route::get('/equip/{id}/{label}', [TeamsController::class, 'index']);
 Route::get('/club/{id}/{label}', [ClubsController::class, 'index']);
 Route::get('/jugador/{id}/{label}', [PlayersController::class, 'index']);
 Route::get('/competicio/{id}/{label}', [CompeticioController::class, 'index']);
+Route::get('/competicio/{id}/{label}/{round}', [CompeticioController::class, 'index']);
 Route::get('/acta/{id}/{label}', [CompeticioController::class, 'acta']);
 Route::get('/desa/{item}/{id}', [UserController::class, 'store'])->middleware(['auth', 'verified']);
 

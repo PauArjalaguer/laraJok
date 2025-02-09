@@ -4,7 +4,7 @@
              <a class="text-white font-bold text-xs " href="/competicio/{{$match->idGroup}}/{{urlencode($match->groupName)}}">{{$match->groupName}} {{-- | {{$match->seasonName}} --}}</a>
          </div>
          <div class="w-1/3 text-right pr-2">
-             <span class="inline w-full text-white font-bold text-xs">{{strlen($match->idRound)>2 ? '' : 'Jornada ' }} {{$match->idRound}}</span>
+             <span class="inline w-full text-white font-bold text-xs">  <a class="text-white font-bold text-xs " href="/competicio/{{$match->idGroup}}/{{urlencode($match->groupName)}}/{{$match->idRound}}">{{strlen($match->idRound)>2 ? '' : 'Jornada ' }} {{$match->idRound}}</a></span>
              @isset($match->localResult)
              <span class="text-white font-bold text-xs"> | <a href="/acta/{{$match->idMatch}}/{{urlencode($match->localTeam)}}-{{urlencode($match->visitorTeam)}}" aria-label="Acta del partit {{urlencode($match->localTeam)}}-{{urlencode($match->visitorTeam)}}">
                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 inline pb-1">

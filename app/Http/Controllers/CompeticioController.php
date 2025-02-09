@@ -17,6 +17,7 @@ class CompeticioController extends Controller
     public function index(Request $request)
     {
         $id = $request->id;
+        $round = $request->round;
         return view(
             'competicio',
             [
@@ -30,9 +31,8 @@ class CompeticioController extends Controller
                 'maxGoalsPerLeague' => Players::maxGoalsPerLeague($id),
                 'totalPlayed' => Leagues::totalPlayed($id),
                 'checkIfSaved' => User::checkIfSaved('competicio', $id),
-                'userSavedData' => User::userSavedData()
-
-
+                'userSavedData' => User::userSavedData(),
+                'round'=>$round
             ]
         );
     }
