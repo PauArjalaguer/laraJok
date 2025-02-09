@@ -15,10 +15,56 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    
+    <script src="https://kit.fontawesome.com/0b5c081e1f.js" crossorigin="anonymous"></script>
 </head>
 
 <body class="antialiased">
+    <div class="relative">
+        <!-- Sidebar -->
+        <div id="sidebar" class="fixed left-0 top-0 w-64 h-full bg-gray-800 text-white z-50 -translate-x-full transition-transform duration-500">
+            <div class="text-gray-100 text-xl">
+                <div class="p-2.5 mt-1 flex items-center rounded-md ">
+                    <h1 class="text-[15px]  ml-3 text-xl text-white font-bold  font-['Comfortaa']">Jok.cat</h1>
+                    <i class="fa-solid fa-circle-xmark ml-24 cursor-pointer lg:hidden" onClick="toggleMenu()"></i>
+                </div>
+                <hr class="my-2 text-gray-600">
+
+                <div>
+                    <div class="p-2.5 mt-3 flex items-center rounded-md 
+        px-4 duration-300 cursor-pointer ">
+                        <i class="fa-brands fa-searchengin"></i>
+                        <input class="text-[15px] ml-4 w-full bg-transparent focus:outline-none" placeholder="Buscar" onKeyUp="search(this.value)" />
+                    </div>
+
+                    <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-blue-600">
+                        <i class="fa-solid fa-house-laptop"></i>
+                        <span class="text-[15px] ml-4 text-white"><a href="/">Home</a></span>
+                    </div>
+                    <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-blue-600">
+                        <i class="fa-regular fa-newspaper"></i>
+                        <span class="text-[15px] ml-4 text-white"><a href="/noticies">Notícies</a></span>
+                    </div>
+                    <hr class="my-4 text-gray-600">
+                    <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-blue-600">
+                        <i class="fa-regular fa-calendar-days text-white"></i>
+                        <span class="text-[15px] ml-4 text-white"><a href="/agenda">Agenda</a></span>
+                    </div>
+                    <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-blue-600">
+                        <i class="fa-sharp-duotone fa-solid fa-shirt"></i>
+                        <span class="text-[15px] ml-4 text-white"><a href="/merchandising">Merchandising</a></span>
+                    </div>
+
+                    <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-blue-600">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span class="text-[15px] ml-4 text-white"><a href='/logout'>Logout</a></span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
     <div id="container" class="min-h-screen">
         <div class="w-full lg:w-3/4 p-2 lg:p-0 mx-auto my-0 ">
             @include('layout.nav')
@@ -36,7 +82,7 @@
             </div>
         </footer>
     </div>
- 
+
 </body>
 
 </html>

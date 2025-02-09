@@ -3,13 +3,13 @@
         <h1><a href="/" class="webtitle font-['Comfortaa'] text-bold text-2xl md:text-4xl  font-bold">JOK.cat</a></h1>
     </div>
 
-    <div class="py-1 w-10/12 text-right text-neutral-700 bg-graeen-700 flex justify-end">
+    <div class="py-1 w-10/12 text-right text-neutral-700  flex justify-end">
         <div class="p-2 inline lg:hidden" id="menuButton">
-            <svg onClick="showMenu()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <svg onClick="toggleMenu()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
         </div>
-        <ul class="pt-2 block  hidden lg:inline" id="menu">
+        <ul class="pt-2 block  hidden lg:inline" id="menu_">
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/noticies">Notícies</a></li>
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/agenda">Agenda</a></li>
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/merchandising">Merchandising</a></li>
@@ -120,9 +120,7 @@
         }, 500);
     }
 
-    function showMenu() {
-        document.getElementById("menuButton").style.display = "none";
-        document.getElementById("menu").style.display = "block";
+    function toggleMenu() { 
+         document.getElementById('sidebar').classList.toggle('-translate-x-full');
     }
-
 </script>
