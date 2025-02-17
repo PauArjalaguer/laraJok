@@ -86,6 +86,7 @@
             //  console.log("Header: " + headerCounter);
         }
     }, 6000);
-    interval();
+    
+   // if(interval()){interval();}
 
 </script>

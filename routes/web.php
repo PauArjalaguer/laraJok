@@ -49,7 +49,9 @@ Route::get('/dashboard/merchandising/edit/{id}', [MerchandisingsController::clas
 Route::put('/dashboard/merchandising/save/{id}', [MerchandisingsController::class,'update'])->middleware(['auth', 'verified']);
 Route::get('/dashboard/merchandising/delete/{id}', [MerchandisingsController::class,'delete'])->middleware(['auth', 'verified'])->name('dashboard.merchandising.delete');
 Route::get('/dashboard/merchandising', function () { return view('dashboard_merchandising',['merchandisingList'=>Merchandisings::orderBy('idAsset','desc')->get()]);})->middleware(['auth', 'verified'])->name('dashboard.merchandising');
-
+Route::get("/privacitat", function(){
+    return view("privacitat");
+ });
 Route::get("/efsmasquefa", function (){ 
     return view('masquefa_legal');});
 
@@ -66,9 +68,9 @@ Route::middleware('auth')->group(function () {
 
 
 
-/* Route::get('/logout', function () {
+ Route::get('/logout', function () {
     Auth::logout();
     return redirect()->route('main');
-})->name('logout'); */
+})->name('logout'); 
 
 require __DIR__ . '/auth.php';

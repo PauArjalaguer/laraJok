@@ -67,7 +67,7 @@
         //echo date('Y-m-d H:i:s', $quarterAgoTimestamp);
     }
     if ($_GET['force']) {
-        $result = $mysqli->query(" select  idLocal,idVisitor,idLeague  from matches where idmatch not in (select idmatch from player_match)  and length(idMatch)>=7 and matchDate<=now() and matchDate>'2024-01-01' ORDER BY RAND() limit 0,50");
+        $result = $mysqli->query(" select  idLocal,idVisitor,idLeague  from matches  ORDER BY matchdate desc limit 0,100");
     } else {
         $result = $mysqli->query("select idLocal,idVisitor,idLeague from matches where matchdate=curdate() and matchHour<=curtime() - INTERVAL 1 HOUR
 and localresult is null  ORDER BY RAND() limit 0,3");
