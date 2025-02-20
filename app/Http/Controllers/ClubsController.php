@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Classifications;
 use App\Models\Clubs;
 use App\Models\Leagues;
 use App\Models\Merchandisings;
@@ -23,7 +24,8 @@ class ClubsController extends Controller
             'teamsList' => Teams::teamsByIdClub($id),
             'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
             'checkIfSaved' => User::checkIfSaved('club', $id),
-            'userSavedData' => User::userSavedData()
+            'userSavedData' => User::userSavedData(),
+            'classifications' => Classifications::classificationGetByIdClub($id)
         ]
     );
 
