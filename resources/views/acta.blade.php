@@ -2,8 +2,11 @@
 @section('title',$matchGetInfoById[0]->teamName."-".$matchGetInfoById[0]->teamName2." :: JOK.cat ")
 @section('content')
 <div class="w-full text-neutral-700 text-xl my-4 font-bold pb-2 border-b border-neutral-400 flex">
-    <div class="lg:w-1/2 inline">
-        <a href="/competicio/{{$matchGetInfoById[0]->idGroup}}/{{urlencode($matchGetInfoById[0]->groupName)}}"> {{$matchGetInfoById[0]->groupName}}</a> - {{$matchGetInfoById[0]->idRound}}
+    <div class="lg:w-1/2 inline flex">
+        <a class="inline active:text-neutral-300" href="/competicio/{{$matchGetInfoById[0]->idGroup}}/{{urlencode($matchGetInfoById[0]->groupName)}}"> {{$matchGetInfoById[0]->groupName}}</a>
+        <div class="w-5 h-5 flex items-center justify-center bg-neutral-700 text-white font-bold rounded-full inline text-sm p-2 mx-1">
+            {{$matchGetInfoById[0]->idRound}}
+        </div>
     </div>
     <div class="w-1/2 inline text-right ">
         {{ \Carbon\Carbon::parse($matchGetInfoById[0]->matchDate)->format('d-m-Y')}} {{ \Carbon\Carbon::parse($matchGetInfoById[0]->matchHour)->format('H:i')}}
@@ -15,7 +18,7 @@
     <div class="w-full flex">
         <div class="w-5/12 flex justify-end text-right items-center  mr-10 lg:m-0">
             <span class="text-lg lg:text-3xl mr-4  text-neutral-700 font-bold">
-                <a href="/equip/{{$matchGetInfoById[0]->idLocal}}/{{urlencode($matchGetInfoById[0]->teamName)}}">{{$matchGetInfoById[0]->teamName}}</a>
+                <a class="active:text-neutral-300" href="/equip/{{$matchGetInfoById[0]->idLocal}}/{{urlencode($matchGetInfoById[0]->teamName)}}">{{$matchGetInfoById[0]->teamName}}</a>
             </span>
             <a href="/equip/{{$matchGetInfoById[0]->idLocal}}/{{urlencode($matchGetInfoById[0]->teamName)}}">
                 <img class="md:w-[70px] lg:w-[120px] aspect-square hidden md:inline" src={{$matchGetInfoById[0]->clubImage1}} />
@@ -29,9 +32,9 @@
             <a href="/equip/{{$matchGetInfoById[0]->idVisitor}}/{{urlencode($matchGetInfoById[0]->teamName2)}}">
                 <img class="md:w-[70px] lg:w-[120px] aspect-square hidden md:inline " src={{$matchGetInfoById[0]->clubImage2}} />
             </a>
-            <a href="/equip/{{$matchGetInfoById[0]->idVisitor}}/{{urlencode($matchGetInfoById[0]->teamName2)}}">
-                <span class="text-lg lg:text-3xl ml-4 text-neutral-700 font-bold">{{$matchGetInfoById[0]->teamName2}}</span>
-            </a>
+            <span class="text-lg lg:text-3xl mr-4  text-neutral-700 font-bold">
+                <a class="active:text-neutral-300" href="/equip/{{$matchGetInfoById[0]->idVisitor}}/{{urlencode($matchGetInfoById[0]->teamName2)}}">{{$matchGetInfoById[0]->teamName2}}</a>
+            </span>
         </div>
     </div>
     <div class="w-full text-center mt-4"><span class="font-bold">Àrbitre</span><br /> {{App\Http\Controllers\TeamsController::teamFormat($matchGetInfoById[0]->referee)}}</div>
@@ -51,7 +54,7 @@
             @if($m->idLocal==$m->idTeam)
             <div class='bg-white w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-50 transition-all shadow-neutral-700 flex'>
                 <div class='p-2 md:p-4 w-8/12 border-r-[1px] text-left  text-xs md:text-sm '>
-                    <a href="/jugador/{{$m->idPlayer}}/{{urlencode($m->playerName)}}">{{App\Http\Controllers\TeamsController::teamFormat($m->playerName)}}</a>
+                    <a class="active:text-neutral-300" href="/jugador/{{$m->idPlayer}}/{{urlencode($m->playerName)}}">{{App\Http\Controllers\TeamsController::teamFormat($m->playerName)}}</a>
                 </div>
                 <div class="p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm">{{$m->goals}}</div>
                 <div class="p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm">{{$m->blue}}</div>
@@ -77,7 +80,7 @@
             @if($m->idVisitor==$m->idTeam)
             <div class="bg-white w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-50 transition-all shadow-neutral-700 flex">
                 <div class="p-2 md:p-4 w-8/12 border-r-[1px] text-left  text-xs md:text-sm">
-                    <a href="/jugador/{{$m->idPlayer}}/{{urlencode($m->playerName)}}">{{App\Http\Controllers\TeamsController::teamFormat($m->playerName)}}</a>
+                    <a class="active:text-neutral-300" href="/jugador/{{$m->idPlayer}}/{{urlencode($m->playerName)}}">{{App\Http\Controllers\TeamsController::teamFormat($m->playerName)}}</a>
                 </div>
                 <div class="p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm">{{$m->goals}}</div>
                 <div class="p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm">{{$m->blue}}</div>

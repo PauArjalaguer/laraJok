@@ -24,12 +24,12 @@ style="margin-bottom: 10px; padding: 8px; width: 100%; border: 1px solid #999;"
 @foreach($agenda as $match)
     <tr class="hover:bg-neutral-50">
         <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base whitespace-nowrap">{{ \Carbon\Carbon::parse($match->matchDate)->format('d-m-y')}} {{\Carbon\Carbon::parse($match->matchHour)->format('H:i')}}</td>
-        <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base"> <a href="/competicio/{{$match->idGroup}}/{{urlencode($match->groupName)}}">{{$match->groupName}}</a></td>
+        <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base"> <a class="active:text-neutral-300" href="/competicio/{{$match->idGroup}}/{{urlencode($match->groupName)}}">{{$match->groupName}}</a></td>
         <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base text-center">{{$match->idRound}}</td>  
-        <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base"><a href="/equip/{{$match->localTeamId}}/{{urlencode($match->localTeamName)}}">{{$match->localTeamName}}</a></td>
+        <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base"><a class="active:text-neutral-300" href="/equip/{{$match->localTeamId}}/{{urlencode($match->localTeamName)}}">{{$match->localTeamName}}</a></td>
         <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base text-center">{{$match->localResult}}</td>      
         <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base text-center">{{$match->visitorResult}}</td> 
-         <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base"><a href="/equip/{{$match->visitorTeamId}}/{{urlencode($match->visitorTeamName)}}">{{$match->visitorTeamName}}</td>
+         <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base"><a class="active:text-neutral-300" href="/equip/{{$match->visitorTeamId}}/{{urlencode($match->visitorTeamName)}}">{{$match->visitorTeamName}}</td>
        
 
     

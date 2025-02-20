@@ -16,7 +16,7 @@
     </div>
     <div class=' md:w-1/2 lg:w-3/4 md:pl-4 mt-2 lg:mt-0'>
         <div class='text-sm lg:text-xl text-neutral-900 font-bold flex-nowrap md:float-left mb-1 mt-4 md:mt-0 '>
-            <a href='/noticies/detall/{{$news->idNew}}/{{$news->newsTitle}}'>
+            <a class="active:text-neutral-300" href='/noticies/detall/{{$news->idNew}}/{{$news->newsTitle}}'>
                 <h1>{{$news->newsTitle}}</h1>
             </a></div>
 
@@ -27,7 +27,7 @@
 
             <p class='block md:hidden '>{!! substr(nl2br($news->newsContent),0,200) !!}
                 @if(strlen($news->newsContent)>200)
-                <a href='/noticies/detall/{{$news->idNew}}/{{$news->newsTitle}}' class='inline'>...
+                <a class="active:text-neutral-300" href='/noticies/detall/{{$news->idNew}}/{{$news->newsTitle}}' class='inline'>...
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 inline">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
@@ -36,7 +36,7 @@
             </p>
             <p class='hidden md:block'>{!! substr(nl2br($news->newsContent),0,600) !!}
                 @if(strlen($news->newsContent)>600)
-                <a href='/noticies/detall/{{$news->idNew}}/{{$news->newsTitle}}' class='inline'>...
+                <a class="active:text-neutral-300" href='/noticies/detall/{{$news->idNew}}/{{$news->newsTitle}}' class='inline'>...
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 inline">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>

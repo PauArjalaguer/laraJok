@@ -61,7 +61,7 @@
         <div class='bg-white w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-50 transition-all shadow-neutral-700 flex'>
             <div class='p-2 md:p-4 w-1/12 text-center border-r-[1px] text-xs md:text-sm '>{{$classificationRow->position}}</div>
             <div class='p-2 md:p-4 w-7/12 border-r-[1px] text-left  text-xs md:text-sm '>
-                <a href="/equip/{{$classificationRow->idTeam}}/{{urlencode($classificationRow->teamName)}}">{{App\Http\Controllers\TeamsController::teamFormat($classificationRow->teamName)}}</a>
+                <a class="active:text-neutral-300" class="active:text-neutral-300" href="/equip/{{$classificationRow->idTeam}}/{{urlencode($classificationRow->teamName)}}">{{App\Http\Controllers\TeamsController::teamFormat($classificationRow->teamName)}}</a>
             </div>
             <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center bg-neutral-700  text-xs md:text-sm text-white'>{{$classificationRow->points}}</div>
             <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm'>{{$classificationRow->won}}</div>
@@ -77,7 +77,7 @@
                     <img src={{ count($bestGoalsMade)>0 ? $bestGoalsMade[0]->clubImage:'' }} class="max-h-8 max-w-8 md:max-h-12 md:max-w-12  " />
                 </div>
                 <div class="p-2 w-11/12 ml-2 ">
-                    <a href="/equip/{{count($bestGoalsMade)>0 ? $bestGoalsMade[0]->idTeam : ''}}/{{count($bestGoalsMade)>0 ? urlencode($bestGoalsMade[0]->teamName ) :''}}">
+                    <a class="active:text-neutral-300" href="/equip/{{count($bestGoalsMade)>0 ? $bestGoalsMade[0]->idTeam : ''}}/{{count($bestGoalsMade)>0 ? urlencode($bestGoalsMade[0]->teamName ) :''}}">
                            <span class="font-bold">{{count($bestGoalsMade)>0 ? App\Http\Controllers\TeamsController::teamFormat($bestGoalsMade[0]->teamName) : ''}}</span>
                     </a>
                     <br />{{count($bestGoalsMade)>0 ? $bestGoalsMade[0]->goalsMade : ''}} gols
@@ -86,11 +86,11 @@
             <div class="font-bold bg-neutral-700 p-2 text-white border-[1px] border-b-[0px] border-neutral-500 mt-2 shadow-md shadow-neutral-700">Equip menys golejat </div>
             <div class="flex bg-white items-center border-[1px]  border-neutral-500 shadow-md shadow-neutral-700">
                 <div class="p-2 w-1/12  ">
-                    <a href="/equip/{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->idTeam  : ''}}/{{count($leastGoalsReceived) ? urlencode($leastGoalsReceived[0]->teamName) : ''}}">
+                    <a class="active:text-neutral-300" href="/equip/{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->idTeam  : ''}}/{{count($leastGoalsReceived) ? urlencode($leastGoalsReceived[0]->teamName) : ''}}">
                         <img src={{count($leastGoalsReceived)>0 ?  $leastGoalsReceived[0]->clubImage : ''}} class="max-h-8 max-w-8 md:max-h-12 md:max-w-12  " />
                 </div>
                 <div class="p-2 w-11/12 ml-2 text-sm">
-                    <a href="/equip/{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->idTeam : ''}}/{{count($leastGoalsReceived)>0 ? urlencode($leastGoalsReceived[0]->teamName) :''}}">
+                    <a class="active:text-neutral-300" href="/equip/{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->idTeam : ''}}/{{count($leastGoalsReceived)>0 ? urlencode($leastGoalsReceived[0]->teamName) :''}}">
                         <span class="font-bold">{{count($leastGoalsReceived)>0 ? App\Http\Controllers\TeamsController::teamFormat($leastGoalsReceived[0]->teamName) : ''}}</span>
                     </a>
                     <br />{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->goalsReceived : ''}} gols
@@ -100,7 +100,7 @@
             @foreach($maxGoalsPerLeague as $player)
             <div class='bg-white w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-50 transition-all shadow-neutral-700 flex'>
                 <div class='p-2 md:p-4 w-11/12 border-r-[1px] text-left  text-xs md:text-sm '>
-                    <a href="/jugador/{{$player->idPlayer}}/{{urlencode($player->playerName)}}">{{App\Http\Controllers\TeamsController::teamFormat($player->playerName)}}</a>
+                    <a class="active:text-neutral-300" href="/jugador/{{$player->idPlayer}}/{{urlencode($player->playerName)}}">{{App\Http\Controllers\TeamsController::teamFormat($player->playerName)}}</a>
                 </div>
                 <div class='p-2 md:p-4 w-1/12 text-center border-r-[1px] text-xs md:text-sm '>{{$player->goals}}</div>
 
