@@ -3,6 +3,7 @@
     <meta http-equiv="refresh" content="15">
     <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
     <title>Cron de dades de partits</title>
+    <meta http-equiv="refresh" content="1">
 </head>
 <?php
 
@@ -200,7 +201,7 @@ matchDate<NOW()
  AND (ERROR!=1 OR ERROR IS NULL) 
   -- and updatedTries<1
    and idMatch!=83653
-order by updated asc, matchDate deSC
+order by updated desc, matchDate deSC
 limit 0,200
 ");
 

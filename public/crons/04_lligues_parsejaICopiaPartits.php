@@ -157,7 +157,7 @@ include("curl.php");
                                     $visitorClub = prepareidClub($visitorImage, $mysqli);
 
 
-                                    echo "\n\t<div class='bg-slate-100 border-l border-t border-slate-700 w-8/12 p-2 text-center'><img width='25' class='inline w-1/12' src='$localImage' /> $localTeam $idLocal - $visitorTeam $idVisitor <img width='25' src=' $visitorImage'  class='inline w-1/12'  /></div>";
+                                    echo "\n\t<div class='bg-slate-100 border-l border-t border-slate-700 w-8/12 p-2 text-center'> $localTeam $idLocal - $visitorTeam $idVisitor </div>";
 
                                     $idMatch = str_replace("fichapartido_", "", $ch2->childNodes[27]->childNodes[1]->attributes[1]->nodeValue);
 
@@ -202,12 +202,16 @@ include("curl.php");
                                     echo "\n\t<div class='bg-slate-100 border-l border-t border-slate-700 w-3/12 p-2 text-center'> $round $localResult - $visitorResult</div>";
 
                                     if ($localTeam && $visitorTeam) {
+                                        try{
                                         $sql = "insert into teams (idTeam, teamName,idClub,idSeason) values (" . $idLocal . ",'" . $localTeam . "'," . $localClub . "," . $idSeason . ")  ON DUPLICATE KEY UPDATE teamName='$localTeam', idSeason=$idSeason";
                                         //echo "<br />$sql";
                                         $mysqli->query($sql);
                                         $sql = "insert into teams (idTeam, teamName,idClub,idSeason) values (" . $idVisitor . ",'" . $visitorTeam . "'," . $visitorClub . "," . $idSeason . ")  ON DUPLICATE KEY UPDATE teamName='$visitorTeam', idSeason=$idSeason";
                                         //echo "<br />$sql";
                                         $mysqli->query($sql);
+                                        }catch(Exception $e) {
+                                            echo 'Message: ' .$e->getMessage();
+                                          }
                                         if (!$idMatch) {
                                             $idMatch = $idLliga . $idGrup . $idLocal . $idVisitor;
                                         } else {
@@ -233,11 +237,23 @@ include("curl.php");
                     }
                 }
             }
+
+            $mysqli->query("
+    UPDATE phases p
+    JOIN (
+        SELECT idGroup, MAX(matchDate) AS last_match_date
+        FROM matches
+        GROUP BY idGroup
+    ) m ON p.idGroup = m.idGroup
+    SET p.enddate = m.last_match_date
+    WHERE p.idGroup = $idGrup;
+");
         }
         if ($_GET['idLeague']) {
             $subquery = " and idLeague=" . $_GET['idLeague'] . " ";
         }
-        $result = $mysqli->query("select idLeague from leagues where idSeason=37  $subquery order by lastupdated asc, idLeague desc limit 0,2");
+        echo "select idLeague from leagues where enddate>now() and  idSeason=37  $subquery order by lastupdated asc, idLeague desc limit 0,2";
+        $result = $mysqli->query("select idLeague from leagues where  idSeason=37  $subquery order by lastupdated asc, idLeague desc limit 0,10");
         while ($row = mysqli_fetch_array($result)) {
             //echo $row['idLeague']." - ";
             parseLeague($row['idLeague'], $mysqli);
@@ -245,7 +261,16 @@ include("curl.php");
         $endTime = new DateTime();
 
         try {
-            $mysqli->query("UPDATE phases SET numberofmatches=(SELECT COUNT(*) FROM matches WHERE idGroup=phases.idGroup);");
+          /*   $mysqli->query("
+    UPDATE phases p
+    JOIN (
+        SELECT idGroup, COUNT(*) AS match_count
+        FROM matches
+        GROUP BY idGroup
+    ) m ON p.idGroup = m.idGroup
+    SET p.numberofmatches = m.match_count;
+"); */
+          //  $mysqli->query("UPDATE phases SET numberofmatches=(SELECT COUNT(*) FROM matches WHERE idGroup=phases.idGroup);");
             /*  $mysqli->query("UPDATE phases SET startdate=(SELECT matchDate FROM matches WHERE idGroup=phases.idGroup LIMIT 1);");
             $mysqli->query("UPDATE phases SET enddate=(SELECT matchDate FROM matches WHERE idGroup=phases.idGroup order by matchdate desc LIMIT 1);"); */
         } catch (Exception $ex) {

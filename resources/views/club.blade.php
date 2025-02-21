@@ -66,6 +66,22 @@
             </div>
         </div>
         @endforeach
+        <div class="pr-1 mt-3">
+            <div class="block mb-2">
+                <h1 class="font-bold text-xl text-neutral-700">Propers partits</h1>
+            </div>
+            @foreach($matchesListNext as $match)
+            <x-matches-component :match="$match" />
+            @endforeach
+        </div>
+        <div class="s pl-1">
+            <div class="block mb-2">
+                <h1 class="font-bold text-xl text-neutral-700">Darrers resultats</h1>
+            </div>
+            @foreach($matchesListLastWithResults as $match)
+            <x-matches-component :match="$match" />
+            @endforeach
+        </div>
         <div id="propersPartits" class="hidden">
             <h1 class="text-xl font-bold">Propers partits</h1>
         </div>

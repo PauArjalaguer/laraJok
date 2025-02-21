@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Classifications;
 use App\Models\Clubs;
 use App\Models\Leagues;
+use App\Models\Matches;
 use App\Models\Merchandisings;
 use App\Models\Teams;
 use App\Models\User;
@@ -15,6 +16,7 @@ class ClubsController extends Controller
 {
    public function index(Request $request){
     $id = $request->id;
+    $userSavedData="";
     return view(
         'club',
         [
@@ -25,7 +27,9 @@ class ClubsController extends Controller
             'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
             'checkIfSaved' => User::checkIfSaved('club', $id),
             'userSavedData' => User::userSavedData(),
-            'classifications' => Classifications::classificationGetByIdClub($id)
+            'classifications' => Classifications::classificationGetByIdClub($id),
+            'matchesListNext' => Matches::matchesListNext( $userSavedData,$id),
+            'matchesListLastWithResults' => Matches::matchesListLastWithResults($userSavedData,$id),
         ]
     );
 
