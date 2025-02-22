@@ -56,7 +56,7 @@
                             $query = "update matches set localResult=" . trim($result[0]) . ", visitorResult=" . trim($result[1]) . ", updated=now(),idMatch=$idMatch where matchDate='$matchDate' and idLocal=$idLocal and idVisitor=$idVisitor and idLeague=$idLeague";
                             echo "<br /><br /><br />" . $query;
                             $mysqli->query($query);
-                            mail('pau.arjalaguer@gmail.com', 'Partit Enviat', "idlocal: $idLocal \nVisitor: $idVisitor\nLeague: $idLeague");
+                            //mail('pau.arjalaguer@gmail.com', 'Partit Enviat', "idlocal: $idLocal \nVisitor: $idVisitor\nLeague: $idLeague");
                         }
                     }
                 }
@@ -67,8 +67,9 @@
         //echo date('Y-m-d H:i:s', $quarterAgoTimestamp);
     }
     if ($_GET['force']) {
-        $result = $mysqli->query(" select  idLocal,idVisitor,idLeague  from matches  ORDER BY matchdate desc limit 0,100");
-    } else {
+       // $result = $mysqli->query(" select  idLocal,idVisitor,idLeague  from matches where idmatch not in (select idmatch from player_match)  and length(idMatch)>=7 and matchDate<=now() and matchDate>'2024-01-01' ORDER BY RAND() limit 0,50");
+  
+  $result=$mysqli->query("select  distinct idLeague from matches where idmatch not in (select idmatch from player_match)  and length(idMatch)>=7 and matchDate<=now() and matchDate>'2024-01-01' -- ORDER BY RAND() limit 0,50");  } else {
         $result = $mysqli->query("select idLocal,idVisitor,idLeague from matches where matchdate=curdate() and matchHour<=curtime() - INTERVAL 1 HOUR
 and localresult is null  ORDER BY RAND() limit 0,3");
     }

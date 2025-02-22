@@ -106,7 +106,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <div id="container" class="min-h-screen">

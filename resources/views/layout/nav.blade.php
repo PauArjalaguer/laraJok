@@ -77,7 +77,6 @@
     var timeout = null;
     const search = (value) => {
         clearTimeout(timeout);
-
         timeout = setTimeout(function() {
             document.getElementById('search').style.display = 'block';
             document.getElementById('searchValue').innerHTML = value;
