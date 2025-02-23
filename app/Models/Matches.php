@@ -73,7 +73,7 @@ class Matches extends Model
             ->join('seasons', 'seasons.idSeason', 'leagues.idSeason')
             ->join("phases", "phases.idGroup", "=", "matches.idGroup")
             ->select('seasons.seasonName', 'phases.groupName', 'matches.idGroup', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2', 'localResult', 'visitorResult')
-            ->where('localResult', '<>', '', 'and')
+            ->whereNotNull('localResult')
             ->when(!empty($idsTeams), function ($query) use ($idsTeams) {
                 return $query->where(function ($subQuery) use ($idsTeams) {
                     $subQuery->whereIn('matches.idLocal', $idsTeams)

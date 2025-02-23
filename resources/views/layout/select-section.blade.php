@@ -1,5 +1,5 @@
 <section id="selectSection" class="flex mb-2">
-    <div class="w-1/2 md:w-2/3 border-solid border border-neutral-400">
+    <div class="w-1/2 md:w-2/3 border-solid border border-neutral-400" id="container">
         <div class="relative w-full md:p-2 text-xs lg:text-base text-gray-700">
             <!-- Search Input with Icon -->
             <div class="relative">
@@ -45,7 +45,7 @@
         </div>
         <!-- Select Dropdown (Styled to Look Like a Single Component) -->
         <select id="clubSelect" aria-label="Selecciona un club" class="hidden w-full mt-1 border border-gray-300 bg-white rounded-lg py-2 px-3 appearance-none text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer" onChange="handleClubChange(this.options[this.selectedIndex].value,this.options[this.selectedIndex].innerHTML)">
-            <option value=""></option>
+           
             @foreach( $clubsList as $club)
             <option value={{$club->value}}>{{$club->label}}</option>
             @endforeach
@@ -63,7 +63,6 @@
 
     function filterLeagues() {
         let input = document.getElementById("searchLeague").value.toLowerCase();
-
         let select = document.getElementById("leagueSelect");
         if (input.length > 0) {
             select.classList.remove("hidden");
@@ -76,8 +75,10 @@
             let text = options[i].innerText.toLowerCase();
             if (text.includes(input)) {
                 options[i].style.display = "";
+                options[i].disabled = false;
             } else {
                 options[i].style.display = "none";
+                options[i].disabled = true;
             }
         }
     }
@@ -103,9 +104,19 @@
         }
     }
 
-    function hideSelectors() {
-        //document.getElementById("clubSelect").classList.add("hidden");
-        //document.getElementById("leagueSelect").classList.add("hidden");
+    function hideSelectors(event) {
+       
+        if (!event.relatedTarget || !container.contains(event.relatedTarget)) {
+        document.getElementById("searchLeague").value="";
+        document.getElementById("searchClubs").value="";
+        document.getElementById("clubSelect").classList.add("hidden");
+        document.getElementById("leagueSelect").classList.add("hidden");
+        }
     }
+
+    searchClubs.addEventListener("blur", hideSelectors);
+        searchLeague.addEventListener("blur", hideSelectors);
+        clubSelect.addEventListener("blur", hideSelectors);
+        leagueSelect.addEventListener("blur", hideSelectors);
 
 </script>
