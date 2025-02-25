@@ -5,42 +5,21 @@ use Illuminate\Http\Request;
 
 class FileUploadController extends Controller
 {
-    /** 
-     * Generate Upload View 
-     * 
-     * @return void 
-
-    */  
-
-    public  function dropzoneUi()  
-    {  
-        return view('upload-view');  
-    }  
-
-    /** 
-     * File Upload Method 
-     * 
-     * @return void 
-     */  
-
-    public  function dropzoneFileUpload(Request $request)  
-    {  
+  
+    public  function dropzoneUi()
+    {
+        return view('upload-view');
+    }
+  
+    public  function dropzoneFileUpload(Request $request)
+    {
+        $image_folder="images/";
         $image = $request->file('file');
-
-     
-        $imageName = time().'.'.$image->extension(); 
-
-       // 
-
- /*       if (extension_loaded('gd') && function_exists('gd_info')) {
-        echo "GD is installed.";
-    } else {
-        echo "GD is not installed.";
-    } */
-        $image->move(public_path('images'),$imageName);  
-        $image_toconvert = imagecreatefromstring(file_get_contents('images/' . $imageName));
-        imagewebp($image_toconvert , "images/".$imageName.'.webp', 80);
-        unlink("images/".$imageName);
+        $imageName = time().'.'.$image->extension();
+        $image->move(public_path('images'),$imageName);
+        $image_toconvert = imagecreatefromstring(file_get_contents($image_folder . $imageName));
+        imagewebp($image_toconvert , $image_folder.$imageName.'.webp', 80);
+        unlink($image_folder.$imageName);
 
         return response()->json(['success'=>$imageName.".webp"]);
     }

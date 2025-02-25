@@ -22,14 +22,14 @@ class ClubsController extends Controller
         [
             'leaguesList' => Leagues::leaguesList(),
             'clubsList' => Clubs::clubsList(),
-            'clubInfo' => Clubs::where('idClub', $id)->get(), 
+            'clubInfo' => Clubs::where('idClub', $id)->get(),
             'teamsList' => Teams::teamsByIdClub($id),
             'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
             'checkIfSaved' => User::checkIfSaved('club', $id),
             'userSavedData' => User::userSavedData(),
             'classifications' => Classifications::classificationGetByIdClub($id),
             'matchesListNext' => Matches::matchesListNext( $userSavedData,$id),
-            'matchesListLastWithResults' => Matches::matchesListLastWithResults($userSavedData,$id),
+            'matchesListLastWithResults' => Matches::matchesListLastWithResults($userSavedData,$id)
         ]
     );
 

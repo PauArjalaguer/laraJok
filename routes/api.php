@@ -52,11 +52,11 @@ Route::get("/news/{website}/{top}", function ($website, $top) {
 Route::get("/new/{website}/{id}", function ($website, $id) {
     return News::where('idNew',  $id)->get();
 });
-Route::get("main/matchesListNext/{top}", function ($top) {
-    return Matches::matchesListNext();
+Route::get("main/matchesListNext/{top}", function () {
+    return Matches::matchesListNext("",0);
 });
-Route::get("main/matchesListLastWithResults/{top}", function ($top) {
-    return Matches::matchesListLastWithResults();
+Route::get("main/matchesListLastWithResults/{top}", function () {
+    return Matches::matchesListLastWithResults("",0);
 });
 Route::get("clubs/clubsList", function () {
     return Clubs::clubsList();
@@ -117,9 +117,7 @@ Route::get("scraping/noia", function () {
     return ScrapingController::scrapeNoia();
 });
 
-Route::get("scraping/congres", function () {
-    return ScrapingController::scrapeCongres();
-});
+
 Route::get("scraping/resultats", function () {
     return ScrapingController::scrapeFecapaResults();
 });
