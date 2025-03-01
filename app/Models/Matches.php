@@ -34,7 +34,7 @@ class Matches extends Model
             ->join('clubs as club2', 'club2.idClub', 't2.idClub')
             ->join('seasons', 'seasons.idSeason', 'leagues.idSeason')
             ->join("phases", "phases.idGroup", "=", "matches.idGroup")
-            ->join("places", "places.idPlace", "=", "matches.idPlace")
+            ->leftJoin("places", "places.idPlace", "=", "matches.idPlace")
             ->select('seasons.seasonName', 'phases.groupName', 'localResult', 'visitorResult', 'matches.idGroup', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2','placeAddress')
             ->whereNull('localResult')
             ->where('matchDate', '>', date("Y-m-d", strtotime('yesterday')))

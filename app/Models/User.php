@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\ResetPasswordNotification;
 
 
 class User extends Authenticatable
@@ -123,9 +124,9 @@ class User extends Authenticatable
             ->pluck('idItem')
             ->toArray();
 
-        foreach ($idsClubs as $idClub) {         
+        foreach ($idsClubs as $idClub) {
             $q = Teams::select("idTeam")->distinct("idTeam")
-                ->where("idClub", $idClub)                
+                ->where("idClub", $idClub)
                 ->get();
             foreach ($q as $team) {
                 array_push($idsTeams, $team->idTeam);
@@ -139,10 +140,10 @@ class User extends Authenticatable
         $idsGroups = collect($userSavedData)
             ->where('category', 'competicio')
             ->pluck('idItem')
-            ->toArray();
-
-       
+            ->toArray();      
       
         return $idsGroups;
     }
+
+
 }
