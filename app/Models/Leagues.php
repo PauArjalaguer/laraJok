@@ -15,12 +15,12 @@ class Leagues extends Model
         $cacheKey = 'leaguesList';
         $ttl = 600000;
         return Cache::remember($cacheKey, $ttl, function () {
-            $leaguesList = Leagues::join('seasons', 'leagues.idSeason', '=', 'seasons.idSeason')->join('phases', 'phases.idLeague', '=', 'leagues.idLeague')
+            return  Leagues::join('seasons', 'leagues.idSeason', '=', 'seasons.idSeason')->join('phases', 'phases.idLeague', '=', 'leagues.idLeague')
                 ->select('leagueName as leagueName','phases.idGroup as value', DB::raw("CONCAT(' ',groupName,' (',seasonName,')') AS label"))->where('phases.numberofmatches','!=', 0)->orderby('leagues.idSeason', 'desc')
                 ->orderby('leagues.idCategory', 'asc')->get();
-            return $leaguesList;
+            
         });
-    }  
+    }
 
     public static function totalPlayed($idLeague)
     {
@@ -32,11 +32,10 @@ class Leagues extends Model
 
         $percentagePlayed = $totalMatches > 0 ? ($playedMatches / $totalMatches) * 100 : 0;
 
-        $result = [
+        return [
             'total' => $totalMatches,
             'played' => $playedMatches,
             'percentage_played' => round($percentagePlayed),
         ];
-        return $result;
     }
 }
