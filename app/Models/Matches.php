@@ -35,7 +35,7 @@ class Matches extends Model
             ->join('seasons', 'seasons.idSeason', 'leagues.idSeason')
             ->join("phases", "phases.idGroup", "=", "matches.idGroup")
             ->leftJoin("places", "places.idPlace", "=", "matches.idPlace")
-            ->select('seasons.seasonName', 'phases.groupName', 'localResult', 'visitorResult', 'matches.idGroup', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2','placeAddress')
+            ->select('seasons.seasonName', 'phases.groupName', 'localResult', 'visitorResult', 'matches.idGroup', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2','placeAddress','lat','lon')
             ->whereNull('localResult')
             ->where('matchDate', '>', date("Y-m-d", strtotime('yesterday')))
             ->when(!empty($idsTeams), function ($query) use ($idsTeams) {
@@ -75,7 +75,8 @@ class Matches extends Model
             ->join('clubs as club2', 'club2.idClub', 't2.idClub')
             ->join('seasons', 'seasons.idSeason', 'leagues.idSeason')
             ->join("phases", "phases.idGroup", "=", "matches.idGroup")
-            ->select('seasons.seasonName', 'phases.groupName', 'matches.idGroup', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2', 'localResult', 'visitorResult')
+            ->leftJoin("places", "places.idPlace", "=", "matches.idPlace")
+            ->select('seasons.seasonName', 'phases.groupName', 'matches.idGroup', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2', 'localResult', 'visitorResult','placeAddress','lat','lon')
             ->whereNotNull('localResult')
             ->when(!empty($idsTeams), function ($query) use ($idsTeams) {
                 return $query->where(function ($subQuery) use ($idsTeams) {
@@ -107,7 +108,8 @@ class Matches extends Model
             ->join('clubs as club2', 'club2.idClub', 't2.idClub')
             ->join('seasons', 'seasons.idSeason', 'leagues.idSeason')
             ->join("phases", "phases.idGroup", "=", "matches.idGroup")
-            ->select('seasons.seasonName', 'groupName', 'matches.idGroup', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2', 'localResult', 'visitorResult')
+            ->leftJoin("places", "places.idPlace", "=", "matches.idPlace")
+            ->select('seasons.seasonName', 'groupName', 'matches.idGroup', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2', 'localResult', 'visitorResult','placeAddress','lat','lon')
             ->where('matches.idGroup', $idGroup)
             ->orderByRaw('CONVERT(idRound, SIGNED) asc')
             ->orderBy('idRound', 'asc')
@@ -130,8 +132,9 @@ class Matches extends Model
             ->join('clubs as club2', 'club2.idClub', 't2.idClub')
             ->join('player_match', 'matches.idMatch', "=", 'player_match.idMatch')
             ->join("phases", "phases.idGroup", "=", "matches.idGroup")
+            ->leftJoin("places", "places.idPlace", "=", "matches.idPlace")
             ->join('seasons', 'seasons.idSeason', 'leagues.idSeason')
-            ->select('seasons.seasonName', 'groupName', 'matches.idGroup', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2', 'localResult', 'visitorResult')
+            ->select('seasons.seasonName', 'groupName', 'matches.idGroup', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2', 'localResult', 'visitorResult','placeAddress','lat','lon')
             ->where("player_match.idPlayer", $idPlayer)
             ->orderBy('matchDate', 'desc')
             ->orderBy('matchHour', 'desc')
@@ -156,5 +159,11 @@ class Matches extends Model
             ->where("matches.idMatch", $idMatch)->get();
 
         return $matchGetInfoById;
+    }
+
+
+    public function Pavellons()
+    {
+        //return $this->belongsTo(Pavellons::class, 'idPlace', 'idPlace');
     }
 }

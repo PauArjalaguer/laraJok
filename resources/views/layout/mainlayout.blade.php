@@ -77,6 +77,10 @@
                         <i class="fa-regular fa-newspaper"></i>
                         <a href="/noticies"><span class="text-[15px] ml-4 text-white">Notícies</span></a>
                     </div>
+                     <div class="p-2.5 m-2 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
+                        <i class="fa-solid fa-building"></i>
+                        <a href="/pavellons"><span class="text-[15px] ml-4 text-white">Pavellons</span></a>
+                    </div>
                     <div class="p-2.5 m-2 flex items-center rounded-md 
         px-4 duration-300 cursor-pointer ">
                         <i class="fa-brands fa-searchengin"></i>

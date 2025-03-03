@@ -7,6 +7,7 @@ use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\MerchandisingsController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\PavellonsController;
 use App\Http\Controllers\PlayersController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TeamsController;
@@ -33,6 +34,7 @@ Route::get("/merchandising", [MerchandisingsController::class, 'index']);
 Route::get("/noticies/detall/{id}/{label}", [NewsController::class, 'detall']);
 Route::get("/noticies", [NewsController::class, 'index']);
 Route::get("/agenda", [AgendaController::class, 'index']);
+Route::get("/pavellons", [PavellonsController::class, 'index']);
 
 //dashboard noticies
 Route::get('/dashboard/news/new/', [NewsController::class,'create'])->middleware(['auth', 'verified'])->name('dashboard.news.new');
@@ -68,9 +70,9 @@ Route::middleware('auth')->group(function () {
 
 
 
- Route::get('/logout', function () {
+/*  Route::get('/logout', function () {
     Auth::logout();
     return redirect()->route('main');
-})->name('logout'); 
+})->name('logout');  */
 
 require __DIR__ . '/auth.php';
