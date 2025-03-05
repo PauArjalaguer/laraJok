@@ -151,17 +151,13 @@
     <script src="{{ asset('pwa/pwa-install.js') }}"></script>
 </body>
 <script>
-    const canGoBack = () => window.history.length > 1;
-
-    console.log("Back");
+    const canGoBack = () => window.history.length > 1;    
     console.log(canGoBack());
-
 
     if (canGoBack()) {
         document.getElementById("pwaNav").classList.remove("hidden");
     }
     if (canGoBack()) {
-
         document.getElementById("pwaNavBack").classList.remove("hidden");
     }
 

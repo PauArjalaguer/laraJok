@@ -1,15 +1,13 @@
 let deferredPrompt;
 
-window.addEventListener("beforeinstallprompt", (event) => {
-    console.log("beforeinstallprompt detectat!");
+window.addEventListener("beforeinstallprompt", (event) => {    
     event.preventDefault();
     deferredPrompt = event;
 
     const installBtn = document.getElementById("install-btn");
     if (installBtn) {
         installBtn.style.display = "block";
-        installBtn.addEventListener("click", async () => {
-            console.log("Botó d'instal·lació clicat!");
+        installBtn.addEventListener("click", async () => {            
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
