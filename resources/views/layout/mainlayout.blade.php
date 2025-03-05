@@ -52,6 +52,19 @@
 
     <link rel="manifest" href="/site.webmanifest">
     <script src="https://kit.fontawesome.com/0b5c081e1f.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        (function(c, l, a, r, i, t, y) {
+            c[a] = c[a] || function() {
+                (c[a].q = c[a].q || []).push(arguments)
+            };
+            t = l.createElement(r);
+            t.async = 1;
+            t.src = "https://www.clarity.ms/tag/" + i;
+            y = l.getElementsByTagName(r)[0];
+            y.parentNode.insertBefore(t, y);
+        })(window, document, "clarity", "script", "qjlnn16w4a");
+
+    </script>
 </head>
 
 <body class="antialiased">
@@ -77,7 +90,7 @@
                         <i class="fa-regular fa-newspaper"></i>
                         <a href="/noticies"><span class="text-[15px] ml-4 text-white">Notícies</span></a>
                     </div>
-                     <div class="p-2.5 m-2 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
+                    <div class="p-2.5 m-2 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
                         <i class="fa-solid fa-building"></i>
                         <a href="/pavellons"><span class="text-[15px] ml-4 text-white">Pavellons</span></a>
                     </div>
