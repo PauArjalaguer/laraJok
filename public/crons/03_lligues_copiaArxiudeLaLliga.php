@@ -1,12 +1,12 @@
 <?php
 header("Access-Control-Allow-Origin: *");
-
 ?>
-<html>
-
+<!doctype html>
+<html lang="en">
 <head>
     <meta http-equiv="refresh" content="300">
     <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+    <title>Cron 3</title>
 </head>
 
 <body style='background-color:#fff'>
@@ -44,15 +44,9 @@ header("Access-Control-Allow-Origin: *");
         date2 = new Date(aff).getTime();
 
 
-        console.log("-------------------------------------------");
-        console.log(fecapaDate + " " + date1);
-        console.log(actualDate + " " + date2);
-
         if (date1 > date2) {
-            console.log("ES mes gran");
             return true;
         } else {
-            console.log("ES mes petit");
             return false;
         }
     }
@@ -101,7 +95,7 @@ header("Access-Control-Allow-Origin: *");
 
     var leagues = [];
     <?php
-    include("cnx/c.php");
+    use cnx\c;
     $result = $mysqli->query("select idLeague from leagues where idSeason=37  order by lastupdated asc, idLeague desc limit 0,50");
     while ($row = mysqli_fetch_array($result)) {
         echo "leagues.push(" . $row['idLeague'] . ");";
@@ -109,8 +103,8 @@ header("Access-Control-Allow-Origin: *");
 
     ?>
     leagues.forEach((league) => {
-       // parseLeague(league);
+  
     })
     setTimeout(() => window.location.replace("04_lligues_parsejaICopiaPartits.php"), 1000);
-  // setTimeout(() => window.location.replace("03_lligues_copiaArxiudeLaLliga.php"), 300000);
+  
 </script>

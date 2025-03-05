@@ -1,11 +1,11 @@
-<?php
-header("Access-Control-Allow-Origin: *");
-
-?><html>
+<?php header("Access-Control-Allow-Origin: *"); ?>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <meta http-equiv="refresh" content="300">
     <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+    <title>Cron 01</title>
 </head>
 
 <body style='background-color:#fff'>
