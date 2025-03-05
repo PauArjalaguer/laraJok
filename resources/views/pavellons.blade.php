@@ -73,7 +73,6 @@
 
 
     ubicacioActual(function(coords) {
-        console.log("coords", coords);
         pavellons.forEach(pavello => {
             let distancia = calcularDistancia(coords.lat, coords.lon, pavello.placeLat, pavello.placeLon);
             pavellonsAmbDistancia.push({

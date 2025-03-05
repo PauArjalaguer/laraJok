@@ -81,30 +81,19 @@
         timeout = setTimeout(function() {
             document.getElementById('search').style.display = 'block';
             document.getElementById('searchValue').innerHTML = value;
-            console.log(value);
             fetch("https://jok.cat/api/search/teams/" + value)
                 .then(response => {
                     document.getElementById('searchReturn').innerHTML = "";
-                    console.log(value + " netejo formulari")
                     return response.json()
                 })
                 .then(data => {
                     document.getElementById('searchReturn').innerHTML = "";
                     document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='block w-full m-2 font-bold'>" + data.length + " equips</div>");
-                    // console.log(data);
                     data.map((team) => {
-                        console.log(team);
                         document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='p-1 w-1/4'><div class='bg-neutral-200 rounded-xl p-4 cursor-pointer' ><a class='text-sm' href='/equip/" + team.idTeam + "/" + team.teamName + "'>" + (team.teamName + " " + team.categoryName).substr(0, 36) + "</a></div></div>")
                     })
 
                 });
-            /* fetch("http://larajok.test/api/search/clubs/" + value)
-             .then(response => {
-                 return response.json()
-             })
-             .then(data => {
-                 console.log(data)
-             })*/
             fetch("https://jok.cat/api/search/players/" + value)
                 .then(response => {
                     return response.json()
@@ -120,7 +109,8 @@
         }, 500);
     }
 
-    function toggleMenu() { 
-         document.getElementById('sidebar').classList.toggle('-translate-x-full');
+    function toggleMenu() {
+        document.getElementById('sidebar').classList.toggle('-translate-x-full');
     }
+
 </script>

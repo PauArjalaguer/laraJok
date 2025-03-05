@@ -10,7 +10,6 @@
             if(counter<10){
                 counter="0"+String(counter);
             }
-            console.log("counter="+counter);
             if(counter=="00"){
                 counter="01";
             }
@@ -18,7 +17,7 @@
         }
     }
 
-    const leagueShow = (league) => { console.log(league);
+    const leagueShow = (league) => { c
         var leagueContainer = document.getElementsByClassName("leagueContainer");
         var leagueButton = document.getElementsByClassName("leagueButton");
         for (i = 0; i < leagueContainer.length; i++) {

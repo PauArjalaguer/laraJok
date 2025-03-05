@@ -46,24 +46,11 @@
         Dropzone.options.myDropzone = {
             // Configuration options go here
             dictDefaultMessage: "<span style='font-size:32px; color:#2a6496;'>\n\<i style='font-size:32px;' class=\"fas fa-cloud fa-fw\"></i> Insertar foto de la notícia."
-            , success: function(file, response) {
-                //console.log(response.success);
+            , success: function(file, response) {                
                 document.getElementById('newsImage').value = "images/"+response.success;
-
-              //  document.getElementById("newsForm").submit();
             }
 
         };
 
-        /* $('#datepicker').datepicker({
-             dateFormat: 'yy-mm-dd'
-         }).val(); */
-
     </script>
-    <script>
-        // Note that the name "myDropzone" is the camelized
-        // id of the form.
-
-    </script>
-
 </x-app-layout>

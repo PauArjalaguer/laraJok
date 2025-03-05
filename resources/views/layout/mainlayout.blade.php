@@ -151,9 +151,8 @@
     <script src="{{ asset('pwa/pwa-install.js') }}"></script>
 </body>
 <script>
-    const canGoBack = () => window.history.length > 1;    
-    console.log(canGoBack());
-
+    const canGoBack = () => window.history.length > 1;
+    
     if (canGoBack()) {
         document.getElementById("pwaNav").classList.remove("hidden");
     }

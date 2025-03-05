@@ -77,16 +77,10 @@
             sliderChangeStatus(3, 'active');
         }
 
-
         if (headerCounter < 3) {
             headerCounter++;
-            console.log("Header: " + headerCounter);
         } else {
             headerCounter = 0;
-            //  console.log("Header: " + headerCounter);
         }
     }, 6000);
-    
-   // if(interval()){interval();}
-
 </script>

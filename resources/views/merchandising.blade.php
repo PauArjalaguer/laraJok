@@ -9,11 +9,15 @@
 <div class='flex flex-wrap'>
     <div class='border-b border-slate-300 flex w-full pb-2'>
         @foreach($merchandisingReturnCategories as $category)
-        <div class="p-2 bg-slate-200 rounded-xl mr-1 text-[12px] md:text-sm flex  cursor-pointer" ><span onClick="showCategory('{{$category->assetCategory}}')">{{$category->assetCategory}}</span> </div>
+        <div class="p-2 bg-slate-200 rounded-xl mr-1 text-[12px] md:text-sm flex  cursor-pointer">
+            <span onClick="showCategory('{{$category->assetCategory}}')">{{$category->assetCategory}}</span>
+        </div>
 
         @endforeach
 
-        <div class="p-2 bg-slate-300 rounded-xl mr-1 text-[12px] md:text-sm flex  cursor-pointer" ><span onClick="showAllCategories()">Totes</span></div>
+        <div class="p-2 bg-slate-300 rounded-xl mr-1 text-[12px] md:text-sm flex  cursor-pointer">
+            <span onClick="showAllCategories()">Totes</span>
+        </div>
     </div>
     @php
     $currentType="a";
@@ -27,7 +31,6 @@
         <div class="relative mt-2 hover:shadow-xl shadow-slate-400 z-10 relative  w-full bg-cover bg-center flex justify-center items-center  overflow-hidden  transition-all duration-1000 rounded-t-xl ease-in-out">
             <div class="bg-left-top rounded-sm bg-slate-100 w-full h-full p-60 transition-all duration-1000 ease-in-out transform bg-center bg-cover hover:scale-110 cursor-pointer" style="background-image: url({{$merch->assetThumbnail}}); display: block;">
             </div>
-
         </div>
         <div class="flex items-center bg-gray-100 border border-t-slate-300">
             <div class="text-slate-500 p-5 text-left  w-1/2">{{$merch->assetPrice ? $merch->assetPrice." €" : "Sense stock"}}</div>
@@ -63,7 +66,7 @@
 
     @endforeach
     const showCategory = (category) => {
-       
+
         let c = document.getElementsByClassName(category);
         for (let i = 0; i < c.length; i++) {
             c[i].style.display = "block";
@@ -76,7 +79,6 @@
 
         hideCategories.map((cat) => {
             let c = document.getElementsByClassName(cat);
-            console.log(c);
             for (let i = 0; i < c.length; i++) {
                 c[i].style.transform = "scale(0)";
                 c[i].style.opacity = "0";
@@ -85,23 +87,23 @@
                 }, 300);
             }
         });
-        
+
 
 
     }
-    const showAllCategories = ()=>{   
-    categories.map((cat) => {
+    const showAllCategories = () => {
+        categories.map((cat) => {
             let c = document.getElementsByClassName(cat);
-            console.log(c);
             for (let i = 0; i < c.length; i++) {
                 c[i].style.display = "block";
-              
+
                 setTimeout(() => {
                     c[i].style.transform = "scale(1)";
                     c[i].style.opacity = "1";
                 }, 300);
             }
         });
-}
+    }
+
 </script>
 @endsection
