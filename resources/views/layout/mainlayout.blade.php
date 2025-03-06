@@ -77,7 +77,7 @@
             <div class="text-gray-100 text-xl">
                 <div class="p-2 mt-1 flex items-center justify-between ">
                     <h1 class="text-[15px]  ml-3 text-xl text-white font-bold  font-['Comfortaa']">Jok.cat</h1>
-                    <i class="fa-solid fa-circle-xmark h-6 w-6 cursor-pointer lg:hidden hover:text-gray-300" onClick="toggleMenu()"></i>
+                    <i class="fa-solid fa-circle-xmark h-6 w-6 cursor-pointer lg:hidden hover:text-gray-300" onClick="toggleMenu()" onKeyPress="toggleMenu()" role="button" tabindex="0"></i>
                 </div>
                 <hr class="my-2 text-gray-600">
 
@@ -129,8 +129,8 @@
 
         <div class="w-full lg:w-3/4 p-2 lg:p-0 mx-auto my-0 ">
             <div id="pwaNav" class="px-2 pb-2 flex justify-between items-center w-full border-b border-gray-200 hidden lg:hidden">
-                <div id="pwaNavBack"><i class="fa-solid fa-backward-step" onClick="goBack()"></i></div>
-                <div id="pwaNavFordward" class="hidden"><i class="fa-solid fa-forward-step" onClick="goForward()"></i></div>
+                <div id="pwaNavBack"><i class="fa-solid fa-backward-step" onClick="goBack()" onKeyPress="goBack()" role="button" tabindex="0"></i></div>
+                <div id="pwaNavFordward" class="hidden"><i class="fa-solid fa-forward-step" onClick="goForward()" onKeyPress="goForward()" role="button" tabindex="0"></i></div>
             </div>
             @include('layout.nav')
             @include('layout.select-section')

@@ -22,10 +22,8 @@ class Matches extends Model
     public static  function matchesListNext($userSavedData, $idClub = 0)
     {
         $idsTeams = User::userTeamsSelected($userSavedData);
-        $cacheKey = 'matchesListNext';
-        $ttl = 900;
-        //return Cache::remember($cacheKey, $ttl, function () use ($idsTeams) {
-        $matchesListNext = DB::table('matches')
+     
+            return  DB::table('matches')
             ->join('leagues', 'matches.idLeague', '=', 'leagues.idLeague')
             ->leftJoin('categories', 'leagues.idCategory', 'categories.idCategory')
             ->join('teams', 'matches.idLocal', '=', 'teams.idTeam')
@@ -54,19 +52,13 @@ class Matches extends Model
             ->orderBy('matchHour', 'asc')
             ->limit(10)
             ->get();
-
-          
-        return $matchesListNext;
-        // });
     }
 
     public static  function matchesListLastWithResults($userSavedData, $idClub = 0)
     {
         $idsTeams = User::userTeamsSelected($userSavedData);
-        $cacheKey = 'matchesListLastWithResults';
-        $ttl = 900;
-        //return Cache::remember($cacheKey, $ttl, function ()  use ($idsTeams) {
-        $matchesListLastWithResults = DB::table('matches')
+       
+            return DB::table('matches')
             ->join('leagues', 'matches.idLeague', '=', 'leagues.idLeague')
             ->join('categories', 'leagues.idCategory', 'categories.idCategory')
             ->join('teams', 'matches.idLocal', '=', 'teams.idTeam')
@@ -94,12 +86,11 @@ class Matches extends Model
             ->orderBy('matchHour', 'desc')
             ->limit(10)
             ->get();
-        return $matchesListLastWithResults;
-        // });
+        
     }
     public static  function matchesListFromIdLeague($idGroup)
     {
-        $matchesFromTomorrow = DB::table('matches')
+        return DB::table('matches')
             ->leftJoin('leagues', 'matches.idLeague', '=', 'leagues.idLeague')
             ->leftJoin('categories', 'leagues.idCategory', 'categories.idCategory')
             ->leftJoin('teams', 'matches.idLocal', '=', 'teams.idTeam')
@@ -115,15 +106,12 @@ class Matches extends Model
             ->orderBy('idRound', 'asc')
             ->orderBy('matchDate', 'asc')
             ->orderBy('matchHour', 'asc')
-
             ->get();
-
-        return $matchesFromTomorrow;
     }
 
     public static  function matchesListFromIdPlayer($idPlayer)
     {
-        $matchesListFromIdPlayer = DB::table('matches')
+        return DB::table('matches')
             ->join('leagues', 'matches.idLeague', '=', 'leagues.idLeague')
             ->leftJoin('categories', 'leagues.idCategory', 'categories.idCategory')
             ->join('teams', 'matches.idLocal', '=', 'teams.idTeam')
@@ -139,13 +127,11 @@ class Matches extends Model
             ->orderBy('matchDate', 'desc')
             ->orderBy('matchHour', 'desc')
             ->get();
-
-        return $matchesListFromIdPlayer;
     }
 
     public static function matchGetInfoById($idMatch)
     {
-        $matchGetInfoById =  DB::table('matches')
+        return  DB::table('matches')
             ->leftJoin('player_match', 'player_match.idMatch', "=", 'matches.idMatch')
             ->join("teams as t1", "t1.idTeam", "=", "matches.idLocal")
             ->join("clubs as c1", "t1.idClub", "=", "c1.idClub")
@@ -157,13 +143,5 @@ class Matches extends Model
             ->orderBy('player_match.idTeam')
             ->orderBy('players.playerName')
             ->where("matches.idMatch", $idMatch)->get();
-
-        return $matchGetInfoById;
-    }
-
-
-    public function Pavellons()
-    {
-        //return $this->belongsTo(Pavellons::class, 'idPlace', 'idPlace');
     }
 }

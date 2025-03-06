@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -74,29 +73,28 @@ class User extends Authenticatable
 
         $idUser =  Auth::user() ? Auth::user()->id : 0;
 
-        $results = DB::table('usersaved')->where('idUser', $idUser)
+        return DB::table('usersaved')->where('idUser', $idUser)
             ->leftJoin('phases', 'usersaved.idItem', 'phases.idGroup')
             ->leftJoin('teams', 'usersaved.idItem', 'teams.idTeam')
             ->leftJoin('clubs', 'usersaved.idItem', 'clubs.idClub')
-            ->leftJoin('players', 'usersaved.idItem', 'players.idPlayer')->get();
-        return $results;
+            ->leftJoin('players', 'usersaved.idItem', 'players.idPlayer')->get();  
     }
 
     public static function checkIfSaved($category, $idItem)
     {
         $idUser =  Auth::user() ? Auth::user()->id : 0;
-        $count = DB::table('usersaved')
+        return DB::table('usersaved')
             ->where('idUser', $idUser)
             ->where('category', $category)
             ->where('idItem', $idItem)
             ->count();
 
-            return $count;
     }
 
-    public static function userTeamsSelected($userSavedData){
+    public static function userTeamsSelected($userSavedData)
+    {
         $idSeason = Leagues::orderBy("idSeason", "desc")->limit(1)->first()->idSeason;
-       
+
         $idsTeams = [];
         $idsTeams = collect($userSavedData)
             ->where('category', 'equip')
@@ -108,8 +106,8 @@ class User extends Authenticatable
             ->pluck('idItem')
             ->toArray();
 
-        //Todo: fer la relació correctament       
-        foreach ($idsPlayers as $idPlayer) {          
+        // Deures: fer la relació correctament
+        foreach ($idsPlayers as $idPlayer) {
             $q = Matches::select("player_match.idTeam")->distinct("player_match.idTeam")->join("player_match", "matches.idMatch", "player_match.idMatch")
                 ->join("leagues", "leagues.idLeague", "matches.idLeague")
                 ->where("idPlayer", $idPlayer)
@@ -118,7 +116,7 @@ class User extends Authenticatable
             foreach ($q as $team) {
                 array_push($idsTeams, $team->idTeam);
             }
-        } 
+        }
         $idsClubs = collect($userSavedData)
             ->where('category', 'club')
             ->pluck('idItem')
@@ -135,15 +133,11 @@ class User extends Authenticatable
         return $idsTeams;
     }
 
-    public static function userGroupsSelected($userSavedData){
-      
-        $idsGroups = collect($userSavedData)
+    public static function userGroupsSelected($userSavedData)
+    {
+        return collect($userSavedData)
             ->where('category', 'competicio')
             ->pluck('idItem')
-            ->toArray();      
-      
-        return $idsGroups;
+            ->toArray();
     }
-
-
 }
