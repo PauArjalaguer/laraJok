@@ -72,7 +72,7 @@
     <div class="relative">
 
         <!-- Sidebar -->
-        <div id="sidebar" class="fixed left-0 top-0 w-[85%] h-full bg-gray-800 text-white z-50 -translate-x-full transition-transform duration-1000 ease-in-out">
+        <div id="sidebar" class="fixed left-0 top-0 w-[55%] h-full bg-gray-800 text-white z-50 -translate-x-full transition-transform duration-1000 ease-in-out">
 
             <div class="text-gray-100 text-xl">
                 <div class="p-2 mt-1 flex items-center justify-between ">
