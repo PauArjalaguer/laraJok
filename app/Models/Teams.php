@@ -12,8 +12,7 @@ class Teams extends Model
 
     public static function teamInfo($id)
     {
-       return Teams::join('clubs', 'clubs.idClub', '=', 'teams.idClub')->leftjoin('categories', 'categories.idCategory', '=', 'teams.idCategory')->where('idTeam', $id)->get();
-        return $result;
+       return Teams::join('clubs', 'clubs.idClub', '=', 'teams.idClub')->leftjoin('categories', 'categories.idCategory', '=', 'teams.idCategory')->where('idTeam', $id)->get();      
     }
 
     public static function teamLeaguesList($id)
@@ -40,6 +39,6 @@ class Teams extends Model
         ->where('pm.idTeam', $id)
         ->groupBy('pl.idPlayer', 'pl.playerName')
         ->orderBy('goals', 'desc')
-        ->get();  
+        ->get();
     }
 }
