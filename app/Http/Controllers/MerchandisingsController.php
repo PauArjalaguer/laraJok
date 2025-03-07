@@ -17,7 +17,7 @@ class MerchandisingsController extends Controller
         'merchandising',
         [
             'clubsList' => Clubs::clubsList(),
-            'leaguesList' => Leagues::leaguesList(),                  
+            'leaguesList' => Leagues::leaguesList(),
             'merchandisingListAll' => Merchandisings::whereNotNull('assetCategory')->orderBy('assetName','asc')->get(),
             'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
             'userSavedData' => User::userSavedData(),
@@ -28,8 +28,8 @@ class MerchandisingsController extends Controller
 
    public function create()
    {
-       $query = DB::table('merchandisings')->insertGetId([          
-           'assetName' => '.',         
+       $query = DB::table('merchandisings')->insertGetId([
+           'assetName' => '.',
        ]);
        $idMerch = $query;
        

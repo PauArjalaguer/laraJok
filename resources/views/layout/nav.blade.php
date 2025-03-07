@@ -76,37 +76,51 @@
 
     }
     var timeout = null;
+    let totalDataLength = 0;
     const search = (value) => {
+        totalDataLength = 0;
         clearTimeout(timeout);
         timeout = setTimeout(function() {
+
             document.getElementById('search').style.display = 'block';
             document.getElementById('searchValue').innerHTML = value;
-            fetch("https://jok.cat/api/search/teams/" + value)
-                .then(response => {
-                    document.getElementById('searchReturn').innerHTML = "";
-                    return response.json()
-                })
-                .then(data => {
-                    document.getElementById('searchReturn').innerHTML = "";
-                    document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='block w-full m-2 font-bold'>" + data.length + " equips</div>");
-                    data.map((team) => {
-                        document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='p-1 w-1/4'><div class='bg-neutral-200 rounded-xl p-4 cursor-pointer' ><a class='text-sm' href='/equip/" + team.idTeam + "/" + team.teamName + "'>" + (team.teamName + " " + team.categoryName).substr(0, 36) + "</a></div></div>")
+            if (value.length > 4) {
+
+                fetch("https://jok.cat/api/search/teams/" + value)
+                    .then(response => {
+                        document.getElementById('searchReturn').innerHTML = "";
+                        return response.json()
                     })
+                    .then(data => {
+                        document.getElementById('searchReturn').innerHTML = "";
+                        totalDataLength = totalDataLength + data.length;
+                        console.log(data.length);
+                        document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='block w-full m-2 font-bold'>" + data.length + " equips</div>");
+                        data.map((team) => {
+                            document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='p-1 w-1/4'><div class='bg-neutral-200 rounded-xl p-4 cursor-pointer' ><a class='text-sm' href='/equip/" + team.idTeam + "/" + team.teamName + "'>" + (team.teamName + " " + team.categoryName).substr(0, 36) + "</a></div></div>")
+                        })
 
-                });
-            fetch("https://jok.cat/api/search/players/" + value)
-                .then(response => {
-                    return response.json()
-                })
-                .then(data => {
-                    document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='block w-full m-2 font-bold'>" + data.length + " jugadors</div>");
-                    data.map((player) => {
-
-                        document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='p-1 w-1/4'><div class='bg-neutral-200 rounded-xl p-4 cursor-pointer' ><a  class='text-sm'  href='/jugador/" + player.idPlayer + "/" + player.playerName + "'>" + player.playerName.substr(0, 36) + "</a></div></div>")
+                    });
+                fetch("https://jok.cat/api/search/players/" + value)
+                    .then(response => {
+                        return response.json()
                     })
+                    .then(data => {
+                        totalDataLength = totalDataLength + data.length;
+                        console.log(data.length);
+                        console.log(totalDataLength);
+                        if(totalDataLength>0){ document.getElementById("sidebarSearchResults").style.display = 'block';}else{document.getElementById("sidebarSearchResults").style.display = 'none';}
+                        document.getElementById("sidebarSearchResults").innerHTML = totalDataLength + " resultats trobats";
+                        document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='block w-full m-2 font-bold'>" + data.length + " jugadors</div>");
+                        data.map((player) => {
+                            document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='p-1 w-1/4'><div class='bg-neutral-200 rounded-xl p-4 cursor-pointer' ><a  class='text-sm'  href='/jugador/" + player.idPlayer + "/" + player.playerName + "'>" + player.playerName.substr(0, 36) + "</a></div></div>")
+                        })
 
-                });
-        }, 500);
+                    });
+
+            }
+        }, 750);
+
     }
 
     function toggleMenu() {

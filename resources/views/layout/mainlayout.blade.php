@@ -70,9 +70,7 @@
 <body class="antialiased">
 
     <div class="relative">
-
-        <!-- Sidebar -->
-        <div id="sidebar" class="fixed left-0 top-0 w-[55%] h-full bg-gray-800 text-white z-50 -translate-x-full transition-transform duration-1000 ease-in-out">
+        <div id="sidebar" class="fixed left-0 top-0 w-[52%] h-full bg-gray-800 text-white z-50 -translate-x-full transition-transform duration-1000 ease-in-out">
 
             <div class="text-gray-100 text-xl">
                 <div class="p-2 mt-1 flex items-center justify-between ">
@@ -82,42 +80,47 @@
                 <hr class="my-2 text-gray-600">
 
                 <div>
-                    <div class="p-2.5 m-2 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
+                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
                         <i class="fa-solid fa-house-laptop"></i>
                         <a href="/"><span class="text-[15px] ml-4 text-white">Inici</span></a>
                     </div>
-                    <div class="p-2.5 m-2 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
+                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
                         <i class="fa-regular fa-newspaper"></i>
                         <a href="/noticies"><span class="text-[15px] ml-4 text-white">Notícies</span></a>
                     </div>
-                    <div class="p-2.5 m-2 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
+                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
                         <i class="fa-solid fa-building"></i>
                         <a href="/pavellons"><span class="text-[15px] ml-4 text-white">Pavellons</span></a>
                     </div>
-                    <div class="p-2.5 m-2 flex items-center rounded-md 
+                    <div class=" m-1 flex items-center rounded-md 
         px-4 duration-300 cursor-pointer ">
                         <i class="fa-brands fa-searchengin"></i>
                         <input class="text-[15px] ml-4 w-full bg-transparent focus:outline-none" placeholder="Buscar" onKeyUp="search(this.value)" />
                     </div>
+                    <div id="sidebarSearchResults" class="p-2 text-sm text-center hidden"> resultats trobats</div>
                     <hr class="my-4 text-gray-600">
-                    <div class="p-2.5 m-2 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
+                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
                         <i class="fa-regular fa-calendar-days text-white"></i>
                         <a href="/agenda"><span class="text-[15px] ml-4 text-white">Agenda</span></a>
                     </div>
-                    <div class="p-2.5 m-2 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
+                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
                         <i class="fa-sharp-duotone fa-solid fa-shirt"></i>
                         <a href="/merchandising"><span class="text-[15px] ml-4 text-white">Merchandising</span></a>
                     </div>
 
-                    <div class="p-2.5 m-2 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500" id="install-btn" style="display: none;">
+                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500" id="install-btn" style="display: none;">
                         <i class="fa-solid fa-mobile-screen"></i>
-                        <button class="text-[15px] ml-4 text-white">Instal·lar App a Android</button>
+                        <button class="text-[15px] ml-4 text-white">Instal·lar App</button>
                     </div>
                     @if (Auth::check())
-                    <div class="p-2.5 m-2 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
+                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
                         <i class="fa-solid fa-right-from-bracket"></i>
                         <a href='/logout'><span class="text-[15px] ml-4 text-white">Logout</span></a>
                     </div>
+                    @else
+                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <a href='/login'><span class="text-[15px] ml-4 text-white">Login</span></a>
                     @endif
 
                 </div>

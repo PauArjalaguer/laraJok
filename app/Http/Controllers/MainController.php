@@ -15,8 +15,7 @@ class MainController extends Controller
 {
     public function index()
     {
-
-        $userSavedData = User::userSavedData();        
+        $userSavedData = User::userSavedData();
         return view(
             'main',
             [
