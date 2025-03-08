@@ -58,7 +58,7 @@
                 <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base text-ellipsis">${pavello.placeAddress}</td>
                 <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base text-center">--</td>
                 <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base">
-                <div class="bg-neutral-700 text-white rounded-xl p-2 text-center mb-1 ${pavello.matches == 0 ? 'hidden' : ''} ">${pavello.matches} partits avui</div>
+                <div class="bg-neutral-700 text-white rounded-xl p-2 text-center mb-1 ${pavello.matches == 0 ? 'hidden' : ''} "><a href='/pavellons/${pavello.id}/${pavello.placeName}'>${pavello.matches} partits avuia.</a></div>
                 <div class="bg-neutral-700 text-white rounded-xl p-2 text-center">
                 <i class="fa-solid fa-map-location-dot"></i>
                 <a href="https://www.google.com/maps/search/?api=1&query=${pavello.latitude},${pavello.longitude}" target="_blank">Mapa</a>
@@ -76,6 +76,7 @@
         pavellons.forEach(pavello => {
             let distancia = calcularDistancia(coords.lat, coords.lon, pavello.placeLat, pavello.placeLon);
             pavellonsAmbDistancia.push({
+                id: pavello.id,
                 placeName: pavello.placeName
                 , placeAddress: pavello.placeAddress
                 , latitude: pavello.placeLat
@@ -95,7 +96,7 @@
                 <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base text-ellipsis">${pavello.placeAddress}</td>
                 <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base text-center">${pavello.distance}</td>
                 <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base">
-                <div class="bg-neutral-700 text-white rounded-xl p-2 text-center mb-1 ${pavello.matches == 0 ? 'hidden' : ''} ">${pavello.matches} partits avui</div>
+                <div class="bg-neutral-700 text-white rounded-xl p-2 text-center mb-1 ${pavello.matches == 0 ? 'hidden' : ''} "><a href='pavellons/${pavello.id}/${pavello.placeName}'>${pavello.matches} partits avui</a></div>
                 <div class="bg-neutral-700 text-white rounded-xl p-2 text-center">
                 <i class="fa-solid fa-map-location-dot"></i>
                 <a href="https://www.google.com/maps/search/?api=1&query=${pavello.latitude},${pavello.longitude}" target="_blank">Mapa</a>

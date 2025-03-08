@@ -5,6 +5,7 @@ use App\Http\Controllers\ClubsController;
 use App\Http\Controllers\CompeticioController;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\MatchesController;
 use App\Http\Controllers\MerchandisingsController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PavellonsController;
@@ -34,6 +35,7 @@ Route::get("/merchandising", [MerchandisingsController::class, 'index']);
 Route::get("/noticies/detall/{id}/{label}", [NewsController::class, 'detall']);
 Route::get("/noticies", [NewsController::class, 'index']);
 Route::get("/agenda", [AgendaController::class, 'index']);
+Route::get("/pavellons/{id}/{label}", [PavellonsController::class, 'detall']);
 Route::get("/pavellons", [PavellonsController::class, 'index']);
 
 //dashboard noticies

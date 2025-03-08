@@ -15,7 +15,6 @@ class Pavellons extends Model
     {
         return $this->hasMany(Matches::class, 'idPlace','idPlace')
             ->where('matchDate', '>', date("Y-m-d", strtotime('yesterday')))
-            ->where('matchDate', '<', date("Y-m-d", strtotime('tomorrow')))
-            ;
+            ->where('matchDate', '<', date("Y-m-d", strtotime('tomorrow')));
     }
 }

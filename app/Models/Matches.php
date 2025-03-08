@@ -144,4 +144,24 @@ class Matches extends Model
             ->orderBy('players.playerName')
             ->where("matches.idMatch", $idMatch)->get();
     }
+
+    public static  function matchesListFromIdPavello($idPavello)
+    {
+        return  DB::table('matches')
+        ->join('leagues', 'matches.idLeague', '=', 'leagues.idLeague')
+        ->leftJoin('categories', 'leagues.idCategory', 'categories.idCategory')
+        ->join('teams', 'matches.idLocal', '=', 'teams.idTeam')
+        ->join('teams as t2', 'matches.idVisitor', '=', 't2.idTeam')
+        ->join('clubs as club1', 'club1.idClub', 'teams.idClub')
+        ->join('clubs as club2', 'club2.idClub', 't2.idClub')
+        ->join('seasons', 'seasons.idSeason', 'leagues.idSeason')
+        ->join("phases", "phases.idGroup", "=", "matches.idGroup")
+        ->leftJoin("places", "places.idPlace", "=", "matches.idPlace")
+        ->select('seasons.seasonName', 'phases.groupName', 'localResult', 'visitorResult', 'matches.idGroup', 'idLocal', 'idVisitor', 'idRound', 'matches.idMatch', 'matches.matchDate', 'matches.matchHour', 'teams.teamName as localTeam', 't2.teamName as visitorTeam', 'categories.categoryName', 'leagues.leagueName', 'club1.clubImage as clubImage1', 'club2.clubImage as clubImage2','placeAddress','lat','lon')
+        ->where('matchDate', '>', date("Y-m-d", strtotime('yesterday')))
+        ->where('places.idPlace', $idPavello)
+        ->orderBy('matchDate', 'asc')
+        ->orderBy('matchHour', 'asc')
+        ->get();
+    }
 }
