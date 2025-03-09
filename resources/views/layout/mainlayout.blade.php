@@ -92,8 +92,7 @@
                         <i class="fa-solid fa-building"></i>
                         <a href="/pavellons"><span class="text-[15px] ml-4 text-white">Pavellons</span></a>
                     </div>
-                    <div class=" m-1 flex items-center rounded-md 
-        px-4 duration-300 cursor-pointer ">
+                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer ">
                         <i class="fa-brands fa-searchengin"></i>
                         <input class="text-[15px] ml-4 w-full bg-transparent focus:outline-none" placeholder="Buscar" onKeyUp="search(this.value)" />
                     </div>

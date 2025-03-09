@@ -46,7 +46,7 @@
         Dropzone.options.myDropzone = {
             // Configuration options go here
             dictDefaultMessage: "<span style='font-size:32px; color:#2a6496;'>\n\<i style='font-size:32px;' class=\"fas fa-cloud fa-fw\"></i> Insertar foto de la notícia."
-            , success: function(file, response) {                
+            , success: function(file, response) {
                 document.getElementById('newsImage').value = "images/"+response.success;
             }
 

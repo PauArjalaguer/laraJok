@@ -152,7 +152,7 @@ class ScrapingController extends Controller
             $titleNode = $xpath->query(".//h2", $div)->item(0);
             $link = $xpath->query('.//h2', $div)->item(0)->childNodes[1]->attributes[0]->nodeValue;
             $image = $xpath->query(".//div[@class='blog-meta']", $div)->item(0)->childNodes[0]->childNodes[0]->attributes[6]->nodeValue;
-            $content = $xpath->query(".//div[@class='entry-content']", $div)->item(0)->nodeValue; 
+            $content = $xpath->query(".//div[@class='entry-content']", $div)->item(0)->nodeValue;
 
             $date =  $xpath->query(".//span[@class='av-structured-data']", $div)->item(3)->nodeValue;
 

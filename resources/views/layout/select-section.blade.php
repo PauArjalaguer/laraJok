@@ -1,6 +1,6 @@
 <section id="selectSection" class="flex mb-2">
     <div class="w-1/2 md:w-2/3 border-solid border border-neutral-400" id="container">
-        <div class="relative w-full md:p-2 text-xs lg:text-base text-gray-700">            
+        <div class="relative w-full md:p-2 text-xs lg:text-base text-gray-700">
             <div class="relative">
                 <input type="text" id="searchLeague" placeholder="Busca una competició" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700" onkeyup="filterLeagues()" onBlur="hideSelectors()">
                 <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

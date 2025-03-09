@@ -77,7 +77,7 @@ class User extends Authenticatable
             ->leftJoin('phases', 'usersaved.idItem', 'phases.idGroup')
             ->leftJoin('teams', 'usersaved.idItem', 'teams.idTeam')
             ->leftJoin('clubs', 'usersaved.idItem', 'clubs.idClub')
-            ->leftJoin('players', 'usersaved.idItem', 'players.idPlayer')->get();  
+            ->leftJoin('players', 'usersaved.idItem', 'players.idPlayer')->get();
     }
 
     public static function checkIfSaved($category, $idItem)

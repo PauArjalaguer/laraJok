@@ -11,9 +11,6 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    {{-- @error('newsTitle') <div class="bg-red-500 rounded-md p-2 text-white font-bold mb-4">{{ $message }}</div> @enderror
-                @error('newsImage') <div class="bg-red-500 rounded-md p-2 text-white font-bold mb-4">{{ $message }} </div> @enderror
-                @error('newsContent')<div class="bg-red-500 rounded-md p-2 text-white font-bold mb-4">{{ $message }} </div> @enderror --}}
                 @if(session('status'))
                 <div class="bg-green-500 rounded-md p-2 text-white font-bold mb-4 w-full block">{{session('status')}}</div>
                 @endif
@@ -50,8 +47,8 @@
         Dropzone.options.myDropzone = {
             // Configuration options go here
             dictDefaultMessage: "<span style='font-size:32px; color:#2a6496;'>\n\<i style='font-size:32px;' class=\"fas fa-cloud fa-fw\"></i> Insertar foto de la notícia."
-            , success: function(file, response) {                
-                document.getElementById('newsImage').value = "images/" + response.success;                
+            , success: function(file, response) {
+                document.getElementById('newsImage').value = "images/" + response.success;
             }
 
         };
