@@ -13,6 +13,12 @@ class UserController extends Controller
         $id = $request->id;
         $item = $request->item;
         User::updateUserSavedData($id, $item);
-        return redirect('/'.$item.'/'.$id.'/'.$id);
+        $allowedItems = ['equip', 'club', 'competicio','jugador'];
+
+        if (!in_array($item, $allowedItems, true)) {
+            abort(404);
+        }
+        
+        return redirect(url("/{$item}/" . intval($id) . "/" . intval($id)));
     }
 }
