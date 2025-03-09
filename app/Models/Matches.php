@@ -59,7 +59,7 @@ class Matches extends Model
         return self::baseMatchesQuery()
             ->whereNull('localResult')
             ->where('matchDate', '>', date("Y-m-d", strtotime('yesterday')))
-            ->whereTime('matchHour', '>', Carbon::now()->format('H:i'))
+           // ->whereTime('matchHour', '>', Carbon::now()->format('H:i'))
             ->when(!empty($idsTeams), function ($query) use ($idsTeams) {
                 return $query->where(function ($subQuery) use ($idsTeams) {
                     $subQuery->whereIn('matches.idLocal', $idsTeams)
