@@ -8,12 +8,13 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
-use \DOMDocument; // Added backslash for global namespace
-use \DOMXPath; // Added backslash for global namespace
+use \DOMDocument;
+use \DOMXPath;
 
 
 class ScrapingController extends Controller
 {
+    const ERROR_FETCH_CONTENT = 'Error fetching content';
     protected static function getWebContent($url, $userAgent = null)
     {
         $ch = curl_init();
@@ -44,9 +45,7 @@ class ScrapingController extends Controller
     {
 
         try {
-            // Check if article already exists
             if (!News::where('externalLink', $data['url'])->exists()) {
-                // print_r($data);
                 $n = News::create([
                     'newsTitle' => $data['title'],
                     'newsDatetime' => $data['date'],
@@ -69,9 +68,10 @@ class ScrapingController extends Controller
     {
         $baseUrl = 'https://www.fcbarcelona.cat';
         $url = $baseUrl . '/ca/hoquei-patins/primer-equip/noticies';
-
         $html = self::getWebContent($url);
-        if (!$html) return response()->json(['error' => 'Failed to fetch content'], 500);
+        if (!$html) {
+            return response()->json(['error' => self::ERROR_FETCH_CONTENT], 500);
+        }
 
         $xpath = self::getDOM($html);
         $articles = [];
@@ -117,7 +117,7 @@ class ScrapingController extends Controller
     protected static function getFCBarcelonaDetail($url)
     {
         $html = self::getWebContent($url);
-        if (!$html) return '';
+        if (!$html) {return '';}
 
         $xpath = self::getDOM($html);
         $textNoticia = "";
@@ -139,21 +139,22 @@ class ScrapingController extends Controller
         $url = $baseUrl . '/Not%C3%ADcies/seccions/hoquei-patins/';
         //https://reusdeportiu.org/Not%C3%ADcies/seccions/hoquei-patins/
         $html = self::getWebContent($url);
-        if (!$html) return response()->json(['error' => 'Failed to fetch content'], 500);
+        if (!$html) {
+            return response()->json(['error' => self::ERROR_FETCH_CONTENT], 500);
+        }
 
         $xpath = self::getDOM($html);
         $articles = [];
 
-        // Find all news containers
         $newsDivs = $xpath->query("//article");
 
         foreach ($newsDivs as $div) {
             $titleNode = $xpath->query(".//h2", $div)->item(0);
             $link = $xpath->query('.//h2', $div)->item(0)->childNodes[1]->attributes[0]->nodeValue;
             $image = $xpath->query(".//div[@class='blog-meta']", $div)->item(0)->childNodes[0]->childNodes[0]->attributes[6]->nodeValue;
-            $content = $xpath->query(".//div[@class='entry-content']", $div)->item(0)->nodeValue; //entry-content
+            $content = $xpath->query(".//div[@class='entry-content']", $div)->item(0)->nodeValue; 
 
-            $date =  $xpath->query(".//span[@class='av-structured-data']", $div)->item(3)->nodeValue; //post_author_timeline
+            $date =  $xpath->query(".//span[@class='av-structured-data']", $div)->item(3)->nodeValue;
 
             $articleData = [
                 'title' => $titleNode ? trim($titleNode->nodeValue) : '',
@@ -176,14 +177,13 @@ class ScrapingController extends Controller
     protected static function getPalauDetail($url)
     {
         $html = self::getWebContent($url);
-        if (!$html) return '';
+        if (!$html) {return '';}
 
         $xpath = self::getDOM($html);
         $textNoticia = "";
 
         $article = $xpath->query("//div[contains(@class, 'entry-content') and contains(@class, 'clearfix')]")->item(0);
         if ($article) {
-            // echo "<pre>"; print_r($article);echo "</pre>";
             $paragraphs = $xpath->query('.//p', $article);
             foreach ($paragraphs as $paragraph) {
                 $textNoticia .= $paragraph->textContent . " \n\n";
@@ -197,7 +197,9 @@ class ScrapingController extends Controller
         $baseUrl = 'https://hcpalau.com';
         $url = $baseUrl . '/noticies/';
         $html = self::getWebContent($url);
-        if (!$html) return response()->json(['error' => 'Failed to fetch content'], 500);
+        if (!$html) {
+            return response()->json(['error' => self::ERROR_FETCH_CONTENT], 500);
+        }
 
         $xpath = self::getDOM($html);
         $articles = [];
@@ -218,11 +220,9 @@ class ScrapingController extends Controller
                     try {
                         $date = Carbon::createFromFormat('Ymd', $date[1])->format("Y-m-d h:m:s");
                     } catch (\Exception $e) {
-                        //$date = '1970-01-01 00:00:00'; 
                         $date = Carbon::now()->format('Y-m-d h:m:s');
                     }
                 } else {
-                    // $date = '1970-01-01 00:00:00';  
                     $date = Carbon::now()->format('Y-m-d h:m:s');
                 }
                 $articleData = [
@@ -233,7 +233,6 @@ class ScrapingController extends Controller
                     'content' => $detail
 
                 ];
-
 
                 if (self::saveArticle($articleData)) {
                     $articles[] = $articleData;
@@ -247,14 +246,13 @@ class ScrapingController extends Controller
     protected static function getCerdanyolaDetail($url)
     {
         $html = self::getWebContent($url);
-        if (!$html) return '';
+        if (!$html){ return '';}
 
         $xpath = self::getDOM($html);
         $textNoticia = "";
 
         $article = $xpath->query("//div[contains(@class, 'article-content')]")->item(0);
         if ($article) {
-            // echo "<pre>"; print_r($article);echo "</pre>";
             $paragraphs = $xpath->query('.//p', $article);
             foreach ($paragraphs as $paragraph) {
                 $textNoticia .= $paragraph->textContent . " \n\n";
@@ -268,7 +266,9 @@ class ScrapingController extends Controller
         $baseUrl = 'https://www.cerdanyola.info';
         $url = $baseUrl . '/search?_token=5YitQbDLpnznBTPY6UpZkwT3wd5VPoBywFbNqwuw&q=hoquei';
         $html = self::getWebContent($url);
-        if (!$html) return response()->json(['error' => 'Failed to fetch content'], 500);
+        if (!$html) {
+            return response()->json(['error' => self::ERROR_FETCH_CONTENT], 500);
+        }
 
         $xpath = self::getDOM($html);
         $articles = [];
@@ -335,16 +335,15 @@ class ScrapingController extends Controller
     protected static function getRegioDetail($url)
     {
         $html = self::getWebContent($url);
-        if (!$html) return '';
+        if (!$html) {return '';}
 
         $xpath = self::getDOM($html);
         $textNoticia = "";
 
-        $title =  $article = $xpath->query("//h1[contains(@class,'ft-title')]")->item(0) ? $article = $xpath->query("//h1[contains(@class,'ft-title')]")->item(0)->nodeValue : '';
+        $title =  $xpath->query("//h1[contains(@class,'ft-title')]")->item(0) ?  $xpath->query("//h1[contains(@class,'ft-title')]")->item(0)->nodeValue : '';
 
         $article = $xpath->query("//div[contains(@class, 'ft-layout-grid-flex__colXs-12')]")->item(0);
         if ($article) {
-            // echo "<pre>"; print_r($article);echo "</pre>";
             $paragraphs = $xpath->query('.//p', $article);
             foreach ($paragraphs as $paragraph) {
                 $textNoticia .= $paragraph->textContent . " \n\n";
@@ -358,7 +357,9 @@ class ScrapingController extends Controller
         $baseUrl = 'https://www.regio7.cat';
         $url = $baseUrl . '/tags/hoquei-patins/';
         $html = self::getWebContent($url);
-        if (!$html) return response()->json(['error' => 'Failed to fetch content'], 500);
+        if (!$html) {
+            return response()->json(['error' => self::ERROR_FETCH_CONTENT], 500);
+        }
 
         $xpath = self::getDOM($html);
         $articles = [];
@@ -415,7 +416,9 @@ class ScrapingController extends Controller
         $baseUrl = 'https://cenoia.com/';
         $url = $baseUrl . 'category/actualitat/';
         $html = self::getWebContent($url);
-        if (!$html) return response()->json(['error' => 'Failed to fetch content'], 500);
+        if (!$html) {
+            return response()->json(['error' => self::ERROR_FETCH_CONTENT], 500);
+        }
 
         $xpath = self::getDOM($html);
         $articles = [];
@@ -432,15 +435,13 @@ class ScrapingController extends Controller
                 echo "\n$title";
                 $link = $xpath->query(".//div[contains(@class, 'post-thumb')]", $div)->item(0)->childNodes[0]->getAttribute('href');
                 $image = $xpath->query(".//div[contains(@class, 'post-thumb')]", $div)->item(0)->childNodes[0]->childNodes[0]->getAttribute('src');
-                //->item(0)->getAttribute('src');
-
-
+            
                 $date = $xpath->query(".//div[contains(@class, 'post-date')]", $div)->item(0)->nodeValue;
 
                 $date = str_replace("de ", "", $date);
                 $date = str_replace("d'", "", $date);
                 $d = explode(" ", $date);
-             
+
                 $monthNames = [
                     'gener' => 1,
                     'febrer' => 2,
@@ -460,24 +461,24 @@ class ScrapingController extends Controller
                 $month = $monthNames[strtolower($d[1])] ?? null;
                 $year = $d[2];
                 $date =  $year . "-" . $month . "-" . $day;
-              
-               
-                 
-                    $detail = self::getNoiaDetail($link);
 
-                    $articleData = [
-                        'title' => $title,
-                        'url' => $link,
-                        'date' => $date,
-                        'image' => $image,
-                        'content' => $detail['content']
-                    ];
 
-                    if (strlen($title) > 1) {
-                        if (self::saveArticle($articleData)) {
-                            $articles[] = $articleData;
-                        }
+
+                $detail = self::getNoiaDetail($link);
+
+                $articleData = [
+                    'title' => $title,
+                    'url' => $link,
+                    'date' => $date,
+                    'image' => $image,
+                    'content' => $detail['content']
+                ];
+
+                if (strlen($title) > 1) {
+                    if (self::saveArticle($articleData)) {
+                        $articles[] = $articleData;
                     }
+                }
                 $contador++;
             }
         }
@@ -488,22 +489,23 @@ class ScrapingController extends Controller
     protected static function getNoiaDetail($url)
     {
         $html = self::getWebContent($url);
-        if (!$html) return '';
+        if (!$html) {
+            return '';
+        }
 
         $xpath = self::getDOM($html);
         $textNoticia = "";
 
-     
+
         $article = $xpath->query("//div[contains(@class, 'entry-content')]")->item(0);
         if ($article) {
-            // echo "<pre>"; print_r($article);echo "</pre>";
             $paragraphs = $xpath->query('.//p', $article);
             foreach ($paragraphs as $paragraph) {
                 $textNoticia .= $paragraph->textContent . " \n\n";
             }
         }
 
-        return [ 'content' => trim($textNoticia)];
+        return ['content' => trim($textNoticia)];
     }
     public static function scrapeFecapaResults()
     {
@@ -562,36 +564,6 @@ class ScrapingController extends Controller
                 // Parse location
                 $locationTd = $row->getElementsByTagName('td')->item(8);
                 $location = trim($locationTd->textContent);
-
-                /*  $games[] = [
-                    'date' => $date,
-                    'time' => $time,
-                    'club1_id' => $club1,
-                    'club2_id' => $club2,
-                    'league_id' => $leagueId,
-                    'result' => $result ?: null,
-                    'location' => $location
-                ]; */
-                /*    if ($result && strpos($result, '-') !== false) {
-                    // Split result into local and visitor scores
-                    list($localResult, $visitorResult) = explode('-', trim($result));
-        
-                    // Find matching match in database
-                    $match = Matches::where('club_local_id', $club1)
-                        ->where('club_visitor_id', $club2)
-                        ->where('group_id', $leagueId)
-                        ->where('date', $date)
-                        ->where('hour', $time)
-                        ->first();
-        
-                    // Update match if found
-                    if ($match) {
-                        $match->update([
-                            'localResult' => trim($localResult),
-                            'visitorResult' => trim($visitorResult)
-                        ]);
-                    }
-                } */
             }
         }
     }

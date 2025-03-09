@@ -14,7 +14,7 @@
             <th class="border border-gray-200 px-3 py-4 text-left text-sm font-semibold text-gray-50">&nbsp;</th>
         </tr>
     </thead>
-    <tbody class="divide-y divide-gray-200">
+    <tbody class="divide-y divide-gray-200"><tr><td>Carregant</td></tr>
     </tbody>
     <tfoot>
         <tr>
@@ -49,6 +49,7 @@
                 , function(error) { // Error callback
                     alert("No s'ha pogut obtenir la ubicació. Assegura't que la geolocalització està activada.");
                      const table = document.querySelector('#agenda tbody');
+                    
                     pavellons.forEach(pavello => {
                         const row = document.createElement('tr');
                        // pavello.distance = pavello.distance.toFixed(1) + ' km';
@@ -87,6 +88,7 @@
         });
         pavellonsAmbDistancia.sort((a, b) => a.distance - b.distance);
         const table = document.querySelector('#agenda tbody');
+        table.innerHTML = '';
         pavellonsAmbDistancia.forEach(pavello => {
             const row = document.createElement('tr');
             pavello.distance = pavello.distance.toFixed(1) + ' km';

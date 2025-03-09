@@ -73,7 +73,7 @@
             <div class="font-bold bg-neutral-700 p-2 text-white border-[1px] border-b-[0px] border-neutral-500 shadow-md shadow-neutral-700 ">Equip més golejador</div>
             <div class="text-sm flex bg-white items-center border-[1px]  border-neutral-500 shadow-md shadow-neutral-700">
                 <div class="p-2 w-1/12 ">
-                    <img alt={{App\Http\Controllers\TeamsController::teamFormat($bestGoalsMade[0]->teamName) : ''}} src={{ count($bestGoalsMade)>0 ? $bestGoalsMade[0]->clubImage:'' }} class="max-h-8 max-w-8 md:max-h-12 md:max-w-12  " />
+                    <img alt="{{count($bestGoalsMade)>0 ? App\Http\Controllers\TeamsController::teamFormat($bestGoalsMade[0]->teamName) : ''}}" src={{ count($bestGoalsMade)>0 ? $bestGoalsMade[0]->clubImage:'' }} class="max-h-8 max-w-8 md:max-h-12 md:max-w-12  " />
                 </div>
                 <div class="p-2 w-11/12 ml-2 ">
                     <a class="active:text-neutral-300" href="/equip/{{count($bestGoalsMade)>0 ? $bestGoalsMade[0]->idTeam : ''}}/{{count($bestGoalsMade)>0 ? urlencode($bestGoalsMade[0]->teamName ) :''}}">
@@ -86,7 +86,7 @@
             <div class="flex bg-white items-center border-[1px]  border-neutral-500 shadow-md shadow-neutral-700">
                 <div class="p-2 w-1/12  ">
                     <a class="active:text-neutral-300" href="/equip/{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->idTeam  : ''}}/{{count($leastGoalsReceived) ? urlencode($leastGoalsReceived[0]->teamName) : ''}}">
-                        <img alt={{App\Http\Controllers\TeamsController::teamFormat($bestGoalsMade[0]->teamName) : ''}}  src={{count($leastGoalsReceived)>0 ?  $leastGoalsReceived[0]->clubImage : ''}} class="max-h-8 max-w-8 md:max-h-12 md:max-w-12  " />
+                        <img alt="{{count($leastGoalsReceived)>0 ? App\Http\Controllers\TeamsController::teamFormat($leastGoalsReceived[0]->teamName) : ''}}"  src={{count($leastGoalsReceived)>0 ?  $leastGoalsReceived[0]->clubImage : ''}} class="max-h-8 max-w-8 md:max-h-12 md:max-w-12  " />
                 </div>
                 <div class="p-2 w-11/12 ml-2 text-sm">
                     <a class="active:text-neutral-300" href="/equip/{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->idTeam : ''}}/{{count($leastGoalsReceived)>0 ? urlencode($leastGoalsReceived[0]->teamName) :''}}">
