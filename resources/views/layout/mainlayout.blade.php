@@ -73,9 +73,10 @@
         <div id="sidebar" class="fixed left-0 top-0 w-[52%] h-full bg-gray-800 text-white z-50 -translate-x-full transition-transform duration-1000 ease-in-out">
 
             <div class="text-gray-100 text-xl">
-                <div class="p-2 mt-1 flex items-center justify-between ">
-                    <h1 class="text-[15px]  ml-3 text-xl text-white font-bold  font-['Comfortaa']">Jok.cat</h1>
+                <div class="p-4 mt-1 flex items-center justify-between ">
                     <i class="fa-solid fa-circle-xmark h-6 w-6 cursor-pointer lg:hidden hover:text-gray-300" onClick="toggleMenu()" onKeyPress="toggleMenu()" role="button" tabindex="0"></i>
+                    <h1 class="text-[15px]  ml-3 text-xl text-white font-bold  font-['Comfortaa']">Jok.cat</h1>
+                    
                 </div>
                 <hr class="my-2 text-gray-600">
 
@@ -102,10 +103,11 @@
                         <i class="fa-regular fa-calendar-days text-white"></i>
                         <a href="/agenda"><span class="text-[15px] ml-4 text-white">Agenda</span></a>
                     </div>
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
+                    
+                 {{--    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
                         <i class="fa-sharp-duotone fa-solid fa-shirt"></i>
                         <a href="/merchandising"><span class="text-[15px] ml-4 text-white">Merchandising</span></a>
-                    </div>
+                    </div> --}}
 
                     <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500" id="install-btn" style="display: none;">
                         <i class="fa-solid fa-mobile-screen"></i>
