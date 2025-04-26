@@ -19,18 +19,18 @@
                     <input type='hidden' name="idAsset" id="idAsset" value="{{$merch[0]->idAsset}}" />
                     <label to="assetName">Títol:</label>
 
-                    <input class='w-full  rounded-md border-slate-300 mb-3' type='text' name='assetName' id="assetName" value="{{$merch[0]->assetName}}" />
+                    <input class='w-full  rounded-md border-neutral-300 mb-3' type='text' name='assetName' id="assetName" value="{{$merch[0]->assetName}}" />
                     <label to="assetThumbnail">Imatge:</label>
-                    <input class='w-full rounded-md border-slate-300 mb-3' type='text' name='assetThumbnail' id="assetThumbnail" value="{{$merch[0]->assetThumbnail}}" />
+                    <input class='w-full rounded-md border-neutral-300 mb-3' type='text' name='assetThumbnail' id="assetThumbnail" value="{{$merch[0]->assetThumbnail}}" />
 
                     <label to="assetUrl">URL:</label>
-                    <input class='w-full rounded-md border-slate-300 mb-3' type='text' name='assetUrl' id="assetUrl" value="{{$merch[0]->assetUrl}}" />
+                    <input class='w-full rounded-md border-neutral-300 mb-3' type='text' name='assetUrl' id="assetUrl" value="{{$merch[0]->assetUrl}}" />
 
                     <label to="assetCategory">Categoria:</label>
-                    <input class='w-full rounded-md border-slate-300 mb-3' type='text' name='assetCategory' id="assetCategory" value="{{$merch[0]->assetCategory}}" />
+                    <input class='w-full rounded-md border-neutral-300 mb-3' type='text' name='assetCategory' id="assetCategory" value="{{$merch[0]->assetCategory}}" />
 
                     <label to="assetPrice">Preu:</label>
-                    <input pattern="^\d*(\.\d{0,1})?$" class='w-full rounded-md border-slate-300 mb-3' type='text' name='assetPrice' id="assetPrice" value="{{$merch[0]->assetPrice}}" />
+                    <input pattern="^\d*(\.\d{0,1})?$" class='w-full rounded-md border-neutral-300 mb-3' type='text' name='assetPrice' id="assetPrice" value="{{$merch[0]->assetPrice}}" />
 
                     <x-input-error :messages="$errors->get('message')" />
                     <x-primary-button>Guardar</x-primary-button>

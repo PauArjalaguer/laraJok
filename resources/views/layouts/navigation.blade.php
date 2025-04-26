@@ -27,6 +27,9 @@
                         Merchandising
                     </x-nav-link>
                     @endif
+                     <x-nav-link :href="route('dashboard.anuncis')" :active="request()->routeIs('dashboard.anuncis')">
+                        Anuncis
+                    </x-nav-link>
                 </div>
             </div>
 

@@ -1,4 +1,4 @@
-<section id="selectSection" class="flex mb-2">
+<section id="selectSection" class="flex mb-2 hidden">
     <div class="w-1/2 md:w-2/3 border-solid border border-neutral-400" id="container">
         <div class="relative w-full md:p-2 text-xs lg:text-base text-gray-700">
             <div class="relative">

@@ -13,6 +13,7 @@
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/noticies">Notícies</a></li>
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/pavellons">Pavellons</a></li>
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/agenda">Agenda</a></li>
+            <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/anuncis">Anuncis</a></li>
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/merchandising">Merchandising</a></li>
             <li class="lg:p-2 cursor-pointer font-bold text-base hidden ">Contacte</li>
             <li class="block lg:inline p-  cursor-pointer font-bold mt-2 lg:mr-2 ">
