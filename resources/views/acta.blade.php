@@ -1,3 +1,6 @@
+@if (!isset($collection[0]))
+    @php abort(404); @endphp
+@endif
 @extends('layout.mainlayout')
 @section('title',$matchGetInfoById[0]->teamName."-".$matchGetInfoById[0]->teamName2." :: JOK.cat ")
 @section('content')
