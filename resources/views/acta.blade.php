@@ -1,4 +1,4 @@
-@if (!isset($collection[0]))
+@if (!isset($matchGetInfoById[0]))
     @php abort(404); @endphp
 @endif
 @extends('layout.mainlayout')
