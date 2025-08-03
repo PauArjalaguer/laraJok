@@ -58,13 +58,14 @@
         let input = document.getElementById("searchClubs").value.toLowerCase();
         let select = document.getElementById("clubSelect");
 
-       let option = document.createElement("option");
-            option.text = "123";
-            option.value = 0;
-            select.appendChild(option);
+     
         select.innerHTML = "";
         let filteredClubs = clubs.filter(club => club.label.toLowerCase().includes(input.trim().toLowerCase()));
 
+        let option = document.createElement("option");
+        option.text = filteredClubs.length + " clubs trobats";
+        option.value = "0";
+        select.appendChild(option);
         filteredClubs.forEach(club => {
             let option = document.createElement("option");
             option.text = club.label;
@@ -104,6 +105,10 @@
         select.innerHTML = "";
 
         let filteredLeagues = leagues.filter(league => league.label.toLowerCase().includes(input.trim().toLowerCase()));
+        let option = document.createElement("option");
+        option.text = filteredLeagues.length + " competicions trobades";
+        option.value = "0";
+        select.appendChild(option);
 
         filteredLeagues.forEach(league => {
             let option = document.createElement("option");
