@@ -1,33 +1,66 @@
-5<html>
+<html>
 <head>
     <meta http-equiv="refresh" content="15">
     <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
     <title>Cron de dades de partits</title>
-    <meta http-equiv="refresh" content="1">
 </head>
 <?php
+function cleanName($s) {
+    $s = trim($s); // treu espais davant i darrere
+    $s = str_replace("\xC2\xA0", " ", $s); // canvia NBSP per espai normal
+    $s = preg_replace('/\s+/u', ' ', $s); // col·lapsa espais múltiples
+    return $s;
+}
 
-error_reporting(E_ALL);
-//ini_set('display_errors', 1);
-include("curl.php");
+error_reporting(0);
+ini_set('display_errors', 1);
+//include("curl.php");
 include("cnx/c.php");
 
-function parseMatch($idMatch, $mysqli)
+function parseMatch($idMatch,$idLeague, $mysqli)
 {
-    //echo "select idLocal, idVisitor from matches where idMatch=" . $idMatch;
+   echo "select idLocal, idVisitor from matches where idMatch=" . $idMatch;
     $result =   $mysqli->query("select idLocal, idVisitor from matches where idMatch=" . $idMatch);
     $row = mysqli_fetch_array($result);
     $idLocal = $row['idLocal'];
     $idVisitor = $row['idVisitor'];
     $mysqli->query("delete from  player_match where idMatch=" . $idMatch);
     $dom   = new DOMDocument('1.0');
-    //https://www.server2.sidgad.es/fecapa/fecapa_gr_83575_1.php
-    $curled = getCurl("https://www.server2.sidgad.es/fecapa/fecapa_gr_".$idMatch."_1.php");
-    //$html = $dom->loadHTML(mb_convert_encoding($curled, 'HTML-ENTITIES', 'UTF-8'));
-    $html = $dom->loadHTML($curled);
+   $url ="https://www.server2.sidgad.es/fecapa/fecapa_gr_".$idMatch."_1.php";
+ //  $url="https://www.server2.sidgad.es/fecapa/fecapa_gr_83612_1.php";
+    //$curled = getCurl("https://www.server2.sidgad.es/fecapa/fecapa_gr_".$idMatch."_1.php");
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    $postData = [
+        'idm'=> 1,
+        'idc'=> $idLeague,
+        'idp'=> $idMatch,
+        'tab'=> 'tab_ficha_resumen'
+    ];
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+    // Set the headers
+    $headers = [
+        'Host: server2.sidgad.es',
+        'Origin: http://server2.sidgad.es',
+        'Referer: http://server2.sidgad.es',
+        'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        'Content-Type: text/html; charset=UTF-8'
+    ];
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+
+   /*  if (curl_errno($ch)) {
+        echo 'cURL error: ' . curl_error($ch);
+    } else {
+        return $response;
+    } */
+   if($response) {$html = $dom->loadHTML($response);
+    print_r($html);
     if (!$html) {
         $mysqli->query("update matches set error=1 where idMatch=" . $idMatch);
-       // echo "<br />La url $url no existeix<br />";
+       echo "<br />La url  no existeix<br />";
     }
     if ($html) {
 		 $mysqli->query("update matches set error=0 where idMatch=" . $idMatch);
@@ -119,7 +152,7 @@ function parseMatch($idMatch, $mysqli)
 				  
                 $n = explode(",", $nom);
                 $nom = $n[1] . " " . $n[0];
-
+$nom = cleanName($nom);
                 $sql = "INSERT INTO player_match (idPlayer, idMatch,  goals, blue,red, idTeam) VALUES ((SELECT idPlayer FROM players where playerName='$nom' LIMIT 1), $idMatch, $gols, $blue,$red,$idLocal);";
                 //echo "<br />" . $sql;
                 if (strlen($nom) > 3) {
@@ -171,8 +204,13 @@ function parseMatch($idMatch, $mysqli)
 
                 $n = explode(",", $nom);
                 $nom = $n[1] . " " . $n[0];
-
-                $sql = "INSERT INTO player_match (idPlayer, idMatch, goals, blue,red, idTeam) VALUES ((SELECT idPlayer FROM players where playerName='$nom' LIMIT 1), $idMatch, $gols, $blue,$red,$idVisitor);";
+$nom = cleanName($nom);
+                //$sql = "INSERT INTO player_match (idPlayer, idMatch, goals, blue,red, idTeam) VALUES ((SELECT idPlayer FROM players where playerName='$nom' LIMIT 1), $idMatch, $gols, $blue,$red,$idVisitor);";
+                $sql ="INSERT INTO player_match (idPlayer, idMatch, goals, blue, red, idTeam)
+SELECT p.idPlayer, $idMatch, $gols, $blue, $red, $idVisitor
+FROM players p
+WHERE p.playerName = '$nom'
+LIMIT 1;";
                echo "<br />" . $sql;
                 if (strlen($nom) > 3) {
                     try {
@@ -185,6 +223,7 @@ function parseMatch($idMatch, $mysqli)
             $a++;
         }
     }
+    }
     $mysqli->query("update matches set updatedTries=updatedTries+1, updated=now() where idMatch=".$idMatch);
 }
 // parseMatch(58169, $mysqli);
@@ -192,20 +231,20 @@ function parseMatch($idMatch, $mysqli)
 //$result = $mysqli->query("select idMatch from matches where idMatch not in(select idMatch from player_match) and idMatch not in (37857,82928,82916,82900,82944,82116,76210,83048,83065,83065,83085,83082) ORDER BY downloadedtime desc limit 0,50");
 
 //$result =  $mysqli->query("select distinct idMatch from matches m where matchDate<now() and (localFaults=0 and visitorFaults=0 and length(referee)<2) and (select count(*) from player_match where idMatch =m.idMatch)<5 and length(m.idMatch)<7 and idMatch not in (82916,82900,82944,82116,76210,83048,83065,83065,83085,83082,82130,6206) limit 100");
-$result =  $mysqli->query("select  idMatch, localFaults, visitorFaults, referee, matchDate from matches m 
+$result =  $mysqli->query("select  idMatch, localFaults, visitorFaults, referee, matchDate, idLeague from matches m 
 WHERE 
 matchDate<NOW() 
 -- and (localFaults=0 and visitorFaults=0 and (length(referee)<2 or referee is NULL)) 
   and (select count(*) from player_match where idMatch =m.idMatch)<5 
   and length(m.idMatch)<7 
  AND (ERROR!=1 OR ERROR IS NULL) 
-  -- and updatedTries<1
-   and idMatch!=83653
-order by updated desc, matchDate deSC
-limit 0,200
+   and updatedTries<10
+ -- and idMatch=83177
+order by updated asc, matchDate deSC
+limit 0,50
 ");
 
 while ($row = mysqli_fetch_array($result)) {
     //echo $row['idLeague']." - ";
-    parseMatch($row['idMatch'], $mysqli);
+    parseMatch($row['idMatch'], $row['idLeague'], $mysqli);
 }

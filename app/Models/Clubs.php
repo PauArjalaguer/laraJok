@@ -14,12 +14,9 @@ class Clubs extends Model
     public static function clubsList()
     {
         $cacheKey = 'clubsList';
-        $ttl = 10000;
+        $ttl = 60000;
         return Cache::remember($cacheKey, $ttl, function () {
-            $clubsList = Clubs::select('idClub as value', 'clubName as label','clubImage')
-                ->orderby('clubName')
-                ->where('idClub', '>', 1)
-                ->where('numberOfTeams', '>=', 1)->get();
+            $clubsList = Clubs::select('idClub as value', 'clubName as label')->orderby('clubName')->where('idClub', '>', 1)->where('numberOfTeams', '>=', 1)->get();
             return $clubsList;
         });
     }

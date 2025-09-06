@@ -1,6 +1,6 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE  & ~E_WARNING);
-
+/* 
 include("cnx/c.php");
 include("curl.php");
 $dom   = new DOMDocument('1.0');
@@ -36,9 +36,9 @@ foreach ($sel[4]->childNodes as $clubs) {
       $mysqli->query("insert into places (idPlace, placeName) values (" . $idPlace . ",'" . $placeName . "') ON DUPLICATE KEY UPDATE placeName='$placeName'");
 
   }
-}  
+}  */
 
-
+/* 
 $taula = $xpath->query("//table[contains(@class, 'tabla_standard')]");
 echo "<pre>";
 print_r($taula[0]->childNodes[3]->childNodes);
@@ -68,9 +68,8 @@ $idLocal="";
 
   
   }
-}
-/*
-set_time_limit(999999);
+} */
+
 $dsn = 'mysql:host=localhost;dbname=patinscat;charset=utf8';
 $usuario = 'jok';
 $clave = 'Arn@u1b3rt@';
@@ -79,7 +78,7 @@ try {
   
   // Obtener todos los lugares sin dirección
   //$stmt = $pdo->query("SELECT idPlace, placeName, placeAddress FROM places WHERE placeAddress IS NULL OR placeAddress = '' limit 1,5");
-  $stmt = $pdo->query("SELECT idPlace, placeName, placeAddress FROM places WHERE lat IS NULL order by placeAddress desc limit 1,5");
+  $stmt = $pdo->query("SELECT idPlace, placeName, placeAddress FROM places");
   $places = $stmt->fetchAll(PDO::FETCH_ASSOC);
   
   foreach ($places as $place) {
@@ -88,7 +87,7 @@ try {
       $placeAddress =urlencode($place['placeAddress']);
      // echo $placeName;
      //Llamada a la API de Nominatim
-      $url = "https://nominatim.openstreetmap.org/search?format=json&q=$placeAddress";
+      $url = "https://nominatim.openstreetmap.org/search?format=json&q=$placeName";
       echo  "<hr />".$url;
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_URL, $url);
@@ -119,7 +118,7 @@ try {
   }
 } catch (PDOException $e) {
   echo "Error de conexión: " . $e->getMessage();
-}*/
+}
 /* 
   $llistaClubs =  $league->attributes[1]->nodeValue;
 

@@ -70,13 +70,18 @@
 <body class="antialiased">
 
     <div class="relative">
-        <div id="sidebar" class="fixed left-0 top-0 w-[52%] h-full bg-gray-800 text-white z-50 -translate-x-full transition-transform duration-1000 ease-in-out">
-
+        <div id="sidebar" class="fixed left-0 top-0 w-[52%] h-full bg-neutral-800 text-white z-50 -translate-x-full transition-transform duration-1000 ease-in-out">
+        @php
+    $userAgent = $_SERVER['HTTP_USER_AGENT'];
+    if(isset($userAgent) && $userAgent == 'iOSWebView'){
+        echo "<div class='mt-20'>&nbsp;</div>";
+    }
+@endphp
             <div class="text-gray-100 text-xl">
                 <div class="p-4 mt-1 flex items-center justify-between ">
                     <i class="fa-solid fa-circle-xmark h-6 w-6 cursor-pointer lg:hidden hover:text-gray-300" onClick="toggleMenu()" onKeyPress="toggleMenu()" role="button" tabindex="0"></i>
                     <h1 class="text-[15px]  ml-3 text-xl text-white font-bold  font-['Comfortaa']">Jok.cat</h1>
-                    
+
                 </div>
                 <hr class="my-2 text-gray-600">
 
@@ -95,7 +100,7 @@
                     </div>
                     <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer ">
                         <i class="fa-brands fa-searchengin"></i>
-                        <input class="text-[15px] ml-4 w-full bg-transparent focus:outline-none" placeholder="Buscar" onKeyUp="search(this.value)" />
+                        <input class="text-[15px] ml-4 w-full bg-transparent focus:outline-none outline-no" placeholder="Buscar" onKeyUp="search(this.value)" />
                     </div>
                     <div id="sidebarSearchResults" class="p-2 text-sm text-center hidden"> resultats trobats</div>
                     <hr class="my-4 text-gray-600">
@@ -103,11 +108,11 @@
                         <i class="fa-regular fa-calendar-days text-white"></i>
                         <a href="/agenda"><span class="text-[15px] ml-4 text-white">Agenda</span></a>
                     </div>
-                    
-                 {{--    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
+
+                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
                         <i class="fa-sharp-duotone fa-solid fa-shirt"></i>
                         <a href="/merchandising"><span class="text-[15px] ml-4 text-white">Merchandising</span></a>
-                    </div> --}}
+                    </div>
 
                     <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500" id="install-btn" style="display: none;">
                         <i class="fa-solid fa-mobile-screen"></i>
@@ -122,41 +127,41 @@
                     <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
                         <i class="fa-solid fa-right-from-bracket"></i>
                         <a href='/login'><span class="text-[15px] ml-4 text-white">Login</span></a>
-                    @endif
+                        @endif
 
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div id="container" class="min-h-screen">
+        <div id="container" class="min-h-screen">
 
-        <div class="w-full lg:w-3/4 p-2 lg:p-0 mx-auto my-0 ">
-            <div id="pwaNav" class="px-2 pb-2 flex justify-between items-center w-full border-b border-gray-200 hidden lg:hidden">
-                <div id="pwaNavBack"><i class="fa-solid fa-backward-step" onClick="goBack()" onKeyPress="goBack()" role="button" tabindex="0"></i></div>
-                <div id="pwaNavFordward" class="hidden"><i class="fa-solid fa-forward-step" onClick="goForward()" onKeyPress="goForward()" role="button" tabindex="0"></i></div>
-            </div>
-            @include('layout.nav')
-            @include('layout.select-section')
-            @yield('content')
-        </div>
-        <footer class="w-full justify-center  sticky top-[100vh] bg-neutral-900">
-            @include('layout.merchandising')
-            <div class="flex w-full justify-center py-8 ">
-                <div class="w-3/4 flex">
-                    <div class="w-1/3 text-white text-left"><span class="jok">JOK.cat</span><br>http://www.jok.cat<br>jok@jok.cat</div>
-                    <div class="w-1/3 text-white">&nbsp;</div>
-                    <div class="w-1/3  text-white">&nbsp;</div>
+            <div class="w-full lg:w-3/4 p-2 lg:p-0 mx-auto my-0 ">
+                <div id="pwaNav" class="px-4 pb-2 flex justify-between items-center w-full border-b border-gray-200 hidden lg:hidden">
+                    <div id="pwaNavBack"><i class="fa-solid fa-backward-step" onClick="goBack()" onKeyPress="goBack()" role="button" tabindex="0"></i></div>
+                    <div id="pwaNavFordward" class="hidden"><i class="fa-solid fa-forward-step" onClick="goForward()" onKeyPress="goForward()" role="button" tabindex="0"></i></div>
                 </div>
+                @include('layout.nav')
+                @include('layout.select-section')
+                @yield('content')
             </div>
-        </footer>
-    </div>
-    @vite(['resources/js/app.js'])
-    <script src="{{ asset('pwa/pwa-install.js') }}"></script>
+            <footer class="w-full justify-center  sticky top-[100vh] bg-neutral-900">
+                @include('layout.merchandising')
+                <div class="flex w-full justify-center py-8 ">
+                    <div class="w-3/4 flex">
+                        <div class="w-1/3 text-white text-left"><span class="jok">JOK.cat</span><br>http://www.jok.cat<br>jok@jok.cat</div>
+                        <div class="w-1/3 text-white">&nbsp;</div>
+                        <div class="w-1/3  text-white">&nbsp;</div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        @vite(['resources/js/app.js'])
+        <script src="{{ asset('pwa/pwa-install.js') }}"></script>
 </body>
 <script>
     const canGoBack = () => window.history.length > 1;
-    
+
     if (canGoBack()) {
         document.getElementById("pwaNav").classList.remove("hidden");
     }

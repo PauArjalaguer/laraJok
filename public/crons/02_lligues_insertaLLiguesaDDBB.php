@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html>
 
 <head>
   <title>Parseja lligues</title>
@@ -9,27 +9,30 @@
 </head>
 
 <body>
+
   <div class='w-3/4 mx-auto my-2 bg-slate-100 rounded-xl p-2'>
     <h1 class="text-4xl font-bold p-5">Lligues</h1>
     <?php
-    use curl;
-    error_reporting(E_ALL & ~E_NOTICE  & ~E_WARNING & ~E_DEPRECATED);
+      include("curl.php");
+      error_reporting(E_ALL & ~E_NOTICE  & ~E_WARNING & ~E_DEPRECATED);
+    
 
-
-    use cnx\c;
+    include("cnx/c.php");
     $categories = array();
     $res = $mysqli->query("select * from categories order by idCategory asc");
     while ($row = mysqli_fetch_assoc($res)) {
       $categories[] = $row;
     }
-
+    /* echo "<pre>";
+print_r($categories);
+echo "</pre>"; */
     $dom   = new DOMDocument('1.0');
     $url = "https://www.server2.sidgad.es/fecapa/fecapa_ls_1.php";
     $curled = getCurl($url);
-
-    $html = $dom->loadHTML($curled);
-    $dom->preserveWhiteSpace = true;
-    $xpath = new DomXPath($dom);
+        //$html = $dom->loadHTML(mb_convert_encoding($curled, 'HTML-ENTITIES', 'UTF-8'));
+        $html = $dom->loadHTML($curled);
+        $dom->preserveWhiteSpace = true;
+        $xpath = new DomXPath($dom);
     $xpath = new DomXPath($dom);
     $a = $xpath->query("//a");
     foreach ($a as $league) {
@@ -49,11 +52,12 @@
       echo "<div class='bg-slate-100 border-l border-t border-slate-700 w-6/12 p-2'>$nomLliga</div>";
       $idCategory = 0;
       foreach ($categories as $category) {
-        
+        //echo mb_strtolower($category['categoryName']) . " - " . mb_strtolower($nomLliga) . " (" . strpos(mb_strtolower($nomLliga), mb_strtolower($category['categoryName'])) . ")<br />";
         if (strlen(strpos(mb_strtolower($nomLliga), mb_strtolower($category['categoryName']))) > 0) {
           $idCategory = $category['idCategory'];
           echo "<div class='bg-slate-100 border-l border-r border-t border-slate-700 w-4/12 p-2'>" . ucwords(mb_strtolower($category['categoryName'])) . " (" . $idCategory . ")</div>";
         }
+      
       }
       echo "</div>";
       echo "insert into leagues (idLeague, leagueName, idSeason) values (" . $idLliga . ",'" . $nomLliga . "'," . $idSeason . ") ON DUPLICATE KEY UPDATE leagueName='$nomLliga', idSeason=$idSeason, idCategory=$idCategory";
@@ -68,6 +72,4 @@
 
 </html>
 
-<script>
-  setTimeout(() => window.location.replace("03_lligues_copiaArxiudeLaLliga.php"), 15000000);
-</script>
+<script> setTimeout(()=> window.location.replace("03_lligues_copiaArxiudeLaLliga.php"),15000000);</script>

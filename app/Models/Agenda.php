@@ -31,7 +31,7 @@ class Agenda extends Model
         ->join('leagues as l', 'l.idLeague', '=', 'm.idLeague')
         ->join('teams as t1', 't1.idTeam', '=', 'm.idLocal')
         ->join('teams as t2', 't2.idTeam', '=', 'm.idVisitor')
-        ->where('l.idSeason', 37)
+        ->where('l.idSeason', 39)
         ->where('m.matchDate', '>=', date('Y-m-d'))
         ->orderBy('m.matchDate')
         ->orderBy('m.matchHour')

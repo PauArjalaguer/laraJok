@@ -65,7 +65,7 @@ include("curl.php");
             return $matchDate;
         }
 
-        function parseLeague($idLliga, $mysqli, $idSeason = 37)
+        function parseLeague($idLliga, $mysqli, $idSeason = 39)
         {
             $dom   = new DOMDocument('1.0');
             $curled = getCurl("https://www.server2.sidgad.es/fecapa/fecapa_cal_idc_" . $idLliga . "_1.php");
@@ -202,16 +202,16 @@ include("curl.php");
                                     echo "\n\t<div class='bg-slate-100 border-l border-t border-slate-700 w-3/12 p-2 text-center'> $round $localResult - $visitorResult</div>";
 
                                     if ($localTeam && $visitorTeam) {
-                                        try{
-                                        $sql = "insert into teams (idTeam, teamName,idClub,idSeason) values (" . $idLocal . ",'" . $localTeam . "'," . $localClub . "," . $idSeason . ")  ON DUPLICATE KEY UPDATE teamName='$localTeam', idSeason=$idSeason";
-                                        //echo "<br />$sql";
-                                        $mysqli->query($sql);
-                                        $sql = "insert into teams (idTeam, teamName,idClub,idSeason) values (" . $idVisitor . ",'" . $visitorTeam . "'," . $visitorClub . "," . $idSeason . ")  ON DUPLICATE KEY UPDATE teamName='$visitorTeam', idSeason=$idSeason";
-                                        //echo "<br />$sql";
-                                        $mysqli->query($sql);
-                                        }catch(Exception $e) {
-                                            echo 'Message: ' .$e->getMessage();
-                                          }
+                                        try {
+                                            $sql = "insert into teams (idTeam, teamName,idClub,idSeason) values (" . $idLocal . ",'" . $localTeam . "'," . $localClub . "," . $idSeason . ")  ON DUPLICATE KEY UPDATE teamName='$localTeam', idSeason=$idSeason";
+                                            //echo "<br />$sql";
+                                            $mysqli->query($sql);
+                                            $sql = "insert into teams (idTeam, teamName,idClub,idSeason) values (" . $idVisitor . ",'" . $visitorTeam . "'," . $visitorClub . "," . $idSeason . ")  ON DUPLICATE KEY UPDATE teamName='$visitorTeam', idSeason=$idSeason";
+                                            //echo "<br />$sql";
+                                            $mysqli->query($sql);
+                                        } catch (Exception $e) {
+                                            echo 'Message: ' . $e->getMessage();
+                                        }
                                         if (!$idMatch) {
                                             $idMatch = $idLliga . $idGrup . $idLocal . $idVisitor;
                                         } else {
@@ -252,8 +252,8 @@ include("curl.php");
         if ($_GET['idLeague']) {
             $subquery = " and idLeague=" . $_GET['idLeague'] . " ";
         }
-        echo "select idLeague from leagues where enddate>now() and  idSeason=37  $subquery order by lastupdated asc, idLeague desc limit 0,2";
-        $result = $mysqli->query("select idLeague from leagues where  idSeason=37  $subquery order by lastupdated asc, idLeague desc limit 0,10");
+        echo "select idLeague from leagues where enddate>now() and  idSeason=39  $subquery order by lastupdated asc, idLeague desc limit 0,2";
+        $result = $mysqli->query("select idLeague from leagues where  idSeason=39  $subquery order by lastupdated asc, idLeague desc limit 0,10");
         while ($row = mysqli_fetch_array($result)) {
             //echo $row['idLeague']." - ";
             parseLeague($row['idLeague'], $mysqli);
@@ -261,7 +261,7 @@ include("curl.php");
         $endTime = new DateTime();
 
         try {
-          /*   $mysqli->query("
+            /*   $mysqli->query("
     UPDATE phases p
     JOIN (
         SELECT idGroup, COUNT(*) AS match_count
@@ -270,9 +270,9 @@ include("curl.php");
     ) m ON p.idGroup = m.idGroup
     SET p.numberofmatches = m.match_count;
 "); */
-          //  $mysqli->query("UPDATE phases SET numberofmatches=(SELECT COUNT(*) FROM matches WHERE idGroup=phases.idGroup);");
-            /*  $mysqli->query("UPDATE phases SET startdate=(SELECT matchDate FROM matches WHERE idGroup=phases.idGroup LIMIT 1);");
-            $mysqli->query("UPDATE phases SET enddate=(SELECT matchDate FROM matches WHERE idGroup=phases.idGroup order by matchdate desc LIMIT 1);"); */
+            $mysqli->query("UPDATE phases SET numberofmatches=(SELECT COUNT(*) FROM matches WHERE idGroup=phases.idGroup) where numberofmatches is null;");
+            $mysqli->query("UPDATE phases SET startdate=(SELECT matchDate FROM matches WHERE idGroup=phases.idGroup LIMIT 1) where startdate is null;");
+            $mysqli->query("UPDATE phases SET enddate=(SELECT matchDate FROM matches WHERE idGroup=phases.idGroup order by matchdate desc LIMIT 1) where enddate is null;");
         } catch (Exception $ex) {
             echo "jopelines";
         }
@@ -284,8 +284,8 @@ include("curl.php");
 </body>
 
 </html>
-<?php 
-if($_GET['force']){
+<?php
+if ($_GET['force']) {
     echo "<script>  setTimeout(() => location.reload(), 5000); </script>";
 }
 ?>

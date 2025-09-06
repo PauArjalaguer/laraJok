@@ -1,3 +1,9 @@
+@php
+    $userAgent = $_SERVER['HTTP_USER_AGENT'];
+    if(isset($userAgent) && $userAgent == 'iOSWebView'){
+        echo "<div class='mt-20'>&nbsp;</div>";
+    }
+@endphp
 <nav class="flex">
     <div class="py-2 lg:py-2 w-2/12">
         <h1><a href="/" class="webtitle font-['Comfortaa'] text-bold text-2xl md:text-4xl  font-bold">JOK.cat</a></h1>
@@ -13,6 +19,7 @@
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/noticies">Notícies</a></li>
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/pavellons">Pavellons</a></li>
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/agenda">Agenda</a></li>
+            {{-- <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base hidden "><a href="/anuncis">Anuncis</a></li> --}}
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/merchandising">Merchandising</a></li>
             <li class="lg:p-2 cursor-pointer font-bold text-base hidden ">Contacte</li>
             <li class="block lg:inline p-  cursor-pointer font-bold mt-2 lg:mr-2 ">
@@ -51,6 +58,19 @@
         </ul>
     </div>
 </nav>
+@if($userAgent != 'iOSWebView')
+<div class="flex rounded-xl my-1 bg-neutral-200 p-2 px-4" id='appStore'>
+    <div class="w-11/12">
+        <h1 class="font-bold font-sm md:text-xl text-neutral-700">
+            <a href="https://apps.apple.com/ca/app/jok/id6743651881" class='text-neutral-900'>Descarrega't ja l' aplicació per a IOS</a></h1>
+    </div>
+    <div class="w-1/12 text-right flex justify-end cursor-pointer" onClick="document.getElementById('appStore').style.display='none';">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+    </div>
+</div>
+@endif
 @if (!Auth::check())
 <div class="flex rounded-xl my-1 bg-neutral-200 p-2 px-4" id='userSavedDataBanner'>
     <div class="w-11/12">

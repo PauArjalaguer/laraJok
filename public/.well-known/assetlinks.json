@@ -1,0 +1,9 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "cat.jok.twa",
+        "sha256_cert_fingerprints": ["FE:D3:2A:22:A7:67:8F:C7:C4:57:D7:B3:6D:13:38:00:03:76:A7:2D:C0:23:37:9C:BA:83:C1:2A:63:BE:94:46",
+      "CA:EE:47:E5:52:72:AC:8D:E0:52:AA:78:19:40:45:28:DB:2A:CC:99:9D:63:3B:2C:7A:A8:10:27:19:80:04:FB"]
+      }
+    }]

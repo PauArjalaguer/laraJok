@@ -64,7 +64,7 @@ function parseLeague($idLliga, $mysqli)
                 ($idClassification,$idTeam,$points,$position,$played,$won, $draw, $lost, $gA, $gC, $idLliga, $idGroup) ON DUPLICATE KEY 
                 UPDATE  position=$position, won=$won, draw=$draw, played=$played, lost=$lost, goalsMade=$gA, goalsReceived=$gC, points=$points, position=$position ";
                 echo $sql2;
-                if ($idTeam) {
+                if ($idTeam && $played>0) {
                     $mysqli->query($sql2);
                 }
             }

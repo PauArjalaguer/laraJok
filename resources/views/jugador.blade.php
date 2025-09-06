@@ -66,7 +66,7 @@
         </div>
     </div>
     <div class="w-full md:block md:w-1/3  justify-center items-start md:pl-2   ">
-        <div class="w-full flex justify-center  ">
+        <div class="w-full flex justify-center hidden ">
             <a href="/jugador/{{$playerInfo[0]->idPlayer}}/{{urlencode($playerInfo[0]->playerName)}}">
                 <!-- <img class='p-10 ' src='http://ronaldmottram.co.nz/wp-content/uploads/2019/01/default-user-icon-8-300x300.jpg' /> -->
                 <img class='p-10' src="http://clubolesapati.cat/images/dynamic/playersImages/{{$playerInfo[0]->idPlayer}}.jpg" onerror="this.onerror=null;this.src='http://ronaldmottram.co.nz/wp-content/uploads/2019/01/default-user-icon-8-300x300.jpg';" />

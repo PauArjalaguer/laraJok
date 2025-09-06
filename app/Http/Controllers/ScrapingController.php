@@ -220,9 +220,11 @@ class ScrapingController extends Controller
                     try {
                         $date = Carbon::createFromFormat('Ymd', $date[1])->format("Y-m-d h:m:s");
                     } catch (\Exception $e) {
+                        //$date = '1970-01-01 00:00:00'; 
                         $date = Carbon::now()->format('Y-m-d h:m:s');
                     }
                 } else {
+                    // $date = '1970-01-01 00:00:00';  
                     $date = Carbon::now()->format('Y-m-d h:m:s');
                 }
                 $articleData = [
@@ -340,7 +342,7 @@ class ScrapingController extends Controller
         $xpath = self::getDOM($html);
         $textNoticia = "";
 
-        $title =  $xpath->query("//h1[contains(@class,'ft-title')]")->item(0) ?  $xpath->query("//h1[contains(@class,'ft-title')]")->item(0)->nodeValue : '';
+        $title =  $article = $xpath->query("//h1[contains(@class,'ft-title')]")->item(0) ? $article = $xpath->query("//h1[contains(@class,'ft-title')]")->item(0)->nodeValue : '';
 
         $article = $xpath->query("//div[contains(@class, 'ft-layout-grid-flex__colXs-12')]")->item(0);
         if ($article) {
@@ -564,6 +566,36 @@ class ScrapingController extends Controller
                 // Parse location
                 $locationTd = $row->getElementsByTagName('td')->item(8);
                 $location = trim($locationTd->textContent);
+
+                /*  $games[] = [
+                    'date' => $date,
+                    'time' => $time,
+                    'club1_id' => $club1,
+                    'club2_id' => $club2,
+                    'league_id' => $leagueId,
+                    'result' => $result ?: null,
+                    'location' => $location
+                ]; */
+                /*    if ($result && strpos($result, '-') !== false) {
+                    // Split result into local and visitor scores
+                    list($localResult, $visitorResult) = explode('-', trim($result));
+        
+                    // Find matching match in database
+                    $match = Matches::where('club_local_id', $club1)
+                        ->where('club_visitor_id', $club2)
+                        ->where('group_id', $leagueId)
+                        ->where('date', $date)
+                        ->where('hour', $time)
+                        ->first();
+        
+                    // Update match if found
+                    if ($match) {
+                        $match->update([
+                            'localResult' => trim($localResult),
+                            'visitorResult' => trim($visitorResult)
+                        ]);
+                    }
+                } */
             }
         }
     }

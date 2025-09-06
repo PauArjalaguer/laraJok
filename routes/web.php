@@ -72,10 +72,10 @@ Route::middleware('auth')->group(function () {
 
 
 
-/*  Route::get('/logout', function () {
+Route::get('/logout', function () {
     Auth::logout();
     return redirect()->route('main');
-})->name('logout');  */
+})->name('logout'); 
 
 require __DIR__ . '/auth.php';
 

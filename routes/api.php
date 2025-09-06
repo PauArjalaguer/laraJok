@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ScrapingController;
+use App\Http\Controllers\ScrapingFCF;
 use App\Models\Agenda;
 use App\Models\Classifications;
 use App\Models\Clubs;
@@ -130,4 +131,9 @@ Route::get(
 );
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+///fcf
+Route::get("scrapingFCF/teams",function(){
+    return ScrapingFCF::scrapeTeams();
 });
