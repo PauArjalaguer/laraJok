@@ -19,15 +19,13 @@ class MainController extends Controller
         return view(
             'main',
             [
-                'clubsList' => Clubs::clubsList(),
-                'leaguesList' => Leagues::leaguesList(),
                 'matchesListNext' => Matches::matchesListNext( $userSavedData),
                 'matchesListLastWithResults' => Matches::matchesListLastWithResults($userSavedData),
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
                 'userSavedData' =>  $userSavedData,
                 'newsListTop'=>News::orderBy('newsDateTime','desc')->where('website','jokcat')->limit(4)->get(),
                 'userAgent' => request()->userAgent()
-                
+
             ]
         );
     }

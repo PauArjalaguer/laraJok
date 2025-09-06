@@ -27,6 +27,7 @@ Route::get('/club/{id}/{label}', [ClubsController::class, 'index']);
 Route::get('/jugador/{id}/{label}', [PlayersController::class, 'index']);
 Route::get('/competicio/{id}/{label}', [CompeticioController::class, 'index']);
 Route::get('/competicio/{id}/{label}/{round}', [CompeticioController::class, 'index']);
+Route::get('/competicions', [CompeticioController::class, 'llistat']);
 Route::get('/acta/{id}/{label}', [CompeticioController::class, 'acta']);
 Route::get('/desa/{item}/{id}', [UserController::class, 'store'])->middleware(['auth', 'verified']);
 
@@ -34,6 +35,7 @@ Route::get("/merchandising", [MerchandisingsController::class, 'index']);
 
 Route::get("/noticies/detall/{id}/{label}", [NewsController::class, 'detall']);
 Route::get("/noticies", [NewsController::class, 'index']);
+Route::get("/agenda", [AgendaController::class, 'index']);
 Route::get("/agenda", [AgendaController::class, 'index']);
 Route::get("/pavellons/{id}/{label}", [PavellonsController::class, 'detall']);
 Route::get("/pavellons", [PavellonsController::class, 'index']);
@@ -56,7 +58,8 @@ Route::get('/dashboard/merchandising', function () { return view('dashboard_merc
 Route::get("/privacitat", function(){
     return view("privacitat");
  });
-Route::get("/efsmasquefa", function (){ 
+
+Route::get("/efsmasquefa", function (){
     return view('masquefa_legal');});
 
 Route::get('/dashboard', function () {
@@ -72,10 +75,7 @@ Route::middleware('auth')->group(function () {
 
 
 
-Route::get('/logout', function () {
-    Auth::logout();
-    return redirect()->route('main');
-})->name('logout'); 
+
 
 require __DIR__ . '/auth.php';
 

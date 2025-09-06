@@ -16,8 +16,6 @@ class PavellonsController extends Controller
         return view(
             'pavellons',
             [
-                'clubsList' => Clubs::clubsList(),
-                'leaguesList' => Leagues::leaguesList(),
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
                 'userSavedData' => User::userSavedData(),
                 'pavellons' => Pavellons::whereNotNull('lat')->with('matches') ->get()
@@ -29,8 +27,6 @@ class PavellonsController extends Controller
         return view(
             'pavello',
             [
-                'clubsList' => Clubs::clubsList(),
-                'leaguesList' => Leagues::leaguesList(),
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
                 'userSavedData' => User::userSavedData(),
                 'partits_pavello' => Matches::matchesListFromIdPavello($idPavello)

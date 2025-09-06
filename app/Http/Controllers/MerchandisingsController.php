@@ -16,8 +16,6 @@ class MerchandisingsController extends Controller
     return view(
         'merchandising',
         [
-            'clubsList' => Clubs::clubsList(),
-            'leaguesList' => Leagues::leaguesList(),
             'merchandisingListAll' => Merchandisings::whereNotNull('assetCategory')->orderBy('assetName','asc')->get(),
             'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
             'userSavedData' => User::userSavedData(),
@@ -32,7 +30,7 @@ class MerchandisingsController extends Controller
            'assetName' => '.',
        ]);
        $idMerch = $query;
-       
+
        return to_route('dashboard.merchandising.edit',$idMerch);
    }
    public function edit($idMerch)

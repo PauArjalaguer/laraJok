@@ -91,11 +91,15 @@
                         <a href="/"><span class="text-[15px] ml-4 text-white">Inici</span></a>
                     </div>
                     <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
+                        <i class="fa-solid fa-person-skating"></i>
+                        <a href="/competicios"><span class="text-[15px] ml-4 text-white">Competicions</span></a>
+                    </div>
+                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
                         <i class="fa-regular fa-newspaper"></i>
                         <a href="/noticies"><span class="text-[15px] ml-4 text-white">Notícies</span></a>
                     </div>
                     <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-solid fa-building"></i>
+                        <i class="fa-solid fa-location-pin"></i>
                         <a href="/pavellons"><span class="text-[15px] ml-4 text-white">Pavellons</span></a>
                     </div>
                     <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer ">
@@ -142,7 +146,7 @@
                     <div id="pwaNavFordward" class="hidden"><i class="fa-solid fa-forward-step" onClick="goForward()" onKeyPress="goForward()" role="button" tabindex="0"></i></div>
                 </div>
                 @include('layout.nav')
-                @include('layout.select-section')
+                {{-- @include('layout.select-section') --}}
                 @yield('content')
             </div>
             <footer class="w-full justify-center  sticky top-[100vh] bg-neutral-900">

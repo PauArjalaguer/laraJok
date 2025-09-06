@@ -16,6 +16,8 @@
             </svg>
         </div>
         <ul class="pt-2 block  hidden lg:inline" id="menu_">
+            <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/competicions">Competició</a></li>
+          {{-- <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/clubs">Clubs</a></li> --}}
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/noticies">Notícies</a></li>
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/pavellons">Pavellons</a></li>
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/agenda">Agenda</a></li>

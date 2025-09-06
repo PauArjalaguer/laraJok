@@ -20,8 +20,6 @@ class NewsController extends Controller
         return view(
             'news',
             [
-                'clubsList' => Clubs::clubsList(),
-                'leaguesList' => Leagues::leaguesList(),
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
                 'userSavedData' => User::userSavedData(),
                 'newsListTop' => News::orderBy('newsDateTime', 'desc')->where('website','jokcat')->simplePaginate(5)
@@ -36,8 +34,6 @@ class NewsController extends Controller
         return view(
             'news_detail',
             [
-                'clubsList' => Clubs::clubsList(),
-                'leaguesList' => Leagues::leaguesList(),
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
                 'userSavedData' => User::userSavedData(),
                 'newsDetail' => News::where('idNew', $id)->get()
@@ -47,9 +43,9 @@ class NewsController extends Controller
     public function create()
     {
         $query = DB::table('news')->insertGetId([
-           
+
             'newsTitle' => '.',
-           
+
 
         ]);
         $idNews = $query;

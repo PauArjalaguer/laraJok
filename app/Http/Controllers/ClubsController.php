@@ -20,8 +20,6 @@ class ClubsController extends Controller
     return view(
         'club',
         [
-            'leaguesList' => Leagues::leaguesList(),
-            'clubsList' => Clubs::clubsList(),
             'clubInfo' => Clubs::where('idClub', $id)->get(),
             'teamsList' => Teams::teamsByIdClub($id),
             'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),

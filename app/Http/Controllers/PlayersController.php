@@ -20,8 +20,6 @@ class PlayersController extends Controller
         return view(
             'jugador',
             [
-                'leaguesList' => Leagues::leaguesList(),
-                'clubsList' => Clubs::clubsList(),
                 'playerInfo' => Players::where('idPlayer', $id)->get(),
                 'playerMatchesList' => Matches::matchesListFromIdPlayer($id),
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),

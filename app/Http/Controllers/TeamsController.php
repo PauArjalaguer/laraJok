@@ -23,13 +23,11 @@ class TeamsController extends Controller
         return view(
             'equip',
             [
-                'leaguesList' => Leagues::leaguesList(),
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
-                'clubsList' => Clubs::clubsList(),
                 'teamLeaguesList' => Teams::teamLeaguesList($id),
                 'teamInfo' => Teams::teamInfo($id),
                 'teamGoals'=>Teams::teamGoals($id),
-                'playersList' => Players::playersByIdTeam($id),               
+                'playersList' => Players::playersByIdTeam($id),
                 'checkIfSaved' => User::checkIfSaved('equip', $id),
                 'userSavedData' => User::userSavedData()
             ]

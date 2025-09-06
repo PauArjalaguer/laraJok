@@ -16,8 +16,6 @@ class AgendaController extends Controller
       return view('agenda', [
          'agenda' => Agenda::get(),
          'userSavedData' => User::userSavedData(),
-         'clubsList' => Clubs::clubsList(),
-         'leaguesList' => Leagues::leaguesList(),
          'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
       ]);
    }

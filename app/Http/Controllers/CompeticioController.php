@@ -19,10 +19,8 @@ class CompeticioController extends Controller
         $id = $request->id;
         $round = $request->round;
         return view(
-            'competicio',
-            [
-                'leaguesList' => Leagues::leaguesList(),
-                'clubsList' => Clubs::clubsList(),
+            'competicio',            [
+
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
                 'matchesList' => Matches::matchesListFromIdLeague($id),
                 'classification' => Classifications::classificationGetByIdGroup($id),
@@ -43,11 +41,22 @@ class CompeticioController extends Controller
         return view(
             'acta',
             [
+                'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
+                'userSavedData' => User::userSavedData(),
+                'matchGetInfoById' => Matches::matchGetInfoById($id)
+            ]
+        );
+    }
+    public static function llistat()
+    {
+        return view(
+            'competicions_llistat',
+            [
                 'leaguesList' => Leagues::leaguesList(),
                 'clubsList' => Clubs::clubsList(),
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
                 'userSavedData' => User::userSavedData(),
-                'matchGetInfoById' => Matches::matchGetInfoById($id)
+
             ]
         );
     }
