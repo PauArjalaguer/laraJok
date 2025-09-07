@@ -92,7 +92,7 @@
                     </div>
                     <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
                         <i class="fa-solid fa-person-skating"></i>
-                        <a href="/competicios"><span class="text-[15px] ml-4 text-white">Competicions</span></a>
+                        <a href="/competicions"><span class="text-[15px] ml-4 text-white">Competicions</span></a>
                     </div>
                     <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
                         <i class="fa-regular fa-newspaper"></i>
