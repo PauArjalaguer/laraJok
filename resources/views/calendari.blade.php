@@ -23,8 +23,9 @@
             @endphp
             <table width="100%" style="table-layout:fixed;   /* reparteix l’amplada per igual */
     border-collapse:collapse;">
+                <tr><td>&nbsp;</td></tr>
                 <tr>
-                    <th colspan="7">{{$nom_mes}} </th>
+                    <th colspan="7" align="left">{{ucfirst(strtolower($nom_mes))}} </th>
                 </tr>
                 <tr>
                     @for($a=1;$a<$num_primer_dia;$a++)
@@ -43,26 +44,29 @@
                                 //print_r($partits_del_dia);
                             @endphp
 
-                            <td style="border:1px solid #2d3748; padding:3px; vertical-align: top; min-height: 300px;">
-                                <div class="font-bold  bg-neutral-300 rounded-xl text-white p-1 text-center text-[9px]">{{ $dia_del_mes}} </div>
-                            @foreach($partits_del_dia as $partit)
-                                 <div class=" text-[10px] items-center border-b">
-                                    {{$partit->localTeam}} - {{$partit->visitorTeam}}
-                                </div>
-                                @endforeach
+                            <td style="border:1px solid #e5e5e5; vertical-align: top; height: 200px; padding:0px;" class="border-neutral-400">
+                                <div class="grid place-items-center min-h-30 ">
+                                    <div class="m-2 w-6 h-6 rounded-full bg-neutral-600 text-white flex items-center justify-center  text-[9px] font-bold shadow-md">
+                                        {{ $dia_del_mes}}
+                                    </div>
+                                    @foreach($partits_del_dia as $partit)
+                                         <div class=" text-[10px] items-center border-t border-neutral-200 p-2">
+                                             {{substr($partit->matchHour,0,5)}} {{\Illuminate\Support\Str::title(strtolower($partit->localTeam))}} - {{\Illuminate\Support\Str::title(strtolower($partit->visitorTeam))}}
+                                       </div>
+                                    @endforeach
                             </td>
 
-                            @if($compta_setmanes==7)
-                                   @php $compta_setmanes=0; @endphp
-                                    </tr><tr>
-                            @endif
-                     @endfor
-                </tr>
-            </table>
+    @if($compta_setmanes==7)
+           @php $compta_setmanes=0; @endphp
+            </tr><tr>
+    @endif
+@endfor
+</tr>
+</table>
 
-            @if($any==$any_actual && $mes==11)
-                {{ $mes_actual = 1}}
-            @endif
-        @endfor
-    @endfor
+@if($any==$any_actual && $mes==11)
+{{ $mes_actual = 1}}
+@endif
+@endfor
+@endfor
 @endsection
