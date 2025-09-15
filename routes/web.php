@@ -36,7 +36,7 @@ Route::get("/merchandising", [MerchandisingsController::class, 'index']);
 Route::get("/noticies/detall/{id}/{label}", [NewsController::class, 'detall']);
 Route::get("/noticies", [NewsController::class, 'index']);
 Route::get("/agenda", [AgendaController::class, 'index']);
-Route::get("/agenda", [AgendaController::class, 'index']);
+Route::get("/calendari", [AgendaController::class, 'calendari']);
 Route::get("/pavellons/{id}/{label}", [PavellonsController::class, 'detall']);
 Route::get("/pavellons", [PavellonsController::class, 'index']);
 

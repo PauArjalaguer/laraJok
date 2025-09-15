@@ -21,6 +21,10 @@
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/noticies">Notícies</a></li>
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/pavellons">Pavellons</a></li>
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/agenda">Agenda</a></li>
+
+            @if (Auth::check())
+            <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/calendari">Calendari</a></li>
+            @endif
             {{-- <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base hidden "><a href="/anuncis">Anuncis</a></li> --}}
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/merchandising">Merchandising</a></li>
             <li class="lg:p-2 cursor-pointer font-bold text-base hidden ">Contacte</li>
@@ -61,7 +65,7 @@
     </div>
 </nav>
 @if($userAgent != 'iOSWebView')
-<div class="flex rounded-xl my-1 bg-neutral-200 p-2 px-4" id='appStore'>
+<div class="flex rounded-xl my-1 bg-neutral-200 p-2 px-4 " id='appStore'>
     <div class="w-11/12">
         <h1 class="font-bold font-sm md:text-xl text-neutral-700">
             <a href="https://apps.apple.com/ca/app/jok/id6743651881" class='text-neutral-900'>Descarrega't ja l' aplicació per a IOS</a></h1>

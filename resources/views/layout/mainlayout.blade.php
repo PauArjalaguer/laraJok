@@ -109,9 +109,15 @@
                     <div id="sidebarSearchResults" class="p-2 text-sm text-center hidden"> resultats trobats</div>
                     <hr class="my-4 text-gray-600">
                     <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-regular fa-calendar-days text-white"></i>
+                        <i class="fa-solid fa-calendar-week text-white"></i>
                         <a href="/agenda"><span class="text-[15px] ml-4 text-white">Agenda</span></a>
                     </div>
+                    @if (Auth::check())
+                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
+                        <i class="fa-regular fa-calendar-day text-white"></i>
+                        <a href="/calendari"><span class="text-[15px] ml-4 text-white">Calendari</span></a>
+                    </div>
+                    @endif
 
                     <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
                         <i class="fa-sharp-duotone fa-solid fa-shirt"></i>

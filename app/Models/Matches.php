@@ -52,7 +52,7 @@ class Matches extends Model
             ]);
     }
 
-    public static  function matchesListNext($userSavedData, $idClub = 0)
+    public static  function matchesListNext($userSavedData, $idClub = 0,$limit=10)
     {
         $idsTeams = User::userTeamsSelected($userSavedData);
 
@@ -74,7 +74,7 @@ class Matches extends Model
             })
             ->orderBy('matchDate', 'asc')
             ->orderBy('matchHour', 'asc')
-            ->limit(10)
+            ->limit($limit)
             ->get();
     }
 
