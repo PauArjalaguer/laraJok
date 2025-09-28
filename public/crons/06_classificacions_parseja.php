@@ -74,7 +74,7 @@ function parseLeague($idLliga, $mysqli)
         }
     }
 }
-$result =$result = $mysqli->query("select idLeague from leagues where idSeason=37  order by lastupdated desc, idLeague desc limit 0,100");
+$result =$result = $mysqli->query("select idLeague from leagues where idSeason=39  order by lastupdated desc, idLeague desc limit 0,100");
 while ($row = mysqli_fetch_array($result)) {
     //echo $row['idLeague']." - ";
     parseLeague($row['idLeague'], $mysqli);
