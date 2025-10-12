@@ -127,11 +127,11 @@
                             if (team.idSeason !== lastSeason) {console.log("new season");
                                 document.getElementById('searchReturn').insertAdjacentHTML(
                                 'beforeend',
-                                `<div class="w-full h-4 separador" ></div>` // pots canviar h-4 per més o menys espai
+                                `<div class="w-full h-4 separador" >`+team.seasonName+`</div>` // pots canviar h-4 per més o menys espai
                                 );
                                 lastSeason = team.idSeason;
                             }
-                            document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='p-1 w-1/4'><div class='bg-neutral-200 rounded-xl p-4 cursor-pointer' ><a class='text-sm' href='/equip/" + team.idTeam + "/" + team.teamName + "'>" + (team.teamName + " " + team.categoryName).substr(0, 36) + "</a></div></div>")
+                            document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='p-1 w-1/4'><div class='bg-neutral-200 rounded-xl p-4 cursor-pointer' ><a class='text-sm' href='/equip/" + team.idTeam + "/" + team.teamName + "'>" + team.teamName + "<br /><small>" + team.categoryName + "</small></a></div></div>")
                           
                         })
 

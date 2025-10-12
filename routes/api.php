@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/search/teams/{search}", function ($search) {
-    return Teams::join('categories', 'categories.idCategory', '=', 'teams.idCategory')->where('teamName', 'like', '%' . $search . '%')->limit(100)->orderBy('idTeam', 'desc')->get();
+    return Teams::join('categories', 'categories.idCategory', '=', 'teams.idCategory')->join('seasons', 'seasons.idSeason', '=', 'teams.idSeason')->where('teamName', 'like', '%' . $search . '%')->limit(100)->orderBy('idTeam', 'desc')->get();
 });
 Route::get("/search/clubs/{search}", function ($search) {
     return Clubs::where('clubName', 'like', '%' . $search . '%')->limit(100)->get();
