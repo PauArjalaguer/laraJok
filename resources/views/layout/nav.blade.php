@@ -127,7 +127,7 @@
                             if (team.idSeason !== lastSeason) {console.log("new season");
                                 document.getElementById('searchReturn').insertAdjacentHTML(
                                 'beforeend',
-                                `<div class="w-full h-4 separador" >`+team.seasonName+`</div>` // pots canviar h-4 per més o menys espai
+                                `<div class="w-full p-2 h-6" >`+team.seasonName+`</div>` // pots canviar h-4 per més o menys espai
                                 );
                                 lastSeason = team.idSeason;
                             }
