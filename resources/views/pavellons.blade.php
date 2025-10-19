@@ -103,7 +103,7 @@
             pavello.distance = pavello.distance.toFixed(1) + ' km';
             row.classList.add('hover:bg-neutral-50');
             let r_innerHTML = `
-                <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base"><span class="text-bold">${pavello.placeName}</span><br />${pavello.placeAddress}</td>
+                <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base"><span class="text-bold"><a href='/pavellons/${pavello.id}/${pavello.placeName}'>${pavello.placeName}</a></span><br />${pavello.placeAddress}</td>
                 <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base hidden lg:table-cell"></td>
                 <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base text-center">${pavello.distance}</td>
                 <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base">
