@@ -58,7 +58,7 @@
                        // pavello.distance = pavello.distance.toFixed(1) + ' km';
                         row.classList.add('hover:bg-neutral-50');
                         row.innerHTML = `
-                <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base">${pavello.placeName}</td>
+                <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base"><a href='/pavellons/${pavello.id}/${pavello.placeName}'>${pavello.placeName}</a></td>
                 <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base  hidden lg:table-cell ">${pavello.placeAddress}</td>
                 <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base text-center">--</td>
                 <td class="border border-gray-200 px-3 py-4 text-sm text-gray-900 text-xs md:text-base">
