@@ -20,7 +20,7 @@ function findIdTeam($teamName, $idLeague, $idGroup, $mysqli)
 {
     if ($idGroup) {
         $sql = "Select idTeam, teamName from teams t join matches m on m.idLocal=t.idTeam where idLeague=$idLeague and idGroup=$idGroup
-    and teamName ='" . addslashes($teamName) . "' limit 0,1";
+    and teamName ='" . trim(addslashes($teamName)). "' limit 0,1";
         echo "<br />$sql";
         $res = $mysqli->query($sql) or die(mysqli_error($mysqli));
         $r = mysqli_fetch_assoc($res);

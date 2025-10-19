@@ -63,8 +63,33 @@
             y = l.getElementsByTagName(r)[0];
             y.parentNode.insertBefore(t, y);
         })(window, document, "clarity", "script", "qjlnn16w4a");
-
+      
+        function predict(id_match){
+            fetch(`/api/matches/predict/${id_match}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Error en la resposta');
+                    return response.text(); // o .json() si el backend retorna JSON
+                })
+                .then(data => {
+                    const el = document.getElementById(`predict_${id_match}`);
+                    if (el) el.innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Error en el fetch:', error);
+                    document.getElementById(`predict_${id_match}`).innerHTML('');
+            })            
+        }
     </script>
+    <style>
+        @keyframes grow-bar {
+            from { width: 0; }
+            to { width: var(--bar-width); }
+        }
+
+        .animate-grow {
+        animation: grow-bar 1s ease-out forwards;
+        }
+        </style>
 </head>
 
 <body class="antialiased">
@@ -72,11 +97,11 @@
     <div class="relative">
         <div id="sidebar" class="fixed left-0 top-0 w-[52%] h-full bg-neutral-800 text-white z-50 -translate-x-full transition-transform duration-1000 ease-in-out">
         @php
-    $userAgent = $_SERVER['HTTP_USER_AGENT'];
-    if(isset($userAgent) && $userAgent == 'iOSWebView'){
-        echo "<div class='mt-20'>&nbsp;</div>";
-    }
-@endphp
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
+            if(isset($userAgent) && $userAgent == 'iOSWebView'){
+                echo "<div class='mt-20'>&nbsp;</div>";
+            }
+        @endphp
             <div class="text-gray-100 text-xl">
                 <div class="p-4 mt-1 flex items-center justify-between ">
                     <i class="fa-solid fa-circle-xmark h-6 w-6 cursor-pointer lg:hidden hover:text-gray-300" onClick="toggleMenu()" onKeyPress="toggleMenu()" role="button" tabindex="0"></i>
@@ -182,6 +207,22 @@
     const goBack = () => {
         if (canGoBack()) window.history.back();
     };
-
+    const predictLocks = {}; // evita crides duplicades per id
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) { // si es veu
+                const id_match = entry.target.dataset.idMatch;
+                predict(id_match);
+                observer.unobserve(entry.target); // només 1 vegada
+            }
+        });
+    }, { threshold: 0.3 }); // es dispara quan el 30% del div és visible
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('[id^="predict_"]').forEach(el => {
+            const id_match = el.id.replace('predict_', '');
+            el.dataset.idMatch = id_match;
+            observer.observe(el);
+        });
+    });
 </script>
 </html>

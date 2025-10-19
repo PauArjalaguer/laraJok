@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\DB;
 class Players extends Model
 {
     use HasFactory;
-    public static function playersByIdTeam($id)
+    public static function playersByIdTeam($id_team)
     {
         $result = Players::distinct("playerName")->select('players.idPlayer', 'playerName')->join("player_match", "player_match.idPlayer", "=", "players.idPlayer")->orderBy('playerName', 'asc')
-            ->where('idTeam', $id)->whereIn('player_match.idMatch', function ($q) use ($id) {
-                $q->from('matches')->select('idMatch')->where('idLocal', '=', $id)->orwhere('idVisitor',  $id)->toSql();
+            ->where('idTeam', $id_team)->whereIn('player_match.idMatch', function ($q) use ($id_team) {
+                $q->from('matches')->select('idMatch')->where('idLocal', '=', $id_team)->orwhere('idVisitor',  $id_team)->toSql();
             })->get();
         return $result;
     }

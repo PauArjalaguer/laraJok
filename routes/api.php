@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MatchesController;
 use App\Http\Controllers\ScrapingController;
 use App\Http\Controllers\ScrapingFCF;
 use App\Models\Agenda;
@@ -11,7 +12,7 @@ use App\Models\Merchandisings;
 use App\Models\News;
 use App\Models\Players;
 use App\Models\Teams;
-
+use App\View\Components\MatchesComponent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,9 @@ Route::get("/search/{search}", function ($search) {
     return ['teams' => $teams, 'clubs' => $clubs, 'players' => $players, 'leagues' => $leagues];
 });
 
+Route::get("/matches/predict/{id_match}", function($id_match){
+    return MatchesController::predict($id_match);    
+});
 Route::get("/leagues", function () {
     return Leagues::all();
 });

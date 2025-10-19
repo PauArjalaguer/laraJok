@@ -39,3 +39,13 @@
          </div>
      </div>
  </div>
+ @if($match->idMatch>1000000)
+ <div id="predict_<?= $match->idMatch ?>">Calculant predicció</div>
+ <script>
+  
+</script>
+@else
+    <div class="h-3">&nbsp;</div>
+@endif
+
+{{--  {{ \App\Http\Controllers\MatchesController::predict($match->idMatch)}} --}}

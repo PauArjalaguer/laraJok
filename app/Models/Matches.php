@@ -14,6 +14,7 @@ class Matches extends Model
         'matchDate'  => 'date:d-m-Y',
 
     ];
+    protected $primaryKey = 'idMatch';
     protected $dateFormat = 'U';
 
     private static function baseMatchesQuery()
