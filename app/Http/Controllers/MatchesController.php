@@ -120,28 +120,21 @@ class MatchesController extends Controller
         $teamB = $match['idVisitor'];
 
         $matchesA = Matches::where('idLocal',   $teamA)
-            ->orWhere('visitorTeam', $teamA)
+            ->orWhere('idVisitor', $teamA)
             ->get();
         $matchesB = Matches::where('idLocal', $teamB)
-            ->orWhere('visitorTeam',  $teamB)
+            ->orWhere('idVisitor',  $teamB)
             ->get();
         // Partits d'A i B
-        $matchesA = Matches::where('localTeam', $teamA)
-            ->orWhere('visitorTeam', $teamA)
-            ->get();
-
-        $matchesB = Matches::where('localTeam', $teamB)
-            ->orWhere('visitorTeam', $teamB)
-            ->get();
-
+        
         // Tots els rivals que han jugat contra A
         $rivalsA = $matchesA->map(function ($m) use ($teamA) {
-            return $m->localTeam == $teamA ? $m->visitorTeam : $m->localTeam;
+            return $m->idLocal == $teamA ? $m->idVisitor : $m->idLocal;
         })->unique();
 
         // Tots els rivals que han jugat contra B
         $rivalsB = $matchesB->map(function ($m) use ($teamB) {
-            return $m->localTeam == $teamB ? $m->visitorTeam : $m->localTeam;
+            return $m->idLocal == $teamB ? $m->idVisitor : $m->idLocal;
         })->unique();
 
         // Rivals comuns
@@ -153,18 +146,18 @@ class MatchesController extends Controller
 
         // Compareu els resultats contra cada rival comú
         foreach ($common_rivals as $rival) {
-            $matchA = $matchesA->first(fn($m) => $m->localTeam == $rival || $m->visitorTeam == $rival);
-            $matchB = $matchesB->first(fn($m) => $m->localTeam == $rival || $m->visitorTeam == $rival);
+            $matchA = $matchesA->first(fn($m) => $m->idLocal == $rival || $m->idVisitor == $rival);
+            $matchB = $matchesB->first(fn($m) => $m->idLocal == $rival || $m->idVisitor == $rival);
 
             // Funció auxiliar per saber qui guanya
             $winnerA = null;
             if ($matchA->localResult != $matchA->visitorResult) {
-                $winnerA = $matchA->localResult > $matchA->visitorResult ? $matchA->localTeam : $matchA->visitorTeam;
+                $winnerA = $matchA->localResult > $matchA->visitorResult ? $matchA->idLocal : $matchA->idVisitor;
             }
 
             $winnerB = null;
             if ($matchB->localResult != $matchB->visitorResult) {
-                $winnerB = $matchB->localResult > $matchB->visitorResult ? $matchB->localTeam : $matchB->visitorTeam;
+                $winnerB = $matchB->localResult > $matchB->visitorResult ? $matchB->idLocal : $matchB->idVisitor;
             }
 
             // Determinem els punts
