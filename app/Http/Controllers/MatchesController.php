@@ -205,10 +205,10 @@ class MatchesController extends Controller
         // Direcció i color
         if ($diff > 0) {
             $translate = -$barWidth; // cap a l'esquerra
-            $gradient = 'linear-gradient(to left, #999, #ddd)';
+            $gradient = 'linear-gradient(to left, #f3f4f6, #404040)';
         } elseif ($diff < 0) {
             $translate = $barWidth; // cap a la dreta
-            $gradient = 'linear-gradient(to right, #999, #ddd)';
+            $gradient = 'linear-gradient(to right, #f3f4f6, #404040)';
         } else {
             $translate = 0;
             $gradient = '#A1A1AA';
