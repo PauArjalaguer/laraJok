@@ -13,7 +13,7 @@ class Leagues extends Model
     public static function leaguesList()
     {
         $cacheKey = 'leaguesList';
-        $ttl = 600000;
+        $ttl = 10000;
         return Cache::remember($cacheKey, $ttl, function () {
             return  Leagues::join('seasons', 'leagues.idSeason', '=', 'seasons.idSeason')->join('phases', 'phases.idLeague', '=', 'leagues.idLeague')
                 ->join('categories','leagues.idCategory', '=', 'categories.idCategory')

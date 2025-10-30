@@ -23,7 +23,10 @@ class AgendaController extends Controller
 
    public function calendari(){
        return view('calendari', [
-           'agenda' => Matches::matchesListNext(User::userSavedData(),0,1000),
+           'agenda' => array_merge(
+               Matches::matchesListNext(User::userSavedData(), 0, 1000)->toArray(),
+               Matches::matchesListLastWithResults(User::userSavedData(), 0, 1000)->toArray()
+           ),
            'userSavedData' => User::userSavedData(),
            'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
        ]);

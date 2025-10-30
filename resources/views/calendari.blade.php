@@ -1,4 +1,6 @@
-@php use Carbon\Carbon; @endphp
+@php use Carbon\Carbon;
+$agenda = collect($agenda);
+@endphp
 @extends('layout.mainlayout')
 @section('title',"Calendari :: JOK.cat ")
 @section('content')
