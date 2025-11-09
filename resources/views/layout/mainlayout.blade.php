@@ -139,7 +139,7 @@
                     </div>
                     @if (Auth::check())
                     <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-regular fa-calendar-day text-white"></i>
+                        <i class="fa-regular fa-calendar-days text-white"></i>
                         <a href="/calendari"><span class="text-[15px] ml-4 text-white">Calendari</span></a>
                     </div>
                     @endif
