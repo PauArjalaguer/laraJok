@@ -95,6 +95,19 @@
                     <br />{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->goalsReceived : ''}} gols
                 </div>
             </div>
+            <div class="font-bold bg-neutral-700 p-2 text-white border-[1px] border-b-[0px] border-neutral-500 mt-2 shadow-md shadow-neutral-700">Equip amb més porteries a zero </div>
+            <div class="flex bg-white items-center border-[1px]  border-neutral-500 shadow-md shadow-neutral-700">
+                <div class="p-2 w-1/12  ">
+                    <a class="active:text-neutral-300" href="/equip/{{count($cleanSheets)>0 ? $cleanSheets[0]->idTeam  : ''}}/{{count($cleanSheets) ? urlencode($cleanSheets[0]->teamName) : ''}}">
+                        <img alt="{{count($cleanSheets)>0 ? App\Http\Controllers\TeamsController::teamFormat($cleanSheets[0]->teamName) : ''}}"  src={{count($cleanSheets)>0 ?  $cleanSheets[0]->clubImage : ''}} class="max-h-8 max-w-8 md:max-h-12 md:max-w-12  " />
+                </div>
+                <div class="p-2 w-11/12 ml-2 text-sm">
+                    <a class="active:text-neutral-300" href="/equip/{{count($cleanSheets)>0 ? $cleanSheets[0]->idTeam : ''}}/{{count($cleanSheets)>0 ? urlencode($cleanSheets[0]->teamName) :''}}">
+                        <span class="font-bold">{{count($cleanSheets)>0 ? App\Http\Controllers\TeamsController::teamFormat($cleanSheets[0]->teamName) : ''}}</span>
+                    </a>
+                    <br />{{count($cleanSheets)>0 ? $cleanSheets[0]->cleanSheets : ''}} partits
+                </div>
+            </div>
             <div class="font-bold bg-neutral-700 p-2 text-white border-[1px] border-b-[0px] border-neutral-500 mt-2 shadow-md shadow-neutral-700">Golejadors </div>
             @foreach($maxGoalsPerLeague as $player)
             <div class='bg-white w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-50 transition-all shadow-neutral-700 flex'>

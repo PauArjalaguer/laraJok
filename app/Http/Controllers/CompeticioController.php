@@ -27,6 +27,7 @@ class CompeticioController extends Controller
                 'bestGoalsMade' => Classifications::classificationGetBestGoalsMadeByIdLeague($id),
                 'leastGoalsReceived' => Classifications::classificationGetLeastGoalsReceived($id),
                 'maxGoalsPerLeague' => Players::maxGoalsPerLeague($id),
+                'cleanSheets' => Leagues::cleanSheets($id),
                 'totalPlayed' => Leagues::totalPlayed($id),
                 'checkIfSaved' => User::checkIfSaved('competicio', $id),
                 'userSavedData' => User::userSavedData(),
