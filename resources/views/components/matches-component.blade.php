@@ -6,15 +6,17 @@
          <div class="w-1/3 text-right pr-2">
              <span class="inline w-full text-white font-bold text-xs">
                  <a class="text-white font-bold text-xs active:text-neutral-300 " href="/competicio/{{$match->idGroup}}/{{urlencode($match->groupName)}}/{{$match->idRound}}">{{strlen($match->idRound)>2 ? '' : 'Jornada ' }} {{$match->idRound}}</a></span>
-             @isset($match->localResult)          
+             @isset($match->localResult)
                 <a class="text-white" href="/acta/{{$match->idMatch}}/{{urlencode($match->localTeam)}}-{{urlencode($match->visitorTeam)}}" aria-label="Acta del partit {{urlencode($match->localTeam)}}-{{urlencode($match->visitorTeam)}}">  | <i class="fa-solid fa-chart-line"></i></a>
-            </span>
              @endisset
+            </span>
+
 
              @php
                 $userAgent = $_SERVER['HTTP_USER_AGENT'];
             @endphp
-            @isset($match->lat)
+             @if(isset($match->lat) && !isset($match->localResult))
+
                 @if(isset($userAgent) && $userAgent == 'iOSWebView')
                    <a class="text-white" target="_blank" href="https://maps.apple.com/?q={{$match->lat}},{{$match->lon}}" aria-label="Ubicació del partit {{urlencode($match->localTeam)}}-{{urlencode($match->visitorTeam)}}"> | <i class="fa-solid fa-location-crosshairs"></i></a>
                 @else
@@ -42,7 +44,7 @@
  @if($match->idMatch>1000000)
  <div id="predict_<?= $match->idMatch ?>">Calculant predicció</div>
  <script>
-  
+
 </script>
 @else
     <div class="h-3">&nbsp;</div>
