@@ -49,8 +49,8 @@
             <h1 class="text-neutral-700 font-bold pb-4 md:text-xl">Golejadors</h1>
             @foreach ($teamGoals as $goals)
             @if($goals->goals!=0)
-            <div class="relative overflow-hidden bg-white w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-50 transition-all shadow-neutral-700 flex  items-center  p-4 capitalize flex ">
-                <div class="absolute top-0 left-0 h-full bg-neutral-100" style="width: {{$goals->percentage}}%;"></div>
+            <div class="group relative overflow-hidden bg-white w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-50 transition-all shadow-neutral-700 flex  items-center  p-4 capitalize flex ">
+                <div class="absolute top-0 left-0 h-full bg-neutral-100 group-hover:bg-neutral-400 transition-colors" style="width: {{$goals->percentage}}%;"></div>
                 <div class="w-10/12 relative z-10">
                     <a class="active:text-neutral-300" href="/jugador/{{$goals->idPlayer}}/{{urlencode($goals->playerName)}}">{{mb_strtolower($goals->playerName)}} </a> 
                 </div>
