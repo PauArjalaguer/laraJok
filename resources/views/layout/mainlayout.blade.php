@@ -51,7 +51,11 @@
     <link href="/pwa/icons/ios/192.png" sizes="192x192" rel="apple-touch-startup-image">
 
     <link rel="manifest" href="/site.webmanifest">
-    <script src="https://kit.fontawesome.com/bfecf98ef1.js" crossorigin="anonymous"></script>
+    @if(date('j') >= 15)
+        <script src="https://kit.fontawesome.com/bfecf98ef1.js" crossorigin="anonymous"></script>
+    @else
+        <script src="https://kit.fontawesome.com/0b5c081e1f.js" crossorigin="anonymous"></script>
+    @endif
     <script type="text/javascript">
         (function(c, l, a, r, i, t, y) {
             c[a] = c[a] || function() {
