@@ -30,7 +30,7 @@ class Teams extends Model
     }
 
     public static function teamGoals($id){
-        return DB::table('player_match as pm')
+        $players = DB::table('player_match as pm')
         ->selectRaw('SUM(goals) as goals, pl.playerName, pl.idPlayer')
         ->join('players as pl', 'pl.idPlayer', '=', 'pm.idPlayer')
         ->join('matches as m', 'm.idMatch', '=', 'pm.idMatch')
@@ -40,5 +40,14 @@ class Teams extends Model
         ->groupBy('pl.idPlayer', 'pl.playerName')
         ->orderBy('goals', 'desc')
         ->get();
+
+        $totalGoals = $players->sum('goals');
+
+        $players->transform(function ($player) use ($totalGoals) {
+            $player->percentage = $totalGoals > 0 ? round(($player->goals / $totalGoals) * 100, 2) : 0;
+            return $player;
+        });
+
+        return $players;
     }
 }

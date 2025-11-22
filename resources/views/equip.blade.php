@@ -50,10 +50,10 @@
             @foreach ($teamGoals as $goals)
             @if($goals->goals!=0)
             <div class="bg-white w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-50 transition-all shadow-neutral-700 flex  items-center  p-4 capitalize flex ">
-                <div class="w-11/12">
+                <div class="w-10/12">
                     <a class="active:text-neutral-300" href="/jugador/{{$goals->idPlayer}}/{{urlencode($goals->playerName)}}">{{mb_strtolower($goals->playerName)}} </a> 
                 </div>
-                <div class="w-1/12">{{$goals->goals}}</div>
+                <div class="w-2/12 text-right">{{$goals->goals}} <span class="text-xs text-gray-500">{{round($goals->percentage, 1)}}%</span></div>
             </div>
             @endif
             @endforeach
