@@ -53,7 +53,7 @@
                 <div class="w-10/12">
                     <a class="active:text-neutral-300" href="/jugador/{{$goals->idPlayer}}/{{urlencode($goals->playerName)}}">{{mb_strtolower($goals->playerName)}} </a> 
                 </div>
-                <div class="w-2/12 text-right">{{$goals->goals}} <span class="text-xs text-gray-500">{{round($goals->percentage, 1)}}%</span></div>
+                <div class="w-2/12 text-right">{{$goals->goals}} <span class="text-xs text-gray-500">{{sprintf('%04.1f', $goals->percentage)}}%</span></div>
             </div>
             @endif
             @endforeach
