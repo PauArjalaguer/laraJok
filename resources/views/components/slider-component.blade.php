@@ -41,7 +41,7 @@
 
         }
     }
-    let headerCounter = 0;
+    let headerCounter = 1;
 
     sliderChangeStatus(0, 'active');
     sliderChangeStatus(1, 'inactive');
@@ -86,6 +86,6 @@
             //  console.log("Header: " + headerCounter);
         }
     }, 6000);
-    interval();
+
 
 </script>

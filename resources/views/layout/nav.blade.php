@@ -110,49 +110,55 @@
 
             document.getElementById('search').style.display = 'block';
             document.getElementById('searchValue').innerHTML = value;
-            if (value.length > 4) {
+            if (value.length >= 4) {
+                
+                const teamsFetch = fetch("https://jok.cat/api/search/teams/" + value).then(response => response.json());
+                const playersFetch = fetch("https://jok.cat/api/search/players/" + value).then(response => response.json());
 
-                fetch("https://jok.cat/api/search/teams/" + value)
-                    .then(response => {
-                        document.getElementById('searchReturn').innerHTML = "";
-                        return response.json()
-                    })
-                    .then(data => {
-                        document.getElementById('searchReturn').innerHTML = "";
-                        totalDataLength = totalDataLength + data.length;
-                       
-                        document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='block w-full m-2 font-bold'>" + data.length + " equips</div>");
-                       let lastSeason = null;
-                        data.map((team) => {
-                            if (team.idSeason !== lastSeason) {console.log("new season");
-                                document.getElementById('searchReturn').insertAdjacentHTML(
-                                'beforeend',
-                                `<div class="w-full p-2 h-6" >`+team.seasonName+`</div>` // pots canviar h-4 per més o menys espai
+                Promise.all([teamsFetch, playersFetch])
+                    .then(([teamsData, playersData]) => {
+                        const searchReturn = document.getElementById('searchReturn');
+                        searchReturn.innerHTML = ""; // Clear results once
+                        
+                        // Process Teams
+                        totalDataLength += teamsData.length;
+                        searchReturn.insertAdjacentHTML('beforeend', "<div class='block w-full m-2 font-bold'>" + teamsData.length + " equips</div>");
+                        
+                        let lastSeason = null;
+                        teamsData.map((team) => {
+                            if (team.idSeason !== lastSeason) {
+                                searchReturn.insertAdjacentHTML(
+                                    'beforeend',
+                                    `<div class="w-full p-2 h-6" >` + team.seasonName + `</div>`
                                 );
                                 lastSeason = team.idSeason;
                             }
-                            document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='p-1 w-1/4'><div class='bg-neutral-200 rounded-xl p-4 cursor-pointer' ><a class='text-sm' href='/equip/" + team.idTeam + "/" + team.teamName + "'>" + team.teamName + "<br /><small>" + team.categoryName + "</small></a></div></div>")
-                          
-                        })
+                            searchReturn.insertAdjacentHTML('beforeend', "<div class='p-1 w-1/4'><div class='bg-neutral-200 rounded-xl p-4 cursor-pointer' ><a class='text-sm' href='/equip/" + team.idTeam + "/" + team.teamName + "'>" + team.teamName + "<br /><small>" + team.categoryName + "</small></a></div></div>")
+                        });
 
-                    });
-                fetch("https://jok.cat/api/search/players/" + value)
-                    .then(response => {
-                        return response.json()
+                        // Process Players
+                        totalDataLength += playersData.length;
+                        searchReturn.insertAdjacentHTML('beforeend', "<div class='block w-full m-2 font-bold'>" + playersData.length + " jugadors</div>");
+                        
+                        playersData.map((player) => {
+                            searchReturn.insertAdjacentHTML('beforeend', "<div class='p-1 w-1/4'><div class='bg-neutral-200 rounded-xl p-4 cursor-pointer' ><a  class='text-sm'  href='/jugador/" + player.idPlayer + "/" + player.playerName + "'>" + player.playerName.substr(0, 36) + "</a></div></div>")
+                        });
+
+                        // Update Sidebar Visibility
+                        const sidebarSearchResults = document.getElementById("sidebarSearchResults");
+                        if (sidebarSearchResults) {
+                             if (totalDataLength > 0) {
+                                sidebarSearchResults.style.display = 'block';
+                            } else {
+                                sidebarSearchResults.style.display = 'none';
+                            }
+                            sidebarSearchResults.innerHTML = totalDataLength + " resultats trobats";
+                        }
+                       
                     })
-                    .then(data => {
-                        totalDataLength = totalDataLength + data.length;
-                        console.log(data.length);
-                        console.log(totalDataLength);
-                        if(totalDataLength>0){ document.getElementById("sidebarSearchResults").style.display = 'block';}else{document.getElementById("sidebarSearchResults").style.display = 'none';}
-                        document.getElementById("sidebarSearchResults").innerHTML = totalDataLength + " resultats trobats";
-                        document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='block w-full m-2 font-bold'>" + data.length + " jugadors</div>");
-                        data.map((player) => {
-                            document.getElementById('searchReturn').insertAdjacentHTML('beforeend', "<div class='p-1 w-1/4'><div class='bg-neutral-200 rounded-xl p-4 cursor-pointer' ><a  class='text-sm'  href='/jugador/" + player.idPlayer + "/" + player.playerName + "'>" + player.playerName.substr(0, 36) + "</a></div></div>")
-                        })
-
+                    .catch(error => {
+                        console.error("Error fetching search results:", error);
                     });
-
             }
         }, 750);
 
