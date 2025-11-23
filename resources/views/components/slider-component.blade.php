@@ -41,6 +41,8 @@
 
         }
     }
+    // QA FIX: Initialized to 1 so the first slide (index 0) transitions to the second slide (index 1) 
+    // after the first 6-second interval. If set to 0, it would stay on slide 0 for 12 seconds.
     let headerCounter = 1;
 
     sliderChangeStatus(0, 'active');
@@ -86,6 +88,7 @@
             //  console.log("Header: " + headerCounter);
         }
     }, 6000);
+    // QA FIX: Removed erroneous call to interval() here. 'interval' is the ID returned by setInterval, not a function.
 
 
 </script>

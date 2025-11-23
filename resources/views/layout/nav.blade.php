@@ -115,6 +115,8 @@
                 const teamsFetch = fetch("https://jok.cat/api/search/teams/" + value).then(response => response.json());
                 const playersFetch = fetch("https://jok.cat/api/search/players/" + value).then(response => response.json());
 
+                // QA FIX: Use Promise.all to wait for BOTH requests to complete before updating the UI.
+                // This prevents race conditions where one request might overwrite or clear the other's results.
                 Promise.all([teamsFetch, playersFetch])
                     .then(([teamsData, playersData]) => {
                         const searchReturn = document.getElementById('searchReturn');

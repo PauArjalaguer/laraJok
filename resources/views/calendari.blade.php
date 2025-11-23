@@ -67,7 +67,7 @@ $agenda = collect($agenda);
 </table>
 
 @if($any==$any_actual && $mes==11)
-{{ $mes_actual = 1}}
+@php $mes_actual = 1; @endphp
 @endif
 @endfor
 @endfor
