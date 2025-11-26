@@ -37,7 +37,7 @@ $agenda = collect($agenda);
                             $compta_setmanes++;
                         @endphp
                     @endfor
-                    @for($a=1;$a<$dies_del_mes;$a++)
+                    @for($a=1;$a<=$dies_del_mes;$a++)
                             @php
                                 $dies ++;
                                 $compta_setmanes++;
