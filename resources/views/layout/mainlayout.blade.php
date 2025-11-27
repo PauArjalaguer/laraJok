@@ -72,11 +72,14 @@
             fetch(`/api/matches/predict/${id_match}`)
                 .then(response => {
                     if (!response.ok) throw new Error('Error en la resposta');
-                    return response.text(); // o .json() si el backend retorna JSON
+                    return response.text(); 
                 })
                 .then(data => {
                     const el = document.getElementById(`predict_${id_match}`);
-                    if (el) el.innerHTML = data;
+                    if (el) {
+                        el.innerHTML = data;
+                        el.classList.remove('py-2');
+                    }
                 })
                 .catch(error => {
                     console.error('Error en el fetch:', error);

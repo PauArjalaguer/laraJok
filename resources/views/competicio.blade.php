@@ -40,7 +40,7 @@
 </div>
 @if ($totalPlayed['percentage_played']>0)
 <div class="bg-neutral-300 w-full my-2">
-    <div id="percent" class="bg-neutral-900  text-neutral-300 py-2 font-bold transition-all ease-in" style='width:0%'>
+    <div id="percent" class="bg-neutral-700  text-neutral-300 py-2 font-bold transition-all ease-in" style='width:0%'>
       <span id="percentPlace" class='  px-6 text-neutral-300 '> &nbsp;</span>
     <span id="percentText" class='hidden  px-6 text-white '> {{$totalPlayed['percentage_played']}} % jugat</span></div>
 </div>
@@ -48,7 +48,7 @@
 <div class='w-full lg:flex  '>
 
     <div class='{{ count($classification)>0  ?  "w-full lg:w-1/2  lg:pr-2 mb-2" : "hidden"}}'>
-        <div class='bg-neutral-700 w-full  border-solid border-[1px]  border-b-[0px]  border-neutral-400 shadow-md    transition-all shadow-neutral-100 flex text-white'>
+        <div class='bg-neutral-700 w-full rounded-t-2xl  border-solid border-[1px]  border-b-[0px]  border-neutral-400 shadow-md    transition-all shadow-neutral-100 flex text-white'>
             <div class='p-4 w-1/12 text-center '>&nbsp;</div>
             <div class='p-4 w-7/12  text-left font-bold'>Equips</div>
             <div class='p-4 w-1/12  text-center bg-neutral-700 font-bold'>P</div>
@@ -70,7 +70,7 @@
         </div>
         @endforeach
         <div class="mt-2">
-            <div class="font-bold bg-neutral-700 p-2 text-white border-[1px] border-b-[0px] border-neutral-500 shadow-md shadow-neutral-700 ">Equip més golejador</div>
+            <div class="font-bold bg-neutral-700 rounded-t-2xl  p-2 text-white border-[1px] border-b-[0px] border-neutral-500 shadow-md shadow-neutral-700 ">Equip més golejador</div>
             <div class="text-sm flex bg-white items-center border-[1px]  border-neutral-500 shadow-md shadow-neutral-700">
                 <div class="p-2 w-1/12 ">
                     <img alt="{{count($bestGoalsMade)>0 ? App\Http\Controllers\TeamsController::teamFormat($bestGoalsMade[0]->teamName) : ''}}" src={{ count($bestGoalsMade)>0 ? $bestGoalsMade[0]->clubImage:'' }} class="max-h-8 max-w-8 md:max-h-12 md:max-w-12  " />
@@ -82,7 +82,7 @@
                     <br />{{count($bestGoalsMade)>0 ? $bestGoalsMade[0]->goalsMade : ''}} gols
                 </div>
             </div>
-            <div class="font-bold bg-neutral-700 p-2 text-white border-[1px] border-b-[0px] border-neutral-500 mt-2 shadow-md shadow-neutral-700">Equip menys golejat </div>
+            <div class="font-bold bg-neutral-700 rounded-t-2xl  p-2 text-white border-[1px] border-b-[0px] border-neutral-500 mt-2 shadow-md shadow-neutral-700">Equip menys golejat </div>
             <div class="flex bg-white items-center border-[1px]  border-neutral-500 shadow-md shadow-neutral-700">
                 <div class="p-2 w-1/12  ">
                     <a class="active:text-neutral-300" href="/equip/{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->idTeam  : ''}}/{{count($leastGoalsReceived) ? urlencode($leastGoalsReceived[0]->teamName) : ''}}">
@@ -95,7 +95,7 @@
                     <br />{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->goalsReceived : ''}} gols
                 </div>
             </div>
-            <div class="font-bold bg-neutral-700 p-2 text-white border-[1px] border-b-[0px] border-neutral-500 mt-2 shadow-md shadow-neutral-700">Equip amb més porteries a zero </div>
+            <div class="font-bold bg-neutral-700 rounded-t-2xl  p-2 text-white border-[1px] border-b-[0px] border-neutral-500 mt-2 shadow-md shadow-neutral-700">Equip amb més porteries a zero </div>
             <div class="flex bg-white items-center border-[1px]  border-neutral-500 shadow-md shadow-neutral-700">
                 <div class="p-2 w-1/12  ">
                     <a class="active:text-neutral-300" href="/equip/{{count($cleanSheets)>0 ? $cleanSheets[0]->idTeam  : ''}}/{{count($cleanSheets) ? urlencode($cleanSheets[0]->teamName) : ''}}">
@@ -108,9 +108,9 @@
                     <br />{{count($cleanSheets)>0 ? $cleanSheets[0]->cleanSheets : ''}} partits
                 </div>
             </div>
-            <div class="font-bold bg-neutral-700 p-2 text-white border-[1px] border-b-[0px] border-neutral-500 mt-2 shadow-md shadow-neutral-700">Golejadors </div>
+            <div class="font-bold bg-neutral-700 p-2 rounded-t-2xl  text-white border-[1px] border-b-[0px] border-neutral-500 mt-2 shadow-md shadow-neutral-700">Golejadors </div>
             @foreach($maxGoalsPerLeague as $player)
-            <div class='bg-white w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-50 transition-all shadow-neutral-700 flex'>
+            <div class='bg-white w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-50  transition-all shadow-neutral-700 flex'>
                 <div class='p-2 md:p-4 w-11/12 border-r-[1px] text-left  text-xs md:text-sm '>
                     <a class="active:text-neutral-300" href="/jugador/{{$player->idPlayer}}/{{urlencode($player->playerName)}}">{{App\Http\Controllers\TeamsController::teamFormat($player->playerName)}}</a>
                 </div>
@@ -123,7 +123,7 @@
     </div>
 
     <div class='{{ count($classification)>0  ?   "w-full lg:w-1/2  lg:pl-2 " : "w-full" }}'>
-        <div class='flex justify-stretch flex-wrap'>
+        <div class='flex justify-stretch flex-wrap mb-3'>
             @php
             $currentRound=0;
             $counter=0;
