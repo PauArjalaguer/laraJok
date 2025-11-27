@@ -17,7 +17,7 @@ include("curl.php");
 <body>
 
 
-    <div class='w-3/4 mx-auto my-2 bg-slate-100 rounded-xl p-2'>
+    <div class='w-3/4 mx-auto my-2 bg-neutral-100 rounded-xl p-2'>
         <h1 class="text-4xl font-bold p-5">Partits</h1>
         <?php
         $initTime = new DateTime();
@@ -95,8 +95,8 @@ include("curl.php");
                         $idPhase = $phase->attributes[0]->nodeValue;
                         $phaseName = addslashes(utf8_decode($phase->nodeValue));
                         echo "\n<div class='flex'>";
-                        echo "<div class='bg-slate-100 border-l border-t border-slate-700 w-1/12 p-2 text-center'>$idPhase</div>";
-                        echo "<div class='bg-slate-100 border-l border-t border-slate-700 w-11/12 p-2 text-center'>$phaseName</div>";
+                        echo "<div class='bg-neutral-100 border-l border-t border-neutral-700 w-1/12 p-2 text-center'>$idPhase</div>";
+                        echo "<div class='bg-neutral-100 border-l border-t border-neutral-700 w-11/12 p-2 text-center'>$phaseName</div>";
                         echo "</div>";
                         $sql = "insert into phases (idGroup, groupName, idLeague) values (" . $idPhase . ",'" . $phaseName . "','$idLliga') ON DUPLICATE KEY UPDATE groupName='$phaseName'";
                         // echo $sql;
@@ -106,8 +106,8 @@ include("curl.php");
             } else {
                 $idPhase = $idLliga;
                 echo "\n<div class='flex'>";
-                echo "<div class='bg-slate-100 border-l border-t border-slate-700 w-1/12 p-2 text-center'>$idLliga</div>";
-                echo "<div class='bg-slate-100 border-l border-t border-slate-700 w-11/12 p-2 text-center'>No hi ha grups</div>";
+                echo "<div class='bg-neutral-100 border-l border-t border-neutral-700 w-1/12 p-2 text-center'>$idLliga</div>";
+                echo "<div class='bg-neutral-100 border-l border-t border-neutral-700 w-11/12 p-2 text-center'>No hi ha grups</div>";
                 echo "</div>";
                 $sql = "insert into phases (idGroup, groupName, idLeague) values (" . $idPhase . ",'Grup únic','$idLliga') ON DUPLICATE KEY UPDATE groupName='Grup únic'";
                 $mysqli->query($sql);
@@ -136,11 +136,11 @@ include("curl.php");
                                     //data i hora del partit
                                     $matchDate = prepareDate($ch2->childNodes[3]->nodeValue);
                                     $matchHour = trim($ch2->childNodes[5]->nodeValue);
-                                    echo "\n\t<div class='bg-slate-100 border-l border-t border-slate-700 w-2/12 p-2 text-center'>$idGrup $matchDate <br /> $matchHour</div>";
+                                    echo "\n\t<div class='bg-neutral-100 border-l border-t border-neutral-700 w-2/12 p-2 text-center'>$idGrup $matchDate <br /> $matchHour</div>";
 
                                     //lloc
                                     $place = utf8_decode(trim($ch2->childNodes[7]->nodeValue));
-                                    echo "\n\t<div class='bg-slate-100 border-l border-t border-slate-700 w-2/12 p-2 text-center'>$place</div>";
+                                    echo "\n\t<div class='bg-neutral-100 border-l border-t border-neutral-700 w-2/12 p-2 text-center'>$place</div>";
                                     $idPlace = 1;
 
                                     $a = explode(" ", $at);
@@ -157,7 +157,7 @@ include("curl.php");
                                     $visitorClub = prepareidClub($visitorImage, $mysqli);
 
 
-                                    echo "\n\t<div class='bg-slate-100 border-l border-t border-slate-700 w-8/12 p-2 text-center'> $localTeam $idLocal - $visitorTeam $idVisitor </div>";
+                                    echo "\n\t<div class='bg-neutral-100 border-l border-t border-neutral-700 w-8/12 p-2 text-center'> $localTeam $idLocal - $visitorTeam $idVisitor </div>";
 
                                     $idMatch = str_replace("fichapartido_", "", $ch2->childNodes[27]->childNodes[1]->attributes[1]->nodeValue);
 
@@ -199,7 +199,7 @@ include("curl.php");
                                         $visitorResult = 'null';
                                     }
                                     $round = addslashes(str_replace("JORNADA ", "", utf8_decode(trim($ch2->childNodes[9]->nodeValue))));
-                                    echo "\n\t<div class='bg-slate-100 border-l border-t border-slate-700 w-3/12 p-2 text-center'> $round $localResult - $visitorResult</div>";
+                                    echo "\n\t<div class='bg-neutral-100 border-l border-t border-neutral-700 w-3/12 p-2 text-center'> $round $localResult - $visitorResult</div>";
 
                                     if ($localTeam && $visitorTeam) {
                                         try {

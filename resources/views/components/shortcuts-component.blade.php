@@ -14,7 +14,7 @@
     }
 
     @endphp
-    <div class="p-2 bg-slate-200 inline  rounded-xl mr-1 text-[12px] md:text-sm flex  flex-col items-end">
+    <div class="p-2 bg-neutral-200 inline  rounded-xl mr-1 text-[12px] md:text-sm flex  flex-col items-end">
         <a href="/{{$userData->category}}/{{$userData->idItem}}/{{$label}}">
             @if ($userData->category=='jugador')
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-3 hidden md:inline">

@@ -10,7 +10,7 @@
 
 <body>
 
-  <div class='w-3/4 mx-auto my-2 bg-slate-100 rounded-xl p-2'>
+  <div class='w-3/4 mx-auto my-2 bg-neutral-100 rounded-xl p-2'>
     <h1 class="text-4xl font-bold p-5">Lligues</h1>
     <?php
       include("curl.php");
@@ -47,15 +47,15 @@ echo "</pre>"; */
       $pParams = explode(";", $params);
       $teamsList = explode(":", $pParams[0]);
       echo "\n<div class='flex'>";
-      echo "<div class='bg-slate-100 border-l border-t border-slate-700 w-1/12 p-2 text-center'>$idSeason</div>";
-      echo "<div class='bg-slate-100 border-l border-t border-slate-700 w-1/12 p-2 text-center'>$idLliga</div>";
-      echo "<div class='bg-slate-100 border-l border-t border-slate-700 w-6/12 p-2'>$nomLliga</div>";
+      echo "<div class='bg-neutral-100 border-l border-t border-neutral-700 w-1/12 p-2 text-center'>$idSeason</div>";
+      echo "<div class='bg-neutral-100 border-l border-t border-neutral-700 w-1/12 p-2 text-center'>$idLliga</div>";
+      echo "<div class='bg-neutral-100 border-l border-t border-neutral-700 w-6/12 p-2'>$nomLliga</div>";
       $idCategory = 0;
       foreach ($categories as $category) {
         //echo mb_strtolower($category['categoryName']) . " - " . mb_strtolower($nomLliga) . " (" . strpos(mb_strtolower($nomLliga), mb_strtolower($category['categoryName'])) . ")<br />";
         if (strlen(strpos(mb_strtolower($nomLliga), mb_strtolower($category['categoryName']))) > 0) {
           $idCategory = $category['idCategory'];
-          echo "<div class='bg-slate-100 border-l border-r border-t border-slate-700 w-4/12 p-2'>" . ucwords(mb_strtolower($category['categoryName'])) . " (" . $idCategory . ")</div>";
+          echo "<div class='bg-neutral-100 border-l border-r border-t border-neutral-700 w-4/12 p-2'>" . ucwords(mb_strtolower($category['categoryName'])) . " (" . $idCategory . ")</div>";
         }
       
       }

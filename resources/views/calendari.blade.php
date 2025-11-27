@@ -24,11 +24,11 @@
         @endphp
 
         <div class="mb-10">
-            <h2 class="text-xl font-semibold text-gray-700 mb-3">{{$nom_mes}}</h2>
+            <h2 class="text-xl font-semibold text-neutral-700 mb-3">{{$nom_mes}}</h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-7 border border-gray-300 rounded-lg overflow-hidden">
+            <div class="grid grid-cols-1 md:grid-cols-7 border border-neutral-300 rounded-lg overflow-hidden">
                 @for($a=1; $a<$num_primer_dia; $a++)
-                    <div class="hidden md:block h-48 bg-gray-50"></div>
+                    <div class="hidden md:block h-48 bg-neutral-100"></div>
                     @php $dies++; $compta_setmanes++; @endphp
                 @endfor
 
@@ -42,7 +42,7 @@
                         $isToday = $dateObj->isToday();
                     @endphp
 
-                    <div {{ $isToday ? 'id=today' : '' }} class="min-h-[8rem] md:h-48 border border-gray-200 p-2 flex flex-col text-sm {{ $isToday ? 'bg-blue-50 ring-2 ring-blue-300' : '' }}">
+                    <div {{ $isToday ? 'id=today' : '' }} class="min-h-[8rem] md:h-48 border border-neutral-200 p-2 flex flex-col text-sm {{ $isToday ? 'bg-blue-50 ring-2 ring-blue-300' : 'bg-neutral-50' }}">
                         <div class="flex justify-end">
                             <div class="w-7 h-7 rounded-full bg-neutral-700 text-white flex items-center justify-center text-xs font-bold shadow">
                                 {{$dia_del_mes}}
@@ -51,7 +51,7 @@
 
                         <div class="mt-1 space-y-1 overflow-y-auto pr-1">
                             @foreach($partits_del_dia as $partit)
-                                <div class="text-[11px] bg-white border border-gray-200 rounded p-1 shadow-sm hover:bg-gray-100 transition">
+                                <div class="text-[11px] bg-white border border-neutral-200 rounded p-1 shadow-sm hover:bg-neutral-100 transition">
                                     <span class="font-semibold">{{substr($partit->matchHour,0,5)}}</span>
                                     {{ Str::title(strtolower($partit->localTeam)) }} - {{ Str::title(strtolower($partit->visitorTeam)) }}
                                 </div>

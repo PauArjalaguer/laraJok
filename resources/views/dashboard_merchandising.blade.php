@@ -20,7 +20,7 @@
                 <div class="p-6 text-gray-900">
                   
                     @foreach($merchandisingList as $merch)
-                    <div class='w-full flex  border-b py-2 hover:bg-slate-100'>
+                    <div class='w-full flex  border-b py-2 hover:bg-neutral-100'>
                        <div class='w-3/12 w-full '><img src={{$merch->assetThumbnail}} class='w-1/6' /></div> 
                         <div class='w-8/12 '>{{$merch->assetName}}</div>                      
                         <div class='w-1/12 text-right   border-indigo-500'>

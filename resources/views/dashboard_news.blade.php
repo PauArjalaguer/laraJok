@@ -21,7 +21,7 @@
                 <div class="p-6 text-gray-900">
                 
                     @foreach($newsList as $news)
-                    <div class='w-full flex  border-b py-2 hover:bg-slate-100'>
+                    <div class='w-full flex  border-b py-2 hover:bg-neutral-100'>
                         <div class='w-6/12 w-full '>{{$news->newsTitle}}</div>
                         <div class='w-5/12 text-right '>{{ \Carbon\Carbon::parse($news->newsDatetime)->format('d-m-y H:i')}} </div>
                         <div class='w-1/12 text-right   border-indigo-500'>

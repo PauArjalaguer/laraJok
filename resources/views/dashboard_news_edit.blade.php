@@ -22,14 +22,14 @@
                         <input type='hidden' name="idNew" id="idNew" value="{{$news[0]->idNew}}" />
                         <label to="newsTitle">Títol:</label>
 
-                        <input class='w-full  rounded-md border-slate-300 mb-3' type='text' name='newsTitle' id="newsTitle" value="{{$news[0]->newsTitle}}" />
+                        <input class='w-full  rounded-md border-neutral-300 mb-3' type='text' name='newsTitle' id="newsTitle" value="{{$news[0]->newsTitle}}" />
                         <label to="newsSubtitle">Subtítol:</label>
-                        <input class='w-full rounded-md border-slate-300 mb-3' type='text' name='newsSubtitle' id="newsSubtitle" value="{{$news[0]->newsSubtitle}}" />
+                        <input class='w-full rounded-md border-neutral-300 mb-3' type='text' name='newsSubtitle' id="newsSubtitle" value="{{$news[0]->newsSubtitle}}" />
                         <label to="newsImage">Imatge:</label>
-                        <input class='w-full rounded-md border-slate-300 mb-3' type='text' name='newsImage' id="newsImage" value="{{$news[0]->newsImage}}" />
+                        <input class='w-full rounded-md border-neutral-300 mb-3' type='text' name='newsImage' id="newsImage" value="{{$news[0]->newsImage}}" />
 
                         <label to="newsContent">Subtítol:</label>
-                        <textarea rows=20 class='w-full rounded-md border-slate-300 mb-1 h-96' type='text' name='newsContent' id="newsContent" contentEditable>{{$news[0]->newsContent}}</textarea>
+                        <textarea rows=20 class='w-full rounded-md border-neutral-300 mb-1 h-96' type='text' name='newsContent' id="newsContent" contentEditable>{{$news[0]->newsContent}}</textarea>
                         <x-input-error :messages="$errors->get('message')" />
                         <x-primary-button>Guardar</x-primary-button>
 
