@@ -50,6 +50,10 @@
     <link href="/pwa/icons/ios/256.png" sizes="256x256" rel="apple-touch-startup-image">
     <link href="/pwa/icons/ios/192.png" sizes="192x192" rel="apple-touch-startup-image">
 
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="shortcut icon" href="/favicon.ico">
+
     <link rel="manifest" href="/site.webmanifest">
     @if(date('j') >= 15)
         <script src="https://kit.fontawesome.com/bfecf98ef1.js" crossorigin="anonymous"></script>
