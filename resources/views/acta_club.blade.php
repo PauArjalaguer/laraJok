@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="container mx-auto px-4">
-    <h1 class="text-3xl font-bold my-8 text-center text-neutral-800">Actas de la Setmana</h1>
+    <h1 class="text-3xl font-bold my-8 text-center text-neutral-800">Actes de la Setmana</h1>
 
     @if(count($matches) == 0)
         <div class="text-center text-xl text-neutral-600 my-10">No hi ha partits amb acta disponible aquesta setmana.</div>

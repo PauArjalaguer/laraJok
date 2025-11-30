@@ -170,16 +170,27 @@ class Matches extends Model
     }
     public static function matchesListLastWeekByClub($idClub)
     {
+        $now = Carbon::now();
+        // If Mon(1), Tue(2), Wed(3) -> Show previous weekend
+        if ($now->dayOfWeek >= 1 && $now->dayOfWeek <= 3) {
+             $start = $now->copy()->subWeek()->startOfWeek(Carbon::MONDAY)->addDays(4)->format('Y-m-d');
+             $end = $now->copy()->subWeek()->endOfWeek(Carbon::SUNDAY)->format('Y-m-d');
+        } else {
+             // Thu(4), Fri(5), Sat(6), Sun(0) -> Show current weekend
+             $start = $now->copy()->startOfWeek(Carbon::MONDAY)->addDays(4)->format('Y-m-d');
+             $end = $now->copy()->endOfWeek(Carbon::SUNDAY)->format('Y-m-d');
+        }
+
         return self::baseMatchesQuery()
-            ->where('matchDate', '>=', Carbon::now()->subDays(7)->format('Y-m-d'))
-            ->where('matchDate', '<=', Carbon::now()->format('Y-m-d'))
+            ->where('matchDate', '>=', $start)
+            ->where('matchDate', '<=', $end)
             ->where(function ($query) use ($idClub) {
                 $query->where('club1.idClub', $idClub)
                       ->orWhere('club2.idClub', $idClub);
             })
             ->whereNotNull('localResult')
-            ->orderBy('matchDate', 'desc')
-            ->orderBy('matchHour', 'desc')
+            ->orderBy('matchDate', 'asc')
+            ->orderBy('matchHour', 'asc')
             ->get();
     }
 
