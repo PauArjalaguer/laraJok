@@ -95,6 +95,14 @@
                 <img onerror="this.style.display='none'" className=' w-full p-8 pt-0  ' src={{$clubInfo[0]->clubImage}} />
             </a>
         </div>
+        <div class="flex flex-col gap-2 mb-6 px-4">
+            <a href="/acta_club/{{$clubInfo[0]->idClub}}/actes-setmana" class="w-full bg-neutral-700 hover:bg-neutral-600 text-white font-bold py-2 px-4 rounded text-center transition-colors">
+                Actes de la setmana
+            </a>
+            <a href="/acta_header/{{$clubInfo[0]->idClub}}" target="_blank" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded text-center transition-colors">
+                Generar gràfic resultats
+            </a>
+        </div>
         <div class="w-full">
 
             @php

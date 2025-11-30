@@ -168,4 +168,19 @@ class Matches extends Model
             ->orderBy('matchHour', 'asc')
             ->get();
     }
+    public static function matchesListLastWeekByClub($idClub)
+    {
+        return self::baseMatchesQuery()
+            ->where('matchDate', '>=', Carbon::now()->subDays(7)->format('Y-m-d'))
+            ->where('matchDate', '<=', Carbon::now()->format('Y-m-d'))
+            ->where(function ($query) use ($idClub) {
+                $query->where('club1.idClub', $idClub)
+                      ->orWhere('club2.idClub', $idClub);
+            })
+            ->whereNotNull('localResult')
+            ->orderBy('matchDate', 'desc')
+            ->orderBy('matchHour', 'desc')
+            ->get();
+    }
+
 }

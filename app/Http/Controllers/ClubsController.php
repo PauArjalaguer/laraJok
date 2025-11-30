@@ -33,4 +33,39 @@ class ClubsController extends Controller
 
 
    }
+    public function acta_club(Request $request){
+        $id = $request->id;
+        $matches = Matches::matchesListLastWeekByClub($id);
+        $fullMatches = [];
+        foreach($matches as $m) {
+            $fullMatches[] = Matches::matchGetInfoById($m->idMatch);
+        }
+        
+        return view(
+            'acta_club',
+            [
+                'matches' => $fullMatches,
+                'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
+                'userSavedData' => User::userSavedData(),
+            ]
+        );
+   }
+
+    public function acta_header(Request $request){
+        $id = $request->id;
+        $matches = Matches::matchesListLastWeekByClub($id);
+        $fullMatches = [];
+        foreach($matches as $m) {
+            $fullMatches[] = Matches::matchGetInfoById($m->idMatch);
+        }
+        $clubInfo = Clubs::where('idClub', $id)->first();
+        
+        return view(
+            'acta_header',
+            [
+                'matches' => $fullMatches,
+                'clubInfo' => $clubInfo
+            ]
+        );
+   }
 }
