@@ -91,12 +91,12 @@
     </div>
 
     {{-- Footer --}}
-    <div class="w-full flex justify-between items-end mt-12 z-10 border-t border-white/10 pt-6">
+   <!--  <div class="w-full flex justify-between items-end mt-12 z-10 border-t border-white/10 pt-6">
         <div class="flex gap-4 items-center">
              <span class="text-2xl font-bold text-white/80">#somJOK</span>
         </div>
         <div class="text-2xl font-bold text-white/60">www.jok.cat</div>
-    </div>
+    </div> -->
 
     <script>
         function extractColors() {
