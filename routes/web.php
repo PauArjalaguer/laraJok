@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', [MainController::class, 'index'])->name("main");
 Route::get('/equip/{id}/{label}', [TeamsController::class, 'index']);
 Route::get('/club/{id}/{label}', [ClubsController::class, 'index']);
+Route::get('/acta_club/{id}/{label}', [ClubsController::class, 'acta_club']);
+Route::get('/acta_header/{id}', [ClubsController::class, 'acta_header']);
 Route::get('/jugador/{id}/{label}', [PlayersController::class, 'index']);
 Route::get('/competicio/{id}/{label}', [CompeticioController::class, 'index']);
 Route::get('/competicio/{id}/{label}/{round}', [CompeticioController::class, 'index']);
