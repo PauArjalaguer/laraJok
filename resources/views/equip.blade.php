@@ -20,6 +20,11 @@
         <div class="bg-white w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-50 transition-all shadow-neutral-700 flex  items-center 
                                      p-4 capitalize flex ">
             <div class="w-full">
+                
+                <span class="inline-flex items-center justify-center w-6  h-6 rounded-full bg-neutral-700 text-white font-bold text-xs flex-shrink-0">
+                    {{$player->number}}
+                </span>
+              
                 <a class="active:text-neutral-300" href="/jugador/{{$player->idPlayer}}/{{urlencode($player->playerName)}}">
                     {{mb_strtolower($player->playerName)}} </a>
             </div>
