@@ -145,7 +145,7 @@ function parseMatch($idMatch, $idLeague, $mysqli)
                     }
 
                     if ($players->childNodes[21]->nodeValue) {
-                        $red = $players->childNodes[21]->nodeValue;
+                        $red = 1;
                         echo " HI HA UNA TARGETA VERMELLA";
                     };
                     if ($players->childNodes[15]->nodeValue) {
@@ -164,6 +164,12 @@ function parseMatch($idMatch, $idLeague, $mysqli)
                     $n = explode(",", $nom);
                     $nom = $n[1] . " " . $n[0];
                     $nom = cleanName($nom);
+                    $sql = "update players set number = $dorsal  where playerName='$nom'  ";
+                    try {
+                        $mysqli->query($sql);
+                    } catch (Exception $ex) {
+                        echo " -> Algo ha passat al insertar el jugador $nom al partit $idMatch";
+                    }
                     $sql = "INSERT INTO player_match (idPlayer, idMatch,  goals, blue,red, idTeam) VALUES ((SELECT idPlayer FROM players where playerName='$nom' LIMIT 1), $idMatch, $gols, $blue,$red,$idLocal);";
                     //echo "<br />" . $sql;
                     if (strlen($nom) > 3) {
@@ -195,9 +201,16 @@ function parseMatch($idMatch, $idLeague, $mysqli)
                     }
 
                     echo $nom = addslashes(utf8_decode($players->childNodes[9]->nodeValue));
+                     $gols = trim($players->childNodes[11]->nodeValue);
+                      if (strlen($gols) > 0) {
+                        $gols = $players->childNodes[11]->nodeValue;
+                        echo " HA MARCAT $gols GOLS ";
+                    } else {
+                        $gols = 0;
+                    }
 
                      if ($players->childNodes[21]->nodeValue) {
-                        $red = $players->childNodes[21]->nodeValue;
+                        $red =1;
                         echo " HI HA UNA TARGETA VERMELLA";
                     };
                     if ($players->childNodes[15]->nodeValue) {
@@ -216,6 +229,12 @@ function parseMatch($idMatch, $idLeague, $mysqli)
                     $n = explode(",", $nom);
                     $nom = $n[1] . " " . $n[0];
                     $nom = cleanName($nom);
+                    $sql = "update players set number = $dorsal  where playerName='$nom'  ";
+                    try {
+                        $mysqli->query($sql);
+                    } catch (Exception $ex) {
+                        echo " -> Algo ha passat al insertar el jugador $nom al partit $idMatch";
+                    }
                     //$sql = "INSERT INTO player_match (idPlayer, idMatch, goals, blue,red, idTeam) VALUES ((SELECT idPlayer FROM players where playerName='$nom' LIMIT 1), $idMatch, $gols, $blue,$red,$idVisitor);";
                     $sql = "INSERT INTO player_match (idPlayer, idMatch, goals, blue, red, idTeam)
 SELECT p.idPlayer, $idMatch, $gols, $blue, $red, $idVisitor
