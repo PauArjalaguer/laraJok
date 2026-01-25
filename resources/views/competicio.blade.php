@@ -95,8 +95,9 @@
                     <br />{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->goalsReceived : ''}} gols
                 </div>
             </div>
+             @if(count($cleanSheets)>0)
             <div class="font-bold bg-neutral-700 p-2 text-white border-[1px] border-b-[0px] border-neutral-500 mt-2 shadow-md shadow-neutral-700">Equip amb més porteries a zero </div>
-           @if(count($cleanSheets)>0)
+          
             <div class="flex bg-white items-center border-[1px]  border-neutral-500 shadow-md shadow-neutral-700">
                 <div class="p-2 w-1/12  ">
                     <a class="active:text-neutral-300" href="/equip/{{count($cleanSheets)>0 ? $cleanSheets[0]->idTeam  : ''}}/{{count($cleanSheets) ? urlencode($cleanSheets[0]->teamName) : ''}}">
