@@ -96,6 +96,7 @@
                 </div>
             </div>
             <div class="font-bold bg-neutral-700 p-2 text-white border-[1px] border-b-[0px] border-neutral-500 mt-2 shadow-md shadow-neutral-700">Equip amb més porteries a zero </div>
+           @if(count($cleanSheets)>0)
             <div class="flex bg-white items-center border-[1px]  border-neutral-500 shadow-md shadow-neutral-700">
                 <div class="p-2 w-1/12  ">
                     <a class="active:text-neutral-300" href="/equip/{{count($cleanSheets)>0 ? $cleanSheets[0]->idTeam  : ''}}/{{count($cleanSheets) ? urlencode($cleanSheets[0]->teamName) : ''}}">
@@ -108,6 +109,7 @@
                     <br />{{count($cleanSheets)>0 ? $cleanSheets[0]->cleanSheets : ''}} partits
                 </div>
             </div>
+            @endif
             <div class="font-bold bg-neutral-700 p-2 text-white border-[1px] border-b-[0px] border-neutral-500 mt-2 shadow-md shadow-neutral-700">Golejadors </div>
             @foreach($maxGoalsPerLeague as $player)
             <div class='bg-white w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-50 transition-all shadow-neutral-700 flex'>
