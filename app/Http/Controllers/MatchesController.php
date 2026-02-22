@@ -201,6 +201,8 @@ class MatchesController extends Controller
 
         // Calculem la mida proporcional
         $barWidth = $total > 0 ? (abs($diff) / $total) * $maxWidth : 0;
+        $match->prediccio = $diff;
+        $match->save();
 
         // Direcció i color
         if ($diff > 0) {

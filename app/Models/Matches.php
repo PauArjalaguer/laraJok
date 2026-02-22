@@ -15,6 +15,7 @@ class Matches extends Model
 
     ];
     protected $primaryKey = 'idMatch';
+    public $timestamps = false;
     protected $dateFormat = 'U';
 
     private static function baseMatchesQuery()
