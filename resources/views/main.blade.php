@@ -1,7 +1,25 @@
 @extends('layout.mainlayout')
 @section('title'," JOK.cat ")
 @section('content')
-
+   <script async src="https://tally.so/widgets/embed.js"></script>
+    <script>
+        window.TallyConfig = {
+        "formId": "EkPjzA",
+        "popup": {
+            "emoji": {
+            "text": "👋",
+            "animation": "flash"
+            },
+            "hideTitle": true,
+            "autoClose": 0,
+            "formEventsForwarding": true,
+            "open": {
+            "trigger": "scroll",
+            "scrollPercent": 10
+            }
+        }
+        };
+    </script>
 <x-slider-component :newsListTop="$newsListTop" />
 <div class="w-full lg:flex my-2">
     <div class="lg:w-1/2 pr-1">

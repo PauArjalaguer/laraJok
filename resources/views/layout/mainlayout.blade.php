@@ -53,27 +53,9 @@
     <link href="/pwa/icons/ios/512.png" sizes="512x512" rel="apple-touch-startup-image">
     <link href="/pwa/icons/ios/256.png" sizes="256x256" rel="apple-touch-startup-image">
     <link href="/pwa/icons/ios/192.png" sizes="192x192" rel="apple-touch-startup-image">
-    <script async src="https://tally.so/widgets/embed.js"></script>
-    <script>
-        window.TallyConfig = {
-        "formId": "EkPjzA",
-        "popup": {
-            "emoji": {
-            "text": "👋",
-            "animation": "flash"
-            },
-            "hideTitle": true,
-            "autoClose": 0,
-            "formEventsForwarding": true,
-            "open": {
-            "trigger": "scroll",
-            "scrollPercent": 10
-            }
-        }
-        };
-    </script>
+ 
 
-<script async src="https://tally.so/widgets/embed.js"></script>
+
 
     <link rel="manifest" href="/site.webmanifest">
     @if(date('j') >= 15)
