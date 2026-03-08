@@ -144,7 +144,7 @@ class Matches extends Model
             ->join("clubs as c2", "t2.idClub", "=", "c2.idClub")
             ->leftJoin("players", "players.idPlayer", "=", "player_match.idPlayer")
             ->join("phases", "phases.idGroup", "=", "matches.idGroup")
-            ->select("matches.idMatch", "matches.idGroup", "idRound", "groupName", "idLocal", "idVisitor", "matchDate", "matchHour", "idRound", "localResult", "visitorResult", "localFaults", "visitorFaults", "referee", "player_match.idPlayer", "players.playerName", "goals", "blue", "red", "directes", "penalti", "player_match.idTeam", "t1.teamName", "t2.teamName as teamName2", "c1.clubImage as clubImage1", "c2.clubImage as clubImage2")
+            ->select("matches.idMatch", "matches.idGroup", "idRound", "groupName", "idLocal", "idVisitor", "matchDate", "matchHour", "idRound", "localResult", "visitorResult", "localFaults", "visitorFaults", "referee", "player_match.idPlayer", "players.playerName", "goals", "blue", "red", "directes", "penalti", "player_match.idTeam", "t1.teamName", "t2.teamName as teamName2", "c1.clubImage as clubImage1", "c2.clubImage as clubImage2","captain","gk")
             ->orderBy('player_match.idTeam')
             ->orderBy('players.playerName')
             ->where("matches.idMatch", $idMatch)->get();

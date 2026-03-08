@@ -1,4 +1,5 @@
 <div class="w-full lg:flex">
+    
     <div class="lg:w-1/2 text-right lg:p-2">
         <div class="bg-neutral-700 w-full  border-solid border-[1px]  border-b-[0px]  border-neutral-400 shadow-md transition-all shadow-neutral-100 flex text-white">
             <div class="p-4 w-8/12  text-left font-bold">Jugador</div>
@@ -12,6 +13,16 @@
         @if($m->idLocal==$m->idTeam)
         <div class='bg-white w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-50 transition-all shadow-neutral-700 flex'>
             <div class='p-2 md:p-4 w-8/12 border-r-[1px] text-left  text-xs md:text-sm '>
+                @if($m->captain==1)
+                <span class="inline-flex items-center justify-center w-6  h-6 rounded-full bg-neutral-700 text-white font-bold text-xs flex-shrink-0">
+                    C
+                </span>
+                @endif
+                @if($m->gk==1)
+                <span class="inline-flex items-center justify-center w-6  h-6 rounded-full bg-neutral-700 text-white font-bold text-xs flex-shrink-0">
+                    P
+                </span>
+                @endif
                 <a class="active:text-neutral-300" href="/jugador/{{$m->idPlayer}}/{{urlencode($m->playerName)}}">{{App\Http\Controllers\TeamsController::teamFormat($m->playerName)}}</a>
             </div>
             <div class="p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm">{{$m->goals}}</div>
@@ -38,6 +49,16 @@
         @if($m->idVisitor==$m->idTeam)
         <div class="bg-white w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-50 transition-all shadow-neutral-700 flex">
             <div class="p-2 md:p-4 w-8/12 border-r-[1px] text-left  text-xs md:text-sm">
+                @if($m->captain==1)
+                <span class="inline-flex items-center justify-center w-6  h-6 rounded-full bg-neutral-700 text-white font-bold text-xs flex-shrink-0">
+                    C
+                </span>
+                @endif
+                @if($m->gk==1)
+                <span class="inline-flex items-center justify-center w-6  h-6 rounded-full bg-neutral-700 text-white font-bold text-xs flex-shrink-0">
+                    P
+                </span>
+                @endif
                 <a class="active:text-neutral-300" href="/jugador/{{$m->idPlayer}}/{{urlencode($m->playerName)}}">{{App\Http\Controllers\TeamsController::teamFormat($m->playerName)}}</a>
             </div>
             <div class="p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm">{{$m->goals}}</div>
