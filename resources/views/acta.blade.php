@@ -42,7 +42,10 @@
     </div>
     <div class="w-full text-center mt-4"><span class="font-bold">Àrbitre</span><br /> {{App\Http\Controllers\TeamsController::teamFormat($matchGetInfoById[0]->referee)}}</div>
     <div class="clear-both">&nbsp;</div>
-
-    @include('partials.acta_match_table', ['matchData' => $matchGetInfoById])
+    @if($matchGetInfoById->count()>1)
+        @include('partials.acta_match_table', ['matchData' => $matchGetInfoById])
+    @else
+        <div class="text-center">Acta encara no disponible o no existent a Fecapa.</div>
+    @endif
 </div>
 @endsection
