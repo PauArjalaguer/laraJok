@@ -47,6 +47,7 @@ function parseLeague($idLliga, $mysqli)
             echo "<br><br>Id Grup: " . $idGroup = $row['idGroup'];
         }
         foreach ($classification->childNodes[3]->childNodes as $tr) {
+            $prevPosition=0;
             if ($tr->tagName == 'tr') {
                 $position = $tr->childNodes[1]->nodeValue;
                 $teamName = utf8_decode($tr->childNodes[5]->childNodes[0]->nodeValue);
@@ -60,9 +61,18 @@ function parseLeague($idLliga, $mysqli)
                 $gC = $tr->childNodes[19]->nodeValue;
                 echo "<br />" . $position . " " . $idTeam . " - " . $teamName . " " . $points . " " . $played . " Guanyat " . $won . " Empatat " . $draw . " Perdut  " . $lost . " " . $gA . " " . $gC;
                 $idClassification = $idGroup . $idTeam;
-                $sql2 = "insert into classifications (idClassification,idTeam,points,position,played,won, draw, lost, goalsMade, goalsReceived, idLeague, idGroup) values 
-                ($idClassification,$idTeam,$points,$position,$played,$won, $draw, $lost, $gA, $gC, $idLliga, $idGroup) ON DUPLICATE KEY 
-                UPDATE  position=$position, won=$won, draw=$draw, played=$played, lost=$lost, goalsMade=$gA, goalsReceived=$gC, points=$points, position=$position ";
+                
+                /*Busco partits jugats i posició per veure si hi ha hagut canvis */
+                $sql_ant="select played from classifications where idClassification=$idClassification";
+                $res_ant =  $mysqli->query($sql_ant);
+                $row_ant = mysqli_fetch_assoc($res);
+                if($row_ant['played']!=$played){
+                    $prevPosition = $position;
+                }
+
+                $sql2 = "insert into classifications (idClassification,idTeam,points,position,played,won, draw, lost, goalsMade, goalsReceived, idLeague, idGroup, prevPosition) values 
+                ($idClassification,$idTeam,$points,$position,$played,$won, $draw, $lost, $gA, $gC, $idLliga, $idGroup,$prevPosition) ON DUPLICATE KEY 
+                UPDATE  position=$position, won=$won, draw=$draw, played=$played, lost=$lost, goalsMade=$gA, goalsReceived=$gC, points=$points, position=$position, prevPosition= $prevPosition ";
                 echo $sql2;
                 if ($idTeam && $played>0) {
                     $mysqli->query($sql2);
