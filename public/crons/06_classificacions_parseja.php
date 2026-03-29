@@ -67,9 +67,9 @@ function parseLeague($idLliga, $mysqli)
                 $res_ant =  $mysqli->query($sql_ant);
                 $row_ant = mysqli_fetch_assoc($res);
                 if($row_ant['position']!=$position){
-                    $prevPosition = $position;
-                }else{
                     $prevPosition = $row_ant['position'];
+                }else{
+                    $prevPosition = $position;
                 }
 
                 $sql2 = "insert into classifications (idClassification,idTeam,points,position,played,won, draw, lost, goalsMade, goalsReceived, idLeague, idGroup, prevPosition) values 
