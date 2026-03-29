@@ -65,7 +65,10 @@ function parseLeague($idLliga, $mysqli)
                 /*Busco partits jugats i posició per veure si hi ha hagut canvis */
                 $sql_ant="select played, position from classifications where idClassification=$idClassification";
                 $res_ant =  $mysqli->query($sql_ant);
-                $row_ant = mysqli_fetch_assoc($res);
+                $row_ant = mysqli_fetch_assoc($res_ant);
+                echo "<hr />Posicio anterior";
+                print_r($row_ant);
+                  echo "<hr />";
                 if($row_ant['position']!=$position){
                     $prevPosition = $row_ant['position'];
                 }else{
