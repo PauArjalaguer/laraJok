@@ -45,7 +45,11 @@ export default {
     'pointer-events-none',
     'transition-opacity',
     'duration-200',
-    'animate-grow'
+    'animate-grow',
+    // Classification form indicators
+    'bg-green-500',
+    'bg-red-500',
+    'bg-yellow-400',
   ],
     theme: {
         extend: {

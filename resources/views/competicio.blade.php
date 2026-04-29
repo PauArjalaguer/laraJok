@@ -30,6 +30,46 @@
  
 </script>
 
+<style>
+    .classCol-team { width: 58.333%; min-width: 0; /* w-7/12 */ }
+    .classCol-form { width: 16.666%; /* w-2/12 */ }
+    .classification-expanded .classCol-team { width: 25%; min-width: 0; /* w-3/12 */ }
+    .classification-expanded .classCol-form { width: 16.666%; }
+    .classification-expanded .classCol-team a {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+
+<script>
+    let classificationExpanded = false;
+    const toggleClassification = () => {
+        classificationExpanded = !classificationExpanded;
+        const container = document.getElementById('classificationContainer');
+        const extras = document.getElementsByClassName('classCol-extra');
+        const arrow = document.getElementById('expandClassArrow');
+        const text = document.getElementById('expandClassText');
+
+        if (classificationExpanded) {
+            container.classList.add('classification-expanded');
+            for (let i = 0; i < extras.length; i++) {
+                extras[i].classList.remove('hidden');
+            }
+            arrow.style.transform = 'rotate(180deg)';
+            text.textContent = 'Reduir';
+        } else {
+            container.classList.remove('classification-expanded');
+            for (let i = 0; i < extras.length; i++) {
+                extras[i].classList.add('hidden');
+            }
+            arrow.style.transform = 'rotate(0deg)';
+            text.textContent = 'Ampliar';
+        }
+    }
+</script>
+
 <div class="w-full text-neutral-700 text-xl mb-4 font-bold pb-2 border-b border-neutral-400">
     <a href="/desa/competicio/{{$matchesList[0]->idGroup}}">
         <svg xmlns="http://www.w3.org/2000/svg" fill={{$checkIfSaved==1 ? 'currentColor':'none'}} viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline w-6 cursor-pointer {{$checkIfSaved==1 ? 'text-red-800':''}}">
@@ -47,26 +87,105 @@
 @endif
 <div class='w-full lg:flex  '>
 
-    <div class='{{ count($classification)>0  ?  "w-full lg:w-1/2  lg:pr-2 mb-2" : "hidden"}}'>
-        <div class='bg-neutral-700 w-full  border-solid border-[1px]  border-b-[0px]  border-neutral-400 shadow-md    transition-all shadow-neutral-100 flex text-white'>
-            <div class='p-4 w-1/12 text-center '>&nbsp;</div>
-            <div class='p-4 w-7/12  text-left font-bold'>Equips</div>
-            <div class='p-4 w-1/12  text-center bg-neutral-700 font-bold'>P</div>
-            <div class='p-4 w-1/12  text-center font-bold'>G</div>
-            <div class='p-4 w-1/12 text-center font-bold'>E</div>
-            <div class='p-4 w-1/12  text-center font-bold'>Pe</div>
+    <div id="classificationContainer" class='{{ count($classification)>0  ?  "w-full lg:w-1/2  lg:pr-2 mb-2" : "hidden"}}'>
+        {{-- Expand/Collapse button - hidden on mobile --}}
+        <div class="hidden md:flex justify-end mb-1">
+            <button id="expandClassBtn" onclick="toggleClassification()" class="flex items-center gap-1 text-xs text-neutral-500 hover:text-neutral-800 transition-colors px-2 py-1 rounded hover:bg-neutral-200">
+                <span id="expandClassText">Ampliar</span>
+                <svg id="expandClassArrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 transition-transform duration-300">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                </svg>
+            </button>
         </div>
-        @foreach($classification as $classificationRow)
-        <div class='bg-white w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-50 transition-all shadow-neutral-700 flex'>
-            <div class='p-2 md:p-4 w-1/12 text-center border-r-[1px] text-xs md:text-sm '>{{$classificationRow->position}}</div>
-            <div class='p-2 md:p-4 w-7/12 border-r-[1px] text-left  text-xs md:text-sm '>
-                <a class="active:text-neutral-300" class="active:text-neutral-300" href="/equip/{{$classificationRow->idTeam}}/{{urlencode($classificationRow->teamName)}}">{{App\Http\Controllers\TeamsController::teamFormat($classificationRow->teamName)}}</a>
-            </div>
-            <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center bg-neutral-700  text-xs md:text-sm text-white'>{{$classificationRow->points}}</div>
-            <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm'>{{$classificationRow->won}}</div>
-            <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm'>{{$classificationRow->draw}}</div>
-            <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm'>{{$classificationRow->lost}}</div>
 
+        {{-- Classification Header --}}
+        <div class='bg-neutral-700 w-full border-solid border-[1px] border-b-[0px] border-neutral-400 shadow-md transition-all shadow-neutral-100 flex text-white'>
+            <div class='p-4 w-1/12 text-center '>&nbsp;</div>
+            <div class='p-4 classCol-team text-left font-bold'>Equips</div>
+            <div class='p-4 w-1/12 text-center bg-neutral-700 font-bold'>P</div>
+            <div class='p-4 w-1/12 text-center font-bold classCol-extra hidden '>PJ</div>
+            <div class='p-4 w-1/12 text-center font-bold'>G</div>
+            <div class='p-4 w-1/12 text-center font-bold'>E</div>
+            <div class='p-4 w-1/12 text-center font-bold'>Pe</div>
+            {{-- Expanded columns --}}
+          
+            <div class='p-4 w-1/12 text-center font-bold classCol-extra hidden'>GF</div>
+            <div class='p-4 w-1/12 text-center font-bold classCol-extra hidden'>GC</div>
+            <div class='p-3 classCol-form text-center font-bold classCol-extra hidden'>Darrers partits</div>
+        </div>
+
+        {{-- Prepare last matches data per team --}}
+        @php
+            $teamForm = [];
+            $lastPlayedMatches = $lastPlayedMatches->reverse();
+            foreach ($lastPlayedMatches as $match) {
+                // For local team
+                $localId = $match->idLocal;
+                $visitorId = $match->idVisitor;
+                $localGoals = (int)$match->localResult;
+                $visitorGoals = (int)$match->visitorResult;
+
+                // Build tooltip string
+                $localTeamName = App\Http\Controllers\TeamsController::teamFormat($match->localTeamName);
+                $visitorTeamName = App\Http\Controllers\TeamsController::teamFormat($match->visitorTeamName);
+                $tooltip = "{$localTeamName} {$localGoals} - {$visitorGoals} {$visitorTeamName} ".date('d/m/Y', strtotime($match->matchDate));
+
+                // Local team result
+                if (!isset($teamForm[$localId])) $teamForm[$localId] = [];
+                if (count($teamForm[$localId]) < 5) {
+                    if ($localGoals > $visitorGoals) {
+                        $teamForm[$localId][] = ['result' => 'W', 'tooltip' => $tooltip];
+                    } elseif ($localGoals < $visitorGoals) {
+                        $teamForm[$localId][] = ['result' => 'L', 'tooltip' => $tooltip];
+                    } else {
+                        $teamForm[$localId][] = ['result' => 'D', 'tooltip' => $tooltip];
+                    }
+                }
+
+                // Visitor team result
+                if (!isset($teamForm[$visitorId])) $teamForm[$visitorId] = [];
+                if (count($teamForm[$visitorId]) < 5) {
+                    if ($visitorGoals > $localGoals) {
+                        $teamForm[$visitorId][] = ['result' => 'W', 'tooltip' => $tooltip];
+                    } elseif ($visitorGoals < $localGoals) {
+                        $teamForm[$visitorId][] = ['result' => 'L', 'tooltip' => $tooltip];
+                    } else {
+                        $teamForm[$visitorId][] = ['result' => 'D', 'tooltip' => $tooltip];
+                    }
+                }
+            }
+        @endphp
+
+        @foreach($classification as $classificationRow)
+        <div class='bg-white w-full border-solid border-t-[1px] border-neutral-400 shadow-md hover:bg-neutral-50 transition-all shadow-neutral-700 flex'>
+            <div class='p-2 md:p-4 w-1/12 text-center border-r-[1px] text-xs md:text-sm '>{{$classificationRow->position}}</div>
+            <div class='p-2 md:p-4 classCol-team border-r-[1px] text-left text-xs md:text-sm '>
+                <a class="active:text-neutral-300" href="/equip/{{$classificationRow->idTeam}}/{{urlencode($classificationRow->teamName)}}">{{App\Http\Controllers\TeamsController::teamFormat($classificationRow->teamName)}}</a>
+            </div>
+            <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center bg-neutral-700 text-xs md:text-sm text-white'>{{$classificationRow->points}}</div>
+              <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center text-xs md:text-sm classCol-extra hidden bg-neutral-200'>{{$classificationRow->played}}</div>
+          
+            <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center text-xs md:text-sm'>{{$classificationRow->won}}</div>
+            <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center text-xs md:text-sm'>{{$classificationRow->draw}}</div>
+            <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center text-xs md:text-sm'>{{$classificationRow->lost}}</div>
+            {{-- Expanded columns --}}
+            <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center text-xs md:text-sm classCol-extra hidden'>{{$classificationRow->goalsMade}}</div>
+            <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center text-xs md:text-sm classCol-extra hidden'>{{$classificationRow->goalsReceived}}</div>
+            <div class='p-2 md:p-4 classCol-form border-r-[1px] text-center text-xs md:text-sm classCol-extra hidden'>
+                <div class="flex items-center justify-center gap-1">
+                    @if(isset($teamForm[$classificationRow->idTeam]))
+                        @foreach($teamForm[$classificationRow->idTeam] as $matchData)
+                            @if($matchData['result'] === 'W')
+                                <span class="inline-block w-3 h-3 md:w-4 md:h-4 rounded-full bg-green-500" title="{{ $matchData['tooltip'] }}"></span>
+                            @elseif($matchData['result'] === 'L')
+                                <span class="inline-block w-3 h-3 md:w-4 md:h-4 rounded-full bg-red-500" title="{{ $matchData['tooltip'] }}"></span>
+                            @else
+                                <span class="inline-block w-3 h-3 md:w-4 md:h-4 rounded-full bg-yellow-400" title="{{ $matchData['tooltip'] }}"></span>
+                            @endif
+                        @endforeach
+                    @endif
+                </div>
+            </div>
         </div>
         @endforeach
         <div class="mt-2">

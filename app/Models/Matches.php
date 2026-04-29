@@ -114,6 +114,21 @@ class Matches extends Model
             ->get();
     }
 
+    public static function lastPlayedMatchesByGroup($idGroup, $limit = 150)
+    {
+        return DB::table('matches')
+            ->join('teams as local', 'matches.idLocal', '=', 'local.idTeam')
+            ->join('teams as visitor', 'matches.idVisitor', '=', 'visitor.idTeam')
+            ->where('matches.idGroup', $idGroup)
+            ->whereNotNull('localResult')
+            ->whereNotNull('visitorResult')
+            ->select('idLocal', 'idVisitor', 'localResult', 'visitorResult', 'matchDate', 'local.teamName as localTeamName', 'visitor.teamName as visitorTeamName')
+            ->orderBy('matchDate', 'desc')
+            //->orderByRaw('CONVERT(idRound, SIGNED) desc')
+            ->limit($limit)
+            ->get();
+    }
+
     public static  function matchesListFromIdPlayer($idPlayer)
     {
         return DB::table('matches')

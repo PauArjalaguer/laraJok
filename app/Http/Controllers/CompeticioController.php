@@ -31,7 +31,8 @@ class CompeticioController extends Controller
                 'totalPlayed' => Leagues::totalPlayed($id),
                 'checkIfSaved' => User::checkIfSaved('competicio', $id),
                 'userSavedData' => User::userSavedData(),
-                'round'=>$round
+                'round'=>$round,
+                'lastPlayedMatches' => Matches::lastPlayedMatchesByGroup($id),
             ]
         );
     }
