@@ -174,7 +174,7 @@
             <div class='p-2 md:p-4 classCol-form border-r-[1px] text-center text-xs md:text-sm classCol-extra hidden'>
                 <div class="flex items-center justify-center gap-1">
                     @if(isset($teamForm[$classificationRow->idTeam]))
-                        @foreach($teamForm[$classificationRow->idTeam] as $matchData)
+                        @foreach(array_reverse($teamForm[$classificationRow->idTeam]) as $matchData)
                             @if($matchData['result'] === 'W')
                                 <span class="inline-block w-3 h-3 md:w-4 md:h-4 rounded-full bg-green-500" title="{{ $matchData['tooltip'] }}"></span>
                             @elseif($matchData['result'] === 'L')
