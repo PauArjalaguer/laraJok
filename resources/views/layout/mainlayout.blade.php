@@ -160,6 +160,11 @@
                         <a href="/merchandising"><span class="text-[15px] ml-4 text-white">Merchandising</span></a>
                     </div>
 
+                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
+                        <i class="fa-solid fa-tags"></i>
+                        <a href="/anuncis"><span class="text-[15px] ml-4 text-white">Segona Mà</span></a>
+                    </div>
+
                     <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500" id="install-btn" style="display: none;">
                         <i class="fa-solid fa-mobile-screen"></i>
                         <button class="text-[15px] ml-4 text-white">Instal·lar App</button>
