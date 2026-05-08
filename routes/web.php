@@ -61,6 +61,20 @@ Route::get('/dashboard/merchandising/edit/{id}', [MerchandisingsController::clas
 Route::put('/dashboard/merchandising/save/{id}', [MerchandisingsController::class,'update'])->middleware(['auth', 'verified']);
 Route::get('/dashboard/merchandising/delete/{id}', [MerchandisingsController::class,'delete'])->middleware(['auth', 'verified'])->name('dashboard.merchandising.delete');
 Route::get('/dashboard/merchandising', function () { return view('dashboard_merchandising',['merchandisingList'=>Merchandisings::orderBy('idAsset','desc')->get()]);})->middleware(['auth', 'verified'])->name('dashboard.merchandising');
+
+// dashboard anuncis
+Route::get('/dashboard/anuncis', [AnuncisController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard.anuncis');
+Route::get('/dashboard/anuncis/new', [AnuncisController::class, 'create'])->middleware(['auth', 'verified'])->name('dashboard.anuncis.new');
+Route::get('/dashboard/anuncis/edit/{id}', [AnuncisController::class, 'edit'])->middleware(['auth', 'verified'])->name('dashboard.anuncis.edit');
+Route::post('/dashboard/anuncis/store', [AnuncisController::class, 'store'])->middleware(['auth', 'verified'])->name('dashboard.anuncis.store');
+Route::post('/dashboard/anuncis/update/{id}', [AnuncisController::class, 'update'])->middleware(['auth', 'verified'])->name('dashboard.anuncis.update');
+Route::get('/dashboard/anuncis/delete/{id}', [AnuncisController::class, 'destroy'])->middleware(['auth', 'verified'])->name('dashboard.anuncis.delete');
+Route::get('/dashboard/anuncis/moderacio', [AnuncisController::class, 'moderacio'])->middleware(['auth', 'verified'])->name('dashboard.anuncis.moderacio');
+Route::get('/dashboard/anuncis/delete-foto/{id}', [AnuncisController::class, 'destroyFoto'])->middleware(['auth', 'verified'])->name('dashboard.anuncis.delete-foto');
+
+Route::post('/dashboard/anuncis/upload-image', [AnuncisController::class, 'uploadImage'])->middleware(['auth', 'verified'])->name('dashboard.anuncis.upload-image');
+
+
 Route::get("/privacitat", function(){
     return view("privacitat");
  });

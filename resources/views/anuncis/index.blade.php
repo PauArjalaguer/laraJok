@@ -49,8 +49,9 @@
         @endif
     </div>
 
-    {{-- Fila de filtres --}}
-    <div class="flex flex-wrap gap-2 mb-3">
+    {{-- Fila de filtres + Botó Nou --}}
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <div class="flex flex-wrap gap-2">
 
         {{-- Tipus --}}
         <div class="relative" id="dropTipus-wrap">
@@ -179,7 +180,16 @@
         </a>
         @endif
 
-    </div><!-- /filtres -->
+        </div><!-- /filtres -->
+
+        {{-- Botó Nou Anunci --}}
+        <a href="{{ route('dashboard.anuncis.new') }}" 
+           class="inline-flex items-center px-4 py-2 bg-neutral-800 text-white text-sm font-semibold rounded-xl hover:bg-neutral-700 transition-all duration-200 shadow-sm active:scale-95">
+            <i class="fa-solid fa-plus mr-1.5"></i>
+            Nou Anunci
+        </a>
+
+    </div><!-- /fila-filtres -->
 </form>
 
 {{-- ══════════════════════════════════════════════════════════════════════
@@ -249,8 +259,7 @@
             <h2 class="text-sm font-semibold text-neutral-800 leading-snug mb-1 line-clamp-2">{{ $anunci->titol }}</h2>
             <p class="text-[11px] text-neutral-400 mb-2">
                 <i class="fa-solid fa-ruler-combined mr-0.5"></i>{{ $anunci->mida->nom_mida }}
-                <span class="text-neutral-300 mx-1">·</span>
-                {{ ucfirst($anunci->mida->tipus_mida) }}
+              
             </p>
             <div class="mt-auto flex items-center justify-between">
                 @if($anunci->preu)

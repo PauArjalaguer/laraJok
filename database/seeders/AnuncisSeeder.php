@@ -10,11 +10,22 @@ class AnuncisSeeder extends Seeder
 {
     public function run(): void
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('anuncismarques')->truncate();
+        DB::table('anuncisestats')->truncate();
+        DB::table('anuncismides')->truncate();
+        DB::table('anuncistipus')->truncate();
+        DB::table('anuncisfotos')->truncate();
+        DB::table('anuncis')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
         // ── Marques ──────────────────────────────────────────────────────────
+
         $marques = [
-            'Bauer', 'CCM', 'Salming', 'Sher-Wood', 'Rickter',
-            'Reno', 'Borelli', 'Gens', 'Jofa', 'Vic',
-            'Alkali', 'Oxdog', 'Fat Pipe', 'Unihoc', 'TK',
+            'Reno', 'Azemad', 'Sioux', 'Toor', 'Skater', 
+            'Roll-Line', 'Genial', 'Crojet', 'Replic', 'Etisport', 
+            'Queen Skate', 'Boiani', 'TVS', 'Meneghini', 'STD Skates', 'McRoller',
+            'Altres'
         ];
         foreach ($marques as $m) {
             DB::table('anuncismarques')->insert(['nom_marca' => $m, 'created_at' => now(), 'updated_at' => now()]);
@@ -27,27 +38,32 @@ class AnuncisSeeder extends Seeder
         }
 
         // ── Mides ────────────────────────────────────────────────────────────
-        $midesSamarreta = ['3XS', 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', 'Junior 8', 'Junior 10', 'Junior 12', 'Junior 14'];
+        $midesSamarreta = ['3XS', 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', 'Junior 8', 'Junior 10', 'Junior 12', 'Junior 14', 'Altres'];
         foreach ($midesSamarreta as $mida) {
             DB::table('anuncismides')->insert(['nom_mida' => $mida, 'tipus_mida' => 'samarreta', 'created_at' => now(), 'updated_at' => now()]);
         }
 
-        $midesCalcat = ['30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47'];
+        $midesCalcat = ['30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', 'Altres'];
         foreach ($midesCalcat as $mida) {
             DB::table('anuncismides')->insert(['nom_mida' => $mida, 'tipus_mida' => 'calcat', 'created_at' => now(), 'updated_at' => now()]);
         }
 
         // ── Tipus ────────────────────────────────────────────────────────────
         $tipus = [
-            ['nom_tipus' => 'Casc',     'icona_fa' => 'fa-helmet-safety'],
-            ['nom_tipus' => 'Sticks',   'icona_fa' => 'fa-hockey-sticks'],
-            ['nom_tipus' => 'Patins',   'icona_fa' => 'fa-person-skating'],
-            ['nom_tipus' => 'Pilotes',  'icona_fa' => 'fa-circle'],
-            ['nom_tipus' => 'Tèxtil',   'icona_fa' => 'fa-shirt'],
+            ['nom_tipus' => 'Sticks',               'icona_fa' => 'fa-hockey-sticks'],
+            ['nom_tipus' => 'Patins',               'icona_fa' => 'fa-person-skating'],
+            ['nom_tipus' => 'Rodes i Recanvis',     'icona_fa' => 'fa-circle-dot'],
+            ['nom_tipus' => 'Proteccions Jugador',  'icona_fa' => 'fa-shield-halved'],
+            ['nom_tipus' => 'Proteccions Porter',   'icona_fa' => 'fa-user-shield'],
+            ['nom_tipus' => 'Bosses',               'icona_fa' => 'fa-bag-shopping'],
+            ['nom_tipus' => 'Cascs',                'icona_fa' => 'fa-helmet-safety'],
+            ['nom_tipus' => 'Tèxtil',               'icona_fa' => 'fa-shirt'],
+            ['nom_tipus' => 'ALTRES',               'icona_fa' => 'fa-ellipsis'],
         ];
         foreach ($tipus as $t) {
             DB::table('anuncistipus')->insert(array_merge($t, ['created_at' => now(), 'updated_at' => now()]));
         }
+
 
         // ── Usuari de prova ──────────────────────────────────────────────────
         // Agafem el primer usuari existent
@@ -71,33 +87,30 @@ class AnuncisSeeder extends Seeder
         // ── Títols de prova variats ──────────────────────────────────────────
         $titolsPatrons = [
             'Patins {marca} talla {mida} com nous',
-            'Venc casc {marca} molt poc usat',
-            'Stick {marca} per dretà, en bon estat',
-            'Equipació completa {marca} talla {mida}',
-            'Pilotes oficials {marca} (paquet de 6)',
-            'Patins infantils {marca} talla {mida}',
-            'Casc {marca} amb careta inclosa',
-            'Canyelleres {marca} talla {mida}',
-            'Guants de porter {marca}',
-            'Samarreta oficial {marca} talla {mida}',
-            'Espatlleres {marca} quasi noves',
-            'Stick {marca} per esquerrà',
-            'Patins {marca} a estrenar, talla {mida}',
-            'Kit complet iniciació {marca}',
-            'Pantalons {marca} talla {mida}',
+            'Venc casc {marca} amb visor',
+            'Stick {marca} de fusta, pràcticament nou',
+            'Stick {marca} de composite talla {mida}',
+            'Equipació de porter {marca} completa',
+            'Rodes {marca} de 92A, pack de 8',
+            'Guants {marca} per a jugador talla {mida}',
+            'Genolleres {marca} d\'hoquei patins',
+            'Espinilleres {marca} molt protegides',
+            'Botes {marca} soles, talla {mida}',
+            'Guantilles de porter {marca}',
+            'Bossa porta-patins {marca}',
+            'Protector bucal i mitges {marca}',
+            'Mascareta de porter {marca}',
+            'Frens {marca} de color blanc',
         ];
 
         $descripcionsPatrons = [
-            'Material en excel·lent estat, pràcticament sense ús. Venut per canvi de talla. Recollida a Mollet del Vallès o enviament a càrrec del comprador.',
-            'Usat durant dues temporades, bon estat general. Alguns cops però res que afecti al funcionament. Preu negociable.',
-            'Comprat fa un any, usat molt poc. Perfecte per a jugadors que comencen. Inclou tots els elements originals.',
-            'Venc per haver deixat de jugar. Material revisat i net. Possibilitat de veure\'l personalment a Granollers.',
-            'Molt bon estat. Usat durant una temporada. Es pot recollir a Barcelona zona Eixample o s\'envia per Correus.',
-            'Material quasi nou, comprat i poc usat per canvi de posició. Ideal per iniciar-se en l\'hoquei patins.',
-            'Equip complet en molt bon estat. Venut per canvi de talla del fill. Preu per aviat venda.',
-            'Busco comprador ràpid, me\'n vaig de viatge. Preu inamovible. Recollida a Vic o enviament contractat pel comprador.',
-            'Usat una temporada, molt ben conservat. Revisat per tècnic especialitzat. Garantia de funcionament.',
-            'Adquirit el passat novembre, sortit poc a la pista. Totes les peces en perfecte estat, casc, protectors i guants.',
+            'Material d\'hoquei patins en excel·lent estat. Venut per canvi de talla. Molt cuidat, ideal per a competició.',
+            'Usat només una temporada. Les botes estan perfectes i les rodes tenen encara molta vida. Recollida a local social.',
+            'Stick professional de fusta, molt bon tacte. No té cap esquerda, només les típiques rascades de l\'ús.',
+            'Guants molt flexibles i amb molta protecció. Talla {mida}. Es poden enviar per correu.',
+            'Material revisat. Les rodes són Roll-Line i els rodaments giren perfectament. Preu algo negociable.',
+            'Kit complet per a principiants. Inclou patins, genolleres i guants. Tot de la marca {marca}.',
+            'Equip de porter molt complet. Peto, guardes i mascareta. Molt poca utilització.',
         ];
 
         // ── Fotos de placeholder (picsum per categoria) ──────────────────────

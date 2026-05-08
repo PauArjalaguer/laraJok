@@ -17,6 +17,11 @@
                     <x-nav-link :href="route('main')" :active="request()->routeIs('main')">
                         Tornar a Web
                     </x-nav-link>
+                    
+                    <x-nav-link :href="route('dashboard.anuncis')" :active="request()->routeIs('dashboard.anuncis')">
+                        Els Meus Anuncis
+                    </x-nav-link>
+
                     @if(Auth::user()->idRole==1 || Auth::user()->idRole==2)
                     <x-nav-link :href="route('dashboard.news')" :active="request()->routeIs('dashboard.news')">
                         Noticies
@@ -82,6 +87,11 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('dashboard.anuncis')" :active="request()->routeIs('dashboard.anuncis')">
+                Els Meus Anuncis
+            </x-responsive-nav-link>
+
 
             <x-responsive-nav-link :href="route('dashboard.news')" :active="request()->routeIs('dashboard.news')">
                 Noticies
