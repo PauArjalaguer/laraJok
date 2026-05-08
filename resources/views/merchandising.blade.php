@@ -2,9 +2,15 @@
 @section('title',"Merchandising :: JOK.cat ")
 @section('content')
 
-<div class="w-full text-neutral-700 text-xl mb-2 font-bold  border-b border-neutral-400">
-
-    Merchandising
+<div class="w-full mt-2 mb-4">
+    <div class="flex items-center justify-between border-b border-neutral-200 pb-3">
+        <div>
+            <h1 class="text-2xl font-bold text-neutral-800 font-['Comfortaa']">
+                <i class="fa-solid fa-shirt text-neutral-500 mr-2"></i>Merchandising
+            </h1>
+            <p class="text-sm text-neutral-500 mt-0.5">Productes oficials del JOK.cat</p>
+        </div>
+    </div>
 </div>
 <div class='flex flex-wrap'>
     <div class='border-b border-neutral-300 flex w-full pb-2'>

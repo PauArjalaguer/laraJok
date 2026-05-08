@@ -66,7 +66,7 @@
     </div>
 </nav>
 @if($userAgent != 'iOSWebView')
-<div class="flex rounded-xl my-1 bg-neutral-200 p-2 px-4 " id='appStore'>
+<div class="flex rounded-xl my-1 bg-neutral-200 p-2 px-4 hidden " id='appStore'>
     <div class="w-11/12">
         <h1 class="font-bold font-sm md:text-xl text-neutral-700">
             <a href="https://apps.apple.com/ca/app/jok/id6743651881" class='text-neutral-900'>Descarrega't ja l' aplicació per a IOS</a></h1>

@@ -9,7 +9,18 @@
     $mes_actual = Carbon::now()->month;
 @endphp
 
-<div class="w-full mx-auto mt-10">
+<div class="w-full mt-2 mb-4">
+    <div class="flex items-center justify-between border-b border-neutral-200 pb-3">
+        <div>
+            <h1 class="text-2xl font-bold text-neutral-800 font-['Comfortaa']">
+                <i class="fa-solid fa-calendar text-neutral-500 mr-2"></i>Calendari
+            </h1>
+            <p class="text-sm text-neutral-500 mt-0.5">Vista mensual de tots els partits</p>
+        </div>
+    </div>
+</div>
+
+<div class="w-full mx-auto mt-4">
 @for($any=$any_actual; $any<=$any_seguent; $any++)
     <h1 class="text-neutral-700 text-3xl font-bold mb-6">{{$any}}</h1>
 

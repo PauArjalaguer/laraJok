@@ -2,14 +2,27 @@
 @section('title',$clubInfo[0]->clubName." :: JOK.cat ")
 @section('content')
 
-<div class="w-full text-neutral-700 text-xl mb-4 font-bold pb-2 border-b border-neutral-400">
-
-    <img onerror="this.style.display='none'" class='  inline md:hidden  mix-blend-multiply' width="20" src={{$clubInfo[0]->clubImage}} /> {{$clubInfo[0]->clubName}}
-    <a class="active:text-neutral-300" href="/desa/club/{{$clubInfo[0]->idClub}}">
-        <svg xmlns="http://www.w3.org/2000/svg" fill={{$checkIfSaved==1 ? 'currentColor':'none'}} viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline w-6 hover:text-neutral-500 cursor-pointer {{$checkIfSaved==1 ? 'text-red-800':''}}">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-        </svg>
-    </a>
+<div class="w-full mt-2 mb-4">
+    <div class="flex items-center justify-between border-b border-neutral-200 pb-3">
+        <div class="flex items-center gap-3">
+            <img onerror="this.style.display='none'" class="w-10 h-10 object-contain mix-blend-multiply" src={{$clubInfo[0]->clubImage}} />
+            <div>
+                <h1 class="text-2xl font-bold text-neutral-800 font-['Comfortaa']">
+                    {{$clubInfo[0]->clubName}}
+                </h1>
+                <p class="text-sm text-neutral-500 mt-0.5">
+                    <i class="fa-solid fa-building text-neutral-400 mr-1"></i>Club
+                </p>
+            </div>
+        </div>
+        <div class="text-right">
+            <a href="/desa/club/{{$clubInfo[0]->idClub}}" title="{{ $checkIfSaved==1 ? 'Treu de favorits' : 'Desa als favorits' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" fill={{$checkIfSaved==1 ? 'currentColor':'none'}} viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 cursor-pointer transition-colors hover:text-red-700 {{$checkIfSaved==1 ? 'text-red-700':'text-neutral-400'}}">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                </svg>
+            </a>
+        </div>
+    </div>
 </div>
 <div class='md:flex '>
     <div class="w-full md:w-2/3 md:mr-5">

@@ -1,7 +1,16 @@
 @extends('layout.mainlayout')
 @section('title',"Noticies :: JOK.cat ")
 @section('content')
-<div class="w-full text-neutral-700 text-xl mb-4 font-bold pb-2 border-b border-neutral-400">Notícies</div>
+<div class="w-full mt-2 mb-4">
+    <div class="flex items-center justify-between border-b border-neutral-200 pb-3">
+        <div>
+            <h1 class="text-2xl font-bold text-neutral-800 font-['Comfortaa']">
+                <i class="fa-solid fa-newspaper text-neutral-500 mr-2"></i>Notícies
+            </h1>
+            <p class="text-sm text-neutral-500 mt-0.5">Les darreres novetats del hoquei patins</p>
+        </div>
+    </div>
+</div>
 
 @foreach($newsListTop as $news)
 <div onClick='location.href = "/noticies/detall/{{$news->idNew}}/{{$news->newsTitle}}"' class='md:flex border border-solid border-0 border-b-[0px] border-b-neutral-300  md:pb-4 md:mt-4 '>

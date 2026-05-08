@@ -1,6 +1,16 @@
 @extends('layout.mainlayout')
 @section('title',"Agenda :: JOK.cat ")
 @section('content')
+<div class="w-full mt-2 mb-4">
+    <div class="flex items-center justify-between border-b border-neutral-200 pb-3">
+        <div>
+            <h1 class="text-2xl font-bold text-neutral-800 font-['Comfortaa']">
+                <i class="fa-solid fa-calendar-days text-neutral-500 mr-2"></i>Agenda
+            </h1>
+            <p class="text-sm text-neutral-500 mt-0.5">Tots els partits programats</p>
+        </div>
+    </div>
+</div>
 <input 
 type="text" 
 id="searchInput" 

@@ -96,9 +96,44 @@
             from { width: 0; }
             to { width: var(--bar-width); }
         }
-
         .animate-grow {
-        animation: grow-bar 1s ease-out forwards;
+            animation: grow-bar 1s ease-out forwards;
+        }
+
+        /* ── View Transitions ── */
+        @view-transition {
+            navigation: auto;
+        }
+        /* Transició de sortida: fade + puja lleugerament */
+        ::view-transition-old(root) {
+            animation: 220ms cubic-bezier(0.4, 0, 1, 1) both vt-fade-out;
+        }
+        /* Transició d'entrada: fade + baixa des de dalt */
+        ::view-transition-new(root) {
+            animation: 340ms cubic-bezier(0, 0, 0.2, 1) 60ms both vt-fade-in;
+        }
+        @keyframes vt-fade-out {
+            from { opacity: 1; transform: translateY(0); }
+            to   { opacity: 0; transform: translateY(-10px); }
+        }
+        @keyframes vt-fade-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        /* Element compartit: imatge hero de la card → detall */
+        ::view-transition-old(anunci-hero) {
+            animation: 380ms cubic-bezier(0.4, 0, 0.2, 1) both vt-hero-out;
+        }
+        ::view-transition-new(anunci-hero) {
+            animation: 380ms cubic-bezier(0.4, 0, 0.2, 1) both vt-hero-in;
+        }
+        @keyframes vt-hero-out {
+            from { opacity: 1; transform: scale(1); }
+            to   { opacity: 0; transform: scale(1.04); }
+        }
+        @keyframes vt-hero-in {
+            from { opacity: 0; transform: scale(0.96); }
+            to   { opacity: 1; transform: scale(1); }
         }
         </style>
 </head>

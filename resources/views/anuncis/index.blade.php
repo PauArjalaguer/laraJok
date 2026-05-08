@@ -194,8 +194,9 @@
 @else
 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 mb-6">
     @foreach($anuncis as $anunci)
-    <div class="anunci-card bg-white border border-neutral-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col"
-         data-fotos="{{ $anunci->fotos->pluck('foto_ruta')->toJson() }}">
+    <a href="{{ route('anuncis.show', $anunci->id) }}"
+       class="anunci-card bg-white border border-neutral-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col"
+       data-fotos="{{ $anunci->fotos->pluck('foto_ruta')->toJson() }}">
 
         {{-- ── Zona de fotos amb slider en hover ── --}}
         <div class="anunci-foto-wrap relative overflow-hidden rounded-t-2xl bg-neutral-100"
@@ -260,7 +261,7 @@
                 <span class="text-[10px] text-neutral-300">{{ $anunci->created_at->diffForHumans() }}</span>
             </div>
         </div>
-    </div>
+    </a>
     @endforeach
 </div>
 
@@ -467,6 +468,17 @@ document.querySelectorAll('.anunci-card').forEach(card => {
             d.style.opacity = i === 0 ? '1' : '0.5';
             d.style.transform = 'scale(1)';
         });
+    });
+});
+
+// ── View Transition: marca la imatge de la card clicada com a "hero" ──────────
+// La pàgina de detall té view-transition-name:anunci-hero a la imatge principal.
+// Quan fem clic a una card, posem el mateix nom a la imatge de la card
+// perquè el navegador pugui animar-la com a element compartit (Chrome 126+).
+document.querySelectorAll('a.anunci-card').forEach(card => {
+    card.addEventListener('click', function() {
+        const img = this.querySelector('.anunci-img');
+        if (img) img.style.viewTransitionName = 'anunci-hero';
     });
 });
 </script>

@@ -1,7 +1,16 @@
 @extends('layout.mainlayout')
 @section('title',"Competicions :: JOK.cat ")
 @section('content')
-    <div class="w-full text-neutral-700 text-xl mb-4 font-bold pb-2 border-b border-neutral-400">Competicions</div>
+<div class="w-full mt-2 mb-4">
+    <div class="flex items-center justify-between border-b border-neutral-200 pb-3">
+        <div>
+            <h1 class="text-2xl font-bold text-neutral-800 font-['Comfortaa']">
+                <i class="fa-solid fa-trophy text-neutral-500 mr-2"></i>Competicions
+            </h1>
+            <p class="text-sm text-neutral-500 mt-0.5">Totes les competicions disponibles</p>
+        </div>
+    </div>
+</div>
 
     <div class="mb-6">
         <input type="text" id="leagueSearch" placeholder="Cerca competició..." class="w-full p-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-neutral-700">
@@ -66,36 +75,36 @@
             leagueItems.forEach(item => {
                 const label = item.getAttribute('data-label');
                 if (label.includes(searchTerm)) {
-                    item.classList.remove('hidden');
+                    item.classList.remove('llistat-hidden');
                 } else {
-                    item.classList.add('hidden');
+                    item.classList.add('llistat-hidden');
                 }
             });
 
             // Amagar categories que no tinguin items visibles
             categorySections.forEach(section => {
-                const visibleItems = section.querySelectorAll('.league-item:not(.hidden)');
+                const visibleItems = section.querySelectorAll('.league-item:not(.llistat-hidden)');
                 if (visibleItems.length === 0) {
-                    section.classList.add('hidden');
+                    section.classList.add('llistat-hidden');
                 } else {
-                    section.classList.remove('hidden');
+                    section.classList.remove('llistat-hidden');
                 }
             });
 
             // Amagar temporades que no tinguin categories visibles
             seasonSections.forEach(section => {
-                const visibleCategories = section.querySelectorAll('.category-section:not(.hidden)');
+                const visibleCategories = section.querySelectorAll('.category-section:not(.llistat-hidden)');
                 if (visibleCategories.length === 0) {
-                    section.classList.add('hidden');
+                    section.classList.add('llistat-hidden');
                 } else {
-                    section.classList.remove('hidden');
+                    section.classList.remove('llistat-hidden');
                 }
             });
         });
     </script>
 
     <style>
-        .hidden {
+        .llistat-hidden {
             display: none !important;
         }
     </style>

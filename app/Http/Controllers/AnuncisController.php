@@ -10,6 +10,7 @@ use App\Models\AnunciTipus;
 use App\Models\Merchandisings;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class AnuncisController extends Controller
 {
@@ -79,6 +80,32 @@ class AnuncisController extends Controller
             'tipus',
             'filtresActius'
         ) + [
+            'userSavedData'    => User::userSavedData(),
+            'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
+        ]);
+    }
+
+    public function show($id, $slug = null)
+    {
+        $anunci = Anunci::with(['marca', 'estat', 'mida', 'tipus', 'fotos', 'usuari'])->findOrFail($id);
+
+        // ── Redirect 301 cap a la URL canonònica si el slug és incorrecte o manca ──
+        $correctSlug = $anunci->slug;
+        if ($slug !== $correctSlug) {
+            return redirect()->route('anuncis.show', ['id' => $id, 'slug' => $correctSlug], 301);
+        }
+
+        // Anuncis relacionats (mateix tipus, excloent l'actual)
+        $relacionats = Anunci::with(['marca', 'estat', 'fotos'])
+            ->where('id_tipus', $anunci->id_tipus)
+            ->where('id', '!=', $anunci->id)
+            ->latest()
+            ->take(4)
+            ->get();
+
+        return view('anuncis.show', [
+            'anunci'           => $anunci,
+            'relacionats'      => $relacionats,
             'userSavedData'    => User::userSavedData(),
             'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
         ]);

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Anunci extends Model
 {
@@ -54,5 +55,14 @@ class Anunci extends Model
     public function fotoPortada()
     {
         return $this->fotos()->first();
+    }
+
+    /**
+     * Slug SEO generat a partir del títol.
+     * Ex: "Venc casc Jofa molt poc usat" -> "venc-casc-jofa-molt-poc-usat"
+     */
+    public function getSlugAttribute(): string
+    {
+        return Str::slug($this->titol);
     }
 }
