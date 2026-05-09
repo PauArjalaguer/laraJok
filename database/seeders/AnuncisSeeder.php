@@ -24,7 +24,7 @@ class AnuncisSeeder extends Seeder
         $marques = [
             'Reno', 'Azemad', 'Sioux', 'Toor', 'Skater', 
             'Roll-Line', 'Genial', 'Crojet', 'Replic', 'Etisport', 
-            'Queen Skate', 'Boiani', 'TVS', 'Meneghini', 'STD Skates', 'McRoller',
+            'Queen Skate', 'Boiani', 'TVS', 'Meneghini', 'STD Skates', 'McRoller','Stika'
             'Altres'
         ];
         foreach ($marques as $m) {
