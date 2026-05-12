@@ -75,7 +75,7 @@ class AnuncisController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+$validated = $request->validate([
             'titol'      => 'required|string|max:200',
             'descripcio' => 'required|string',
             'preu'       => 'nullable|numeric',
@@ -83,6 +83,9 @@ class AnuncisController extends Controller
             'id_estat'   => 'required|exists:anuncisestats,id',
             'id_tipus'   => 'required|exists:anuncistipus,id',
             'id_mida'    => 'required|exists:anuncismides,id',
+            'latitud'    => 'nullable|numeric|between:-90,90',
+            'longitud'   => 'nullable|numeric|between:-180,180',
+            'nom_ubicacio' => 'nullable|string|max:200',
         ]);
 
         $anunci = new Anunci($validated);
@@ -120,6 +123,9 @@ class AnuncisController extends Controller
             'id_estat'   => 'required|exists:anuncisestats,id',
             'id_tipus'   => 'required|exists:anuncistipus,id',
             'id_mida'    => 'required|exists:anuncismides,id',
+            'latitud'    => 'nullable|numeric|between:-90,90',
+            'longitud'   => 'nullable|numeric|between:-180,180',
+            'nom_ubicacio' => 'nullable|string|max:200',
         ]);
 
         $anunci->update($validated);
@@ -265,18 +271,23 @@ class AnuncisController extends Controller
     public function index(Request $request)
 
     {
-        // ── Filtres lookup ────────────────────────────────────────────────────
+        $userLat = $request->filled('lat') ? (float) $request->lat : null;
+        $userLng = $request->filled('lng') ? (float) $request->lng : null;
+        $proximitatActiva = $userLat !== null && $userLng !== null;
+
+        if ($userLat !== null && $userLng !== null) {
+            session(['anuncis_lat' => $userLat, 'anuncis_lng' => $userLng]);
+        }
+
         $marques = AnunciMarca::orderBy('nom_marca')->get();
         $estats  = AnunciEstat::all();
         $mides   = AnunciMida::orderByRaw("FIELD(tipus_mida,'samarreta','calcat'), nom_mida")->get();
         $tipus  = AnunciTipus::all();
 
-        // ── Query base ────────────────────────────────────────────────────────
         $query = Anunci::with(['marca', 'estat', 'mida', 'tipus', 'fotos'])
             ->join('anuncismarques', 'anuncis.id_marca', '=', 'anuncismarques.id')
             ->select('anuncis.*');
 
-        // ── Cerca de text (títol, descripció, marca) ──────────────────────────
         if ($request->filled('cerca')) {
             $cerca = '%' . $request->cerca . '%';
             $query->where(function ($q) use ($cerca) {
@@ -286,33 +297,75 @@ class AnuncisController extends Controller
             });
         }
 
-        // ── Filtre estat ──────────────────────────────────────────────────────
         if ($request->filled('estat')) {
             $query->where('anuncis.id_estat', $request->estat);
         }
 
-        // ── Filtre mida (múltiple) ────────────────────────────────────────────
         if ($request->filled('mides') && is_array($request->mides)) {
             $query->whereIn('anuncis.id_mida', $request->mides);
         }
 
-        // ── Filtre marca (múltiple) ───────────────────────────────────────────
         if ($request->filled('marques') && is_array($request->marques)) {
             $query->whereIn('anuncis.id_marca', $request->marques);
         }
 
-        // ── Filtre tipus (múltiple) ───────────────────────────────────────────
         if ($request->filled('tipus') && is_array($request->tipus)) {
             $query->whereIn('anuncis.id_tipus', $request->tipus);
         }
 
-        // ── Ordenació ─────────────────────────────────────────────────────────
-        $query->orderBy('anuncis.created_at', 'desc');
+        if ($proximitatActiva) {
+            $query->selectRaw("
+                anuncis.*,
+                (6371 * acos(
+                    LEAST(1, GREATEST(-1,
+                        cos(radians(?)) * cos(radians(anuncis.latitud)) *
+                        cos(radians(anuncis.longitud) - radians(?)) +
+                        sin(radians(?)) * sin(radians(anuncis.latitud))
+                    ))
+                )) AS distancia
+            ", [$userLat, $userLng, $userLat])
+            ->whereNotNull('anuncis.latitud')
+            ->whereNotNull('anuncis.longitud')
+            ->orderByRaw("distancia ASC");
 
-        // ── Paginació (15 per pàgina) ─────────────────────────────────────────
-        $anuncis = $query->paginate(15)->withQueryString();
+            $anuncisAmbUbicacio = $query->get();
 
-        // ── Nombre de filtres actius ──────────────────────────────────────────
+            $querySenseUbicacio = Anunci::with(['marca', 'estat', 'mida', 'tipus', 'fotos'])
+                ->join('anuncismarques', 'anuncis.id_marca', '=', 'anuncismarques.id')
+                ->select('anuncis.*')
+                ->where(function ($q) use ($request) {
+                    $q->whereNull('anuncis.latitud')->orWhereNull('anuncis.longitud');
+                    if ($request->filled('cerca')) {
+                        $cerca = '%' . $request->cerca . '%';
+                        $q->where(function ($q2) use ($cerca) {
+                            $q2->where('anuncis.titol', 'like', $cerca)
+                              ->orWhere('anuncis.descripcio', 'like', $cerca)
+                              ->orWhere('anuncismarques.nom_marca', 'like', $cerca);
+                        });
+                    }
+                    if ($request->filled('estat')) {
+                        $q->where('anuncis.id_estat', $request->estat);
+                    }
+                    if ($request->filled('mides') && is_array($request->mides)) {
+                        $q->whereIn('anuncis.id_mida', $request->mides);
+                    }
+                    if ($request->filled('marques') && is_array($request->marques)) {
+                        $q->whereIn('anuncis.id_marca', $request->marques);
+                    }
+                    if ($request->filled('tipus') && is_array($request->tipus)) {
+                        $q->whereIn('anuncis.id_tipus', $request->tipus);
+                    }
+                })
+                ->orderBy('anuncis.created_at', 'desc');
+
+            $anuncisSenseUbicacio = $querySenseUbicacio->get();
+
+            $anuncis = $anuncisAmbUbicacio->merge($anuncisSenseUbicacio)->paginate(15)->withQueryString();
+        } else {
+            $query->orderBy('anuncis.created_at', 'desc');
+            $anuncis = $query->paginate(15)->withQueryString();
+        }
+
         $filtresActius = collect([
             $request->filled('cerca'),
             $request->filled('estat'),
@@ -327,7 +380,10 @@ class AnuncisController extends Controller
             'estats',
             'mides',
             'tipus',
-            'filtresActius'
+            'filtresActius',
+            'proximitatActiva',
+            'userLat',
+            'userLng'
         ) + [
             'userSavedData'    => User::userSavedData(),
             'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),

@@ -20,6 +20,9 @@ class Anunci extends Model
         'id_estat',
         'id_mida',
         'id_tipus',
+        'latitud',
+        'longitud',
+        'nom_ubicacio',
     ];
 
     public function usuari(): BelongsTo

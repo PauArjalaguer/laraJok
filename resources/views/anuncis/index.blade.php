@@ -11,6 +11,11 @@
         <div>
             <h1 class="text-2xl font-bold text-neutral-800 font-['Comfortaa']">
                 <i class="fa-solid fa-tags text-neutral-500 mr-2"></i>Segona Mà
+                @if($proximitatActiva)
+                    <span class="ml-2 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full align-middle">
+                        <i class="fa-solid fa-location-dot mr-0.5"></i>Proximitat activa
+                    </span>
+                @endif
             </h1>
             <p class="text-sm text-neutral-500 mt-0.5">
                 Material d'hoquei patins de segona mà
@@ -48,6 +53,8 @@
         </button>
         @endif
     </div>
+    <input type="hidden" name="lat" id="filter-lat" value="{{ request('lat') }}">
+    <input type="hidden" name="lng" id="filter-lng" value="{{ request('lng') }}">
 
     {{-- Fila de filtres + Botó Nou --}}
     <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
@@ -171,23 +178,40 @@
         </div>
 
         {{-- Botó netejar tots els filtres --}}
-        @if($filtresActius > 0)
+        @if($filtresActius > 0 || $proximitatActiva)
         <a href="{{ route('anuncis.index') }}"
             class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-red-200 bg-red-50 text-red-600 text-sm hover:bg-red-100 transition">
             <i class="fa-solid fa-filter-slash text-xs"></i>
             Netejar filtres
-            <span class="bg-red-500 text-white rounded-full text-[10px] w-4 h-4 flex items-center justify-center font-bold">{{ $filtresActius }}</span>
+            @if($filtresActius > 0)
+                <span class="bg-red-500 text-white rounded-full text-[10px] w-4 h-4 flex items-center justify-center font-bold">{{ $filtresActius }}</span>
+            @endif
         </a>
         @endif
 
         </div><!-- /filtres -->
 
-        {{-- Botó Nou Anunci --}}
-        <a href="{{ route('dashboard.anuncis.new') }}" 
-           class="inline-flex items-center px-4 py-2 bg-neutral-800 text-white text-sm font-semibold rounded-xl hover:bg-neutral-700 transition-all duration-200 shadow-sm active:scale-95">
-            <i class="fa-solid fa-plus mr-1.5"></i>
-            Nou Anunci
-        </a>
+        {{-- Botó Proximitat + Nou Anunci --}}
+        <div class="flex items-center gap-2">
+            @if($proximitatActiva)
+            <a href="{{ route('anuncis.index', request()->except(['lat','lng'])) }}"
+               class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl border border-green-200 bg-green-50 text-green-700 hover:bg-green-100 transition">
+                <i class="fa-solid fa-location-crosshairs"></i> Proximitat activa
+                <i class="fa-solid fa-xmark ml-0.5"></i>
+            </a>
+            @else
+            <button type="button" onclick="demanaUbicacio()"
+               class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl border border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50 transition">
+                <i class="fa-solid fa-location-crosshairs"></i> Ordre per proximitat
+            </button>
+            @endif
+
+            <a href="{{ route('dashboard.anuncis.new') }}"
+               class="inline-flex items-center px-4 py-2 bg-neutral-800 text-white text-sm font-semibold rounded-xl hover:bg-neutral-700 transition-all duration-200 shadow-sm active:scale-95">
+                <i class="fa-solid fa-plus mr-1.5"></i>
+                Nou Anunci
+            </a>
+        </div>
 
     </div><!-- /fila-filtres -->
 </form>
@@ -259,7 +283,11 @@
             <h2 class="text-sm font-semibold text-neutral-800 leading-snug mb-1 line-clamp-2">{{ $anunci->titol }}</h2>
             <p class="text-[11px] text-neutral-400 mb-2">
                 <i class="fa-solid fa-ruler-combined mr-0.5"></i>{{ $anunci->mida->nom_mida }}
-              
+                @if($proximitatActiva && $anunci->distancia !== null)
+                    <span class="ml-1 text-green-600 font-medium">
+                        &middot; <i class="fa-solid fa-location-dot mr-0.5"></i>{{ number_format($anunci->distancia, 0, ',', '.') }} km
+                    </span>
+                @endif
             </p>
             <div class="mt-auto flex items-center justify-between">
                 @if($anunci->preu)
@@ -490,6 +518,30 @@ document.querySelectorAll('a.anunci-card').forEach(card => {
         if (img) img.style.viewTransitionName = 'anunci-hero';
     });
 });
+
+function demanaUbicacio() {
+    if (!navigator.geolocation) {
+        alert('El teu navegador no suporta geolocalització.');
+        return;
+    }
+    navigator.geolocation.getCurrentPosition(
+        function(pos) {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+            document.getElementById('filter-lat').value = lat;
+            document.getElementById('filter-lng').value = lng;
+            document.getElementById('filtresForm').submit();
+        },
+        function(error) {
+            let missatge = 'No s\'ha pogut obtenir la ubicació.';
+            if (error.code === 1) missatge = 'Permís de ubicació denegat. Activa\'l al navegador per ordenar per proximitat.';
+            if (error.code === 2) missatge = 'Ubicació no disponible.';
+            if (error.code === 3) missatge = 'Temps d\'espera esgotat.';
+            alert(missatge);
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+    );
+}
 </script>
 
 @endsection

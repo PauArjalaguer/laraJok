@@ -95,6 +95,34 @@
                                 </div>
 
                                 <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1">Ubicació</label>
+                                    <div id="ubicacio-box" class="border border-gray-300 rounded-lg p-3 bg-gray-50">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <i class="fa-solid fa-location-dot text-gray-400"></i>
+                                            <span id="ubicacio-display" class="text-sm text-gray-600">
+                                                @if($anunci->latitud && $anunci->longitud)
+                                                    {{ $anunci->nom_ubicacio ?: 'Ubicació guardada' }}
+                                                @else
+                                                    Sense ubicació
+                                                @endif
+                                            </span>
+                                        </div>
+                                        <button type="button" id="btn-detectar-ubicacio" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-indigo-700 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors">
+                                            <i class="fa-solid fa-crosshairs"></i>
+                                            <span id="btn-ubicacio-text">{{ $anunci->latitud ? 'Canviar ubicació' : 'La meva ubicació actual' }}</span>
+                                        </button>
+                                        @if($anunci->latitud && $anunci->longitud)
+                                        <button type="button" id="btn-esborrar-ubicacio" class="ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors">
+                                            <i class="fa-solid fa-xmark"></i> Treure
+                                        </button>
+                                        @endif
+                                    </div>
+                                    <input type="hidden" name="latitud" id="latitud" value="{{ old('latitud', $anunci->latitud) }}">
+                                    <input type="hidden" name="longitud" id="longitud" value="{{ old('longitud', $anunci->longitud) }}">
+                                    <input type="hidden" name="nom_ubicacio" id="nom_ubicacio" value="{{ old('nom_ubicacio', $anunci->nom_ubicacio) }}">
+                                </div>
+
+                                <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Fotos del producte</label>
                                     <div id="dropzone-area" class="border-2 border-dashed border-gray-300 rounded-xl p-6 bg-gray-50 hover:bg-gray-100 hover:border-indigo-400 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center min-h-[200px]">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-12 text-gray-400 mb-3">
@@ -221,6 +249,68 @@
                     e.target.closest('.preview-item').remove();
                 }
             });
+
+            // Geolocalització
+            const btnUbicacio = document.getElementById('btn-detectar-ubicacio');
+            const ubicacioDisplay = document.getElementById('ubicacio-display');
+            const btnUbicacioText = document.getElementById('btn-ubicacio-text');
+            const btnEsborrarUbicacio = document.getElementById('btn-esborrar-ubicacio');
+
+            btnUbicacio.addEventListener('click', function() {
+                if (!navigator.geolocation) {
+                    alert('El teu navegador no suporta geolocalització.');
+                    return;
+                }
+                btnUbicacio.disabled = true;
+                btnUbicacioText.textContent = 'Detectant...';
+
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        document.getElementById('latitud').value = lat;
+                        document.getElementById('longitud').value = lng;
+                        document.getElementById('nom_ubicacio').value = lat.toFixed(4) + ', ' + lng.toFixed(4);
+                        ubicacioDisplay.textContent = lat.toFixed(4) + ', ' + lng.toFixed(4);
+                        btnUbicacioText.textContent = 'Canviar ubicació';
+                        btnUbicacio.disabled = false;
+
+                        if (!btnEsborrarUbicacio) {
+                            const esborrarBtn = document.createElement('button');
+                            esborrarBtn.type = 'button';
+                            esborrarBtn.id = 'btn-esborrar-ubicacio';
+                            esborrarBtn.className = 'ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors';
+                            esborrarBtn.innerHTML = '<i class="fa-solid fa-xmark"></i> Treure';
+                            btnUbicacio.parentNode.appendChild(esborrarBtn);
+                            esborrarBtn.addEventListener('click', esborrarUbicacio);
+                        }
+                    },
+                    function(error) {
+                        btnUbicacio.disabled = false;
+                        btnUbicacioText.textContent = 'La meva ubicació actual';
+                        let missatge = 'Error en obtenir la ubicació.';
+                        if (error.code === 1) missatge = 'Permís denegat. Activa la ubicació al navegador.';
+                        if (error.code === 2) missatge = 'Ubicació no disponible.';
+                        if (error.code === 3) missatge = 'Temps d\'espera esgotat.';
+                        alert(missatge);
+                    },
+                    { enableHighAccuracy: true, timeout: 10000 }
+                );
+            });
+
+            function esborrarUbicacio() {
+                document.getElementById('latitud').value = '';
+                document.getElementById('longitud').value = '';
+                document.getElementById('nom_ubicacio').value = '';
+                ubicacioDisplay.textContent = 'Sense ubicació';
+                btnUbicacioText.textContent = 'La meva ubicació actual';
+                const btn = document.getElementById('btn-esborrar-ubicacio');
+                if (btn) btn.remove();
+            }
+
+            if (btnEsborrarUbicacio) {
+                btnEsborrarUbicacio.addEventListener('click', esborrarUbicacio);
+            }
         });
     </script>
 </x-app-layout>

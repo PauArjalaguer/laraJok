@@ -216,6 +216,16 @@ $totalFotos = $fotos->count();
                 <span class="detail-label">Tipus</span>
                 <span class="detail-value">{{ $anunci->tipus->nom_tipus }}</span>
             </div>
+            @if($anunci->latitud && $anunci->longitud)
+            <div class="detail-row">
+                <span class="detail-label">Ubicació</span>
+                <a href="https://www.google.com/maps?q={{ $anunci->latitud }},{{ $anunci->longitud }}" target="_blank"
+                   class="detail-value text-blue-600 hover:text-blue-800 flex items-center gap-1">
+                    <i class="fa-solid fa-location-dot"></i>
+                    {{ $anunci->nom_ubicacio ?: 'Veure al mapa' }}
+                </a>
+            </div>
+            @endif
             @if($anunci->preu)
             <div class="detail-row">
                 <span class="detail-label">Preu</span>
