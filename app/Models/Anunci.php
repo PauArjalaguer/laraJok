@@ -23,6 +23,9 @@ class Anunci extends Model
         'latitud',
         'longitud',
         'nom_ubicacio',
+        'conforme_usuari_enviament_mail',
+        'visites',
+        'enviaments',
     ];
 
     public function usuari(): BelongsTo

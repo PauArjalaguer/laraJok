@@ -103,7 +103,7 @@ $totalFotos = $fotos->count();
                 </span>
             </div>
 
-            {{-- Títol --}}
+            {{-- Titol --}}
             <h1 class="text-2xl font-bold text-neutral-900 leading-tight mb-3 font-['Comfortaa']">
                 {{ $anunci->titol }}
             </h1>
@@ -119,7 +119,7 @@ $totalFotos = $fotos->count();
                 @endif
             </div>
 
-            {{-- Card condició / mida --}}
+            {{-- Card condicio / mida --}}
             <div class="rounded-2xl border border-neutral-200 bg-white p-4 mb-4 shadow-sm">
                 <div class="grid grid-cols-2 gap-3">
                     {{-- Estat --}}
@@ -138,11 +138,31 @@ $totalFotos = $fotos->count();
 
             {{-- CTA Buttons --}}
             <div class="flex flex-col gap-2.5 mb-5">
-                <a href="mailto:{{ $anunci->usuari?->email ?? 'info@jok.cat' }}?subject=Interès en: {{ urlencode($anunci->titol) }}"
-                   class="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-neutral-900 text-white font-semibold text-sm hover:bg-neutral-700 active:scale-[0.98] transition-all duration-200 shadow-md">
-                    <i class="fa-solid fa-envelope"></i>
-                    Contactar amb el venedor
-                </a>
+                @auth
+                    <button type="button" onclick="showContactModal()"
+                            class="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-neutral-900 text-white font-semibold text-sm hover:bg-neutral-700 active:scale-[0.98] transition-all duration-200 shadow-md">
+                        <i class="fa-solid fa-envelope"></i>
+                        Contactar amb el venedor
+                    </button>
+                @else
+                    <a href="{{ route('login') }}?redirect_url={{ urlencode(request()->fullUrl()) }}"
+                       class="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-neutral-900 text-white font-semibold text-sm hover:bg-neutral-700 active:scale-[0.98] transition-all duration-200 shadow-md">
+                        <i class="fa-solid fa-envelope"></i>
+                        Contactar amb el venedor
+                    </a>
+                @endauth
+
+                @if(session('status'))
+                <div class="p-3 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700">
+                    <i class="fa-solid fa-check-circle mr-1"></i>{{ session('status') }}
+                </div>
+                @endif
+                @if(session('error'))
+                <div class="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                    <i class="fa-solid fa-xmark-circle mr-1"></i>{{ session('error') }}
+                </div>
+                @endif
+
                 <button onclick="shareAnunci()"
                         class="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-neutral-200 bg-white text-neutral-700 font-medium text-sm hover:bg-neutral-50 hover:border-neutral-300 active:scale-[0.98] transition-all duration-200">
                     <i class="fa-solid fa-share-nodes"></i>
@@ -163,6 +183,15 @@ $totalFotos = $fotos->count();
                 <div class="ml-auto text-right flex-none">
                     <p class="text-[10px] text-neutral-400">Publicat</p>
                     <p class="text-xs text-neutral-600 font-medium">{{ $anunci->created_at->diffForHumans() }}</p>
+                    @if($anunci->visites > 0 || $anunci->enviaments > 0)
+                        <p class="text-[10px] text-neutral-400 mt-1">
+                            <i class="fa-solid fa-eye mr-0.5"></i>{{ $anunci->visites }}
+                            @if($anunci->enviaments > 0)
+                                <span class="mx-1">·</span>
+                                <i class="fa-solid fa-paper-plane mr-0.5"></i>{{ $anunci->enviaments }}
+                            @endif
+                        </p>
+                    @endif
                 </div>
             </div>
             @endif
@@ -178,12 +207,12 @@ $totalFotos = $fotos->count();
     </div>
 </div>
 
-{{-- ── DESCRIPCIÓ ──────────────────────────────────────────────────────── --}}
+{{-- ── DESCRIPCIO ──────────────────────────────────────────────────────── --}}
 @if($anunci->descripcio)
 <div class="mb-10">
     <div class="border-b border-neutral-200 mb-5 flex gap-6">
         <button class="desc-tab desc-tab-active" id="tab-desc" onclick="showTab('desc')">
-            Descripció
+            Descripcio
         </button>
         <button class="desc-tab" id="tab-detalls" onclick="showTab('detalls')">
             Detalls
@@ -218,7 +247,7 @@ $totalFotos = $fotos->count();
             </div>
             @if($anunci->latitud && $anunci->longitud)
             <div class="detail-row">
-                <span class="detail-label">Ubicació</span>
+                <span class="detail-label">Ubicacio</span>
                 <a href="https://www.google.com/maps?q={{ $anunci->latitud }},{{ $anunci->longitud }}" target="_blank"
                    class="detail-value text-blue-600 hover:text-blue-800 flex items-center gap-1">
                     <i class="fa-solid fa-location-dot"></i>
@@ -237,12 +266,12 @@ $totalFotos = $fotos->count();
 </div>
 @endif
 
-{{-- ── ANUNCIS RELACIONATS ─────────────────────────────────────────────── --}}
+{{-- ── ANUNCIS RELACIONATS ───────────────────────────────────────────── --}}
 @if($relacionats->count() > 0)
 <div class="mb-10">
     <div class="flex items-center justify-between mb-4">
         <h2 class="text-lg font-bold text-neutral-800 font-['Comfortaa']">
-            <i class="fa-solid fa-layer-group text-neutral-400 mr-2 text-base"></i>Més {{ $anunci->tipus->nom_tipus }}
+            <i class="fa-solid fa-layer-group text-neutral-400 mr-2 text-base"></i>Mes {{ $anunci->tipus->nom_tipus }}
         </h2>
         <a href="{{ route('anuncis.index', ['tipus' => [$anunci->id_tipus]]) }}"
            class="text-xs text-neutral-500 hover:text-neutral-800 transition flex items-center gap-1">
@@ -293,6 +322,31 @@ $totalFotos = $fotos->count();
         <i class="fa-solid fa-arrow-left text-xs"></i>
         Tornar als anuncis
     </a>
+</div>
+
+{{-- Modal contacte --}}
+<div id="contact-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-8 shadow-xl">
+        <div class="text-center mb-6">
+            
+            <h3 class="text-lg font-bold text-neutral-900">Contactar amb el venedor</h3>
+        </div>
+        <p class="text-sm text-neutral-600 text-center mb-6">
+           
+            <strong>Important:</strong> Enviaràs les teves dades de contacte al venedor (<strong>{{ auth()->user()->email ?? '' }}</strong>) per correu electrònic perquè pugui respondre a la teva sol·licitud. Tota interacció posterior es farà ja fora de Jok.cat.
+        </p>
+        <div class="flex gap-3">
+            <button onclick="closeContactModal()" class="flex-1 px-4 py-2.5 border border-neutral-300 rounded-xl text-neutral-700 font-medium hover:bg-neutral-50 transition-colors">
+                Cancel·lar
+            </button>
+            <form action="{{ route('anuncis.contact', $anunci->id) }}" method="POST" class="flex-1">
+                @csrf
+                <button type="submit" class="w-full px-4 py-2.5 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors">
+                    Enviar
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
 
 {{-- ── ESTILS ──────────────────────────────────────────────────────────── --}}
@@ -347,7 +401,7 @@ $totalFotos = $fotos->count();
 
 {{-- ── JAVASCRIPT ──────────────────────────────────────────────────────── --}}
 <script>
-// ── Galeria de fotos ─────────────────────────────────────────────────────────
+// Galeria de fotos
 const fotos = @json($fotos->pluck('foto_ruta'));
 let currentIdx = 0;
 
@@ -381,7 +435,7 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight') changePhoto(1);
 });
 
-// Swipe mòbil
+// Swipe mobil
 let touchStartX = 0;
 const mainPhoto = document.getElementById('mainPhoto');
 if (mainPhoto) {
@@ -392,7 +446,7 @@ if (mainPhoto) {
     }, {passive: true});
 }
 
-// ── Tabs descripció ──────────────────────────────────────────────────────────
+// Tabs descripcio
 function showTab(tab) {
     ['desc', 'detalls'].forEach(t => {
         document.getElementById('panel-' + t)?.classList.toggle('hidden', t !== tab);
@@ -400,12 +454,20 @@ function showTab(tab) {
     });
 }
 
-// ── Share ────────────────────────────────────────────────────────────────────
+// Contact modal
+function showContactModal() {
+    document.getElementById('contact-modal').classList.remove('hidden');
+}
+function closeContactModal() {
+    document.getElementById('contact-modal').classList.add('hidden');
+}
+
+// Share
 function shareAnunci() {
     if (navigator.share) {
         navigator.share({
             title: '{{ addslashes($anunci->titol) }}',
-            text: 'Mira aquest anunci de Segona Mà a JOK.cat',
+            text: 'Mira aquest anunci de Segona Ma a JOK.cat',
             url: window.location.href
         });
     } else {

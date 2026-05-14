@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 
 use App\Models\AnunciFoto;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 
 class AnuncisController extends Controller
 {
@@ -86,10 +87,13 @@ $validated = $request->validate([
             'latitud'    => 'nullable|numeric|between:-90,90',
             'longitud'   => 'nullable|numeric|between:-180,180',
             'nom_ubicacio' => 'nullable|string|max:200',
+            'conforme_usuari_enviament_mail' => 'required|accepted',
         ]);
 
         $anunci = new Anunci($validated);
         $anunci->id_usuari = auth()->id();
+        $anunci->visites = 0;
+        $anunci->enviaments = 0;
         $anunci->save();
 
         // Gestionar fotos (si n'hi ha de temporals o enviades)
@@ -126,6 +130,7 @@ $validated = $request->validate([
             'latitud'    => 'nullable|numeric|between:-90,90',
             'longitud'   => 'nullable|numeric|between:-180,180',
             'nom_ubicacio' => 'nullable|string|max:200',
+            'conforme_usuari_enviament_mail' => 'required|accepted',
         ]);
 
         $anunci->update($validated);
@@ -286,7 +291,8 @@ $validated = $request->validate([
 
         $query = Anunci::with(['marca', 'estat', 'mida', 'tipus', 'fotos'])
             ->join('anuncismarques', 'anuncis.id_marca', '=', 'anuncismarques.id')
-            ->select('anuncis.*');
+            ->select('anuncis.*')
+            ->where('anuncis.conforme_usuari_enviament_mail', 1);
 
         if ($request->filled('cerca')) {
             $cerca = '%' . $request->cerca . '%';
@@ -333,6 +339,7 @@ $validated = $request->validate([
             $querySenseUbicacio = Anunci::with(['marca', 'estat', 'mida', 'tipus', 'fotos'])
                 ->join('anuncismarques', 'anuncis.id_marca', '=', 'anuncismarques.id')
                 ->select('anuncis.*')
+                ->where('anuncis.conforme_usuari_enviament_mail', 1)
                 ->where(function ($q) use ($request) {
                     $q->whereNull('anuncis.latitud')->orWhereNull('anuncis.longitud');
                     if ($request->filled('cerca')) {
@@ -394,11 +401,14 @@ $validated = $request->validate([
     {
         $anunci = Anunci::with(['marca', 'estat', 'mida', 'tipus', 'fotos', 'usuari'])->findOrFail($id);
 
-        // ── Redirect 301 cap a la URL canonònica si el slug és incorrecte o manca ──
+        // Redirect 301 cap a la URL canonònica si el slug és incorrecte o manca
         $correctSlug = $anunci->slug;
         if ($slug !== $correctSlug) {
             return redirect()->route('anuncis.show', ['id' => $id, 'slug' => $correctSlug], 301);
         }
+
+        // Incrementar visites
+        $anunci->increment('visites');
 
         // Anuncis relacionats (mateix tipus, excloent l'actual)
         $relacionats = Anunci::with(['marca', 'estat', 'fotos'])
@@ -414,5 +424,62 @@ $validated = $request->validate([
             'userSavedData'    => User::userSavedData(),
             'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
         ]);
+    }
+
+    public function contact(Request $request, $id)
+    {
+        $anunci = Anunci::with(['marca', 'estat', 'mida', 'tipus', 'fotos', 'usuari'])->findOrFail($id);
+
+        $user = auth()->user();
+        if (!$user) {
+            return back()->with('error', 'Has d\'iniciar sessió per contactar amb el venedor.');
+        }
+
+        $emailVenedor = $anunci->usuari->email ?? 'info@jok.cat';
+        $emailInteressat = $user->email;
+
+        $fotoUrl = $anunci->fotos->first()?->foto_ruta 
+            ? asset($anunci->fotos->first()->foto_ruta) 
+            : 'https://picsum.photos/seed/'.$anunci->id.'/400/300';
+
+        $html = '
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                <h2 style="margin: 0 0 10px 0; color: #1f2937;">Nou interessat al teu anunci</h2>
+                <p style="color: #6b7280; margin: 0;">Algú s\'ha posat en contacte amb tu respecte l\'anunci:</p>
+            </div>
+            
+            <div style="display: flex; gap: 20px; margin-bottom: 20px; padding: 15px; border: 1px solid #e5e7eb; border-radius: 10px;">
+                <img src="'.$fotoUrl.'" alt="'.$anunci->titol.'" style="width: 120px; height: 90px; object-fit: cover; border-radius: 8px; padding:10px;">
+                <div>
+                    <h3 style="margin: 0 0 5px 0; color: #1f2937; font-size: 16px;">'.$anunci->titol.'</h3>
+                    <p style="margin: 0 0 5px 0; color: #6b7280; font-size: 14px;">'.$anunci->marca->nom_marca.' · '.$anunci->tipus->nom_tipus.'</p>
+                    <p style="margin: 0; color: #059669; font-size: 18px; font-weight: bold;">'.($anunci->preu ? number_format($anunci->preu, 0, ',', '.').' €' : 'A consultar').'</p>
+                </div>
+            </div>
+
+            <div style="background: #eff6ff; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                <p style="margin: 0 0 10px 0; font-weight: bold; color: #1e40af;">Dades de contacte:</p>
+                <p style="margin: 0; color: #1f2937;"><strong>Nom:</strong> '.$user->name.'</p>
+                <p style="margin: 5px 0 0 0; color: #1f2937;"><strong>Email:</strong> <a href="mailto:'.$emailInteressat.'" style="color: #2563eb;">'.$emailInteressat.'</a></p>
+            </div>
+
+            <p style="color: #9ca3af; font-size: 12px; text-align: center; margin: 0;">
+                Jok.cat només fa de mitjancer. La comunicació entre comprador i venedor és directa.
+            </p>
+        </div>';
+
+        try {
+            Mail::html($html, function ($message) use ($emailVenedor, $anunci) {
+                $message->to($emailVenedor)
+                    ->subject('Nou interessat: ' . $anunci->titol);
+            });
+
+            $anunci->increment('enviaments');
+
+            return back()->with('status', 'S\'ha enviat el correu al venedor correctament.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error en enviar el correu. Torna a intentar-ho.');
+        }
     }
 }

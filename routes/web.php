@@ -74,6 +74,8 @@ Route::get('/dashboard/anuncis/delete-foto/{id}', [AnuncisController::class, 'de
 
 Route::post('/dashboard/anuncis/upload-image', [AnuncisController::class, 'uploadImage'])->middleware(['auth', 'verified'])->name('dashboard.anuncis.upload-image');
 
+Route::post('/anuncis/contact/{id}', [AnuncisController::class, 'contact'])->name('anuncis.contact');
+
 
 Route::get("/privacitat", function(){
     return view("privacitat");

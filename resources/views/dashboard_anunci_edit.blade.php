@@ -152,11 +152,25 @@
                         </div>
                     </div>
 
-                    <div class="px-8 py-4 bg-gray-50 border-t border-gray-100 flex justify-end items-center space-x-4">
-                        <a href="{{ route('dashboard.anuncis') }}" class="text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors">Cancel·lar</a>
-                        <button type="submit" class="inline-flex items-center px-6 py-2 bg-indigo-600 border border-transparent rounded-lg font-bold text-white shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
-                            {{ $isEdit ? 'Guardar Canvis' : 'Publicar Anunci' }}
-                        </button>
+                    <div class="px-8 py-4 bg-gray-50 border-t border-gray-100">
+                        <div class="mb-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                            <div class="flex items-start gap-3">
+                                <input type="checkbox" name="conforme_usuari_enviament_mail" id="conforme" value="1" class="mt-1 w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" {{ old('conforme_usuari_enviament_mail', $anunci->conforme_usuari_enviament_mail) ? 'checked' : '' }} required>
+                                <label for="conforme" class="text-sm text-amber-800 leading-relaxed">
+                                    <strong>Important:</strong> Jok.cat actua exclusivament com a intermediari entre el comprador i el venedor, i no participa en la transacció. 
+                                    En publicar un anunci, autoritzes la recepció d'un missatge amb l'adreça de contacte de la persona interessada per tal de gestionar la compravenda externament a la plataforma.
+                                </label>
+                            </div>
+                            @error('conforme_usuari_enviament_mail')
+                                <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="flex justify-end items-center space-x-4">
+                            <a href="{{ route('dashboard.anuncis') }}" class="text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors">Cancel·lar</a>
+                            <button type="submit" class="inline-flex items-center px-6 py-2 bg-indigo-600 border border-transparent rounded-lg font-bold text-white shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                                {{ $isEdit ? 'Guardar Canvis' : 'Publicar Anunci' }}
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>

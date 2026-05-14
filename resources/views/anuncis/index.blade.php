@@ -295,7 +295,14 @@
                 @else
                     <span class="text-sm text-neutral-400 italic">Sense preu</span>
                 @endif
-                <span class="text-[10px] text-neutral-300">{{ $anunci->created_at->diffForHumans() }}</span>
+                <div class="text-right">
+                    <span class="text-[10px] text-neutral-300 block">{{ $anunci->created_at->diffForHumans() }}</span>
+                    @if($anunci->visites > 0)
+                        <span class="text-[9px] text-neutral-400">
+                            <i class="fa-solid fa-eye"></i> {{ $anunci->visites }}
+                        </span>
+                    @endif
+                </div>
             </div>
         </div>
     </a>
