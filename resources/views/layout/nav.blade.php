@@ -27,7 +27,7 @@
             @endif
             {{-- <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base hidden "><a href="/anuncis">Anuncis</a></li> --}}
             <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/merchandising">Merchandising</a></li>
-            <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/anuncis">Anuncis</a></li>
+            <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/anuncis">Segona Mà <span class="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full align-top ml-1">Nou</span></a></li>
             <li class="lg:p-2 cursor-pointer font-bold text-base hidden ">Contacte</li>
             <li class="block lg:inline p-  cursor-pointer font-bold mt-2 lg:mr-2 ">
                 <div class="hidden bg-neutral-200 rounded-xl  p-2  w-full   inline text-center" id="searchBarButton" onClick="(()=>{this.style.display='none'; document.getElementById('searchBar').style.display='inline'})()">
