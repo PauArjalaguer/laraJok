@@ -503,7 +503,7 @@ $validated = $request->validate([
             </div>
 
             <p style="color: #9ca3af; font-size: 12px; text-align: center; margin: 0;">
-                Jok.cat només fa de mitjancer. La comunicació entre comprador i venedor és directa.
+                Jok.cat només fa de intermediari. La comunicació entre comprador i venedor és directa.
             </p>
         </div>';
 
