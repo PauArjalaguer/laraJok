@@ -107,6 +107,34 @@ $validated = $request->validate([
             }
         }
 
+        // Enviar mail resum a jok@jok.cat
+        try {
+            $anunci->load(['marca', 'estat', 'mida', 'tipus', 'usuari']);
+            
+            $html = '
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 10px;">
+                <h2 style="color: #1f2937; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px;">Nou anunci creat</h2>
+                <p>S\'ha generat un nou anunci a la plataforma Jok.cat:</p>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <tr><td style="padding: 8px 0; border-bottom: 1px solid #f3f4f6; width: 100px;"><strong>Títol:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #f3f4f6;">' . htmlspecialchars($anunci->titol) . '</td></tr>
+                    <tr><td style="padding: 8px 0; border-bottom: 1px solid #f3f4f6;"><strong>Usuari:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #f3f4f6;">' . htmlspecialchars($anunci->usuari->name ?? 'Desconegut') . ' (' . htmlspecialchars($anunci->usuari->email ?? '') . ')</td></tr>
+                    <tr><td style="padding: 8px 0; border-bottom: 1px solid #f3f4f6;"><strong>Preu:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #f3f4f6;">' . ($anunci->preu ? number_format($anunci->preu, 0, ',', '.') . ' €' : 'A consultar') . '</td></tr>
+                    <tr><td style="padding: 8px 0; border-bottom: 1px solid #f3f4f6;"><strong>Marca:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #f3f4f6;">' . htmlspecialchars($anunci->marca->nom_marca ?? '-') . '</td></tr>
+                    <tr><td style="padding: 8px 0; border-bottom: 1px solid #f3f4f6;"><strong>Tipus:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #f3f4f6;">' . htmlspecialchars($anunci->tipus->nom_tipus ?? '-') . '</td></tr>
+                </table>
+                <p style="margin-top: 20px;">
+                    <a href="' . route('anuncis.show', $anunci->id) . '" style="background-color: #000; color: #fff; padding: 10px 15px; text-decoration: none; border-radius: 5px; display: inline-block;">Veure anunci</a>
+                </p>
+            </div>';
+
+            Mail::html($html, function ($message) use ($anunci) {
+                $message->to('jok@jok.cat')
+                    ->subject('Nou anunci creat: ' . $anunci->titol);
+            });
+        } catch (\Exception $e) {
+            // Ignorar l'error per no tallar el flux a l'usuari
+        }
+
         return redirect()->route('dashboard.anuncis')->with('status', 'Anunci creat correctament.');
     }
 
@@ -367,7 +395,17 @@ $validated = $request->validate([
 
             $anuncisSenseUbicacio = $querySenseUbicacio->get();
 
-            $anuncis = $anuncisAmbUbicacio->merge($anuncisSenseUbicacio)->paginate(15)->withQueryString();
+            $anuncisMerge = $anuncisAmbUbicacio->merge($anuncisSenseUbicacio);
+            $perPagina = 15;
+            $paginaActual = $request->get('page', 1);
+            $total = $anuncisMerge->count();
+            $anuncis = new \Illuminate\Pagination\LengthAwarePaginator(
+                $anuncisMerge->forPage($paginaActual, $perPagina),
+                $total,
+                $perPagina,
+                $paginaActual,
+                ['path' => url()->current(), 'query' => $request->query()]
+            );
         } else {
             $query->orderBy('anuncis.created_at', 'desc');
             $anuncis = $query->paginate(15)->withQueryString();
