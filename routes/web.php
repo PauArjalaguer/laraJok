@@ -78,7 +78,9 @@ Route::post('/anuncis/contact/{id}', [AnuncisController::class, 'contact'])->nam
 
 
 Route::get("/privacitat", function(){
-    return view("privacitat");
+    $userSavedData = \App\Models\User::userSavedData();
+    $merchandisingList = \App\Models\Merchandisings::merchandisingReturnFiveRandomItems();
+    return view("privacitat", compact('userSavedData', 'merchandisingList'));
  });
 
 Route::get("/efsmasquefa", function (){

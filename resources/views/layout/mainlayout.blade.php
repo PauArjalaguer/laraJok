@@ -231,45 +231,82 @@
                 @include('layout.merchandising')
                 <div class="flex w-full justify-center py-8 ">
                     <div class="w-3/4 flex">
-                        <div class="w-1/3 text-white text-left"><span class="jok">JOK.cat</span><br>http://www.jok.cat<br>jok@jok.cat</div>
+                        <div class="w-1/3 text-white text-left"><span class="jok">JOK.cat</span><br>http://www.jok.cat<br>jok@jok.cat<br><a href="/privacitat" class="text-sm text-gray-400 hover:text-white underline">Privacitat</a></div>
                         <div class="w-1/3 text-white">&nbsp;</div>
                         <div class="w-1/3  text-white">&nbsp;</div>
                     </div>
                 </div>
             </footer>
-        </div>
-        @vite(['resources/js/app.js'])
+</div>
+            @vite(['resources/js/app.js'])
         <script src="{{ asset('pwa/pwa-install.js') }}"></script>
-</body>
-<script>
-    const canGoBack = () => window.history.length > 1;
 
-    if (canGoBack()) {
-        document.getElementById("pwaNav").classList.remove("hidden");
-    }
-    if (canGoBack()) {
-        document.getElementById("pwaNavBack").classList.remove("hidden");
-    }
+        {{-- Cookie Banner - Only show on desktop --}}
+        <div id="cookie-banner" class="fixed bottom-0 left-0 right-0 bg-neutral-800 text-white p-4 z-50 hidden md:block">
+            <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="text-sm text-center md:text-left text-gray-300">
+                    <p>Utilitzem cookies per millorar la teva experiència. 
+                        <a href="/privacitat" class="text-white underline hover:text-gray-300">Més informació</a>
+                    </p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="acceptCookies()" class="px-4 py-2 bg-neutral-600 hover:bg-neutral-500 rounded-lg text-sm font-semibold transition-colors">
+                        Acceptar
+                    </button>
+                    <button onclick="rejectCookies()" class="px-4 py-2 border border-neutral-500 hover:bg-neutral-700 rounded-lg text-sm text-gray-300 transition-colors">
+                        Rebutjar
+                    </button>
+                </div>
+            </div>
+        </div>
 
-    const goBack = () => {
-        if (canGoBack()) window.history.back();
-    };
-    const predictLocks = {}; // evita crides duplicades per id
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) { // si es veu
-                const id_match = entry.target.dataset.idMatch;
-                predict(id_match);
-                observer.unobserve(entry.target); // només 1 vegada
+        <script>
+            // Cookie Banner functions
+            function acceptCookies() {
+                console.log('accept clicked');
+                localStorage.setItem('cookie_consent', 'accepted');
+                document.getElementById('cookie-banner').style.display = 'none';
             }
-        });
-    }, { threshold: 0.3 }); // es dispara quan el 30% del div és visible
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('[id^="predict_"]').forEach(el => {
-            const id_match = el.id.replace('predict_', '');
-            el.dataset.idMatch = id_match;
-            observer.observe(el);
-        });
-    });
-</script>
+
+            function rejectCookies() {
+                console.log('reject clicked');
+                localStorage.setItem('cookie_consent', 'rejected');
+                document.getElementById('cookie-banner').style.display = 'none';
+            }
+
+            // Show banner if no consent
+            if (!localStorage.getItem('cookie_consent')) {
+                document.getElementById('cookie-banner').classList.remove('hidden');
+            }
+
+            const canGoBack = () => window.history.length > 1;
+
+            if (canGoBack()) {
+                document.getElementById("pwaNav").classList.remove("hidden");
+            }
+            if (canGoBack()) {
+                document.getElementById("pwaNavBack").classList.remove("hidden");
+            }
+
+            const goBack = () => {
+                if (canGoBack()) window.history.back();
+            };
+            const predictLocks = {}; // evita crides duplicades per id
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) { // si es veu
+                        const id_match = entry.target.dataset.idMatch;
+                        predict(id_match);
+                        observer.unobserve(entry.target); // només 1 vegada
+                    }
+                });
+            }, { threshold: 0.3 }); // es dispara quan el 30% del div és visible
+            document.addEventListener('DOMContentLoaded', () => {
+                document.querySelectorAll('[id^="predict_"]').forEach(el => {
+                    const id_match = el.id.replace('predict_', '');
+                    el.dataset.idMatch = id_match;
+                    observer.observe(el);
+                });
+            });
+        </script>
 </html>
