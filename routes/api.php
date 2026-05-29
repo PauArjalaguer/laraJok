@@ -3,6 +3,7 @@
 use App\Http\Controllers\MatchesController;
 use App\Http\Controllers\ScrapingController;
 use App\Http\Controllers\ScrapingFCF;
+use App\Http\Controllers\FecapaController;
 use App\Models\Agenda;
 use App\Models\Classifications;
 use App\Models\Clubs;
@@ -12,7 +13,8 @@ use App\Models\Merchandisings;
 use App\Models\News;
 use App\Models\Players;
 use App\Models\Teams;
-use App\View\Components\MatchesComponent;
+
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -141,3 +143,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get("scrapingFCF/teams",function(){
     return ScrapingFCF::scrapeTeams();
 });
+Route::get('/fecapa/gestio_lligues', [FecapaController::class, 'gestio_lligues']);

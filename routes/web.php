@@ -42,7 +42,6 @@ Route::get("/anuncis/{id}/{slug?}", [AnuncisController::class, 'show'])->name('a
 
 Route::get("/noticies/detall/{id}/{label}", [NewsController::class, 'detall']);
 Route::get("/noticies", [NewsController::class, 'index']);
-Route::get('/fecapa/gestio_lligues', [FecapaController::class, 'gestio_lligues']);
 Route::get("/agenda", [AgendaController::class, 'index']);
 Route::get("/calendari", [AgendaController::class, 'calendari']);
 Route::get("/pavellons/{id}/{label}", [PavellonsController::class, 'detall']);

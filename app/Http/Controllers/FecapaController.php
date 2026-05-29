@@ -15,7 +15,7 @@ class FecapaController extends Controller
     {
         return Categories::orderBy('idCategory', 'asc')->get();
     }
-    private function get_fecapa_leagues_HTML()
+    private function gestio_lligues_get_fecapa_leagues_HTML()
     {
         $url = "https://www.server2.sidgad.es/fecapa/fecapa_ls_1.php";
 
@@ -47,7 +47,7 @@ class FecapaController extends Controller
         curl_close($ch);
         return $response;
     }
-    protected function parse_league_node($node, $categories)
+    protected function gestio_lligues_parse_league_node($node, $categories)
     {
         $llistaClubs = $node->attributes[1]->nodeValue;
         $t = explode("temp_", $llistaClubs);
@@ -61,7 +61,7 @@ class FecapaController extends Controller
         $nomLliga = trim(mb_convert_encoding($node->childNodes[3]->nodeValue, 'ISO-8859-1', 'UTF-8'));
         $idLliga = $node->attributes[2]->nodeValue;
 
-        $idCategory = $this->match_category($nomLliga, $categories);
+        $idCategory = $this->gestio_lligues_match_category($nomLliga, $categories);
 
         return [
             'idLeague' => $idLliga,
@@ -77,12 +77,11 @@ class FecapaController extends Controller
             ['à', 'á', 'è', 'é', 'ì', 'í', 'ò', 'ó', 'ù', 'ú', 'ï', 'ü', 'ç', '·'],
             ['a', 'a', 'e', 'e', 'i', 'i', 'o', 'o', 'u', 'u', 'i', 'u', 'c', ' '],
             $string
-        );
-        Log::info($string);
+        );        
         return preg_replace('/[^a-z0-9]/', '', $string);
     }
 
-    protected function match_category($nomLliga, $categories)
+    protected function gestio_lligues_match_category($nomLliga, $categories)
     {
         $nomLligaNormalitzat = $this->normalize_string($nomLliga);
 
@@ -97,7 +96,7 @@ class FecapaController extends Controller
         return 0;
     }
 
-    protected function saveLeague($data)
+    protected function gestio_lligues_save_league($data)
     {
         DB::statement("
             INSERT INTO leagues (idLeague, leagueName, idSeason, idCategory)
@@ -119,7 +118,7 @@ class FecapaController extends Controller
         $categories = $this->get_categories();
 
         //2 Carrega la web amb les lligues
-        $html = $this->get_fecapa_leagues_HTML();
+        $html = $this->gestio_lligues_get_fecapa_leagues_HTML();
         if (!$html) {
             return response()->json(['error' => 'Error fetching content'], 500);
         }
@@ -134,9 +133,9 @@ class FecapaController extends Controller
         $inserted = 0;
 
         foreach ($links as $league) {
-            $data = $this->parse_league_node($league, $categories);
+            $data = $this->gestio_lligues_parse_league_node($league, $categories);
             if ($data) {
-                $this->saveLeague($data);
+                $this->gestio_lligues_save_league($data);
                 $inserted++;
             }
         }
