@@ -3,6 +3,7 @@
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\ClubsController;
 use App\Http\Controllers\CompeticioController;
+use App\Http\Controllers\FecapaController;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\MatchesController;
@@ -41,6 +42,7 @@ Route::get("/anuncis/{id}/{slug?}", [AnuncisController::class, 'show'])->name('a
 
 Route::get("/noticies/detall/{id}/{label}", [NewsController::class, 'detall']);
 Route::get("/noticies", [NewsController::class, 'index']);
+Route::get('/fecapa/gestio_lligues', [FecapaController::class, 'gestio_lligues']);
 Route::get("/agenda", [AgendaController::class, 'index']);
 Route::get("/calendari", [AgendaController::class, 'calendari']);
 Route::get("/pavellons/{id}/{label}", [PavellonsController::class, 'detall']);
