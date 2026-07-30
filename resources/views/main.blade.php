@@ -107,11 +107,11 @@
             <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h3 class="font-display text-base md:text-lg font-black text-stone-900 dark:text-white uppercase tracking-tight leading-tight group-hover:text-[#d4ff00] transition-colors">
-                        SEGONA MÀ D'HOQUEI PATINS
+                        SEGONA MÀ
                     </h3>
                     <p class="font-display text-[11px] font-black text-stone-500 dark:text-stone-400 uppercase tracking-wider mt-1 flex items-center gap-1.5">
                         <i class="fa-solid fa-tags text-[#d4ff00]"></i>
-                        <span>COMPRA I VEN MATERIAL, PATINS I EQUIPAMENT D'HOQUEI</span>
+                        <span>COMPRA I VEN EQUIPAMENT D'HOQUEI PATINS</span>
                     </p>
                 </div>
                 <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#d4ff00] text-black font-black text-xs uppercase tracking-wider group-hover:bg-lime-400 transition-colors shadow-xs self-start md:self-auto flex-shrink-0">
