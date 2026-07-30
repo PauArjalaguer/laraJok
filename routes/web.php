@@ -33,6 +33,7 @@ Route::get('/competicio/{id}/{label}', [CompeticioController::class, 'index']);
 Route::get('/competicio/{id}/{label}/{round}', [CompeticioController::class, 'index']);
 Route::get('/competicions', [CompeticioController::class, 'llistat']);
 Route::get('/acta/{id}/{label}', [CompeticioController::class, 'acta']);
+Route::get('/arbitre/{name}', [CompeticioController::class, 'arbitre']);
 Route::get('/desa/{item}/{id}', [UserController::class, 'store'])->middleware(['auth', 'verified']);
 
 Route::get("/merchandising", [MerchandisingsController::class, 'index']);

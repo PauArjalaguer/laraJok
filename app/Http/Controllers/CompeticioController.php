@@ -62,4 +62,20 @@ class CompeticioController extends Controller
             ]
         );
     }
+
+    public static function arbitre(Request $request, $name)
+    {
+        $refereeName = urldecode($name);
+        $matchesList = Matches::matchesListByReferee($refereeName, 25);
+
+        return view(
+            'arbitre',
+            [
+                'refereeName' => $refereeName,
+                'matchesList' => $matchesList,
+                'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
+                'userSavedData' => User::userSavedData(),
+            ]
+        );
+    }
 }

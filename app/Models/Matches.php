@@ -50,8 +50,19 @@ class Matches extends Model
                 'visitorResult',
                 'placeAddress',
                 'lat',
-                'lon'
+                'lon',
+                'referee'
             ]);
+    }
+
+    public static function matchesListByReferee($refereeName, $limit = 25)
+    {
+        return self::baseMatchesQuery()
+            ->where('matches.referee', $refereeName)
+            ->orderBy('matches.matchDate', 'desc')
+            ->orderBy('matches.matchHour', 'desc')
+            ->limit($limit)
+            ->get();
     }
 
     public static  function matchesListNext($userSavedData, $idClub = 0,$limit=10)
