@@ -146,13 +146,13 @@
         /* ── Hallmark Modern Utility Classes ── */
         .font-display { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
         .font-syne { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
-        .font-mono-score { font-family: 'JetBrains Mono', monospace; }
+        .font-mono-score { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
         
         .hallmark-stamp {
             display: inline-flex;
             align-items: center;
             padding: 0.2rem 0.55rem;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
             font-size: 0.65rem;
             font-weight: 800;
             text-transform: uppercase;

@@ -70,59 +70,66 @@
     }
 </script>
 
-<div class="w-full mt-2 mb-4">
-    <div class="flex items-center justify-between border-b border-neutral-200 pb-3">
+<div class="w-full mt-2 mb-6">
+    <div class="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-4">
         <div>
-            <h1 class="text-2xl font-bold text-neutral-800 font-['Comfortaa']">
-                <i class="fa-solid fa-list-ol text-neutral-500 mr-2"></i>{{$matchesList[0]->groupName}}
+            <div class="flex items-center gap-2">
+                <span class="hallmark-stamp bg-[#f5c310] text-black">CLASSIFICACIÓ I JORNADES</span>
+            </div>
+            <h1 class="text-2xl md:text-3xl font-extrabold text-stone-900 dark:text-white font-display mt-2">
+                {{$matchesList[0]->groupName}}
             </h1>
-            <p class="text-sm text-neutral-500 mt-0.5">
-                <i class="fa-solid fa-trophy text-neutral-400 mr-1"></i>Competició
+            <p class="text-xs md:text-sm text-stone-500 dark:text-stone-400 mt-1 font-display flex items-center gap-1.5">
+                <i class="fa-solid fa-trophy text-[#f5c310]"></i> {{ $matchesList[0]->leagueName ?? 'Competició' }}
             </p>
         </div>
         <div class="text-right">
-            <a href="/desa/competicio/{{$matchesList[0]->idGroup}}" title="{{ $checkIfSaved==1 ? 'Treu de favorits' : 'Desa als favorits' }}">
-                <svg xmlns="http://www.w3.org/2000/svg" fill={{$checkIfSaved==1 ? 'currentColor':'none'}} viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 cursor-pointer transition-colors hover:text-red-700 {{$checkIfSaved==1 ? 'text-red-700':'text-neutral-400'}}">
+            <a href="/desa/competicio/{{$matchesList[0]->idGroup}}" title="{{ $checkIfSaved==1 ? 'Treu de favorits' : 'Desa als favorits' }}" class="inline-flex p-2 rounded-xl bg-stone-100 dark:bg-stone-850 hover:bg-stone-200 dark:hover:bg-stone-800 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" fill={{$checkIfSaved==1 ? 'currentColor':'none'}} viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer transition-colors {{$checkIfSaved==1 ? 'text-red-600':'text-stone-400'}}">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                 </svg>
             </a>
         </div>
     </div>
 </div>
+
 @if ($totalPlayed['percentage_played']>0)
-<div class="bg-neutral-300 w-full my-2">
-    <div id="percent" class="bg-neutral-900  text-neutral-300 py-2 font-bold transition-all ease-in" style='width:0%'>
-      <span id="percentPlace" class='  px-6 text-neutral-300 '> &nbsp;</span>
-    <span id="percentText" class='hidden  px-6 text-white '> {{$totalPlayed['percentage_played']}} % jugat</span></div>
+<div class="bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 w-full my-4 rounded-xl overflow-hidden p-1 shadow-sm">
+    <div id="percent" class="bg-stone-900 dark:bg-[#f5c310] text-white dark:text-black py-1.5 font-display text-xs font-extrabold rounded-lg transition-all ease-in text-center uppercase tracking-wider" style='width:0%'>
+      <span id="percentPlace" class='px-4'> &nbsp;</span>
+      <span id="percentText" class='hidden px-4'>{{$totalPlayed['percentage_played']}}% COMPLETAT</span>
+    </div>
 </div>
 @endif
-<div class='w-full lg:flex  '>
 
-    <div id="classificationContainer" class='{{ count($classification)>0  ?  "w-full lg:w-1/2  lg:pr-2 mb-2" : "hidden"}}'>
-        {{-- Expand/Collapse button - hidden on mobile --}}
-        <div class="hidden md:flex justify-end mb-1">
-            <button id="expandClassBtn" onclick="toggleClassification()" class="flex items-center gap-1 text-xs text-neutral-500 hover:text-neutral-800 transition-colors px-2 py-1 rounded hover:bg-neutral-200">
+<div class='w-full lg:flex gap-6'>
+
+    <div id="classificationContainer" class='{{ count($classification)>0  ?  "w-full lg:w-1/2 mb-4" : "hidden"}}'>
+        {{-- Expand/Collapse button --}}
+        <div class="hidden md:flex justify-between items-center mb-3">
+            <h3 class="font-display font-extrabold text-sm uppercase tracking-wider text-stone-900 dark:text-white">
+                Classificació
+            </h3>
+            <button id="expandClassBtn" onclick="toggleClassification()" class="flex items-center gap-1.5 text-xs font-display font-bold text-stone-500 hover:text-[#f5c310] transition-colors px-2.5 py-1 rounded-lg bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800">
                 <span id="expandClassText">Ampliar</span>
-                <svg id="expandClassArrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 transition-transform duration-300">
+                <svg id="expandClassArrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 transition-transform duration-300">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                 </svg>
             </button>
         </div>
 
         {{-- Classification Header --}}
-        <div class='bg-neutral-700 w-full border-solid border-[1px] border-b-[0px] border-neutral-400 shadow-md transition-all shadow-neutral-100 flex text-white'>
-            <div class='p-4 w-1/12 text-center '>&nbsp;</div>
-            <div class='p-4 classCol-team text-left font-bold'>Equips</div>
-            <div class='p-4 w-1/12 text-center bg-neutral-700 font-bold'>P</div>
-            <div class='p-4 w-1/12 text-center font-bold classCol-extra hidden '>PJ</div>
-            <div class='p-4 w-1/12 text-center font-bold'>G</div>
-            <div class='p-4 w-1/12 text-center font-bold'>E</div>
-            <div class='p-4 w-1/12 text-center font-bold'>Pe</div>
-            {{-- Expanded columns --}}
-          
-            <div class='p-4 w-1/12 text-center font-bold classCol-extra hidden'>GF</div>
-            <div class='p-4 w-1/12 text-center font-bold classCol-extra hidden'>GC</div>
-            <div class='p-3 classCol-form text-center font-bold classCol-extra hidden'>Darrers partits</div>
+        <div class='bg-stone-900 dark:bg-[#181920] w-full border border-stone-800 rounded-t-xl overflow-hidden text-white font-display text-xs font-bold uppercase tracking-wider flex items-center shadow-sm'>
+            <div class='p-3 w-1/12 text-center text-stone-400'>#</div>
+            <div class='p-3 classCol-team text-left'>Equips</div>
+            <div class='p-3 w-1/12 text-center bg-black text-[#f5c310] font-black'>P</div>
+            <div class='p-3 w-1/12 text-center classCol-extra hidden'>PJ</div>
+            <div class='p-3 w-1/12 text-center'>G</div>
+            <div class='p-3 w-1/12 text-center'>E</div>
+            <div class='p-3 w-1/12 text-center'>Pe</div>
+            <div class='p-3 w-1/12 text-center classCol-extra hidden'>GF</div>
+            <div class='p-3 w-1/12 text-center classCol-extra hidden'>GC</div>
+            <div class='p-3 classCol-form text-center classCol-extra hidden'>Darrers partits</div>
         </div>
 
         {{-- Prepare last matches data per team --}}
@@ -130,18 +137,15 @@
             $teamForm = [];
             $lastPlayedMatches = $lastPlayedMatches->reverse();
             foreach ($lastPlayedMatches as $match) {
-                // For local team
                 $localId = $match->idLocal;
                 $visitorId = $match->idVisitor;
                 $localGoals = (int)$match->localResult;
                 $visitorGoals = (int)$match->visitorResult;
 
-                // Build tooltip string
                 $localTeamName = App\Http\Controllers\TeamsController::teamFormat($match->localTeamName);
                 $visitorTeamName = App\Http\Controllers\TeamsController::teamFormat($match->visitorTeamName);
                 $tooltip = "{$localTeamName} {$localGoals} - {$visitorGoals} {$visitorTeamName} ".date('d/m/Y', strtotime($match->matchDate));
 
-                // Local team result
                 if (!isset($teamForm[$localId])) $teamForm[$localId] = [];
                 if (count($teamForm[$localId]) < 5) {
                     if ($localGoals > $visitorGoals) {
@@ -153,7 +157,6 @@
                     }
                 }
 
-                // Visitor team result
                 if (!isset($teamForm[$visitorId])) $teamForm[$visitorId] = [];
                 if (count($teamForm[$visitorId]) < 5) {
                     if ($visitorGoals > $localGoals) {
@@ -168,30 +171,30 @@
         @endphp
 
         @foreach($classification as $classificationRow)
-        <div class='bg-white w-full border-solid border-t-[1px] border-neutral-400 shadow-md hover:bg-neutral-50 transition-all shadow-neutral-700 flex'>
-            <div class='p-2 md:p-4 w-1/12 text-center border-r-[1px] text-xs md:text-sm '>{{$classificationRow->position}}</div>
-            <div class='p-2 md:p-4 classCol-team border-r-[1px] text-left text-xs md:text-sm '>
-                <a class="active:text-neutral-300" href="/equip/{{$classificationRow->idTeam}}/{{urlencode($classificationRow->teamName)}}">{{App\Http\Controllers\TeamsController::teamFormat($classificationRow->teamName)}}</a>
+        <div class='bg-white dark:bg-[#131419] w-full border-x border-b border-stone-200 dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-850 transition-all font-display text-xs md:text-sm flex items-center text-stone-900 dark:text-stone-100'>
+            <div class='p-3 w-1/12 text-center font-bold text-stone-500 border-r border-stone-100 dark:border-stone-850'>{{$classificationRow->position}}</div>
+            <div class='p-3 classCol-team border-r border-stone-100 dark:border-stone-850 text-left font-bold truncate'>
+                <a class="hover:text-[#f5c310] transition-colors" href="/equip/{{$classificationRow->idTeam}}/{{urlencode($classificationRow->teamName)}}">{{App\Http\Controllers\TeamsController::teamFormat($classificationRow->teamName)}}</a>
             </div>
-            <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center bg-neutral-700 text-xs md:text-sm text-white'>{{$classificationRow->points}}</div>
-              <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center text-xs md:text-sm classCol-extra hidden bg-neutral-200'>{{$classificationRow->played}}</div>
+            <div class='p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-black bg-stone-100 dark:bg-black text-stone-900 dark:text-[#f5c310]'>{{$classificationRow->points}}</div>
+            <div class='p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center classCol-extra hidden text-stone-500'>{{$classificationRow->played}}</div>
           
-            <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center text-xs md:text-sm'>{{$classificationRow->won}}</div>
-            <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center text-xs md:text-sm'>{{$classificationRow->draw}}</div>
-            <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center text-xs md:text-sm'>{{$classificationRow->lost}}</div>
+            <div class='p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center'>{{$classificationRow->won}}</div>
+            <div class='p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center'>{{$classificationRow->draw}}</div>
+            <div class='p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center'>{{$classificationRow->lost}}</div>
             {{-- Expanded columns --}}
-            <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center text-xs md:text-sm classCol-extra hidden'>{{$classificationRow->goalsMade}}</div>
-            <div class='p-2 md:p-4 w-1/12 border-r-[1px] text-center text-xs md:text-sm classCol-extra hidden'>{{$classificationRow->goalsReceived}}</div>
-            <div class='p-2 md:p-4 classCol-form border-r-[1px] text-center text-xs md:text-sm classCol-extra hidden'>
+            <div class='p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center classCol-extra hidden text-stone-500'>{{$classificationRow->goalsMade}}</div>
+            <div class='p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center classCol-extra hidden text-stone-500'>{{$classificationRow->goalsReceived}}</div>
+            <div class='p-3 classCol-form text-center classCol-extra hidden'>
                 <div class="flex items-center justify-center gap-1">
                     @if(isset($teamForm[$classificationRow->idTeam]))
                         @foreach(array_reverse($teamForm[$classificationRow->idTeam]) as $matchData)
                             @if($matchData['result'] === 'W')
-                                <span class="inline-block w-3 h-3 md:w-4 md:h-4 rounded-full bg-green-500" title="{{ $matchData['tooltip'] }}"></span>
+                                <span class="inline-block w-3 h-3 rounded-full bg-emerald-500" title="{{ $matchData['tooltip'] }}"></span>
                             @elseif($matchData['result'] === 'L')
-                                <span class="inline-block w-3 h-3 md:w-4 md:h-4 rounded-full bg-red-500" title="{{ $matchData['tooltip'] }}"></span>
+                                <span class="inline-block w-3 h-3 rounded-full bg-rose-500" title="{{ $matchData['tooltip'] }}"></span>
                             @else
-                                <span class="inline-block w-3 h-3 md:w-4 md:h-4 rounded-full bg-yellow-400" title="{{ $matchData['tooltip'] }}"></span>
+                                <span class="inline-block w-3 h-3 rounded-full bg-amber-400" title="{{ $matchData['tooltip'] }}"></span>
                             @endif
                         @endforeach
                     @endif
@@ -199,85 +202,96 @@
             </div>
         </div>
         @endforeach
-        <div class="mt-2">
-            <div class="font-bold bg-neutral-700 p-2 text-white border-[1px] border-b-[0px] border-neutral-500 shadow-md shadow-neutral-700 ">Equip més golejador</div>
-            <div class="text-sm flex bg-white items-center border-[1px]  border-neutral-500 shadow-md shadow-neutral-700">
-                <div class="p-2 w-1/12 ">
-                    <img alt="{{count($bestGoalsMade)>0 ? App\Http\Controllers\TeamsController::teamFormat($bestGoalsMade[0]->teamName) : ''}}" src={{ count($bestGoalsMade)>0 ? $bestGoalsMade[0]->clubImage:'' }} class="max-h-8 max-w-8 md:max-h-12 md:max-w-12  " />
+
+        <!-- Highlight Stats Section -->
+        <div class="mt-6 space-y-3 font-display">
+            <!-- Equip més golejador -->
+            <div class="bg-white dark:bg-[#131419] border border-stone-200 dark:border-stone-800 rounded-xl p-3.5 shadow-sm flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <img alt="{{count($bestGoalsMade)>0 ? App\Http\Controllers\TeamsController::teamFormat($bestGoalsMade[0]->teamName) : ''}}" src={{ count($bestGoalsMade)>0 ? $bestGoalsMade[0]->clubImage:'' }} class="w-9 h-9 object-contain" />
+                    <div>
+                        <span class="text-[10px] font-bold text-[#f5c310] uppercase tracking-wider block">MÉS GOLEJADOR</span>
+                        <a class="font-bold text-xs md:text-sm text-stone-900 dark:text-stone-100 hover:text-[#f5c310]" href="/equip/{{count($bestGoalsMade)>0 ? $bestGoalsMade[0]->idTeam : ''}}/{{count($bestGoalsMade)>0 ? urlencode($bestGoalsMade[0]->teamName ) :''}}">
+                            {{count($bestGoalsMade)>0 ? App\Http\Controllers\TeamsController::teamFormat($bestGoalsMade[0]->teamName) : ''}}
+                        </a>
+                    </div>
                 </div>
-                <div class="p-2 w-11/12 ml-2 ">
-                    <a class="active:text-neutral-300" href="/equip/{{count($bestGoalsMade)>0 ? $bestGoalsMade[0]->idTeam : ''}}/{{count($bestGoalsMade)>0 ? urlencode($bestGoalsMade[0]->teamName ) :''}}">
-                           <span class="font-bold">{{count($bestGoalsMade)>0 ? App\Http\Controllers\TeamsController::teamFormat($bestGoalsMade[0]->teamName) : ''}}</span>
-                    </a>
-                    <br />{{count($bestGoalsMade)>0 ? $bestGoalsMade[0]->goalsMade : ''}} gols
-                </div>
-            </div>
-            <div class="font-bold bg-neutral-700 p-2 text-white border-[1px] border-b-[0px] border-neutral-500 mt-2 shadow-md shadow-neutral-700">Equip menys golejat </div>
-            <div class="flex bg-white items-center border-[1px]  border-neutral-500 shadow-md shadow-neutral-700">
-                <div class="p-2 w-1/12  ">
-                    <a class="active:text-neutral-300" href="/equip/{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->idTeam  : ''}}/{{count($leastGoalsReceived) ? urlencode($leastGoalsReceived[0]->teamName) : ''}}">
-                        <img alt="{{count($leastGoalsReceived)>0 ? App\Http\Controllers\TeamsController::teamFormat($leastGoalsReceived[0]->teamName) : ''}}"  src={{count($leastGoalsReceived)>0 ?  $leastGoalsReceived[0]->clubImage : ''}} class="max-h-8 max-w-8 md:max-h-12 md:max-w-12  " />
-                </div>
-                <div class="p-2 w-11/12 ml-2 text-sm">
-                    <a class="active:text-neutral-300" href="/equip/{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->idTeam : ''}}/{{count($leastGoalsReceived)>0 ? urlencode($leastGoalsReceived[0]->teamName) :''}}">
-                        <span class="font-bold">{{count($leastGoalsReceived)>0 ? App\Http\Controllers\TeamsController::teamFormat($leastGoalsReceived[0]->teamName) : ''}}</span>
-                    </a>
-                    <br />{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->goalsReceived : ''}} gols
+                <div class="text-right font-extrabold text-sm md:text-base text-stone-900 dark:text-white bg-stone-100 dark:bg-stone-850 px-2.5 py-1 rounded-lg">
+                    {{count($bestGoalsMade)>0 ? $bestGoalsMade[0]->goalsMade : '0'}} <span class="text-[10px] text-stone-500 font-normal">gols</span>
                 </div>
             </div>
-             @if(count($cleanSheets)>0)
-            <div class="font-bold bg-neutral-700 p-2 text-white border-[1px] border-b-[0px] border-neutral-500 mt-2 shadow-md shadow-neutral-700">Equip amb més porteries a zero </div>
-          
-            <div class="flex bg-white items-center border-[1px]  border-neutral-500 shadow-md shadow-neutral-700">
-                <div class="p-2 w-1/12  ">
-                    <a class="active:text-neutral-300" href="/equip/{{count($cleanSheets)>0 ? $cleanSheets[0]->idTeam  : ''}}/{{count($cleanSheets) ? urlencode($cleanSheets[0]->teamName) : ''}}">
-                        <img alt="{{count($cleanSheets)>0 ? App\Http\Controllers\TeamsController::teamFormat($cleanSheets[0]->teamName) : ''}}"  src={{count($cleanSheets)>0 ?  $cleanSheets[0]->clubImage : ''}} class="max-h-8 max-w-8 md:max-h-12 md:max-w-12  " />
+
+            <!-- Equip menys golejat -->
+            <div class="bg-white dark:bg-[#131419] border border-stone-200 dark:border-stone-800 rounded-xl p-3.5 shadow-sm flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <img alt="{{count($leastGoalsReceived)>0 ? App\Http\Controllers\TeamsController::teamFormat($leastGoalsReceived[0]->teamName) : ''}}" src={{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->clubImage : ''}} class="w-9 h-9 object-contain" />
+                    <div>
+                        <span class="text-[10px] font-bold text-emerald-500 uppercase tracking-wider block">MENYS GOLEJAT</span>
+                        <a class="font-bold text-xs md:text-sm text-stone-900 dark:text-stone-100 hover:text-[#f5c310]" href="/equip/{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->idTeam : ''}}/{{count($leastGoalsReceived)>0 ? urlencode($leastGoalsReceived[0]->teamName) :''}}">
+                            {{count($leastGoalsReceived)>0 ? App\Http\Controllers\TeamsController::teamFormat($leastGoalsReceived[0]->teamName) : ''}}
+                        </a>
+                    </div>
                 </div>
-                <div class="p-2 w-11/12 ml-2 text-sm">
-                    <a class="active:text-neutral-300" href="/equip/{{count($cleanSheets)>0 ? $cleanSheets[0]->idTeam : ''}}/{{count($cleanSheets)>0 ? urlencode($cleanSheets[0]->teamName) :''}}">
-                        <span class="font-bold">{{count($cleanSheets)>0 ? App\Http\Controllers\TeamsController::teamFormat($cleanSheets[0]->teamName) : ''}}</span>
-                    </a>
-                    <br />{{count($cleanSheets)>0 ? $cleanSheets[0]->cleanSheets : ''}} partits
+                <div class="text-right font-extrabold text-sm md:text-base text-stone-900 dark:text-white bg-stone-100 dark:bg-stone-850 px-2.5 py-1 rounded-lg">
+                    {{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->goalsReceived : '0'}} <span class="text-[10px] text-stone-500 font-normal">gols</span>
+                </div>
+            </div>
+
+            <!-- Golejadors -->
+            @if(count($maxGoalsPerLeague)>0)
+            <div class="bg-white dark:bg-[#131419] border border-stone-200 dark:border-stone-800 rounded-xl p-3.5 shadow-sm mt-4">
+                <h4 class="text-xs font-extrabold uppercase tracking-wider text-stone-900 dark:text-white mb-3 flex items-center justify-between">
+                    <span>MÀXIMS GOLEJADORS</span>
+                    <i class="fa-solid fa-futbol text-[#f5c310]"></i>
+                </h4>
+                <div class="space-y-2">
+                    @foreach($maxGoalsPerLeague->take(5) as $player)
+                    <div class="flex items-center justify-between text-xs py-1 border-b border-stone-100 dark:border-stone-850 last:border-0">
+                        <a class="font-semibold text-stone-800 dark:text-stone-200 hover:text-[#f5c310] transition-colors" href="/jugador/{{$player->idPlayer}}/{{urlencode($player->playerName)}}">
+                            {{App\Http\Controllers\TeamsController::teamFormat($player->playerName)}}
+                        </a>
+                        <span class="font-extrabold text-[#f5c310] bg-stone-900 dark:bg-black px-2 py-0.5 rounded text-[11px]">
+                            {{$player->goals}} Gols
+                        </span>
+                    </div>
+                    @endforeach
                 </div>
             </div>
             @endif
-            <div class="font-bold bg-neutral-700 p-2 text-white border-[1px] border-b-[0px] border-neutral-500 mt-2 shadow-md shadow-neutral-700">Golejadors </div>
-            @foreach($maxGoalsPerLeague as $player)
-            <div class='bg-white w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-50 transition-all shadow-neutral-700 flex'>
-                <div class='p-2 md:p-4 w-11/12 border-r-[1px] text-left  text-xs md:text-sm '>
-                    <a class="active:text-neutral-300" href="/jugador/{{$player->idPlayer}}/{{urlencode($player->playerName)}}">{{App\Http\Controllers\TeamsController::teamFormat($player->playerName)}}</a>
-                </div>
-                <div class='p-2 md:p-4 w-1/12 text-center border-r-[1px] text-xs md:text-sm '>{{$player->goals}}</div>
-
-            </div>
-            @endforeach
         </div>
 
     </div>
 
-    <div class='{{ count($classification)>0  ?   "w-full lg:w-1/2  lg:pl-2 " : "w-full" }}'>
-        <div class='flex justify-stretch flex-wrap'>
-            @php
-            $currentRound=0;
-            $counter=0;
-            @endphp
-            @foreach($matchesList as $match)
-            @if ($currentRound!=$match->idRound)
-            @if(strlen($match->idRound)==1)
-            @php
-            $match->idRound="0".$match->idRound
-            @endphp
-            @endif
-            <div id="{{str_replace(" ","",$match->idRound)}}_button" class="min-w-10 {{ strlen($match->idRound)> 2 ? 'rounded-3xl  px-3' : 'rounded-[50%]'; }} mr-1 mt-1 bg-neutral-700 text-center leading-10  font-bold inline space-between  text-white cursor-pointer leagueButton " onClick="leagueShow('{{str_replace(" ","",$match->idRound)}}')">{{$match->idRound}}</div>
+    <!-- COLUMN 2: JORNADES I PARTITS -->
+    <div class='{{ count($classification)>0  ? "w-full lg:w-1/2" : "w-full" }}'>
+        <div class="mb-4">
+            <h3 class="font-display font-extrabold text-sm uppercase tracking-wider text-stone-900 dark:text-white mb-3">
+                Jornades
+            </h3>
+            <div class='flex justify-start flex-wrap gap-1.5'>
+                @php
+                $currentRound=0;
+                $counter=0;
+                @endphp
+                @foreach($matchesList as $match)
+                @if ($currentRound!=$match->idRound)
+                @if(strlen($match->idRound)==1)
+                @php
+                $match->idRound="0".$match->idRound
+                @endphp
+                @endif
+                <button id="{{str_replace(" ","",$match->idRound)}}_button" class="min-w-9 h-9 px-2 rounded-lg font-display text-xs font-extrabold bg-stone-100 dark:bg-stone-850 text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-800 hover:bg-[#f5c310] hover:text-black transition-all cursor-pointer leagueButton" onClick="leagueShow('{{str_replace(" ","",$match->idRound)}}')">
+                    {{$match->idRound}}
+                </button>
+                @endif
 
-            @endif
+                @php
+                $currentRound=$match->idRound;
+                $counter++;
+                @endphp
 
-            @php
-            $currentRound=$match->idRound;
-            $counter++;
-            @endphp
-
-            @endforeach
+                @endforeach
+            </div>
         </div>
 
         <div id="season0">
@@ -289,7 +303,6 @@
             @if ($currentRound!=$match->idRound)
         </div>
         <div id=league_{{str_replace(" ","",$match->idRound)}} class='leagueContainer @if ($counter!=1) hidden @endif'>
-            <div class='block rounded-t-xl my-2 text-neutral-700 font-bold hidden'>{{$match->seasonName}}</div>
             @endif
             @if(!$round)
             <script>showActualRound('{{$match->matchDate}}',{{ $currentRound}})</script>
@@ -302,10 +315,10 @@
             @endforeach
         </div>
        
-
         <div class="clear-both"></div>
     </div>
 </div>
+
 @if($round)
 <script>showActualRound('{{$match->matchDate}}',{{ $round}})</script>
 @endif

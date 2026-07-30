@@ -229,10 +229,10 @@
         <!-- Segona Mà (Darrers Anuncis) Slider -->
         <div class="mt-7">
             <div class="flex items-center justify-between pb-1 border-b border-stone-200 dark:border-stone-800 mb-3 px-0.5">
-                <h2 class="font-syne text-xs font-bold text-stone-800 dark:text-stone-200 uppercase tracking-wider">
+                <h2 class="font-display text-xs font-bold text-stone-800 dark:text-stone-200 uppercase tracking-wider">
                     SEGONA MÀ (ANUNCIS)
                 </h2>
-                <a href="/anuncis" class="font-mono text-[9px] font-bold text-[#f5c310] uppercase">Veure Tots →</a>
+                <a href="/anuncis" class="font-display text-[10px] font-bold text-[#f5c310] uppercase">Veure Tots →</a>
             </div>
             
             <div x-data="{ 
@@ -253,14 +253,14 @@
                             </div>
                             <div class="p-2.5 flex-grow flex flex-col justify-between text-xs">
                                 <div>
-                                    <span class="font-mono text-[8.5px] font-extrabold text-[#f5c310] uppercase tracking-wide block">
+                                    <span class="font-display text-[9px] font-extrabold text-[#f5c310] uppercase tracking-wide block">
                                         {{ $ad->marca->nom_marca ?? 'General' }}
                                     </span>
-                                    <h4 class="font-mono font-bold text-stone-800 dark:text-stone-200 truncate mt-0.5" title="{{ $ad->titol }}">
+                                    <h4 class="font-display font-bold text-stone-800 dark:text-stone-200 truncate mt-0.5" title="{{ $ad->titol }}">
                                         {{ $ad->titol }}
                                     </h4>
                                 </div>
-                                <div class="flex items-center justify-between mt-2 pt-1.5 border-t border-stone-200 dark:border-stone-800 font-mono">
+                                <div class="flex items-center justify-between mt-2 pt-1.5 border-t border-stone-200 dark:border-stone-800 font-display">
                                     <span class="font-extrabold text-stone-900 dark:text-white">
                                         {{ $ad->preu ? $ad->preu.' €' : 'Cons.' }}
                                     </span>
@@ -271,7 +271,7 @@
                             </div>
                         </a>
                     @empty
-                        <div class="font-mono text-xs text-stone-500 dark:text-stone-400 text-center py-8 w-full bg-white dark:bg-[#131419] border border-stone-200 dark:border-stone-800 rounded-xl">
+                        <div class="font-display text-xs text-stone-500 dark:text-stone-400 text-center py-8 w-full bg-white dark:bg-[#131419] border border-stone-200 dark:border-stone-800 rounded-xl">
                             No hi ha anuncis recents.
                         </div>
                     @endforelse
