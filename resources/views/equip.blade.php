@@ -2,34 +2,28 @@
 @section('title', $teamInfo[0]->teamName." :: JOK.cat ")
 @section('content')
 
-<!-- TEAM HERO HEADER (Ultra-Clean Apple Sports) -->
-<div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl p-5 md:p-6 mb-7 shadow-xs">
-    <div class="flex items-center gap-4">
-        <!-- Escut de l'Equip (Sense fons blanc en dark) -->
-        <a href="/club/{{$teamInfo[0]->idClub}}/{{urlencode($teamInfo[0]->clubName)}}" class="w-14 h-14 md:w-18 md:h-18 bg-white dark:bg-transparent rounded-2xl p-2 flex-shrink-0 flex items-center justify-center hover:scale-105 transition-transform">
-            <img class="max-w-full max-h-full object-contain" src="{{$teamInfo[0]->clubImage}}" alt="{{$teamInfo[0]->clubName}}" onerror="this.style.display='none'" />
-        </a>
-        
-        <!-- Detalls & Badges Enganxats -->
-        <div>
-            <!-- Fila de Badges enganxats -->
-            <div class="flex flex-wrap items-center gap-2 mb-1">
-                <a href="/club/{{$teamInfo[0]->idClub}}/{{urlencode($teamInfo[0]->clubName)}}" class="hallmark-stamp bg-stone-100 text-stone-700 border border-stone-200/80 dark:bg-stone-900 dark:text-stone-300 hover:text-stone-900 dark:hover:text-[#d4ff00] transition-colors">
+<!-- TEAM HEADER (Clean Unified Style) -->
+<div class="w-full mt-2 mb-6">
+    <div class="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-4">
+        <div class="flex items-center gap-3.5">
+            <a href="/club/{{$teamInfo[0]->idClub}}/{{urlencode($teamInfo[0]->clubName)}}" class="w-10 h-10 md:w-12 md:h-12 bg-white dark:bg-transparent rounded-xl p-1 flex-shrink-0 flex items-center justify-center hover:scale-105 transition-transform">
+                <img class="max-w-full max-h-full object-contain" src="{{$teamInfo[0]->clubImage}}" alt="{{$teamInfo[0]->clubName}}" onerror="this.style.display='none'" />
+            </a>
+            <div>
+                <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white font-display tracking-tight">
+                    {{App\Http\Controllers\TeamsController::teamFormat($teamInfo[0]->teamName)}}
+                </h1>
+                <a href="/club/{{$teamInfo[0]->idClub}}/{{urlencode($teamInfo[0]->clubName)}}" class="text-xs font-bold text-stone-500 dark:text-stone-400 hover:text-[#d4ff00] transition-colors">
                     {{$teamInfo[0]->clubName}}
                 </a>
-
-                <a href="/desa/equip/{{$teamInfo[0]->idTeam}}" title="{{ $checkIfSaved==1 ? 'Treu de favorits' : 'Desa als favorits' }}" class="hallmark-stamp inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#d4ff00] dark:hover:text-black transition-all text-[10px] font-black uppercase tracking-wider border border-stone-200/80 dark:border-stone-800">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="{{ $checkIfSaved==1 ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3 {{ $checkIfSaved==1 ? 'text-red-600' : 'text-stone-400' }}">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                    </svg>
-                    <span>{{ $checkIfSaved==1 ? 'Favorit' : 'Favorit' }}</span>
-                </a>
             </div>
-
-            <!-- Nom de l'Equip -->
-            <h1 class="font-['Comfortaa'] font-bold text-xl md:text-3xl text-stone-900 dark:text-white leading-tight">
-                {{App\Http\Controllers\TeamsController::teamFormat($teamInfo[0]->teamName)}}
-            </h1>
+        </div>
+        <div class="text-right">
+            <a href="/desa/equip/{{$teamInfo[0]->idTeam}}" title="{{ $checkIfSaved==1 ? 'Treu de favorits' : 'Desa als favorits' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="{{ $checkIfSaved==1 ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 cursor-pointer transition-colors hover:text-red-700 {{ $checkIfSaved==1 ? 'text-red-700' : 'text-stone-400' }}">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                </svg>
+            </a>
         </div>
     </div>
 </div>

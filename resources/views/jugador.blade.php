@@ -8,29 +8,25 @@
     $firstSeason = $seasons->first() ?? '';
 @endphp
 
-<!-- PLAYER HERO HEADER (Ultra-Clean Apple Sports) -->
-<div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl p-5 md:p-6 mb-7 shadow-xs">
-    <div class="flex items-center justify-between">
-        <div>
-            <!-- Badges enganxats -->
-            <div class="flex flex-wrap items-center gap-2 mb-1.5">
-                <a href="/desa/jugador/{{$playerInfo[0]->idPlayer}}" title="{{ $checkIfSaved==1 ? 'Treu de favorits' : 'Desa als favorits' }}" class="hallmark-stamp inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#d4ff00] dark:hover:text-black transition-all text-[10px] font-black uppercase tracking-wider border border-stone-200/80 dark:border-stone-800">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="{{ $checkIfSaved==1 ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3 {{ $checkIfSaved==1 ? 'text-red-600' : 'text-stone-400' }}">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                    </svg>
-                    <span>{{ $checkIfSaved==1 ? 'Favorit' : 'Favorit' }}</span>
-                </a>
-            </div>
-
-            <!-- Nom del Jugador -->
-            <h1 class="font-['Comfortaa'] font-bold text-2xl md:text-3xl text-stone-900 dark:text-white leading-tight capitalize flex items-center gap-3">
-                <span>{{ mb_strtolower($playerInfo[0]->playerName) }}</span>
-                @if(isset($playerInfo[0]->number))
-                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-900 text-white dark:bg-[#d4ff00] dark:text-black font-black text-xs md:text-sm shadow-xs">
-                        {{ $playerInfo[0]->number }}
-                    </span>
-                @endif
+<!-- PLAYER HEADER (Clean Unified Style) -->
+<div class="w-full mt-2 mb-6">
+    <div class="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-4">
+        <div class="flex items-center gap-3">
+            <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white font-display tracking-tight capitalize">
+                {{ mb_strtolower($playerInfo[0]->playerName) }}
             </h1>
+            @if(isset($playerInfo[0]->number))
+                <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-stone-900 text-white dark:bg-[#d4ff00] dark:text-black font-black text-xs shadow-xs">
+                    {{ $playerInfo[0]->number }}
+                </span>
+            @endif
+        </div>
+        <div class="text-right">
+            <a href="/desa/jugador/{{$playerInfo[0]->idPlayer}}" title="{{ $checkIfSaved==1 ? 'Treu de favorits' : 'Desa als favorits' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="{{ $checkIfSaved==1 ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 cursor-pointer transition-colors hover:text-red-700 {{ $checkIfSaved==1 ? 'text-red-700' : 'text-stone-400' }}">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                </svg>
+            </a>
         </div>
     </div>
 </div>
@@ -114,8 +110,19 @@
                                         </td>
                                         <td class="py-3 px-2 text-center font-black">
                                             @if($stats->total_goals > 0)
-                                                <span class="inline-flex items-center gap-1 bg-[#d4ff00] text-black px-2 py-0.5 rounded-full text-[11px] font-black shadow-xs">
-                                                    {{ $stats->total_goals }} ⚽
+                                                <span class="inline-flex items-center gap-1.5 bg-[#d4ff00] text-black px-2.5 py-0.5 rounded-full text-[11px] font-black shadow-xs">
+                                                    {{ $stats->total_goals }}
+                                                    <svg class="w-3.5 h-3.5 inline-block drop-shadow-xs flex-shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" title="Bola d'Hoquei">
+                                                        <defs>
+                                                            <radialGradient id="hockeyBallGrad_{{$stats->seasonName}}" cx="35%" cy="35%" r="65%">
+                                                                <stop offset="0%" stop-color="#a1a1aa" />
+                                                                <stop offset="35%" stop-color="#3f3f46" />
+                                                                <stop offset="85%" stop-color="#09090b" />
+                                                                <stop offset="100%" stop-color="#000000" />
+                                                            </radialGradient>
+                                                        </defs>
+                                                        <circle cx="12" cy="12" r="10" fill="url(#hockeyBallGrad_{{$stats->seasonName}})" stroke="#18181b" stroke-width="1"/>
+                                                    </svg>
                                                 </span>
                                             @else
                                                 <span class="text-stone-400 font-bold">0</span>

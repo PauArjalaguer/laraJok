@@ -45,6 +45,10 @@
         
         const activeContainer = document.getElementById("league_" + league);
         const activeBtn = document.getElementById(league + "_button");
+        const mobileSelect = document.getElementById("mobileRoundSelect");
+        if (mobileSelect) {
+            mobileSelect.value = league;
+        }
         
         if (activeContainer) {
             activeContainer.style.display = "block";
@@ -246,7 +250,17 @@
             @if(count($maxGoalsPerLeague) > 0)
             <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800 rounded-2xl p-4 shadow-xs">
                 <div class="flex items-center gap-2 mb-3 pb-2 border-b border-stone-100 dark:border-stone-800">
-                    <i class="fa-solid fa-futbol text-[#d4ff00]"></i>
+                    <svg class="w-4 h-4 inline-block drop-shadow-xs flex-shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" title="Bola d'Hoquei">
+                        <defs>
+                            <radialGradient id="hockeyBallGradHeader" cx="35%" cy="35%" r="65%">
+                                <stop offset="0%" stop-color="#a1a1aa" />
+                                <stop offset="35%" stop-color="#3f3f46" />
+                                <stop offset="85%" stop-color="#09090b" />
+                                <stop offset="100%" stop-color="#000000" />
+                            </radialGradient>
+                        </defs>
+                        <circle cx="12" cy="12" r="10" fill="url(#hockeyBallGradHeader)" stroke="#18181b" stroke-width="1"/>
+                    </svg>
                     <span class="text-xs font-black text-stone-900 dark:text-white uppercase tracking-wider">MÀXIMS GOLEJADORS DE LA LLIGA</span>
                 </div>
                 <div class="space-y-2">
@@ -275,25 +289,56 @@
     <!-- COLUMN 2: JORNADES I PARTITS -->
     <div id="matchesSection" class='{{ count($classification)>0  ? "col-span-1 lg:col-span-1 transition-all duration-300" : "col-span-1 lg:col-span-2" }}'>
         <div class="mb-4">
-            <h3 class="font-display font-black text-sm uppercase tracking-wider text-stone-900 dark:text-white mb-3">
+            <h3 class="hidden md:block font-display font-black text-sm uppercase tracking-wider text-stone-900 dark:text-white mb-3">
                 Jornades
             </h3>
-            <div class='flex justify-start flex-wrap gap-1.5'>
-                @php
-                $currentRound = 0;
-                $counter = 0;
-                $hasActiveRoundMatch = false;
-                if ($targetRoundId) {
-                    foreach ($matchesList as $mCheck) {
-                        $cleanCheck = str_replace(" ", "", $mCheck->idRound);
-                        if (strlen($cleanCheck) == 1) { $cleanCheck = "0" . $cleanCheck; }
-                        if ($cleanCheck === $targetRoundId) {
-                            $hasActiveRoundMatch = true;
-                            break;
-                        }
+            @php
+            $currentRound = 0;
+            $counter = 0;
+            $hasActiveRoundMatch = false;
+            if ($targetRoundId) {
+                foreach ($matchesList as $mCheck) {
+                    $cleanCheck = str_replace(" ", "", $mCheck->idRound);
+                    if (strlen($cleanCheck) == 1) { $cleanCheck = "0" . $cleanCheck; }
+                    if ($cleanCheck === $targetRoundId) {
+                        $hasActiveRoundMatch = true;
+                        break;
                     }
                 }
-                @endphp
+            }
+            @endphp
+
+            <!-- Mobile Round Selector (md:hidden) -->
+            <div class="block md:hidden mb-3 font-display">
+                <div class="relative">
+                    <select id="mobileRoundSelect" onchange="leagueShow(this.value)" class="w-full appearance-none bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-white text-xs font-black py-2.5 pl-4 pr-10 rounded-full focus:outline-none focus:border-[#d4ff00] transition-all shadow-xs cursor-pointer">
+                        @php
+                        $uniqueRounds = [];
+                        foreach($matchesList as $mItem) {
+                            $rVal = $mItem->idRound;
+                            if (!in_array($rVal, $uniqueRounds)) {
+                                $uniqueRounds[] = $rVal;
+                            }
+                        }
+                        @endphp
+                        @foreach($uniqueRounds as $rVal)
+                            @php
+                            $rClean = strlen($rVal) == 1 ? '0'.$rVal : str_replace(' ', '', $rVal);
+                            $isSelected = $hasActiveRoundMatch ? ($rClean === $targetRoundId) : false;
+                            @endphp
+                            <option value="{{ $rClean }}" {{ $isSelected ? 'selected' : '' }}>
+                                Jornada {{ $rVal }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-stone-500 dark:text-stone-400">
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Desktop Round Buttons (hidden md:flex) -->
+            <div class='hidden md:flex justify-start flex-wrap gap-1.5'>
                 @foreach($matchesList as $match)
                     @php
                     $btnRound = $match->idRound;
