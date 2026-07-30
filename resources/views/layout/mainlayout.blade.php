@@ -28,12 +28,10 @@
     @vite('resources/css/app.css')
     <title>@yield('title')</title>
     <link rel="manifest" href="/manifest.json">
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+    <!-- Fonts (Plus Jakarta Sans & Inter per a disseny ultra-modern i Comfortaa per al logo) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -145,14 +143,32 @@
             from { opacity: 1; transform: scale(1); }
             to   { opacity: 0; transform: scale(1.04); }
         }
-        @keyframes vt-hero-in {
-            from { opacity: 0; transform: scale(0.96); }
-            to   { opacity: 1; transform: scale(1); }
+        /* ── Hallmark Modern Utility Classes ── */
+        .font-display { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
+        .font-syne { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
+        .font-mono-score { font-family: 'JetBrains Mono', monospace; }
+        
+        .hallmark-stamp {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.2rem 0.55rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            border-radius: 6px;
+        }
+        .hallmark-grid-bg {
+            background-image: radial-gradient(rgba(245, 195, 16, 0.15) 1.5px, transparent 1.5px);
+            background-size: 16px 16px;
         }
         </style>
 </head>
 
-<body class="antialiased bg-white text-stone-900 dark:bg-[#121214] dark:text-neutral-100 transition-colors duration-300 min-h-screen">
+<body class="antialiased bg-white text-stone-900 dark:bg-[#0b0c10] dark:text-stone-100 font-display transition-colors duration-300 min-h-screen">
+
+
 
     <div class="relative">
         <div id="sidebar" class="fixed left-0 top-0 w-[65%] sm:w-[50%] md:w-[35%] h-full bg-white text-stone-800 border-r border-stone-200 dark:bg-neutral-900 dark:text-neutral-100 dark:border-neutral-800 z-50 -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl">

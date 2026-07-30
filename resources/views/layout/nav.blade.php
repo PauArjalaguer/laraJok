@@ -4,41 +4,41 @@
         echo "<div class='mt-20'>&nbsp;</div>";
     }
 @endphp
-<nav class="flex items-center justify-between py-4 border-b border-stone-200/60 dark:border-neutral-800/60 mb-6 bg-transparent">
-    <!-- Logo -->
+<nav class="flex items-center justify-between py-4 border-b border-stone-200 dark:border-stone-800/80 mb-6 bg-transparent">
+    <!-- Logo Original (Comfortaa) -->
     <div class="flex items-center">
         <a href="/" class="webtitle font-['Comfortaa'] font-bold text-2xl md:text-3xl tracking-tight text-stone-900 dark:text-white flex items-center gap-0.5">
             JOK.cat
         </a>
     </div>
 
-    <!-- Center Navigation Links -->
+    <!-- Center Navigation Links (Modern Clean Style) -->
     <div class="hidden lg:flex items-center gap-6">
-        <ul class="flex items-center gap-6 text-stone-700 dark:text-neutral-300 font-semibold text-sm">
+        <ul class="flex items-center gap-6 font-display text-sm font-semibold text-stone-700 dark:text-stone-300">
             <li>
-                <a href="/competicions" class="py-1.5 hover:text-[#f5c310] transition-colors {{ request()->is('competicions*') ? 'border-b-2 border-[#f5c310] text-[#f5c310] dark:text-white' : '' }}">
+                <a href="/competicions" class="py-1.5 hover:text-[#f5c310] transition-colors {{ request()->is('competicions*') ? 'border-b-2 border-[#f5c310] text-[#f5c310] dark:text-[#f5c310]' : '' }}">
                     Competicions
                 </a>
             </li>
             <li>
-                <a href="/noticies" class="py-1.5 hover:text-[#f5c310] transition-colors {{ request()->is('noticies*') ? 'border-b-2 border-[#f5c310] text-[#f5c310] dark:text-white' : '' }}">
+                <a href="/noticies" class="py-1.5 hover:text-[#f5c310] transition-colors {{ request()->is('noticies*') ? 'border-b-2 border-[#f5c310] text-[#f5c310] dark:text-[#f5c310]' : '' }}">
                     Notícies
                 </a>
             </li>
             <li>
-                <a href="/pavellons" class="py-1.5 hover:text-[#f5c310] transition-colors {{ request()->is('pavellons*') ? 'border-b-2 border-[#f5c310] text-[#f5c310] dark:text-white' : '' }}">
+                <a href="/pavellons" class="py-1.5 hover:text-[#f5c310] transition-colors {{ request()->is('pavellons*') ? 'border-b-2 border-[#f5c310] text-[#f5c310] dark:text-[#f5c310]' : '' }}">
                     Pavellons
                 </a>
             </li>
             <li>
-                <a href="/agenda" class="py-1.5 hover:text-[#f5c310] transition-colors {{ request()->is('agenda*') || request()->is('/') ? 'border-b-2 border-[#f5c310] text-[#f5c310] dark:text-white' : '' }}">
+                <a href="/agenda" class="py-1.5 hover:text-[#f5c310] transition-colors {{ request()->is('agenda*') || request()->is('/') ? 'border-b-2 border-[#f5c310] text-[#f5c310] dark:text-[#f5c310]' : '' }}">
                     Agenda
                 </a>
             </li>
             <li>
-                <a href="/anuncis" class="py-1.5 hover:text-[#f5c310] transition-colors {{ request()->is('anuncis*') ? 'border-b-2 border-[#f5c310] text-[#f5c310] dark:text-white' : '' }} flex items-center gap-1">
+                <a href="/anuncis" class="py-1.5 hover:text-[#f5c310] transition-colors {{ request()->is('anuncis*') ? 'border-b-2 border-[#f5c310] text-[#f5c310] dark:text-[#f5c310]' : '' }} flex items-center gap-1.5">
                     Segona Mà
-                    <span class="bg-[#f5c310] text-stone-950 dark:bg-amber-450 dark:text-stone-950 text-[10px] font-black px-1.5 py-0.5 rounded-full">Nou</span>
+                    <span class="bg-[#f5c310] text-black text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase">Nou</span>
                 </a>
             </li>
         </ul>
@@ -46,38 +46,38 @@
 
     <!-- Right Actions -->
     <div class="flex items-center gap-2 md:gap-4">
-        <!-- Search Button/Bar -->
-        <div class="relative flex items-center bg-stone-100 dark:bg-neutral-800 border border-stone-200 dark:border-neutral-700/60 rounded-xl px-3 py-1.5 w-32 md:w-48 transition-all">
-            <input type="text" placeholder="Cerca..." class="w-full bg-transparent border-0 p-0 text-xs md:text-sm text-stone-800 dark:text-neutral-100 placeholder-stone-400 dark:placeholder-neutral-500 focus:ring-0 focus:outline-none" onKeyUp="search(this.value)" />
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-stone-400 dark:text-neutral-500 ml-1">
+        <!-- Search Bar -->
+        <div class="relative flex items-center bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl px-3 py-1.5 w-32 md:w-48 transition-all focus-within:border-[#f5c310]">
+            <input type="text" placeholder="Cerca..." class="w-full bg-transparent border-0 p-0 text-xs md:text-sm text-stone-800 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:ring-0 focus:outline-none" onKeyUp="search(this.value)" />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-stone-400 dark:text-stone-500 ml-1">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
         </div>
 
-        <!-- App Store Download Button (mockup style) -->
-        <a href="https://apps.apple.com/ca/app/jok/id6743651881" target="_blank" class="hidden sm:inline-block px-4 py-1.5 rounded-lg text-xs md:text-sm font-bold bg-[#f5c310] text-stone-950 border border-transparent hover:bg-[#e5b50e] dark:bg-transparent dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-neutral-800 transition-all">
-            Descarrega l'App
+        <!-- App Store Download Button -->
+        <a href="https://apps.apple.com/ca/app/jok/id6743651881" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg font-bold text-xs md:text-sm bg-[#f5c310] text-black hover:bg-amber-400 transition-all shadow-sm">
+            <i class="fa-brands fa-apple text-sm"></i> Descarrega l'App
         </a>
 
         <!-- Login / User Action -->
         @if (!Auth::check())
-            <a href="/login" class="text-xs md:text-sm font-bold text-stone-700 dark:text-neutral-300 hover:text-[#f5c310] transition-colors">
-                Login / Registre
+            <a href="/login" class="text-xs md:text-sm font-bold text-stone-700 dark:text-stone-300 hover:text-[#f5c310] transition-colors">
+                Login
             </a>
         @else
-            <a href="/dashboard" class="text-xs md:text-sm font-bold text-stone-700 dark:text-neutral-300 hover:text-[#f5c310] transition-colors">
+            <a href="/dashboard" class="text-xs md:text-sm font-bold text-stone-700 dark:text-stone-300 hover:text-[#f5c310] transition-colors">
                 {{ Auth::user()->name }}
             </a>
         @endif
 
         <!-- Theme Toggler -->
-        <button onClick="toggleTheme()" class="p-2 rounded-xl text-stone-600 dark:text-neutral-400 hover:bg-stone-200/50 dark:hover:bg-neutral-850 transition-colors focus:outline-none" aria-label="Toggle theme">
+        <button onClick="toggleTheme()" class="p-2 rounded-xl text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-900 transition-colors focus:outline-none" aria-label="Toggle theme">
             <i class="fa-solid fa-sun dark:hidden text-lg"></i>
             <i class="fa-solid fa-moon hidden dark:block text-lg text-[#f5c310]"></i>
         </button>
 
         <!-- Mobile Menu Toggle -->
-        <button onClick="toggleMenu()" class="p-2 inline lg:hidden text-stone-700 dark:text-neutral-300 hover:bg-stone-200/50 dark:hover:bg-neutral-800 rounded-xl" id="menuButton">
+        <button onClick="toggleMenu()" class="p-2 inline lg:hidden text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-xl" id="menuButton">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
