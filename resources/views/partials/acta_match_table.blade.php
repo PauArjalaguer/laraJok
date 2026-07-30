@@ -4,7 +4,7 @@
     <div class="w-full">
         <div class="bg-stone-950 dark:bg-[#121215] w-full border border-stone-800 rounded-t-2xl overflow-hidden text-white text-xs font-black uppercase tracking-wider flex items-center p-3 shadow-xs">
             <div class="w-7/12 text-left">Jugador (Local)</div>
-            <div class='w-1/12 text-center text-[#d4ff00] font-black'>G</div>
+            <div class='w-1/12 text-center text-stone-900 dark:text-white font-black'>G</div>
             <div class='w-1/12 text-center text-stone-300'>B</div>
             <div class='w-1/12 text-center text-stone-300'>V</div>
             <div class='w-1/12 text-center text-stone-300'>FD</div>
@@ -19,13 +19,13 @@
             <div class='p-2.5 md:p-3 w-7/12 border-r border-stone-100 dark:border-stone-850 text-left font-extrabold truncate flex items-center gap-1.5'>
                 <!-- Dorsal Badge -->
                 @if(isset($dorsal) && $dorsal !== '')
-                <span class="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded-full bg-stone-900 text-white dark:bg-black dark:text-[#d4ff00] font-black text-[10px] flex-shrink-0" title="Dorsal {{ $dorsal }}">
+                <span class="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded-full bg-[#ffcc00] text-black dark:bg-black dark:text-white font-black text-[10px] flex-shrink-0" title="Dorsal {{ $dorsal }}">
                     {{ $dorsal }}
                 </span>
                 @endif
                 <!-- Captain Badge -->
                 @if(isset($m->captain) && $m->captain==1)
-                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#d4ff00] text-black font-black text-[10px] flex-shrink-0" title="Capità">
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-[10px] flex-shrink-0" title="Capità">
                     C
                 </span>
                 @endif
@@ -35,11 +35,11 @@
                     P
                 </span>
                 @endif
-                <a class="hover:text-[#d4ff00] transition-colors truncate" href="/jugador/{{$m->idPlayer}}/{{urlencode($m->playerName)}}">
+                <a class="hover:text-stone-900 dark:hover:text-white transition-colors truncate" href="/jugador/{{$m->idPlayer}}/{{urlencode($m->playerName)}}">
                     {{App\Http\Controllers\TeamsController::teamFormat($m->playerName)}}
                 </a>
             </div>
-            <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-black {{ $m->goals > 0 ? 'text-[#d4ff00] bg-stone-900 dark:bg-black' : 'text-stone-700 dark:text-stone-300' }}">{{$m->goals}}</div>
+            <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-black {{ $m->goals > 0 ? 'text-stone-900 dark:text-white bg-stone-900 dark:bg-black' : 'text-stone-700 dark:text-stone-300' }}">{{$m->goals}}</div>
             <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-bold text-stone-600 dark:text-stone-400">{{$m->blue}}</div>
             <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-bold text-stone-600 dark:text-stone-400">{{$m->red}}</div>
             <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center text-stone-500 dark:text-stone-400">{{$m->directes}}</div>
@@ -53,7 +53,7 @@
     <div class="w-full">
         <div class="bg-stone-950 dark:bg-[#121215] w-full border border-stone-800 rounded-t-2xl overflow-hidden text-white text-xs font-black uppercase tracking-wider flex items-center p-3 shadow-xs">
             <div class="w-7/12 text-left">Jugador (Visitant)</div>
-            <div class="w-1/12 text-center text-[#d4ff00] font-black">G</div>
+            <div class="w-1/12 text-center text-stone-900 dark:text-white font-black">G</div>
             <div class="w-1/12 text-center text-stone-300">B</div>
             <div class="w-1/12 text-center text-stone-300">V</div>
             <div class="w-1/12 text-center text-stone-300">FD</div>
@@ -68,13 +68,13 @@
             <div class="p-2.5 md:p-3 w-7/12 border-r border-stone-100 dark:border-stone-850 text-left font-extrabold truncate flex items-center gap-1.5">
                 <!-- Dorsal Badge -->
                 @if(isset($dorsal) && $dorsal !== '')
-                <span class="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded-full bg-stone-900 text-white dark:bg-black dark:text-[#d4ff00] font-black text-[10px] flex-shrink-0" title="Dorsal {{ $dorsal }}">
+                <span class="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded-full bg-[#ffcc00] text-black dark:bg-black dark:text-white font-black text-[10px] flex-shrink-0" title="Dorsal {{ $dorsal }}">
                     {{ $dorsal }}
                 </span>
                 @endif
                 <!-- Captain Badge -->
                 @if(isset($m->captain) && $m->captain==1)
-                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#d4ff00] text-black font-black text-[10px] flex-shrink-0" title="Capità">
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-[10px] flex-shrink-0" title="Capità">
                     C
                 </span>
                 @endif
@@ -84,11 +84,11 @@
                     P
                 </span>
                 @endif
-                <a class="hover:text-[#d4ff00] transition-colors truncate" href="/jugador/{{$m->idPlayer}}/{{urlencode($m->playerName)}}">
+                <a class="hover:text-stone-900 dark:hover:text-white transition-colors truncate" href="/jugador/{{$m->idPlayer}}/{{urlencode($m->playerName)}}">
                     {{App\Http\Controllers\TeamsController::teamFormat($m->playerName)}}
                 </a>
             </div>
-            <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-black {{ $m->goals > 0 ? 'text-[#d4ff00] bg-stone-900 dark:bg-black' : 'text-stone-700 dark:text-stone-300' }}">{{$m->goals}}</div>
+            <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-black {{ $m->goals > 0 ? 'text-stone-900 dark:text-white bg-stone-900 dark:bg-black' : 'text-stone-700 dark:text-stone-300' }}">{{$m->goals}}</div>
             <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-bold text-stone-600 dark:text-stone-400">{{$m->blue}}</div>
             <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-bold text-stone-600 dark:text-stone-400">{{$m->red}}</div>
             <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center text-stone-500 dark:text-stone-400">{{$m->directes}}</div>

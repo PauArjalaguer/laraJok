@@ -18,7 +18,7 @@ $totalFotos = $fotos->count();
 <!-- BACK BUTTON & BREADCRUMB -->
 <div class="w-full mt-2 mb-6 font-display">
     <div class="flex flex-wrap items-center justify-between gap-3 border-b border-stone-200 dark:border-stone-800 pb-4">
-        <a href="{{ route('anuncis.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 dark:bg-stone-900 hover:bg-[#d4ff00] hover:text-black dark:hover:bg-[#d4ff00] dark:hover:text-black text-stone-700 dark:text-stone-300 font-display text-xs font-black rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
+        <a href="{{ route('anuncis.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 dark:bg-stone-900 hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black text-stone-700 dark:text-stone-300 font-display text-xs font-black rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
             <i class="fa-solid fa-arrow-left text-[10px] group-hover:-translate-x-0.5 transition-transform"></i>
             <span>Tornar als anuncis</span>
         </a>
@@ -52,17 +52,17 @@ $totalFotos = $fotos->count();
             <!-- Counter Badge -->
             @if($totalFotos > 1)
             <div class="absolute bottom-4 right-4 z-10 bg-black/70 text-white font-black text-xs px-3 py-1 rounded-full flex items-center gap-1.5 backdrop-blur-xs shadow-md">
-                <i class="fa-solid fa-camera text-[10px] text-[#d4ff00]"></i>
+                <i class="fa-solid fa-camera text-[10px] text-stone-900 dark:text-white"></i>
                 <span id="photoCounter">1</span>/{{ $totalFotos }}
             </div>
             @endif
 
             <!-- Navigation Arrows -->
             @if($totalFotos > 1)
-            <button id="prevBtn" onclick="changePhoto(-1)" class="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 dark:bg-stone-900/90 shadow-md flex items-center justify-center text-stone-900 dark:text-white hover:bg-[#d4ff00] hover:text-black dark:hover:bg-[#d4ff00] dark:hover:text-black transition-all">
+            <button id="prevBtn" onclick="changePhoto(-1)" class="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 dark:bg-stone-900/90 shadow-md flex items-center justify-center text-stone-900 dark:text-white hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black transition-all">
                 <i class="fa-solid fa-chevron-left text-xs"></i>
             </button>
-            <button id="nextBtn" onclick="changePhoto(1)" class="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 dark:bg-stone-900/90 shadow-md flex items-center justify-center text-stone-900 dark:text-white hover:bg-[#d4ff00] hover:text-black dark:hover:bg-[#d4ff00] dark:hover:text-black transition-all">
+            <button id="nextBtn" onclick="changePhoto(1)" class="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 dark:bg-stone-900/90 shadow-md flex items-center justify-center text-stone-900 dark:text-white hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black transition-all">
                 <i class="fa-solid fa-chevron-right text-xs"></i>
             </button>
             @endif
@@ -72,7 +72,7 @@ $totalFotos = $fotos->count();
         @if($totalFotos > 1)
         <div class="flex gap-2.5 overflow-x-auto pb-2 scrollbar-hide">
             @foreach($fotos as $i => $foto)
-            <button onclick="selectPhoto({{ $i }})" id="thumb-{{ $i }}" class="thumb-btn flex-none w-16 h-16 md:w-20 md:h-20 rounded-2xl overflow-hidden border-2 transition-all duration-200 {{ $i === 0 ? 'border-[#d4ff00]' : 'border-transparent opacity-60 hover:opacity-100' }}">
+            <button onclick="selectPhoto({{ $i }})" id="thumb-{{ $i }}" class="thumb-btn flex-none w-16 h-16 md:w-20 md:h-20 rounded-2xl overflow-hidden border-2 transition-all duration-200 {{ $i === 0 ? 'border-[#1c1917]' : 'border-transparent opacity-60 hover:opacity-100' }}">
                 <img src="{{ $foto->foto_ruta }}" alt="Foto {{ $i+1 }}" class="w-full h-full object-cover"/>
             </button>
             @endforeach
@@ -126,12 +126,12 @@ $totalFotos = $fotos->count();
             <!-- CTA Buttons -->
             <div class="flex flex-col gap-3 mb-6">
                 @auth
-                    <button type="button" onclick="showContactModal()" class="w-full flex items-center justify-center gap-2 py-3.5 rounded-full bg-[#d4ff00] hover:bg-lime-400 text-black font-black text-xs uppercase tracking-wider transition-all shadow-xs active:scale-[0.98]">
+                    <button type="button" onclick="showContactModal()" class="w-full flex items-center justify-center gap-2 py-3.5 rounded-full bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:bg-amber-400 dark:hover:bg-stone-700 text-black font-black text-xs uppercase tracking-wider transition-all shadow-xs active:scale-[0.98]">
                         <i class="fa-solid fa-envelope"></i>
                         <span>Contactar amb el venedor</span>
                     </button>
                 @else
-                    <a href="{{ route('login') }}?redirect_url={{ urlencode(request()->fullUrl()) }}" class="w-full flex items-center justify-center gap-2 py-3.5 rounded-full bg-[#d4ff00] hover:bg-lime-400 text-black font-black text-xs uppercase tracking-wider transition-all shadow-xs active:scale-[0.98]">
+                    <a href="{{ route('login') }}?redirect_url={{ urlencode(request()->fullUrl()) }}" class="w-full flex items-center justify-center gap-2 py-3.5 rounded-full bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:bg-amber-400 dark:hover:bg-stone-700 text-black font-black text-xs uppercase tracking-wider transition-all shadow-xs active:scale-[0.98]">
                         <i class="fa-solid fa-envelope"></i>
                         <span>Contactar amb el venedor</span>
                     </a>
@@ -143,7 +143,7 @@ $totalFotos = $fotos->count();
                 </div>
                 @endif
 
-                <button onclick="shareAnunci()" class="w-full flex items-center justify-center gap-2 py-3 rounded-full border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-black text-xs uppercase tracking-wider hover:border-[#d4ff00] transition-all shadow-xs">
+                <button onclick="shareAnunci()" class="w-full flex items-center justify-center gap-2 py-3 rounded-full border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-black text-xs uppercase tracking-wider hover:border-[#ffcc00] dark:hover:border-stone-600 transition-all shadow-xs">
                     <i class="fa-solid fa-share-nodes text-xs"></i>
                     <span>Compartir anunci</span>
                 </button>
@@ -152,7 +152,7 @@ $totalFotos = $fotos->count();
             <!-- Seller Card -->
             @if($anunci->usuari)
             <div class="flex items-center gap-3.5 p-4 rounded-3xl bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 shadow-xs mb-5">
-                <div class="w-10 h-10 rounded-full bg-stone-900 text-[#d4ff00] dark:bg-black font-black flex items-center justify-center flex-none text-sm">
+                <div class="w-10 h-10 rounded-full bg-stone-900 text-stone-900 dark:text-white dark:bg-black font-black flex items-center justify-center flex-none text-sm">
                     <i class="fa-solid fa-user"></i>
                 </div>
                 <div class="min-w-0 flex-1">
@@ -189,14 +189,14 @@ $totalFotos = $fotos->count();
         <h2 class="text-lg font-black text-stone-900 dark:text-white tracking-tight">
             Més {{ $anunci->tipus->nom_tipus }} de Segona Mà
         </h2>
-        <a href="{{ route('anuncis.index', ['tipus' => [$anunci->id_tipus]]) }}" class="text-xs font-black text-stone-600 dark:text-stone-400 hover:text-[#d4ff00] transition-colors flex items-center gap-1">
+        <a href="{{ route('anuncis.index', ['tipus' => [$anunci->id_tipus]]) }}" class="text-xs font-black text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white transition-colors flex items-center gap-1">
             <span>Veure tots</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
         </a>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
         @foreach($relacionats as $rel)
-        <a href="{{ route('anuncis.show', $rel->id) }}" class="group bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl overflow-hidden shadow-xs hover:border-[#d4ff00] transition-all flex flex-col justify-between">
+        <a href="{{ route('anuncis.show', $rel->id) }}" class="group bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl overflow-hidden shadow-xs hover:border-[#ffcc00] dark:hover:border-stone-600 transition-all flex flex-col justify-between">
             <div class="relative aspect-[4/3] w-full overflow-hidden bg-stone-100 dark:bg-stone-900">
                 <img src="{{ $rel->fotos->first()?->foto_ruta ?? 'https://picsum.photos/seed/'.$rel->id.'/400/300' }}" alt="{{ $rel->titol }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                 <span class="absolute top-3 right-3 bg-white/90 dark:bg-stone-900/90 text-stone-900 dark:text-stone-100 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full border border-stone-200/80 dark:border-stone-800 backdrop-blur-xs">
@@ -206,7 +206,7 @@ $totalFotos = $fotos->count();
             <div class="p-4 flex flex-col flex-1 justify-between">
                 <div>
                     <p class="text-[10px] text-stone-400 dark:text-stone-500 font-extrabold uppercase tracking-wider mb-1">{{ $rel->marca->nom_marca }}</p>
-                    <h4 class="text-xs font-black text-stone-900 dark:text-white leading-snug group-hover:text-[#d4ff00] transition-colors line-clamp-2">{{ $rel->titol }}</h4>
+                    <h4 class="text-xs font-black text-stone-900 dark:text-white leading-snug group-hover:text-stone-900 dark:hover:text-white transition-colors line-clamp-2">{{ $rel->titol }}</h4>
                 </div>
                 <div class="mt-3 pt-2 border-t border-stone-100 dark:border-stone-800/60 flex items-center justify-between">
                     @if($rel->preu)
@@ -227,7 +227,7 @@ $totalFotos = $fotos->count();
 <div id="contact-modal" class="fixed inset-0 bg-black/70 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 font-display">
     <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800 rounded-3xl max-w-sm w-full p-6 md:p-8 shadow-2xl">
         <div class="text-center mb-5">
-            <div class="w-12 h-12 rounded-full bg-[#d4ff00] text-black font-black flex items-center justify-center mx-auto mb-3 text-lg">
+            <div class="w-12 h-12 rounded-full bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black flex items-center justify-center mx-auto mb-3 text-lg">
                 <i class="fa-solid fa-paper-plane"></i>
             </div>
             <h3 class="text-lg font-black text-stone-900 dark:text-white">Contactar amb el venedor</h3>
@@ -236,12 +236,12 @@ $totalFotos = $fotos->count();
             <strong>Important:</strong> S'enviaran les teves dades de contacte (<strong>{{ auth()->user()->email ?? '' }}</strong>) per correu al venedor.
         </p>
         <div class="flex gap-3">
-            <button onclick="closeContactModal()" class="flex-1 px-4 py-2.5 border border-stone-200 dark:border-stone-800 rounded-full text-stone-700 dark:text-stone-300 font-extrabold text-xs hover:bg-stone-100 dark:hover:bg-stone-900 transition-colors">
+            <button onclick="closeContactModal()" class="flex-1 px-4 py-2.5 border border-stone-200 dark:border-stone-800 rounded-full text-stone-700 dark:text-stone-300 font-extrabold text-xs hover:bg-stone-100 dark:hover:bg-[#ffcc00] transition-colors">
                 Cancel·lar
             </button>
             <form action="{{ route('anuncis.contact', $anunci->id) }}" method="POST" class="flex-1">
                 @csrf
-                <button type="submit" class="w-full px-4 py-2.5 bg-[#d4ff00] text-black font-black rounded-full text-xs hover:bg-lime-400 transition-colors uppercase tracking-wider">
+                <button type="submit" class="w-full px-4 py-2.5 bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black rounded-full text-xs hover:bg-amber-400 dark:hover:bg-stone-700 transition-colors uppercase tracking-wider">
                     Enviar
                 </button>
             </form>
@@ -263,7 +263,7 @@ function selectPhoto(idx) {
         const counter = document.getElementById('photoCounter');
         if (counter) counter.textContent = idx + 1;
         document.querySelectorAll('.thumb-btn').forEach((btn, i) => {
-            btn.classList.toggle('border-[#d4ff00]', i === idx);
+            btn.classList.toggle('border-[#1c1917]', i === idx);
             btn.classList.toggle('opacity-60', i !== idx);
             btn.classList.toggle('border-transparent', i !== idx);
         });

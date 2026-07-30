@@ -6,7 +6,7 @@
     <div class="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-4">
         <div>
             <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white font-display flex items-center gap-2 tracking-tight">
-                <i class="fa-solid fa-user-shield text-[#d4ff00] text-xl md:text-2xl"></i>
+                <i class="fa-solid fa-user-shield text-stone-900 dark:text-white text-xl md:text-2xl"></i>
                 {{ App\Http\Controllers\TeamsController::teamFormat($refereeName) }}
             </h1>
         </div>

@@ -19,7 +19,7 @@
             <span class="hallmark-stamp bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800">
                 {{ $anuncis->total() }} {{ $anuncis->total() == 1 ? 'ANUNCI' : 'ANUNCIS' }}
             </span>
-            <a href="{{ route('dashboard.anuncis.new') }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#d4ff00] hover:bg-lime-400 text-black font-black text-xs uppercase tracking-wider rounded-full transition-all shadow-xs active:scale-95">
+            <a href="{{ route('dashboard.anuncis.new') }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:bg-amber-400 dark:hover:bg-stone-700 text-black font-black text-xs uppercase tracking-wider rounded-full transition-all shadow-xs active:scale-95">
                 <i class="fa-solid fa-plus text-xs"></i>
                 <span>Publica el teu Anunci</span>
             </a>
@@ -35,7 +35,7 @@
     <!-- Search Input -->
     <div class="relative w-full mb-4">
         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
-        <input type="text" name="cerca" id="cerca" value="{{ request('cerca') }}" placeholder="Cerca per títol, descripció o marca..." class="w-full pl-9 pr-10 py-2.5 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-900 dark:text-white border border-stone-200 dark:border-stone-800 focus:outline-none focus:border-[#d4ff00] dark:focus:border-[#d4ff00] text-xs font-medium shadow-xs transition-colors" />
+        <input type="text" name="cerca" id="cerca" value="{{ request('cerca') }}" placeholder="Cerca per títol, descripció o marca..." class="w-full pl-9 pr-10 py-2.5 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-900 dark:text-white border border-stone-200 dark:border-stone-800 focus:outline-none focus:border-[#1c1917] dark:focus:border-[#1c1917] text-xs font-medium shadow-xs transition-colors" />
         @if(request('cerca'))
             <button type="button" onclick="clearField('cerca');submitForm();" class="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 dark:hover:text-white">
                 <i class="fa-solid fa-xmark text-xs"></i>
@@ -162,12 +162,12 @@
         <!-- Proximity Button -->
         <div>
             @if($proximitatActiva)
-            <a href="{{ route('anuncis.index', request()->except(['lat','lng'])) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black rounded-full border border-[#d4ff00]/40 bg-stone-900 text-[#d4ff00] dark:bg-black transition shadow-xs">
+            <a href="{{ route('anuncis.index', request()->except(['lat','lng'])) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black rounded-full border border-[#1c1917]/40 bg-stone-900 text-stone-900 dark:text-white dark:bg-black transition shadow-xs">
                 <i class="fa-solid fa-location-dot"></i> Proximitat activa
                 <i class="fa-solid fa-xmark text-[10px] ml-0.5"></i>
             </a>
             @else
-            <button type="button" onclick="demanaUbicacio()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full border border-stone-200 dark:border-stone-800 bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 hover:border-[#d4ff00] dark:hover:border-[#d4ff00] transition shadow-xs">
+            <button type="button" onclick="demanaUbicacio()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full border border-stone-200 dark:border-stone-800 bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 hover:border-[#ffcc00] dark:hover:border-stone-600 dark:hover:border-[#ffcc00] dark:hover:border-stone-600 transition shadow-xs">
                 <i class="fa-solid fa-location-crosshairs text-xs"></i> Ordre per proximitat
             </button>
             @endif
@@ -181,14 +181,14 @@
         <i class="fa-solid fa-box-open text-4xl text-stone-300 dark:text-stone-700 mb-3 block"></i>
         <h3 class="text-base font-black text-stone-900 dark:text-white">No s'han trobat anuncis</h3>
         <p class="text-xs text-stone-500 dark:text-stone-400 mt-1 font-medium">Prova de canviar els filtres de cerca o la ubicació</p>
-        <a href="{{ route('anuncis.index') }}" class="mt-4 inline-flex items-center gap-1 px-4 py-2 rounded-full bg-stone-900 text-white dark:bg-black dark:text-[#d4ff00] font-black text-xs uppercase tracking-wider hover:bg-[#d4ff00] hover:text-black dark:hover:bg-[#d4ff00] dark:hover:text-black transition-all">
+        <a href="{{ route('anuncis.index') }}" class="mt-4 inline-flex items-center gap-1 px-4 py-2 rounded-full bg-[#ffcc00] text-black dark:bg-black dark:text-white font-black text-xs uppercase tracking-wider hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black transition-all">
             Veure tots els anuncis
         </a>
     </div>
 @else
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mb-8 font-display">
         @foreach($anuncis as $anunci)
-        <a href="{{ route('anuncis.show', $anunci->id) }}" class="anunci-card group bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl overflow-hidden shadow-xs hover:border-stone-400 dark:hover:border-[#d4ff00] transition-all flex flex-col justify-between" data-fotos="{{ $anunci->fotos->pluck('foto_ruta')->toJson() }}">
+        <a href="{{ route('anuncis.show', $anunci->id) }}" class="anunci-card group bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl overflow-hidden shadow-xs hover:border-[#ffcc00] dark:hover:border-[#ffcc00] dark:hover:border-stone-600 transition-all flex flex-col justify-between" data-fotos="{{ $anunci->fotos->pluck('foto_ruta')->toJson() }}">
             
             <!-- Image Wrap -->
             <div class="relative aspect-[4/3] w-full overflow-hidden bg-stone-100 dark:bg-stone-900 border-b border-stone-100 dark:border-stone-800/60">
@@ -226,7 +226,7 @@
                         <span>{{ $anunci->mida->nom_mida }}</span>
                     </div>
 
-                    <h2 class="text-sm font-black text-stone-900 dark:text-white leading-snug group-hover:text-stone-600 dark:group-hover:text-[#d4ff00] transition-colors line-clamp-2">
+                    <h2 class="text-sm font-black text-stone-900 dark:text-white leading-snug group-hover:text-stone-600 dark:group-hover:text-stone-900 dark:hover:text-white transition-colors line-clamp-2">
                         {{ $anunci->titol }}
                     </h2>
                 </div>
@@ -244,7 +244,7 @@
 
                     <div class="text-right">
                         @if($proximitatActiva && $anunci->distancia !== null)
-                            <span class="text-[11px] font-black text-[#d4ff00] block">
+                            <span class="text-[11px] font-black text-stone-900 dark:text-white block">
                                 <i class="fa-solid fa-location-dot mr-0.5"></i>{{ number_format($anunci->distancia, 0, ',', '.') }} km
                             </span>
                         @else
@@ -267,18 +267,18 @@
                 <i class="fa-solid fa-chevron-left"></i>
             </span>
         @else
-            <a href="{{ $anuncis->previousPageUrl() }}" class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-[#d4ff00] hover:text-black dark:hover:bg-[#d4ff00] dark:hover:text-black text-stone-800 dark:text-stone-200 flex items-center justify-center text-xs font-black transition-all border border-stone-200/80 dark:border-stone-800">
+            <a href="{{ $anuncis->previousPageUrl() }}" class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black text-stone-800 dark:text-stone-200 flex items-center justify-center text-xs font-black transition-all border border-stone-200/80 dark:border-stone-800">
                 <i class="fa-solid fa-chevron-left"></i>
             </a>
         @endif
 
         @foreach($anuncis->getUrlRange(1, $anuncis->lastPage()) as $page => $url)
             @if($page == $anuncis->currentPage())
-                <span class="w-9 h-9 rounded-full bg-stone-900 text-white dark:bg-[#d4ff00] dark:text-black flex items-center justify-center text-xs font-black shadow-xs">
+                <span class="w-9 h-9 rounded-full bg-[#ffcc00] text-black dark:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:text-black flex items-center justify-center text-xs font-black shadow-xs">
                     {{ $page }}
                 </span>
             @elseif($page == 1 || $page == $anuncis->lastPage() || abs($page - $anuncis->currentPage()) <= 2)
-                <a href="{{ $url }}" class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-[#d4ff00] hover:text-black dark:hover:bg-[#d4ff00] dark:hover:text-black text-stone-800 dark:text-stone-200 flex items-center justify-center text-xs font-black transition-all border border-stone-200/80 dark:border-stone-800">
+                <a href="{{ $url }}" class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black text-stone-800 dark:text-stone-200 flex items-center justify-center text-xs font-black transition-all border border-stone-200/80 dark:border-stone-800">
                     {{ $page }}
                 </a>
             @elseif(abs($page - $anuncis->currentPage()) == 3)
@@ -287,7 +287,7 @@
         @endforeach
 
         @if($anuncis->hasMorePages())
-            <a href="{{ $anuncis->nextPageUrl() }}" class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-[#d4ff00] hover:text-black dark:hover:bg-[#d4ff00] dark:hover:text-black text-stone-800 dark:text-stone-200 flex items-center justify-center text-xs font-black transition-all border border-stone-200/80 dark:border-stone-800">
+            <a href="{{ $anuncis->nextPageUrl() }}" class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black text-stone-800 dark:text-stone-200 flex items-center justify-center text-xs font-black transition-all border border-stone-200/80 dark:border-stone-800">
                 <i class="fa-solid fa-chevron-right"></i>
             </a>
         @else
@@ -320,9 +320,9 @@
     border-color: #292524;
     color: #d6d3d1;
 }
-.filter-btn:hover { border-color: #d4ff00; }
+.filter-btn:hover { border-color: #1c1917; }
 .filter-btn-active { background-color: #1c1917; color: #ffffff; border-color: #1c1917; }
-.dark .filter-btn-active { background-color: #d4ff00; color: #000000; border-color: #d4ff00; }
+.dark .filter-btn-active { background-color: #1c1917; color: #000000; border-color: #1c1917; }
 
 .filter-badge {
     display: inline-flex;
@@ -337,8 +337,8 @@
     font-weight: 900;
     margin-left: 0.35rem;
 }
-.dark .filter-badge { background: #292524; color: #d4ff00; }
-.filter-btn-active .filter-badge { background: #d4ff00; color: #000; }
+.dark .filter-badge { background: #292524; color: #1c1917; }
+.filter-btn-active .filter-badge { background: #1c1917; color: #000; }
 
 .filter-dropdown {
     position: absolute;
@@ -371,7 +371,7 @@
 .dark .filter-option { color: #e7e5e4; }
 .filter-option:hover { background: #f5f5f4; }
 .dark .filter-option:hover { background: #27272a; }
-.filter-option input { accent-color: #d4ff00; }
+.filter-option input { accent-color: #1c1917; }
 </style>
 
 <script>

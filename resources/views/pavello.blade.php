@@ -4,7 +4,7 @@
 
 <!-- BACK BUTTON -->
 <div class="mb-5">
-    <a href="/pavellons" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black bg-stone-100 dark:bg-stone-900 text-stone-800 dark:text-stone-200 hover:bg-[#d4ff00] hover:text-black dark:hover:bg-[#d4ff00] dark:hover:text-black transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs font-display">
+    <a href="/pavellons" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black bg-stone-100 dark:bg-stone-900 text-stone-800 dark:text-stone-200 hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs font-display">
         <i class="fa-solid fa-arrow-left text-[10px]"></i> Torna a Pavellons
     </a>
 </div>
@@ -16,7 +16,7 @@
     </h1>
     @if(count($partits_pavello) > 0 && !empty($partits_pavello[0]->placeAddress))
         <p class="text-xs md:text-sm font-bold text-stone-500 dark:text-stone-400 mt-1">
-            <i class="fa-solid fa-location-dot text-[#d4ff00] mr-1"></i>
+            <i class="fa-solid fa-location-dot text-stone-900 dark:text-white mr-1"></i>
             {{ $partits_pavello[0]->placeAddress }}
         </p>
     @endif
@@ -29,7 +29,7 @@
         @foreach($partits_pavello as $key => $match)
             @if($dia != $match->matchDate)
                 <div class="flex items-center gap-2 pt-3 border-b border-stone-200 dark:border-stone-800 pb-2 mb-3">
-                    <i class="fa-regular fa-calendar text-[#d4ff00]"></i>
+                    <i class="fa-regular fa-calendar text-stone-900 dark:text-white"></i>
                     <h3 class="font-display font-black text-xs md:text-sm uppercase tracking-wider text-stone-900 dark:text-white">
                         {{ \Carbon\Carbon::parse($match->matchDate)->locale('ca')->isoFormat('LL') }}
                     </h3>

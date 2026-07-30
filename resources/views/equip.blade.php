@@ -13,7 +13,7 @@
                 <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white font-display tracking-tight">
                     {{App\Http\Controllers\TeamsController::teamFormat($teamInfo[0]->teamName)}}
                 </h1>
-                <a href="/club/{{$teamInfo[0]->idClub}}/{{urlencode($teamInfo[0]->clubName)}}" class="text-xs font-bold text-stone-500 dark:text-stone-400 hover:text-[#d4ff00] transition-colors">
+                <a href="/club/{{$teamInfo[0]->idClub}}/{{urlencode($teamInfo[0]->clubName)}}" class="text-xs font-bold text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white transition-colors">
                     {{$teamInfo[0]->clubName}}
                 </a>
             </div>
@@ -48,16 +48,16 @@
 
                 <div class="space-y-1.5">
                     @foreach ($playersList as $player)
-                        <div class="group flex items-center justify-between bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-3 md:p-3.5 hover:border-stone-400 dark:hover:border-[#d4ff00] transition-all shadow-xs">
+                        <div class="group flex items-center justify-between bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-3 md:p-3.5 hover:border-[#ffcc00] dark:hover:border-[#ffcc00] dark:hover:border-stone-600 transition-all shadow-xs">
                             <div class="flex items-center">
-                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-stone-900 text-white dark:bg-[#d4ff00] dark:text-black font-black text-xs mr-3 flex-shrink-0">
+                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#ffcc00] text-black dark:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:text-black font-black text-xs mr-3 flex-shrink-0">
                                     {{ $player->number }}
                                 </span>
-                                <a href="/jugador/{{$player->idPlayer}}/{{urlencode($player->playerName)}}" class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-stone-100 group-hover:text-stone-600 dark:group-hover:text-[#d4ff00] transition-colors capitalize">
+                                <a href="/jugador/{{$player->idPlayer}}/{{urlencode($player->playerName)}}" class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-stone-100 group-hover:text-stone-600 dark:group-hover:text-stone-900 dark:hover:text-white transition-colors capitalize">
                                     {{ mb_strtolower($player->playerName) }}
                                 </a>
                             </div>
-                            <span class="text-stone-400 dark:text-stone-500 group-hover:text-stone-900 dark:group-hover:text-[#d4ff00] transition-colors">
+                            <span class="text-stone-400 dark:text-stone-500 group-hover:text-stone-900 dark:group-hover:text-stone-900 dark:hover:text-white transition-colors">
                                 <i class="fa-solid fa-chevron-right text-xs"></i>
                             </span>
                         </div>
@@ -77,8 +77,8 @@
 
                 <div class="space-y-1.5">
                     @foreach($teamLeaguesList as $league)
-                        <a href="/competicio/{{$league->idGroup}}/{{urlencode($league->groupName)}}" class="group flex items-center justify-between bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-3.5 hover:border-stone-400 dark:hover:border-[#d4ff00] transition-all shadow-xs">
-                            <span class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-stone-100 group-hover:text-stone-600 dark:group-hover:text-[#d4ff00] transition-colors capitalize">
+                        <a href="/competicio/{{$league->idGroup}}/{{urlencode($league->groupName)}}" class="group flex items-center justify-between bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-3.5 hover:border-[#ffcc00] dark:hover:border-[#ffcc00] dark:hover:border-stone-600 transition-all shadow-xs">
+                            <span class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-stone-100 group-hover:text-stone-600 dark:group-hover:text-stone-900 dark:hover:text-white transition-colors capitalize">
                                 {{ mb_strtolower($league->groupName) }}
                             </span>
                             <span class="font-display text-[10px] font-bold text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-stone-900 px-3 py-1 rounded-full">
@@ -92,15 +92,8 @@
 
     </div>
 
-    <!-- RIGHT SIDEBAR (Logo del Club & Golejadors) -->
+    <!-- RIGHT SIDEBAR (Golejadors) -->
     <div class="col-span-1 lg:col-span-4">
-        
-        <!-- Big Shield Container (Sense fons blanc en dark) -->
-        <div class="hidden lg:flex justify-center mb-6">
-            <a href="/club/{{$teamInfo[0]->idClub}}/{{urlencode($teamInfo[0]->clubName)}}" class="w-36 h-36 bg-white dark:bg-transparent rounded-3xl p-4 flex items-center justify-center hover:scale-105 transition-transform">
-                <img onerror="this.style.display='none'" class="max-w-full max-h-full object-contain" src="{{$teamInfo[0]->clubImage}}" alt="{{$teamInfo[0]->clubName}}" />
-            </a>
-        </div>
 
         <!-- GOLEJADORS DE L'EQUIP -->
         @if(count($teamGoals) > 0)
@@ -114,12 +107,12 @@
                 <div class="space-y-1.5">
                     @foreach ($teamGoals as $goals)
                         @if($goals->goals != 0)
-                            <div class="group relative overflow-hidden bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-3 md:p-3.5 shadow-xs hover:border-stone-400 dark:hover:border-[#d4ff00] transition-all flex items-center justify-between">
+                            <div class="group relative overflow-hidden bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-3 md:p-3.5 shadow-xs hover:border-[#ffcc00] dark:hover:border-[#ffcc00] dark:hover:border-stone-600 transition-all flex items-center justify-between">
                                 <!-- Progress bar overlay background -->
                                 <div class="absolute top-0 left-0 h-full bg-stone-100/80 dark:bg-stone-800/40 transition-colors" style="width: {{$goals->percentage}}%;"></div>
                                 
                                 <div class="relative z-10">
-                                    <a href="/jugador/{{$goals->idPlayer}}/{{urlencode($goals->playerName)}}" class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-stone-100 group-hover:text-stone-600 dark:group-hover:text-[#d4ff00] transition-colors capitalize">
+                                    <a href="/jugador/{{$goals->idPlayer}}/{{urlencode($goals->playerName)}}" class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-stone-100 group-hover:text-stone-600 dark:group-hover:text-stone-900 dark:hover:text-white transition-colors capitalize">
                                         {{ mb_strtolower($goals->playerName) }}
                                     </a>
                                 </div>
@@ -127,7 +120,7 @@
                                     <span class="font-display text-[10px] font-bold text-stone-500 dark:text-stone-400">
                                         {{ sprintf('%04.1f', $goals->percentage) }}%
                                     </span>
-                                    <span class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full bg-stone-900 text-white dark:bg-[#d4ff00] dark:text-black font-black text-xs shadow-xs">
+                                    <span class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full bg-[#ffcc00] text-black dark:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:text-black font-black text-xs shadow-xs">
                                         {{ $goals->goals }}
                                     </span>
                                 </div>

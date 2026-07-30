@@ -14,16 +14,16 @@
 
 @if ($type === 'ticker')
     <!-- TICKER STYLE (Apple Sports Bar) -->
-    <div class="inline-flex flex-col bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-3 shadow-xs mr-3 flex-shrink-0 w-64 text-xs transition-all hover:border-[#d4ff00]">
+    <div class="inline-flex flex-col bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-3 shadow-xs mr-3 flex-shrink-0 w-64 text-xs transition-all hover:border-[#ffcc00] dark:hover:border-stone-600">
         <div class="font-display text-[10px] font-extrabold text-stone-500 dark:text-stone-400 uppercase tracking-wider mb-1 truncate" title="{{ $match->groupName }}">
-            <a href="/competicio/{{ $match->idGroup }}/{{ urlencode($match->groupName) }}" class="hover:text-[#d4ff00] transition-colors">
+            <a href="/competicio/{{ $match->idGroup }}/{{ urlencode($match->groupName) }}" class="hover:text-stone-900 dark:hover:text-white transition-colors">
                 {{ $match->groupName }}
             </a>
         </div>
         <div class="flex items-center justify-between font-display">
             <div class="flex items-center gap-1.5 truncate max-w-[78%]">
                 <span class="truncate font-bold text-stone-800 dark:text-stone-200" title="{{ App\Http\Controllers\TeamsController::teamFormat($match->localTeam) }}">{{ App\Http\Controllers\TeamsController::teamFormat($match->localTeam) }}</span>
-                <span class="font-black text-black px-2 py-0.5 bg-[#d4ff00] rounded-full text-[11px]">{{ $match->localResult }} - {{ $match->visitorResult }}</span>
+                <span class="font-black text-black px-2 py-0.5 bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white rounded-full text-[11px]">{{ $match->localResult }} - {{ $match->visitorResult }}</span>
                 <span class="truncate font-bold text-stone-800 dark:text-stone-200" title="{{ App\Http\Controllers\TeamsController::teamFormat($match->visitorTeam) }}">{{ App\Http\Controllers\TeamsController::teamFormat($match->visitorTeam) }}</span>
             </div>
             <!-- LIVE/FI Status Stamp -->
@@ -31,7 +31,7 @@
                 @if(isset($match->localResult))
                     <span class="font-display text-[9px] font-bold text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded-full">FI</span>
                 @else
-                    <span class="font-display text-[9px] font-black text-black bg-[#d4ff00] px-2 py-0.5 rounded-full animate-pulse">LIVE</span>
+                    <span class="font-display text-[9px] font-black text-black bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white px-2 py-0.5 rounded-full animate-pulse">LIVE</span>
                 @endif
             </div>
         </div>
@@ -46,11 +46,11 @@
         $isVisitorSelected = in_array($match->idVisitor, $selectedTeams);
         $isPlayed = isset($match->localResult);
     @endphp
-    <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl mb-3.5 overflow-hidden shadow-xs hover:border-stone-400 dark:hover:border-[#d4ff00] transition-all p-4">
+    <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl mb-3.5 overflow-hidden shadow-xs hover:border-[#ffcc00] dark:hover:border-[#ffcc00] dark:hover:border-stone-600 transition-all p-4">
         <!-- Top header info -->
         <div class="font-display text-[10px] font-extrabold text-stone-500 dark:text-stone-400 uppercase tracking-wider mb-3 truncate flex items-center justify-between" title="{{ $match->groupName }}">
-            <a href="/competicio/{{ $match->idGroup }}/{{ urlencode($match->groupName) }}" class="hover:text-stone-900 dark:hover:text-[#d4ff00] transition-colors truncate flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#d4ff00] inline-block flex-shrink-0 shadow-xs"></span>
+            <a href="/competicio/{{ $match->idGroup }}/{{ urlencode($match->groupName) }}" class="hover:text-stone-900 dark:hover:text-white transition-colors truncate flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white inline-block flex-shrink-0 shadow-xs"></span>
                 <span class="truncate">{{ $match->groupName }}</span>
             </a>
         </div>
@@ -65,15 +65,15 @@
                 </div>
                 <!-- Local Team Name -->
                 <div class="w-full font-extrabold text-[11px] md:text-xs leading-tight line-clamp-2" title="{{ App\Http\Controllers\TeamsController::teamFormat($match->localTeam) }}">
-                    <a href="/equip/{{$match->idLocal}}/{{urlencode($match->localTeam)}}" class="{{ $isLocalSelected ? 'text-stone-900 font-black dark:text-[#d4ff00]' : 'text-stone-900 dark:text-stone-100 hover:text-stone-600 dark:hover:text-[#d4ff00]' }} transition-colors">
+                    <a href="/equip/{{$match->idLocal}}/{{urlencode($match->localTeam)}}" class="{{ $isLocalSelected ? 'text-stone-900 font-black dark:text-white' : 'text-stone-900 dark:text-stone-100 hover:text-stone-600 dark:hover:text-white' }} transition-colors">
                         {{ App\Http\Controllers\TeamsController::teamFormat($match->localTeam) }}
                     </a>
                 </div>
             </div>
             
-            <!-- Mid Center Box (Negre sobre Verd-Lima Apple Sports) -->
-            <div class="flex items-center justify-center flex-shrink-0 bg-[#d4ff00] text-black px-3 py-1.5 rounded-full shadow-xs min-w-[3.6rem] text-center font-display">
-                <span class="text-xs md:text-sm font-black text-black leading-none">
+            <!-- Mid Center Box (Groc Daurat en Light / Monocrom en Dark) -->
+            <div class="flex items-center justify-center flex-shrink-0 bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 px-3.5 py-1.5 rounded-full shadow-xs min-w-[3.6rem] text-center font-display">
+                <span class="text-xs md:text-sm font-black text-black dark:text-white leading-none">
                     @if($isPlayed)
                         {{ $match->localResult }} - {{ $match->visitorResult }}
                     @else
@@ -90,7 +90,7 @@
                 </div>
                 <!-- Visitor Team Name -->
                 <div class="w-full font-extrabold text-[11px] md:text-xs leading-tight line-clamp-2" title="{{ App\Http\Controllers\TeamsController::teamFormat($match->visitorTeam) }}">
-                    <a href="/equip/{{$match->idVisitor}}/{{urlencode($match->visitorTeam)}}" class="{{ $isVisitorSelected ? 'text-stone-900 font-black dark:text-[#d4ff00]' : 'text-stone-900 dark:text-stone-100 hover:text-stone-600 dark:hover:text-[#d4ff00]' }} transition-colors">
+                    <a href="/equip/{{$match->idVisitor}}/{{urlencode($match->visitorTeam)}}" class="{{ $isVisitorSelected ? 'text-stone-900 font-black dark:text-white' : 'text-stone-900 dark:text-stone-100 hover:text-stone-600 dark:hover:text-white' }} transition-colors">
                         {{ App\Http\Controllers\TeamsController::teamFormat($match->visitorTeam) }}
                     </a>
                 </div>
@@ -100,7 +100,7 @@
         <!-- Info area: date, time, location (Identical for ALL matches!) -->
         <div class="mt-3 pt-2.5 border-t border-stone-100 dark:border-stone-800/80 font-display text-[11px] font-bold text-stone-500 dark:text-stone-400 space-y-0.5">
             <div class="flex items-center gap-1.5">
-                <i class="fa-regular fa-calendar text-stone-400 dark:text-[#d4ff00]"></i>
+                <i class="fa-regular fa-calendar text-stone-400 dark:text-white"></i>
                 <span>{{ \Carbon\Carbon::parse($match->matchDate)->format('d/m/Y') }} — {{ \Carbon\Carbon::parse($match->matchHour)->format('H:i') }}</span>
             </div>
             @php
@@ -118,13 +118,13 @@
         @if(isset($match->lat) || $isPlayed)
             <div class="flex items-center gap-2 mt-3 pt-1">
                 @if(isset($match->lat))
-                    <a href="{{ $mapUrl }}" target="_blank" class="group flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-stone-100 hover:bg-stone-900 text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#d4ff00] dark:hover:text-black font-display text-[11px] font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
-                        <i class="fa-solid fa-location-dot text-stone-500 group-hover:text-white dark:text-[#d4ff00] dark:group-hover:text-black transition-colors"></i> Pavelló
+                    <a href="{{ $mapUrl }}" target="_blank" class="group flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-stone-100 hover:bg-[#ffcc00] text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-[11px] font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
+                        <i class="fa-solid fa-location-dot text-stone-500 group-hover:text-white dark:text-white dark:group-hover:text-black transition-colors"></i> Pavelló
                     </a>
                 @endif
                 @if($isPlayed)
-                    <a href="/acta/{{$match->idMatch}}/{{urlencode($match->localTeam)}}-{{urlencode($match->visitorTeam)}}" class="group flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-stone-100 hover:bg-stone-900 text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#d4ff00] dark:hover:text-black font-display text-[11px] font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
-                        <i class="fa-solid fa-file-lines text-stone-500 group-hover:text-white dark:text-[#d4ff00] dark:group-hover:text-black transition-colors"></i> Acta
+                    <a href="/acta/{{$match->idMatch}}/{{urlencode($match->localTeam)}}-{{urlencode($match->visitorTeam)}}" class="group flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-stone-100 hover:bg-[#ffcc00] text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-[11px] font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
+                        <i class="fa-solid fa-file-lines text-stone-500 group-hover:text-white dark:text-white dark:group-hover:text-black transition-colors"></i> Acta
                     </a>
                 @endif
             </div>

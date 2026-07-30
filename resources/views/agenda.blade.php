@@ -14,7 +14,7 @@
         <!-- SEARCH INPUT -->
         <div class="relative w-full md:w-80">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
-            <input type="text" id="searchInput" placeholder="Cerca equip, competició o data..." class="w-full pl-9 pr-4 py-2 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-900 dark:text-white border border-stone-200 dark:border-stone-800 focus:outline-none focus:border-[#d4ff00] dark:focus:border-[#d4ff00] text-xs font-display font-medium shadow-xs transition-colors" oninput="filterAgenda()" />
+            <input type="text" id="searchInput" placeholder="Cerca equip, competició o data..." class="w-full pl-9 pr-4 py-2 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-900 dark:text-white border border-stone-200 dark:border-stone-800 focus:outline-none focus:border-[#1c1917] dark:focus:border-[#1c1917] text-xs font-display font-medium shadow-xs transition-colors" oninput="filterAgenda()" />
         </div>
     </div>
 </div>
@@ -41,12 +41,12 @@
                     $matchLabel = $localName . '-' . $visitorName;
                     $hasResult = (isset($match->localResult) && isset($match->visitorResult) && $match->localResult !== '' && $match->visitorResult !== '');
                 @endphp
-                <tr class="agenda-row hover:bg-stone-50 dark:hover:bg-stone-900/50 transition-colors text-xs font-display">
+                <tr class="agenda-row hover:bg-stone-50 dark:hover:bg-[#ffcc00]/50 transition-colors text-xs font-display">
                     <!-- Date, Time & Round Badge -->
                     <td class="p-3.5 border-b border-stone-100 dark:border-stone-850 whitespace-nowrap">
                         <div class="flex items-center gap-1.5">
                             <span class="inline-flex items-center gap-1 bg-stone-100 dark:bg-stone-900 px-2.5 py-1 rounded-full text-xs font-black border border-stone-200/60 dark:border-stone-800 text-stone-800 dark:text-stone-200">
-                                <i class="fa-regular fa-calendar text-[#d4ff00]"></i>
+                                <i class="fa-regular fa-calendar text-stone-900 dark:text-white"></i>
                                 {{ \Carbon\Carbon::parse($match->matchDate)->format('d/m/Y') }}
                                 <span class="text-stone-500 dark:text-stone-400 font-extrabold ml-1">{{ \Carbon\Carbon::parse($match->matchHour)->format('H:i') }}</span>
                             </span>
@@ -60,7 +60,7 @@
 
                     <!-- Competition -->
                     <td class="p-3.5 border-b border-stone-100 dark:border-stone-850 font-extrabold text-stone-700 dark:text-stone-300">
-                        <a href="/competicio/{{$match->idGroup}}/{{urlencode($match->groupName)}}" class="hover:text-[#d4ff00] transition-colors truncate block max-w-[200px]" title="{{$match->groupName}}">
+                        <a href="/competicio/{{$match->idGroup}}/{{urlencode($match->groupName)}}" class="hover:text-stone-900 dark:hover:text-white transition-colors truncate block max-w-[200px]" title="{{$match->groupName}}">
                             {{$match->groupName}}
                         </a>
                     </td>
@@ -68,7 +68,7 @@
                     <!-- Local Team with Shield -->
                     <td class="p-3.5 border-b border-stone-100 dark:border-stone-850 text-right font-black">
                         <div class="flex items-center justify-end gap-2">
-                            <a href="/equip/{{$match->localTeamId}}/{{urlencode($match->localTeamName)}}" class="text-stone-900 dark:text-stone-100 hover:text-[#d4ff00] transition-colors truncate">
+                            <a href="/equip/{{$match->localTeamId}}/{{urlencode($match->localTeamName)}}" class="text-stone-900 dark:text-stone-100 hover:text-stone-900 dark:hover:text-white transition-colors truncate">
                                 {{$localName}}
                             </a>
                             @if(!empty($match->clubImage1))
@@ -80,7 +80,7 @@
                     <!-- Result -->
                     <td class="p-3.5 border-b border-stone-100 dark:border-stone-850 text-center whitespace-nowrap">
                         @if($hasResult)
-                            <span class="inline-flex items-center justify-center bg-stone-900 text-[#d4ff00] dark:bg-black font-black text-xs px-2.5 py-1 rounded-full shadow-xs">
+                            <span class="inline-flex items-center justify-center bg-stone-900 text-stone-900 dark:text-white dark:bg-black font-black text-xs px-2.5 py-1 rounded-full shadow-xs">
                                 {{$match->localResult}} - {{$match->visitorResult}}
                             </span>
                         @else
@@ -94,7 +94,7 @@
                             @if(!empty($match->clubImage2))
                                 <img src="{{$match->clubImage2}}" alt="{{$visitorName}}" class="w-6 h-6 object-contain flex-shrink-0 bg-white dark:bg-transparent" />
                             @endif
-                            <a href="/equip/{{$match->visitorTeamId}}/{{urlencode($match->visitorTeamName)}}" class="text-stone-900 dark:text-stone-100 hover:text-[#d4ff00] transition-colors truncate">
+                            <a href="/equip/{{$match->visitorTeamId}}/{{urlencode($match->visitorTeamName)}}" class="text-stone-900 dark:text-stone-100 hover:text-stone-900 dark:hover:text-white transition-colors truncate">
                                 {{$visitorName}}
                             </a>
                         </div>
@@ -102,7 +102,7 @@
 
                     <!-- Match Report Link -->
                     <td class="p-3.5 border-b border-stone-100 dark:border-stone-850 text-right whitespace-nowrap">
-                        <a href="/acta/{{$match->idMatch}}/{{urlencode($matchLabel)}}" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-stone-100 text-stone-800 dark:bg-stone-900 dark:text-stone-200 hover:bg-[#d4ff00] hover:text-black dark:hover:bg-[#d4ff00] dark:hover:text-black transition-all text-xs font-black border border-stone-200/80 dark:border-stone-800 shadow-xs">
+                        <a href="/acta/{{$match->idMatch}}/{{urlencode($matchLabel)}}" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-stone-100 text-stone-800 dark:bg-stone-900 dark:text-stone-200 hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black transition-all text-xs font-black border border-stone-200/80 dark:border-stone-800 shadow-xs">
                             Acta <i class="fa-solid fa-arrow-right text-[10px]"></i>
                         </a>
                     </td>

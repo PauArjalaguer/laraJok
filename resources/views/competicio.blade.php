@@ -55,9 +55,10 @@
             activeContainer.classList.remove('hidden');
         }
         if (activeBtn) {
-            activeBtn.style.backgroundColor = '#d4ff00';
-            activeBtn.style.color = '#000000';
-            activeBtn.style.borderColor = '#d4ff00';
+            const isDark = document.documentElement.classList.contains('dark');
+            activeBtn.style.backgroundColor = isDark ? '#27272a' : '#ffcc00';
+            activeBtn.style.color = isDark ? '#ffffff' : '#000000';
+            activeBtn.style.borderColor = isDark ? '#3f3f46' : '#ffcc00';
             activeBtn.classList.add('font-black');
         }
     }
@@ -169,7 +170,7 @@
             
             <div class="p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-extrabold flex items-center justify-center">
                 @if ($p==1)
-                    <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#d4ff00] text-black font-black text-xs">1</span>
+                    <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-xs">1</span>
                 @else
                     <span class="text-stone-500 dark:text-stone-400 font-bold">{{$p}}</span>
                 @endif
@@ -177,7 +178,7 @@
 
             <div class="p-3 classCol-team border-r border-stone-100 dark:border-stone-850 text-left font-black capitalize flex items-center gap-2 truncate">
                 <img alt="{{App\Http\Controllers\TeamsController::teamFormat($classificationRow->teamName)}}" class="w-6 h-6 object-contain flex-shrink-0" src="{{$classificationRow->clubImage}}" />
-                <a class="hover:text-[#d4ff00] transition-colors truncate" title="{{App\Http\Controllers\TeamsController::teamFormat($classificationRow->teamName)}}" href="/equip/{{$classificationRow->idTeam}}/{{urlencode($classificationRow->teamName)}}">
+                <a class="hover:text-stone-900 dark:hover:text-white transition-colors truncate" title="{{App\Http\Controllers\TeamsController::teamFormat($classificationRow->teamName)}}" href="/equip/{{$classificationRow->idTeam}}/{{urlencode($classificationRow->teamName)}}">
                     {{App\Http\Controllers\TeamsController::teamFormat($classificationRow->teamName)}}
                 </a>
             </div>
@@ -219,8 +220,8 @@
                 <div class="flex items-center gap-3">
                     <img alt="{{count($bestGoalsMade)>0 ? App\Http\Controllers\TeamsController::teamFormat($bestGoalsMade[0]->teamName) : ''}}" src={{ count($bestGoalsMade)>0 ? $bestGoalsMade[0]->clubImage:'' }} class="w-9 h-9 object-contain" />
                     <div>
-                        <span class="text-[10px] font-black text-[#d4ff00] uppercase tracking-wider block">MÉS GOLEJADOR</span>
-                        <a class="font-extrabold text-xs md:text-sm text-stone-900 dark:text-stone-100 hover:text-[#d4ff00]" href="/equip/{{count($bestGoalsMade)>0 ? $bestGoalsMade[0]->idTeam : ''}}/{{count($bestGoalsMade)>0 ? urlencode($bestGoalsMade[0]->teamName ) :''}}">
+                        <span class="text-[10px] font-black text-stone-900 dark:text-white uppercase tracking-wider block">MÉS GOLEJADOR</span>
+                        <a class="font-extrabold text-xs md:text-sm text-stone-900 dark:text-stone-100 hover:text-stone-900 dark:hover:text-white" href="/equip/{{count($bestGoalsMade)>0 ? $bestGoalsMade[0]->idTeam : ''}}/{{count($bestGoalsMade)>0 ? urlencode($bestGoalsMade[0]->teamName ) :''}}">
                             {{count($bestGoalsMade)>0 ? App\Http\Controllers\TeamsController::teamFormat($bestGoalsMade[0]->teamName) : ''}}
                         </a>
                     </div>
@@ -236,7 +237,7 @@
                     <img alt="{{count($leastGoalsReceived)>0 ? App\Http\Controllers\TeamsController::teamFormat($leastGoalsReceived[0]->teamName) : ''}}" src={{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->clubImage : ''}} class="w-9 h-9 object-contain" />
                     <div>
                         <span class="text-[10px] font-black text-emerald-500 uppercase tracking-wider block">MENYS GOLEJAT</span>
-                        <a class="font-extrabold text-xs md:text-sm text-stone-900 dark:text-stone-100 hover:text-[#d4ff00]" href="/equip/{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->idTeam : ''}}/{{count($leastGoalsReceived)>0 ? urlencode($leastGoalsReceived[0]->teamName) :''}}">
+                        <a class="font-extrabold text-xs md:text-sm text-stone-900 dark:text-stone-100 hover:text-stone-900 dark:hover:text-white" href="/equip/{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->idTeam : ''}}/{{count($leastGoalsReceived)>0 ? urlencode($leastGoalsReceived[0]->teamName) :''}}">
                             {{count($leastGoalsReceived)>0 ? App\Http\Controllers\TeamsController::teamFormat($leastGoalsReceived[0]->teamName) : ''}}
                         </a>
                     </div>
@@ -270,11 +271,11 @@
                             <span class="w-5 h-5 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-extrabold text-[10px] flex items-center justify-center">
                                 {{ $index + 1 }}
                             </span>
-                            <a class="font-extrabold text-stone-800 dark:text-stone-200 hover:text-[#d4ff00] transition-colors" href="/jugador/{{$player->idPlayer}}/{{urlencode($player->playerName)}}">
+                            <a class="font-extrabold text-stone-800 dark:text-stone-200 hover:text-stone-900 dark:hover:text-white transition-colors" href="/jugador/{{$player->idPlayer}}/{{urlencode($player->playerName)}}">
                                 {{App\Http\Controllers\TeamsController::teamFormat($player->playerName)}}
                             </a>
                         </div>
-                        <span class="font-black text-black bg-[#d4ff00] px-2.5 py-0.5 rounded-full text-[11px]">
+                        <span class="font-black text-black bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white px-2.5 py-0.5 rounded-full text-[11px]">
                             {{$player->goals}} Gols
                         </span>
                     </div>
@@ -311,7 +312,7 @@
             <!-- Mobile Round Selector (md:hidden) -->
             <div class="block md:hidden mb-3 font-display">
                 <div class="relative">
-                    <select id="mobileRoundSelect" onchange="leagueShow(this.value)" class="w-full appearance-none bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-white text-xs font-black py-2.5 pl-4 pr-10 rounded-full focus:outline-none focus:border-[#d4ff00] transition-all shadow-xs cursor-pointer">
+                    <select id="mobileRoundSelect" onchange="leagueShow(this.value)" class="w-full appearance-none bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-white text-xs font-black py-2.5 pl-4 pr-10 rounded-full focus:outline-none focus:border-[#1c1917] transition-all shadow-xs cursor-pointer">
                         @php
                         $uniqueRounds = [];
                         foreach($matchesList as $mItem) {
@@ -347,7 +348,7 @@
                     $isBtnActive = $hasActiveRoundMatch ? ($btnClean === $targetRoundId) : false;
                     @endphp
                     @if ($currentRound != $match->idRound)
-                    <button id="{{$btnClean}}_button" class="inline-flex items-center justify-center text-center {{ strlen($match->idRound) > 2 ? 'px-3 min-w-9 w-auto' : 'w-9' }} h-9 rounded-full font-display text-xs font-black leading-none {{ $isBtnActive ? 'bg-[#d4ff00] text-black border-[#d4ff00]' : 'bg-stone-100 dark:bg-stone-900 text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-800' }} hover:bg-[#d4ff00] hover:text-black transition-all cursor-pointer leagueButton" onClick="leagueShow('{{$btnClean}}')">
+                    <button id="{{$btnClean}}_button" class="inline-flex items-center justify-center text-center {{ strlen($match->idRound) > 2 ? 'px-3 min-w-9 w-auto' : 'w-9' }} h-9 rounded-full font-display text-xs font-black leading-none {{ $isBtnActive ? 'bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 border-[#1c1917]' : 'bg-stone-100 dark:bg-stone-900 text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-800' }} hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black transition-all cursor-pointer leagueButton" onClick="leagueShow('{{$btnClean}}')">
                         {{$match->idRound}}
                     </button>
                     @endif

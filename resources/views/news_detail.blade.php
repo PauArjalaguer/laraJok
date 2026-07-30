@@ -9,7 +9,7 @@
 
 <!-- BACK TO NEWS BUTTON -->
 <div class="mb-5">
-    <a href="/noticies" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black bg-stone-100 dark:bg-stone-900 text-stone-800 dark:text-stone-200 hover:bg-[#d4ff00] hover:text-black dark:hover:bg-[#d4ff00] dark:hover:text-black transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs font-display">
+    <a href="/noticies" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black bg-stone-100 dark:bg-stone-900 text-stone-800 dark:text-stone-200 hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs font-display">
         <i class="fa-solid fa-arrow-left text-[10px]"></i> Torna a Notícies
     </a>
 </div>
@@ -19,7 +19,7 @@
     <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
         <div class="flex items-center gap-2">
             <span class="hallmark-stamp bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800">
-                <i class="fa-regular fa-calendar text-[#d4ff00] mr-1"></i>
+                <i class="fa-regular fa-calendar text-stone-900 dark:text-white mr-1"></i>
                 {{ \Carbon\Carbon::parse($news->newsDatetime)->format('d/m/Y') }}
             </span>
         </div>
@@ -30,7 +30,7 @@
     </h1>
 
     @if(!empty($news->newsSubtitle))
-        <p class="text-sm md:text-lg font-bold text-stone-600 dark:text-stone-300 leading-relaxed border-l-4 border-[#d4ff00] pl-4 py-1 bg-stone-50 dark:bg-stone-900/50 rounded-r-xl">
+        <p class="text-sm md:text-lg font-bold text-stone-600 dark:text-stone-300 leading-relaxed border-l-4 border-[#1c1917] pl-4 py-1 bg-stone-50 dark:bg-stone-900/50 rounded-r-xl">
             {{ $news->newsSubtitle }}
         </p>
     @endif
@@ -51,9 +51,9 @@
 
     @if(!empty($news->externalLink))
         <div class="mt-8 pt-6 border-t border-stone-100 dark:border-stone-800 flex items-center gap-2">
-            <i class="fa-solid fa-link text-[#d4ff00]"></i>
+            <i class="fa-solid fa-link text-stone-900 dark:text-white"></i>
             <span class="text-xs font-bold text-stone-500 dark:text-stone-400">Enllaç extern:</span>
-            <a href="{{ $news->externalLink }}" target="_blank" class="text-xs md:text-sm font-black text-stone-900 dark:text-stone-100 hover:text-[#d4ff00] underline truncate">
+            <a href="{{ $news->externalLink }}" target="_blank" class="text-xs md:text-sm font-black text-stone-900 dark:text-stone-100 hover:text-stone-900 dark:hover:text-white underline truncate">
                 {{ $news->externalLink }}
             </a>
         </div>

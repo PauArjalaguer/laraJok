@@ -27,7 +27,7 @@
         <!-- SEARCH INPUT -->
         <div class="relative w-full md:w-72">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
-            <input type="text" id="searchPavello" placeholder="Cerca per nom o municipi..." class="w-full pl-9 pr-4 py-2 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-900 dark:text-white border border-stone-200 dark:border-stone-800 focus:outline-none focus:border-[#d4ff00] dark:focus:border-[#d4ff00] text-xs font-display font-medium shadow-xs transition-colors" oninput="filterPavellons()" />
+            <input type="text" id="searchPavello" placeholder="Cerca per nom o municipi..." class="w-full pl-9 pr-4 py-2 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-900 dark:text-white border border-stone-200 dark:border-stone-800 focus:outline-none focus:border-[#1c1917] dark:focus:border-[#1c1917] text-xs font-display font-medium shadow-xs transition-colors" oninput="filterPavellons()" />
         </div>
     </div>
 </div>
@@ -52,7 +52,7 @@
 
 <!-- DISCLAIMER FOOTER CARD -->
 <div class="bg-stone-50 dark:bg-stone-900/40 border border-stone-200/80 dark:border-stone-800 rounded-2xl p-4 text-xs text-stone-500 dark:text-stone-400 font-display leading-relaxed mb-6">
-    <i class="fa-solid fa-circle-info text-[#d4ff00] mr-1"></i>
+    <i class="fa-solid fa-circle-info text-stone-900 dark:text-white mr-1"></i>
     La distància es calcula en quilòmetres lineals respecte la teva ubicació actual. Les adreces s'obtenen de forma automatitzada; assegura't de confirmar-les abans de desplaçar-te al pavelló.
 </div>
 
@@ -102,7 +102,7 @@
 
         list.forEach(pavello => {
             const tr = document.createElement('tr');
-            tr.className = 'pavello-row hover:bg-stone-50 dark:hover:bg-stone-900/50 transition-colors text-xs font-display';
+            tr.className = 'pavello-row hover:bg-stone-50 dark:hover:bg-[#ffcc00]/50 transition-colors text-xs font-display';
 
             const distanceText = (pavello.distance !== undefined && pavello.distance !== null) 
                 ? `${pavello.distance.toFixed(1)} km` 
@@ -118,7 +118,7 @@
 
             tr.innerHTML = `
                 <td class="p-3.5 border-b border-stone-100 dark:border-stone-850">
-                    <a href="${detailUrl}" class="font-black text-sm text-stone-900 dark:text-stone-100 hover:text-[#d4ff00] transition-colors block leading-snug">
+                    <a href="${detailUrl}" class="font-black text-sm text-stone-900 dark:text-stone-100 hover:text-stone-900 dark:hover:text-white transition-colors block leading-snug">
                         ${pavello.placeName}
                     </a>
                     <div class="text-[11px] font-medium text-stone-500 dark:text-stone-400 mt-0.5">${pavello.placeAddress || ''}</div>
@@ -130,11 +130,11 @@
                 </td>
                 <td class="p-3.5 border-b border-stone-100 dark:border-stone-850 text-center">
                     ${pavello.matches > 0 
-                        ? `<a href="${detailUrl}" class="inline-flex items-center gap-1 bg-[#d4ff00] text-black font-black text-xs px-2.5 py-1 rounded-full shadow-xs hover:scale-105 transition-transform">${pavello.matches} partits avui</a>` 
+                        ? `<a href="${detailUrl}" class="inline-flex items-center gap-1 bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-xs px-2.5 py-1 rounded-full shadow-xs hover:scale-105 transition-transform">${pavello.matches} partits avui</a>` 
                         : `<span class="text-stone-400 font-bold text-[11px]">Sense partits</span>`}
                 </td>
                 <td class="p-3.5 border-b border-stone-100 dark:border-stone-850 text-right">
-                    <a href="${mapUrl}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-stone-900 text-white dark:bg-black dark:text-[#d4ff00] hover:bg-[#d4ff00] hover:text-black dark:hover:bg-[#d4ff00] dark:hover:text-black transition-all text-xs font-black shadow-xs">
+                    <a href="${mapUrl}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#ffcc00] text-black dark:bg-black dark:text-white hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black transition-all text-xs font-black shadow-xs">
                         <i class="fa-solid fa-map-location-dot"></i> Com anar-hi
                     </a>
                 </td>
