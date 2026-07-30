@@ -87,8 +87,40 @@
         </div>
     </div>
 
-    <!-- COLUMN 2: CENTER (Featured News Grid, Pavellons Banner, Merchandising & Segona Mà) -->
+    <!-- COLUMN 2: CENTER (Segona Mà Banner, Featured News Grid, Pavellons Banner, Merchandising) -->
     <div class="col-span-1 lg:col-span-6">
+        <div class="flex items-center justify-between pb-2 border-b border-stone-200 dark:border-stone-800 mb-4 px-0.5">
+            <h2 class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
+                MERCAT SEGONA MÀ
+            </h2>
+            <a href="/anuncis" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-stone-900 text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#d4ff00] dark:hover:text-black font-display text-[10px] font-black uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
+                <span>Anuncis</span>
+                <i class="fa-solid fa-arrow-right text-[9px] transition-transform group-hover:translate-x-0.5"></i>
+            </a>
+        </div>
+
+        <!-- Segona Mà Promo Banner (Over News) -->
+        <a href="/anuncis" class="relative block w-full rounded-3xl bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 shadow-xs overflow-hidden group mb-6 transition-all hover:border-[#d4ff00] p-5 md:p-6">
+            <!-- Background Image with gradient mask fade -->
+            <div class="absolute inset-y-0 right-0 w-full md:w-8/12 bg-cover bg-right bg-no-repeat opacity-40 dark:opacity-30 transition-transform duration-700 group-hover:scale-105 pointer-events-none" style="background-image: url('/images/segona_ma_promo_banner.jpg'); mask-image: linear-gradient(to right, transparent 0%, black 40%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 40%);"></div>
+
+            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h3 class="font-display text-base md:text-lg font-black text-stone-900 dark:text-white uppercase tracking-tight leading-tight group-hover:text-[#d4ff00] transition-colors">
+                        SEGONA MÀ D'HOQUEI PATINS
+                    </h3>
+                    <p class="font-display text-[11px] font-black text-stone-500 dark:text-stone-400 uppercase tracking-wider mt-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-tags text-[#d4ff00]"></i>
+                        <span>COMPRA I VEN MATERIAL, PATINS I EQUIPAMENT D'HOQUEI</span>
+                    </p>
+                </div>
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#d4ff00] text-black font-black text-xs uppercase tracking-wider group-hover:bg-lime-400 transition-colors shadow-xs self-start md:self-auto flex-shrink-0">
+                    <span>Explora el Mercat</span>
+                    <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+                </div>
+            </div>
+        </a>
+
         <div class="flex items-center justify-between pb-2 border-b border-stone-200 dark:border-stone-800 mb-4 px-0.5">
             <h2 class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
                 NOTÍCIES DESTACADES
@@ -158,7 +190,7 @@
                     </h3>
                     <p class="font-display text-xs font-black text-stone-500 dark:text-stone-400 uppercase tracking-wider mt-2 flex items-center gap-1.5">
                         <i class="fa-solid fa-map-location-dot text-[#d4ff00]"></i>
-                        <span>CERCA EL TEU PAVELLÓ</span>
+                        <span>CERCA EL TEU PROPER PAVELLÓ</span>
                     </p>
                 </div>
                 <div class="w-10 h-10 rounded-full bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-900 dark:text-[#d4ff00] group-hover:bg-[#d4ff00] group-hover:text-black group-hover:border-[#d4ff00] transition-all duration-300 shadow-xs flex-shrink-0">

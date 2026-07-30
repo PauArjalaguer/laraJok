@@ -3,370 +3,327 @@
 
 @section('content')
 
-{{-- ══════════════════════════════════════════════════════════════════════
-     CAPÇALERA
-══════════════════════════════════════════════════════════════════════ --}}
-<div class="w-full mt-2 mb-4">
-    <div class="flex items-center justify-between border-b border-neutral-200 pb-3">
+<!-- UNIFIED HEADER (Ultra-Clean Apple Sports) -->
+<div class="w-full mt-2 mb-6 font-display">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-200 dark:border-stone-800 pb-4">
         <div>
-            <h1 class="text-2xl font-bold text-neutral-800 font-['Comfortaa']">
-                <i class="fa-solid fa-tags text-neutral-500 mr-2"></i>Segona Mà
-                @if($proximitatActiva)
-                    <span class="ml-2 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full align-middle">
-                        <i class="fa-solid fa-location-dot mr-0.5"></i>Proximitat activa
-                    </span>
-                @endif
+            <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white tracking-tight">
+                Segona Mà
             </h1>
-            <p class="text-sm text-neutral-500 mt-0.5">
-                Material d'hoquei patins de segona mà
+            <p class="text-xs md:text-sm text-stone-500 dark:text-stone-400 mt-1 font-medium">
+                Material i equipament d'hoquei patins de segona mà
             </p>
         </div>
-        <div class="text-right">
-            <span class="text-sm text-neutral-500">
-                <span class="font-semibold text-neutral-700">{{ $anuncis->total() }}</span> anunci{{ $anuncis->total() != 1 ? 's' : '' }} trobat{{ $anuncis->total() != 1 ? 's' : '' }}
+
+        <div class="flex items-center gap-3">
+            <span class="hallmark-stamp bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800">
+                {{ $anuncis->total() }} {{ $anuncis->total() == 1 ? 'ANUNCI' : 'ANUNCIS' }}
             </span>
+            <a href="{{ route('dashboard.anuncis.new') }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#d4ff00] hover:bg-lime-400 text-black font-black text-xs uppercase tracking-wider rounded-full transition-all shadow-xs active:scale-95">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>Publica el teu Anunci</span>
+            </a>
         </div>
     </div>
 </div>
 
-{{-- ══════════════════════════════════════════════════════════════════════
-     CERCADOR + FILTRES
-══════════════════════════════════════════════════════════════════════ --}}
-<form method="GET" action="{{ route('anuncis.index') }}" id="filtresForm">
-
-    {{-- Cercador de text --}}
-    <div class="relative mb-3">
-        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-            <i class="fa-solid fa-magnifying-glass text-neutral-400 text-sm"></i>
-        </div>
-        <input
-            type="text"
-            name="cerca"
-            id="cerca"
-            value="{{ request('cerca') }}"
-            placeholder="Buscar per títol, descripció o marca..."
-            class="w-full pl-9 pr-4 py-2.5 border border-neutral-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:border-transparent bg-white transition"
-        />
-        @if(request('cerca'))
-        <button type="button" onclick="clearField('cerca')" class="absolute inset-y-0 right-3 flex items-center text-neutral-400 hover:text-neutral-700">
-            <i class="fa-solid fa-xmark text-xs"></i>
-        </button>
-        @endif
-    </div>
+<!-- SEARCH & FILTERS -->
+<form method="GET" action="{{ route('anuncis.index') }}" id="filtresForm" class="mb-7 font-display">
     <input type="hidden" name="lat" id="filter-lat" value="{{ request('lat') }}">
     <input type="hidden" name="lng" id="filter-lng" value="{{ request('lng') }}">
 
-    {{-- Fila de filtres + Botó Nou --}}
-    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+    <!-- Search Input -->
+    <div class="relative w-full mb-4">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
+        <input type="text" name="cerca" id="cerca" value="{{ request('cerca') }}" placeholder="Cerca per títol, descripció o marca..." class="w-full pl-9 pr-10 py-2.5 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-900 dark:text-white border border-stone-200 dark:border-stone-800 focus:outline-none focus:border-[#d4ff00] dark:focus:border-[#d4ff00] text-xs font-medium shadow-xs transition-colors" />
+        @if(request('cerca'))
+            <button type="button" onclick="clearField('cerca');submitForm();" class="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 dark:hover:text-white">
+                <i class="fa-solid fa-xmark text-xs"></i>
+            </button>
+        @endif
+    </div>
+
+    <!-- Filter Buttons Row -->
+    <div class="flex flex-wrap items-center justify-between gap-3">
         <div class="flex flex-wrap gap-2">
 
-        {{-- Tipus --}}
-        <div class="relative" id="dropTipus-wrap">
-            <button type="button" onclick="toggleDrop('dropTipus')"
-                class="filter-btn {{ count(request()->get('tipus', [])) ? 'filter-btn-active' : '' }}"
-                id="dropTipus-toggle">
-                <i class="fa-solid fa-layer-group mr-1 text-xs"></i>
-                Tipus
-                @if(count(request()->get('tipus', [])))
-                    <span class="filter-badge">{{ count(request()->get('tipus', [])) }}</span>
-                @endif
-                <i class="fa-solid fa-chevron-down ml-1 text-[10px]"></i>
-            </button>
-            <div id="dropTipus" class="filter-dropdown hidden">
-                @foreach($tipus as $t)
-                <label class="filter-option">
-                    <input type="checkbox" name="tipus[]" value="{{ $t->id }}"
-                        {{ in_array($t->id, request()->get('tipus', [])) ? 'checked' : '' }}
-                        onchange="submitForm()">
-                    {{ $t->nom_tipus }}
-                </label>
-                @endforeach
-            </div>
-        </div>
-
-        {{-- Marca (múltiple) --}}
-        <div class="relative" id="dropMarca-wrap">
-            <button type="button" onclick="toggleDrop('dropMarca')"
-                class="filter-btn {{ count(request()->get('marques', [])) ? 'filter-btn-active' : '' }}"
-                id="dropMarca-toggle">
-                <i class="fa-solid fa-tag mr-1 text-xs"></i>
-                Marca
-                @if(count(request()->get('marques', [])))
-                    <span class="filter-badge">{{ count(request()->get('marques', [])) }}</span>
-                @endif
-                <i class="fa-solid fa-chevron-down ml-1 text-[10px]"></i>
-            </button>
-            <div id="dropMarca" class="filter-dropdown hidden">
-                <div class="max-h-52 overflow-y-auto">
-                @foreach($marques as $m)
-                <label class="filter-option">
-                    <input type="checkbox" name="marques[]" value="{{ $m->id }}"
-                        {{ in_array($m->id, request()->get('marques', [])) ? 'checked' : '' }}
-                        onchange="submitForm()">
-                    {{ $m->nom_marca }}
-                </label>
-                @endforeach
-                </div>
-            </div>
-        </div>
-
-        {{-- Estat --}}
-        <div class="relative" id="dropEstat-wrap">
-            <button type="button" onclick="toggleDrop('dropEstat')"
-                class="filter-btn {{ request('estat') ? 'filter-btn-active' : '' }}"
-                id="dropEstat-toggle">
-                <i class="fa-solid fa-circle-half-stroke mr-1 text-xs"></i>
-                Estat
-                @if(request('estat'))
-                    <span class="filter-badge">1</span>
-                @endif
-                <i class="fa-solid fa-chevron-down ml-1 text-[10px]"></i>
-            </button>
-            <div id="dropEstat" class="filter-dropdown hidden">
-                @foreach($estats as $e)
-                <label class="filter-option">
-                    <input type="radio" name="estat" value="{{ $e->id }}"
-                        {{ request('estat') == $e->id ? 'checked' : '' }}
-                        onchange="submitForm()">
-                    {{ $e->nom_estat }}
-                </label>
-                @endforeach
-                @if(request('estat'))
-                <div class="border-t border-neutral-100 mt-1 pt-1">
-                    <button type="button" onclick="clearField('estat');submitForm();" class="text-xs text-neutral-500 hover:text-neutral-700 px-3 py-1">
-                        <i class="fa-solid fa-xmark mr-1"></i>Treure filtre
-                    </button>
-                </div>
-                @endif
-            </div>
-        </div>
-
-        {{-- Mida (múltiple) --}}
-        <div class="relative" id="dropMida-wrap">
-            <button type="button" onclick="toggleDrop('dropMida')"
-                class="filter-btn {{ count(request()->get('mides', [])) ? 'filter-btn-active' : '' }}"
-                id="dropMida-toggle">
-                <i class="fa-solid fa-ruler mr-1 text-xs"></i>
-                Mida
-                @if(count(request()->get('mides', [])))
-                    <span class="filter-badge">{{ count(request()->get('mides', [])) }}</span>
-                @endif
-                <i class="fa-solid fa-chevron-down ml-1 text-[10px]"></i>
-            </button>
-            <div id="dropMida" class="filter-dropdown hidden">
-                <div class="max-h-52 overflow-y-auto">
-                    <div class="px-3 py-1 text-[10px] font-semibold text-neutral-400 uppercase tracking-wider">Samarreta</div>
-                    @foreach($mides->where('tipus_mida','samarreta') as $mida)
+            <!-- Tipus -->
+            <div class="relative" id="dropTipus-wrap">
+                <button type="button" onclick="toggleDrop('dropTipus')" class="filter-btn {{ count(request()->get('tipus', [])) ? 'filter-btn-active' : '' }}">
+                    <i class="fa-solid fa-layer-group text-xs mr-1"></i>
+                    Tipus
+                    @if(count(request()->get('tipus', [])))
+                        <span class="filter-badge">{{ count(request()->get('tipus', [])) }}</span>
+                    @endif
+                    <i class="fa-solid fa-chevron-down ml-1 text-[10px]"></i>
+                </button>
+                <div id="dropTipus" class="filter-dropdown hidden">
+                    @foreach($tipus as $t)
                     <label class="filter-option">
-                        <input type="checkbox" name="mides[]" value="{{ $mida->id }}"
-                            {{ in_array($mida->id, request()->get('mides', [])) ? 'checked' : '' }}
-                            onchange="submitForm()">
-                        {{ $mida->nom_mida }}
-                    </label>
-                    @endforeach
-                    <div class="px-3 py-1 text-[10px] font-semibold text-neutral-400 uppercase tracking-wider mt-1">Calçat</div>
-                    @foreach($mides->where('tipus_mida','calcat') as $mida)
-                    <label class="filter-option">
-                        <input type="checkbox" name="mides[]" value="{{ $mida->id }}"
-                            {{ in_array($mida->id, request()->get('mides', [])) ? 'checked' : '' }}
-                            onchange="submitForm()">
-                        {{ $mida->nom_mida }}
+                        <input type="checkbox" name="tipus[]" value="{{ $t->id }}" {{ in_array($t->id, request()->get('tipus', [])) ? 'checked' : '' }} onchange="submitForm()">
+                        <span>{{ $t->nom_tipus }}</span>
                     </label>
                     @endforeach
                 </div>
             </div>
-        </div>
 
-        {{-- Botó netejar tots els filtres --}}
-        @if($filtresActius > 0 || $proximitatActiva)
-        <a href="{{ route('anuncis.index') }}"
-            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-red-200 bg-red-50 text-red-600 text-sm hover:bg-red-100 transition">
-            <i class="fa-solid fa-filter-slash text-xs"></i>
-            Netejar filtres
-            @if($filtresActius > 0)
-                <span class="bg-red-500 text-white rounded-full text-[10px] w-4 h-4 flex items-center justify-center font-bold">{{ $filtresActius }}</span>
-            @endif
-        </a>
-        @endif
-
-        </div><!-- /filtres -->
-
-        {{-- Botó Proximitat + Nou Anunci --}}
-        <div class="flex items-center gap-2">
-            @if($proximitatActiva)
-            <a href="{{ route('anuncis.index', request()->except(['lat','lng'])) }}"
-               class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl border border-green-200 bg-green-50 text-green-700 hover:bg-green-100 transition">
-                <i class="fa-solid fa-location-crosshairs"></i> Proximitat activa
-                <i class="fa-solid fa-xmark ml-0.5"></i>
-            </a>
-            @else
-            <button type="button" onclick="demanaUbicacio()"
-               class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl border border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50 transition">
-                <i class="fa-solid fa-location-crosshairs"></i> Ordre per proximitat
-            </button>
-            @endif
-
-            <a href="{{ route('dashboard.anuncis.new') }}"
-               class="inline-flex items-center px-4 py-2 bg-neutral-800 text-white text-sm font-semibold rounded-xl hover:bg-neutral-700 transition-all duration-200 shadow-sm active:scale-95">
-                <i class="fa-solid fa-plus mr-1.5"></i>
-                Nou Anunci
-            </a>
-        </div>
-
-    </div><!-- /fila-filtres -->
-</form>
-
-{{-- ══════════════════════════════════════════════════════════════════════
-     GRID D'ANUNCIS
-══════════════════════════════════════════════════════════════════════ --}}
-@if($anuncis->isEmpty())
-    <div class="text-center py-20 text-neutral-400">
-        <i class="fa-solid fa-box-open text-5xl mb-4 block"></i>
-        <p class="text-lg">No s'han trobat anuncis amb aquests filtres.</p>
-        <a href="{{ route('anuncis.index') }}" class="mt-4 inline-block text-sm text-neutral-500 underline">Veure tots els anuncis</a>
-    </div>
-@else
-<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 mb-6">
-    @foreach($anuncis as $anunci)
-    <a href="{{ route('anuncis.show', $anunci->id) }}"
-       class="anunci-card bg-white border border-neutral-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col"
-       data-fotos="{{ $anunci->fotos->pluck('foto_ruta')->toJson() }}">
-
-        {{-- ── Zona de fotos amb slider en hover ── --}}
-        <div class="anunci-foto-wrap relative overflow-hidden rounded-t-2xl bg-neutral-100"
-             style="padding-top: 75%;">
-
-            {{-- Imatge activa --}}
-            <img
-                src="{{ $anunci->fotos->first()?->foto_ruta ?? 'https://picsum.photos/seed/default/600/450' }}"
-                alt="{{ $anunci->titol }}"
-                class="anunci-img absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
-                loading="lazy"
-            />
-
-            {{-- Dots indicadors (si té >1 foto) --}}
-            @if($anunci->fotos->count() > 1)
-            <div class="anunci-dots absolute bottom-1.5 left-0 right-0 flex justify-center gap-1 z-10">
-                @foreach($anunci->fotos as $i => $foto)
-                <span class="anunci-dot w-1.5 h-1.5 rounded-full bg-white transition-all duration-200 {{ $i === 0 ? 'opacity-100' : 'opacity-50' }}"></span>
-                @endforeach
-            </div>
-            @endif
-
-            {{-- Badge tipus --}}
-            <div class="absolute top-2 left-2 z-10">
-                <span class="bg-neutral-800 bg-opacity-80 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full">
-                    {{ $anunci->tipus->nom_tipus }}
-                </span>
+            <!-- Marca -->
+            <div class="relative" id="dropMarca-wrap">
+                <button type="button" onclick="toggleDrop('dropMarca')" class="filter-btn {{ count(request()->get('marques', [])) ? 'filter-btn-active' : '' }}">
+                    <i class="fa-solid fa-tag text-xs mr-1"></i>
+                    Marca
+                    @if(count(request()->get('marques', [])))
+                        <span class="filter-badge">{{ count(request()->get('marques', [])) }}</span>
+                    @endif
+                    <i class="fa-solid fa-chevron-down ml-1 text-[10px]"></i>
+                </button>
+                <div id="dropMarca" class="filter-dropdown hidden">
+                    <div class="max-h-52 overflow-y-auto">
+                    @foreach($marques as $m)
+                    <label class="filter-option">
+                        <input type="checkbox" name="marques[]" value="{{ $m->id }}" {{ in_array($m->id, request()->get('marques', [])) ? 'checked' : '' }} onchange="submitForm()">
+                        <span>{{ $m->nom_marca }}</span>
+                    </label>
+                    @endforeach
+                    </div>
+                </div>
             </div>
 
-            {{-- Badge estat --}}
-            <div class="absolute top-2 right-2 z-10">
-                @php
-                    $estatColors = [
-                        'Nou'       => 'bg-green-500',
-                        'Usat'      => 'bg-blue-500',
-                        'Molt usat' => 'bg-orange-500',
-                        'Per peces' => 'bg-red-500',
-                    ];
-                    $color = $estatColors[$anunci->estat->nom_estat] ?? 'bg-neutral-500';
-                @endphp
-                <span class="text-white text-[10px] font-semibold px-2 py-0.5 rounded-full {{ $color }}">
-                    {{ $anunci->estat->nom_estat }}
-                </span>
-            </div>
-        </div>
-
-        {{-- ── Info de l'anunci ── --}}
-        <div class="p-3 flex flex-col flex-1">
-            <p class="text-[11px] text-neutral-400 font-medium mb-0.5">{{ $anunci->marca->nom_marca }}</p>
-            <h2 class="text-sm font-semibold text-neutral-800 leading-snug mb-1 line-clamp-2">{{ $anunci->titol }}</h2>
-            <p class="text-[11px] text-neutral-400 mb-2">
-                <i class="fa-solid fa-ruler-combined mr-0.5"></i>{{ $anunci->mida->nom_mida }}
-                @if($proximitatActiva && $anunci->distancia !== null)
-                    <span class="ml-1 text-green-600 font-medium">
-                        &middot; <i class="fa-solid fa-location-dot mr-0.5"></i>{{ number_format($anunci->distancia, 0, ',', '.') }} km
-                    </span>
-                @endif
-            </p>
-            <div class="mt-auto flex items-center justify-between">
-                @if($anunci->preu)
-                    <span class="text-base font-bold text-neutral-900">{{ number_format($anunci->preu, 0, ',', '.') }} €</span>
-                @else
-                    <span class="text-sm text-neutral-400 italic">Sense preu</span>
-                @endif
-                <div class="text-right">
-                    <span class="text-[10px] text-neutral-300 block">{{ $anunci->created_at->diffForHumans() }}</span>
-                    @if($anunci->visites > 0)
-                        <span class="text-[9px] text-neutral-400">
-                            <i class="fa-solid fa-eye"></i> {{ $anunci->visites }}
-                        </span>
+            <!-- Estat -->
+            <div class="relative" id="dropEstat-wrap">
+                <button type="button" onclick="toggleDrop('dropEstat')" class="filter-btn {{ request('estat') ? 'filter-btn-active' : '' }}">
+                    <i class="fa-solid fa-circle-half-stroke text-xs mr-1"></i>
+                    Estat
+                    @if(request('estat'))
+                        <span class="filter-badge">1</span>
+                    @endif
+                    <i class="fa-solid fa-chevron-down ml-1 text-[10px]"></i>
+                </button>
+                <div id="dropEstat" class="filter-dropdown hidden">
+                    @foreach($estats as $e)
+                    <label class="filter-option">
+                        <input type="radio" name="estat" value="{{ $e->id }}" {{ request('estat') == $e->id ? 'checked' : '' }} onchange="submitForm()">
+                        <span>{{ $e->nom_estat }}</span>
+                    </label>
+                    @endforeach
+                    @if(request('estat'))
+                    <div class="border-t border-stone-200 dark:border-stone-800 mt-1 pt-1">
+                        <button type="button" onclick="clearField('estat');submitForm();" class="text-xs text-stone-500 hover:text-stone-900 dark:hover:text-white px-3 py-1 font-bold">
+                            <i class="fa-solid fa-xmark mr-1"></i>Treure filtre
+                        </button>
+                    </div>
                     @endif
                 </div>
             </div>
+
+            <!-- Mida -->
+            <div class="relative" id="dropMida-wrap">
+                <button type="button" onclick="toggleDrop('dropMida')" class="filter-btn {{ count(request()->get('mides', [])) ? 'filter-btn-active' : '' }}">
+                    <i class="fa-solid fa-ruler text-xs mr-1"></i>
+                    Mida
+                    @if(count(request()->get('mides', [])))
+                        <span class="filter-badge">{{ count(request()->get('mides', [])) }}</span>
+                    @endif
+                    <i class="fa-solid fa-chevron-down ml-1 text-[10px]"></i>
+                </button>
+                <div id="dropMida" class="filter-dropdown hidden">
+                    <div class="max-h-52 overflow-y-auto">
+                        <div class="px-3 py-1 text-[10px] font-black text-stone-400 dark:text-stone-500 uppercase tracking-wider">Samarreta</div>
+                        @foreach($mides->where('tipus_mida','samarreta') as $mida)
+                        <label class="filter-option">
+                            <input type="checkbox" name="mides[]" value="{{ $mida->id }}" {{ in_array($mida->id, request()->get('mides', [])) ? 'checked' : '' }} onchange="submitForm()">
+                            <span>{{ $mida->nom_mida }}</span>
+                        </label>
+                        @endforeach
+                        <div class="px-3 py-1 text-[10px] font-black text-stone-400 dark:text-stone-500 uppercase tracking-wider mt-1">Calçat</div>
+                        @foreach($mides->where('tipus_mida','calcat') as $mida)
+                        <label class="filter-option">
+                            <input type="checkbox" name="mides[]" value="{{ $mida->id }}" {{ in_array($mida->id, request()->get('mides', [])) ? 'checked' : '' }} onchange="submitForm()">
+                            <span>{{ $mida->nom_mida }}</span>
+                        </label>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reset Filters Button -->
+            @if($filtresActius > 0 || $proximitatActiva)
+            <a href="{{ route('anuncis.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-red-500/30 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 text-xs font-extrabold hover:bg-red-100 dark:hover:bg-red-900/50 transition shadow-xs">
+                <i class="fa-solid fa-filter-circle-xmark text-xs"></i>
+                <span>Netejar filtres</span>
+                @if($filtresActius > 0)
+                    <span class="bg-red-500 text-white rounded-full text-[10px] w-4 h-4 flex items-center justify-center font-black">{{ $filtresActius }}</span>
+                @endif
+            </a>
+            @endif
+
         </div>
-    </a>
-    @endforeach
-</div>
 
-{{-- ══════════════════════════════════════════════════════════════════════
-     PAGINACIÓ
-══════════════════════════════════════════════════════════════════════ --}}
-@if($anuncis->hasPages())
-<div class="flex justify-center items-center gap-1.5 py-6">
+        <!-- Proximity Button -->
+        <div>
+            @if($proximitatActiva)
+            <a href="{{ route('anuncis.index', request()->except(['lat','lng'])) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black rounded-full border border-[#d4ff00]/40 bg-stone-900 text-[#d4ff00] dark:bg-black transition shadow-xs">
+                <i class="fa-solid fa-location-dot"></i> Proximitat activa
+                <i class="fa-solid fa-xmark text-[10px] ml-0.5"></i>
+            </a>
+            @else
+            <button type="button" onclick="demanaUbicacio()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full border border-stone-200 dark:border-stone-800 bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 hover:border-[#d4ff00] dark:hover:border-[#d4ff00] transition shadow-xs">
+                <i class="fa-solid fa-location-crosshairs text-xs"></i> Ordre per proximitat
+            </button>
+            @endif
+        </div>
+    </div>
+</form>
 
-    {{-- Anterior --}}
-    @if($anuncis->onFirstPage())
-        <span class="pag-btn pag-btn-disabled"><i class="fa-solid fa-chevron-left text-xs"></i></span>
-    @else
-        <a href="{{ $anuncis->previousPageUrl() }}" class="pag-btn"><i class="fa-solid fa-chevron-left text-xs"></i></a>
-    @endif
+<!-- ANUNCIS GRID -->
+@if($anuncis->isEmpty())
+    <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl p-12 text-center shadow-xs mb-8 font-display">
+        <i class="fa-solid fa-box-open text-4xl text-stone-300 dark:text-stone-700 mb-3 block"></i>
+        <h3 class="text-base font-black text-stone-900 dark:text-white">No s'han trobat anuncis</h3>
+        <p class="text-xs text-stone-500 dark:text-stone-400 mt-1 font-medium">Prova de canviar els filtres de cerca o la ubicació</p>
+        <a href="{{ route('anuncis.index') }}" class="mt-4 inline-flex items-center gap-1 px-4 py-2 rounded-full bg-stone-900 text-white dark:bg-black dark:text-[#d4ff00] font-black text-xs uppercase tracking-wider hover:bg-[#d4ff00] hover:text-black dark:hover:bg-[#d4ff00] dark:hover:text-black transition-all">
+            Veure tots els anuncis
+        </a>
+    </div>
+@else
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mb-8 font-display">
+        @foreach($anuncis as $anunci)
+        <a href="{{ route('anuncis.show', $anunci->id) }}" class="anunci-card group bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl overflow-hidden shadow-xs hover:border-stone-400 dark:hover:border-[#d4ff00] transition-all flex flex-col justify-between" data-fotos="{{ $anunci->fotos->pluck('foto_ruta')->toJson() }}">
+            
+            <!-- Image Wrap -->
+            <div class="relative aspect-[4/3] w-full overflow-hidden bg-stone-100 dark:bg-stone-900 border-b border-stone-100 dark:border-stone-800/60">
+                <img src="{{ $anunci->fotos->first()?->foto_ruta ?? 'https://picsum.photos/seed/'.$anunci->id.'/600/450' }}" alt="{{ $anunci->titol }}" class="anunci-img w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
 
-    {{-- Números de pàgina --}}
-    @foreach($anuncis->getUrlRange(1, $anuncis->lastPage()) as $page => $url)
-        @if($page == $anuncis->currentPage())
-            <span class="pag-btn pag-btn-active">{{ $page }}</span>
-        @elseif($page == 1 || $page == $anuncis->lastPage() || abs($page - $anuncis->currentPage()) <= 2)
-            <a href="{{ $url }}" class="pag-btn">{{ $page }}</a>
-        @elseif(abs($page - $anuncis->currentPage()) == 3)
-            <span class="pag-btn pag-btn-disabled">…</span>
+                <!-- Hover Dots (Multi-photo) -->
+                @if($anunci->fotos->count() > 1)
+                <div class="anunci-dots absolute bottom-2 left-0 right-0 flex justify-center gap-1 z-10">
+                    @foreach($anunci->fotos as $i => $foto)
+                    <span class="anunci-dot w-1.5 h-1.5 rounded-full bg-white transition-all duration-200 {{ $i === 0 ? 'opacity-100 scale-125' : 'opacity-50' }}"></span>
+                    @endforeach
+                </div>
+                @endif
+
+                <!-- Type Badge -->
+                <div class="absolute top-3 left-3 z-10">
+                    <span class="bg-stone-900/90 text-white dark:bg-black/90 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full backdrop-blur-xs border border-stone-800/50">
+                        {{ $anunci->tipus->nom_tipus }}
+                    </span>
+                </div>
+
+                <!-- State Badge -->
+                <div class="absolute top-3 right-3 z-10">
+                    <span class="bg-white/90 dark:bg-stone-900/90 text-stone-900 dark:text-stone-100 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full backdrop-blur-xs border border-stone-200/80 dark:border-stone-800">
+                        {{ $anunci->estat->nom_estat }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Content Info -->
+            <div class="p-4 flex flex-col flex-1 justify-between">
+                <div>
+                    <div class="flex items-center justify-between text-[11px] font-extrabold text-stone-400 dark:text-stone-500 mb-1 uppercase tracking-wider">
+                        <span>{{ $anunci->marca->nom_marca }}</span>
+                        <span>{{ $anunci->mida->nom_mida }}</span>
+                    </div>
+
+                    <h2 class="text-sm font-black text-stone-900 dark:text-white leading-snug group-hover:text-stone-600 dark:group-hover:text-[#d4ff00] transition-colors line-clamp-2">
+                        {{ $anunci->titol }}
+                    </h2>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-stone-100 dark:border-stone-800/60 flex items-center justify-between">
+                    <div>
+                        @if($anunci->preu)
+                            <span class="text-base font-black text-stone-900 dark:text-white">
+                                {{ number_format($anunci->preu, 0, ',', '.') }} €
+                            </span>
+                        @else
+                            <span class="text-xs font-bold text-stone-400 italic">Consultar</span>
+                        @endif
+                    </div>
+
+                    <div class="text-right">
+                        @if($proximitatActiva && $anunci->distancia !== null)
+                            <span class="text-[11px] font-black text-[#d4ff00] block">
+                                <i class="fa-solid fa-location-dot mr-0.5"></i>{{ number_format($anunci->distancia, 0, ',', '.') }} km
+                            </span>
+                        @else
+                            <span class="text-[10px] font-extrabold text-stone-400 dark:text-stone-500 block">
+                                {{ $anunci->created_at->diffForHumans() }}
+                            </span>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </a>
+        @endforeach
+    </div>
+
+    <!-- PAGINATION -->
+    @if($anuncis->hasPages())
+    <div class="flex justify-center items-center gap-2 py-4 font-display">
+        @if($anuncis->onFirstPage())
+            <span class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-400 dark:text-stone-600 flex items-center justify-center text-xs font-black cursor-not-allowed">
+                <i class="fa-solid fa-chevron-left"></i>
+            </span>
+        @else
+            <a href="{{ $anuncis->previousPageUrl() }}" class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-[#d4ff00] hover:text-black dark:hover:bg-[#d4ff00] dark:hover:text-black text-stone-800 dark:text-stone-200 flex items-center justify-center text-xs font-black transition-all border border-stone-200/80 dark:border-stone-800">
+                <i class="fa-solid fa-chevron-left"></i>
+            </a>
         @endif
-    @endforeach
 
-    {{-- Següent --}}
-    @if($anuncis->hasMorePages())
-        <a href="{{ $anuncis->nextPageUrl() }}" class="pag-btn"><i class="fa-solid fa-chevron-right text-xs"></i></a>
-    @else
-        <span class="pag-btn pag-btn-disabled"><i class="fa-solid fa-chevron-right text-xs"></i></span>
+        @foreach($anuncis->getUrlRange(1, $anuncis->lastPage()) as $page => $url)
+            @if($page == $anuncis->currentPage())
+                <span class="w-9 h-9 rounded-full bg-stone-900 text-white dark:bg-[#d4ff00] dark:text-black flex items-center justify-center text-xs font-black shadow-xs">
+                    {{ $page }}
+                </span>
+            @elseif($page == 1 || $page == $anuncis->lastPage() || abs($page - $anuncis->currentPage()) <= 2)
+                <a href="{{ $url }}" class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-[#d4ff00] hover:text-black dark:hover:bg-[#d4ff00] dark:hover:text-black text-stone-800 dark:text-stone-200 flex items-center justify-center text-xs font-black transition-all border border-stone-200/80 dark:border-stone-800">
+                    {{ $page }}
+                </a>
+            @elseif(abs($page - $anuncis->currentPage()) == 3)
+                <span class="text-stone-400 text-xs font-black px-1">...</span>
+            @endif
+        @endforeach
+
+        @if($anuncis->hasMorePages())
+            <a href="{{ $anuncis->nextPageUrl() }}" class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-[#d4ff00] hover:text-black dark:hover:bg-[#d4ff00] dark:hover:text-black text-stone-800 dark:text-stone-200 flex items-center justify-center text-xs font-black transition-all border border-stone-200/80 dark:border-stone-800">
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+        @else
+            <span class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-400 dark:text-stone-600 flex items-center justify-center text-xs font-black cursor-not-allowed">
+                <i class="fa-solid fa-chevron-right"></i>
+            </span>
+        @endif
+    </div>
     @endif
-
-</div>
 @endif
 
-@endif {{-- /isEmpty --}}
-
-{{-- ══════════════════════════════════════════════════════════════════════
-     ESTILS INLINE
-══════════════════════════════════════════════════════════════════════ --}}
+<!-- STYLES & SCRIPTS -->
 <style>
-/* Filtres */
 .filter-btn {
     display: inline-flex;
     align-items: center;
     padding: 0.4rem 0.85rem;
-    border: 1px solid #d1d5db;
     border-radius: 9999px;
-    background: #fff;
-    font-size: 0.8125rem;
-    color: #374151;
+    background-color: var(--tw-bg-opacity, #f5f5f4);
+    border: 1px solid rgba(229, 231, 235, 0.8);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #44403c;
     cursor: pointer;
-    transition: all .2s;
+    transition: all 0.2s;
     white-space: nowrap;
-    user-select: none;
 }
-.filter-btn:hover { background: #f3f4f6; border-color: #9ca3af; }
-.filter-btn-active { background: #1f2937; color: #fff; border-color: #1f2937; }
-.filter-btn-active:hover { background: #374151; }
+.dark .filter-btn {
+    background-color: #1c1917;
+    border-color: #292524;
+    color: #d6d3d1;
+}
+.filter-btn:hover { border-color: #d4ff00; }
+.filter-btn-active { background-color: #1c1917; color: #ffffff; border-color: #1c1917; }
+.dark .filter-btn-active { background-color: #d4ff00; color: #000000; border-color: #d4ff00; }
+
 .filter-badge {
     display: inline-flex;
     align-items: center;
@@ -374,90 +331,62 @@
     width: 1.1rem;
     height: 1.1rem;
     border-radius: 9999px;
-    background: #e5e7eb;
-    color: #374151;
+    background: #e7e5e4;
+    color: #1c1917;
     font-size: 0.625rem;
-    font-weight: 700;
+    font-weight: 900;
     margin-left: 0.35rem;
 }
-.filter-btn-active .filter-badge { background: #4b5563; color: #fff; }
+.dark .filter-badge { background: #292524; color: #d4ff00; }
+.filter-btn-active .filter-badge { background: #d4ff00; color: #000; }
+
 .filter-dropdown {
     position: absolute;
     top: calc(100% + 6px);
     left: 0;
     z-index: 50;
-    min-width: 180px;
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,.1);
+    min-width: 190px;
+    background: #ffffff;
+    border: 1px solid #e7e5e4;
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     padding: 0.5rem 0;
+}
+.dark .filter-dropdown {
+    background: #18181b;
+    border-color: #27272a;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
 }
 .filter-option {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     padding: 0.4rem 0.85rem;
-    font-size: 0.8125rem;
-    color: #374151;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #292524;
     cursor: pointer;
-    transition: background .15s;
+    transition: background 0.15s;
 }
-.filter-option:hover { background: #f9fafb; }
-.filter-option input { accent-color: #1f2937; }
-
-/* Paginació */
-.pag-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 2rem;
-    height: 2rem;
-    padding: 0 0.5rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    background: #fff;
-    font-size: 0.8125rem;
-    color: #374151;
-    text-decoration: none;
-    transition: all .2s;
-}
-.pag-btn:hover { background: #f3f4f6; border-color: #9ca3af; }
-.pag-btn-active { background: #1f2937 !important; color: #fff !important; border-color: #1f2937 !important; font-weight: 700; }
-.pag-btn-disabled { color: #d1d5db; cursor: default; }
-.pag-btn-disabled:hover { background: #fff; border-color: #e5e7eb; }
-
-/* Card */
-.anunci-card { cursor: pointer; }
-.anunci-foto-wrap { cursor: pointer; }
-.line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
+.dark .filter-option { color: #e7e5e4; }
+.filter-option:hover { background: #f5f5f4; }
+.dark .filter-option:hover { background: #27272a; }
+.filter-option input { accent-color: #d4ff00; }
 </style>
 
-{{-- ══════════════════════════════════════════════════════════════════════
-     JAVASCRIPT
-══════════════════════════════════════════════════════════════════════ --}}
 <script>
-// ── Filtres: obrir/tancar dropdowns ──────────────────────────────────────────
 function toggleDrop(id) {
     const el = document.getElementById(id);
     const isHidden = el.classList.contains('hidden');
-    // Tanca tots
     document.querySelectorAll('.filter-dropdown').forEach(d => d.classList.add('hidden'));
     if (isHidden) el.classList.remove('hidden');
 }
-// Tanca dropdowns en fer clic fora
 document.addEventListener('click', (e) => {
     if (!e.target.closest('[id$="-wrap"]')) {
         document.querySelectorAll('.filter-dropdown').forEach(d => d.classList.add('hidden'));
     }
 });
 
-// ── Enviar formulari en canviar filtre ────────────────────────────────────────
 function submitForm() {
     document.getElementById('filtresForm').submit();
 }
@@ -466,13 +395,12 @@ function clearField(name) {
     if (el) { el.value = ''; }
 }
 
-// ── Hover slider de fotos ─────────────────────────────────────────────────────
+// Photo hover slider
 document.querySelectorAll('.anunci-card').forEach(card => {
     const fotosJson = card.dataset.fotos;
     let fotos = [];
     try { fotos = JSON.parse(fotosJson); } catch(e) { fotos = []; }
-
-    if (fotos.length <= 1) return; // res a fer si només hi ha 1 foto
+    if (fotos.length <= 1) return;
 
     const img   = card.querySelector('.anunci-img');
     const dots  = card.querySelectorAll('.anunci-dot');
@@ -515,17 +443,6 @@ document.querySelectorAll('.anunci-card').forEach(card => {
     });
 });
 
-// ── View Transition: marca la imatge de la card clicada com a "hero" ──────────
-// La pàgina de detall té view-transition-name:anunci-hero a la imatge principal.
-// Quan fem clic a una card, posem el mateix nom a la imatge de la card
-// perquè el navegador pugui animar-la com a element compartit (Chrome 126+).
-document.querySelectorAll('a.anunci-card').forEach(card => {
-    card.addEventListener('click', function() {
-        const img = this.querySelector('.anunci-img');
-        if (img) img.style.viewTransitionName = 'anunci-hero';
-    });
-});
-
 function demanaUbicacio() {
     if (!navigator.geolocation) {
         alert('El teu navegador no suporta geolocalització.');
@@ -533,17 +450,13 @@ function demanaUbicacio() {
     }
     navigator.geolocation.getCurrentPosition(
         function(pos) {
-            const lat = pos.coords.latitude;
-            const lng = pos.coords.longitude;
-            document.getElementById('filter-lat').value = lat;
-            document.getElementById('filter-lng').value = lng;
+            document.getElementById('filter-lat').value = pos.coords.latitude;
+            document.getElementById('filter-lng').value = pos.coords.longitude;
             document.getElementById('filtresForm').submit();
         },
         function(error) {
             let missatge = 'No s\'ha pogut obtenir la ubicació.';
-            if (error.code === 1) missatge = 'Permís de ubicació denegat. Activa\'l al navegador per ordenar per proximitat.';
-            if (error.code === 2) missatge = 'Ubicació no disponible.';
-            if (error.code === 3) missatge = 'Temps d\'espera esgotat.';
+            if (error.code === 1) missatge = 'Permís d\'ubicació denegat.';
             alert(missatge);
         },
         { enableHighAccuracy: true, timeout: 10000 }

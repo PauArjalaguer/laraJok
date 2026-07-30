@@ -171,80 +171,125 @@
 
 
     <div class="relative">
-        <div id="sidebar" class="fixed left-0 top-0 w-[65%] sm:w-[50%] md:w-[35%] h-full bg-white text-stone-800 border-r border-stone-200 dark:bg-neutral-900 dark:text-neutral-100 dark:border-neutral-800 z-50 -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl">
-        @php
-            $userAgent = $_SERVER['HTTP_USER_AGENT'];
-            if(isset($userAgent) && $userAgent == 'iOSWebView'){
-                echo "<div class='mt-20'>&nbsp;</div>";
-            }
-        @endphp
-            <div class="text-stone-800 dark:text-neutral-100 text-xl">
-                <div class="p-4 mt-1 flex items-center justify-between">
-                    <i class="fa-solid fa-circle-xmark h-6 w-6 cursor-pointer lg:hidden hover:text-stone-600 dark:hover:text-neutral-300" onClick="toggleMenu()" onKeyPress="toggleMenu()" role="button" tabindex="0"></i>
-                    <h1 class="text-[15px] ml-3 text-xl font-bold font-['Comfortaa'] text-stone-900 dark:text-white">Jok.cat</h1>
+        <!-- Sidebar Backdrop Overlay -->
+        <div id="sidebarBackdrop" onclick="toggleMenu()" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-40 hidden transition-opacity duration-300"></div>
+
+        <!-- Sidebar Drawer -->
+        <div id="sidebar" class="fixed left-0 top-0 w-[80%] sm:w-[320px] max-w-sm h-full bg-white dark:bg-[#121215] text-stone-900 dark:text-white border-r border-stone-200 dark:border-stone-800/90 z-50 -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl p-5 flex flex-col justify-between overflow-y-auto font-display">
+            <div>
+                <!-- Header -->
+                <div class="flex items-center justify-between pb-4 border-b border-stone-200 dark:border-stone-800 mb-4">
+                    <a href="/" class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
+                        JOK<span class="text-[#d4ff00]">.cat</span>
+                    </a>
+                    <button onclick="toggleMenu()" class="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-600 dark:text-stone-300 hover:bg-[#d4ff00] hover:text-black dark:hover:bg-[#d4ff00] dark:hover:text-black transition-colors flex items-center justify-center">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
                 </div>
-                <hr class="my-2 border-stone-200 dark:border-neutral-800">
 
-                <div class="px-2">
-                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
-                        <i class="fa-solid fa-house-laptop w-5 text-stone-500 dark:text-neutral-400"></i>
-                        <a href="/"><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Inici</span></a>
-                    </div>
-                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
-                        <i class="fa-solid fa-person-skating w-5 text-stone-500 dark:text-neutral-400"></i>
-                        <a href="/competicions"><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Competicions</span></a>
-                    </div>
-                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
-                        <i class="fa-regular fa-newspaper w-5 text-stone-500 dark:text-neutral-400"></i>
-                        <a href="/noticies"><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Notícies</span></a>
-                    </div>
-                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
-                        <i class="fa-solid fa-location-pin w-5 text-stone-500 dark:text-neutral-400"></i>
-                        <a href="/pavellons"><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Pavellons</span></a>
-                    </div>
-                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer border border-stone-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
-                        <i class="fa-brands fa-searchengin w-5 text-stone-500 dark:text-neutral-400"></i>
-                        <input class="text-[15px] ml-4 w-full bg-transparent focus:outline-none border-none p-0 text-stone-800 dark:text-neutral-100 placeholder-stone-400 dark:placeholder-neutral-500" placeholder="Buscar" onKeyUp="search(this.value)" />
-                    </div>
-                    <div id="sidebarSearchResults" class="p-2 text-sm text-center hidden text-stone-500 dark:text-neutral-400"> resultats trobats</div>
-                    <hr class="my-4 border-stone-200 dark:border-neutral-800">
-                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
-                        <i class="fa-solid fa-calendar-week w-5 text-stone-500 dark:text-neutral-400"></i>
-                        <a href="/agenda"><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Agenda</span></a>
-                    </div>
-                    @if (Auth::check())
-                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
-                        <i class="fa-regular fa-calendar-days w-5 text-stone-500 dark:text-neutral-400"></i>
-                        <a href="/calendari"><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Calendari</span></a>
-                    </div>
-                    @endif
-
-                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
-                        <i class="fa-sharp-duotone fa-solid fa-shirt w-5 text-stone-500 dark:text-neutral-400"></i>
-                        <a href="/merchandising"><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Merchandising</span></a>
-                    </div>
-
-                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
-                        <i class="fa-solid fa-tags w-5 text-stone-500 dark:text-neutral-400"></i>
-                        <a href="/anuncis"><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Segona Mà</span></a>
-                    </div>
-
-                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800" id="install-btn" style="display: none;">
-                        <i class="fa-solid fa-mobile-screen w-5 text-stone-500 dark:text-neutral-400"></i>
-                        <button class="text-[15px] ml-4 text-stone-850 dark:text-white font-semibold">Instal·lar App</button>
-                    </div>
-                    @if (Auth::check())
-                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
-                        <i class="fa-solid fa-right-from-bracket w-5 text-stone-500 dark:text-neutral-400"></i>
-                        <a href='/logout'><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Logout</span></a>
-                    </div>
-                    @else
-                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
-                        <i class="fa-solid fa-right-from-bracket w-5 text-stone-500 dark:text-neutral-400"></i>
-                        <a href='/login'><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Login</span></a>
-                    @endif
-                    </div>
+                <!-- Live Search inside Sidebar -->
+                <div class="relative mb-5">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
+                    <input type="text" placeholder="Cerca equip o jugador..." spellcheck="false" autocomplete="off" class="w-full pl-9 pr-4 py-2.5 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-900 dark:text-white border border-stone-200 dark:border-stone-800 focus:outline-none focus:border-[#d4ff00] text-xs font-medium transition-colors" onkeyup="search(this.value)" />
                 </div>
+
+                <div id="sidebarSearchResults" class="text-xs font-bold text-stone-500 dark:text-stone-400 text-center mb-3 hidden"></div>
+
+                <!-- Navigation List -->
+                <div class="space-y-1">
+                    <a href="/" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-stone-900 transition-colors {{ request()->is('/') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-[#d4ff00] group-hover:text-black flex items-center justify-center text-xs transition-colors">
+                                <i class="fa-solid fa-house"></i>
+                            </span>
+                            <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-[#d4ff00]">Inici</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-stone-400 group-hover:translate-x-0.5 transition-transform"></i>
+                    </a>
+
+                    <a href="/competicions" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-stone-900 transition-colors {{ request()->is('competicions*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-[#d4ff00] group-hover:text-black flex items-center justify-center text-xs transition-colors">
+                                <i class="fa-solid fa-trophy"></i>
+                            </span>
+                            <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-[#d4ff00]">Competicions</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-stone-400 group-hover:translate-x-0.5 transition-transform"></i>
+                    </a>
+
+                    <a href="/noticies" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-stone-900 transition-colors {{ request()->is('noticies*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-[#d4ff00] group-hover:text-black flex items-center justify-center text-xs transition-colors">
+                                <i class="fa-regular fa-newspaper"></i>
+                            </span>
+                            <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-[#d4ff00]">Notícies</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-stone-400 group-hover:translate-x-0.5 transition-transform"></i>
+                    </a>
+
+                    <a href="/pavellons" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-stone-900 transition-colors {{ request()->is('pavellons*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-[#d4ff00] group-hover:text-black flex items-center justify-center text-xs transition-colors">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                            </span>
+                            <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-[#d4ff00]">Pavellons</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-stone-400 group-hover:translate-x-0.5 transition-transform"></i>
+                    </a>
+
+                    <a href="/agenda" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-stone-900 transition-colors {{ request()->is('agenda*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-[#d4ff00] group-hover:text-black flex items-center justify-center text-xs transition-colors">
+                                <i class="fa-regular fa-calendar-days"></i>
+                            </span>
+                            <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-[#d4ff00]">Agenda</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-stone-400 group-hover:translate-x-0.5 transition-transform"></i>
+                    </a>
+
+                    <a href="/anuncis" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-stone-900 transition-colors {{ request()->is('anuncis*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-[#d4ff00] group-hover:text-black flex items-center justify-center text-xs transition-colors">
+                                <i class="fa-solid fa-tags"></i>
+                            </span>
+                            <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-[#d4ff00]">Segona Mà</span>
+                        </div>
+                        <span class="bg-[#d4ff00] text-black text-[9px] font-black px-2 py-0.5 rounded-full uppercase shadow-xs">Nou</span>
+                    </a>
+
+                    <a href="/merchandising" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-stone-900 transition-colors {{ request()->is('merchandising*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-[#d4ff00] group-hover:text-black flex items-center justify-center text-xs transition-colors">
+                                <i class="fa-solid fa-shirt"></i>
+                            </span>
+                            <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-[#d4ff00]">Botiga</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-stone-400 group-hover:translate-x-0.5 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Footer User Action -->
+            <div class="pt-4 border-t border-stone-200 dark:border-stone-800 mt-6">
+                @if (Auth::check())
+                    <a href="/dashboard" class="flex items-center justify-between p-3 rounded-2xl bg-stone-100 dark:bg-stone-900 hover:border-[#d4ff00] transition-colors border border-transparent">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-[#d4ff00] text-black font-black flex items-center justify-center text-xs">
+                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                            </div>
+                            <div class="truncate">
+                                <p class="text-xs font-black text-stone-900 dark:text-white truncate">{{ Auth::user()->name }}</p>
+                                <p class="text-[10px] text-stone-500 font-bold uppercase">Perfil</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-gear text-xs text-stone-400"></i>
+                    </a>
+                @else
+                    <a href="/login" class="flex items-center justify-center gap-2 py-3 rounded-full bg-[#d4ff00] hover:bg-lime-400 text-black font-black text-xs uppercase tracking-wider transition-all shadow-xs">
+                        <i class="fa-solid fa-right-to-bracket text-xs"></i>
+                        <span>Iniciar Sessió</span>
+                    </a>
+                @endif
             </div>
         </div>
 
