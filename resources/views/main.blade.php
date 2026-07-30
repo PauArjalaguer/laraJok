@@ -135,7 +135,7 @@
                 <div>
                     <span class="hallmark-stamp bg-[#f5c310] text-black mb-1">GUIA PAVELLONS</span>
                     <h3 class="font-display text-sm md:text-base font-extrabold text-white uppercase tracking-wider mt-1">
-                        Cerca el teu proper pavelló d'hoquei
+                        Cerca el teu pavelló d'hoquei
                     </h3>
                     <p class="font-display text-xs font-medium text-stone-400 mt-1">
                         Localització, horaris i indicacions GPS

@@ -17,17 +17,26 @@
         }
     }
 
-    const leagueShow = (league) => { c
-        var leagueContainer = document.getElementsByClassName("leagueContainer");
-        var leagueButton = document.getElementsByClassName("leagueButton");
-        for (i = 0; i < leagueContainer.length; i++) {
+    const leagueShow = (league) => {
+        const leagueContainer = document.getElementsByClassName("leagueContainer");
+        const leagueButton = document.getElementsByClassName("leagueButton");
+        for (let i = 0; i < leagueContainer.length; i++) {
             leagueContainer[i].style.display = 'none';
-            leagueButton[i].style.backgroundColor = 'rgb(64 64 64 / 1)';
+            leagueButton[i].style.backgroundColor = '';
+            leagueButton[i].style.color = '';
+            leagueButton[i].style.borderColor = '';
+            leagueButton[i].classList.remove('font-black');
         }
-        document.getElementById("league_" + league).style.display = "block";
-        document.getElementById(league + "_button").style.backgroundColor = "rgb(105 105 105 / 1)";
+        const activeContainer = document.getElementById("league_" + league);
+        const activeBtn = document.getElementById(league + "_button");
+        if (activeContainer) activeContainer.style.display = "block";
+        if (activeBtn) {
+            activeBtn.style.backgroundColor = '#f5c310';
+            activeBtn.style.color = '#000000';
+            activeBtn.style.borderColor = '#f5c310';
+            activeBtn.classList.add('font-black');
+        }
     }
- 
 </script>
 
 <style>
@@ -48,19 +57,30 @@
     const toggleClassification = () => {
         classificationExpanded = !classificationExpanded;
         const container = document.getElementById('classificationContainer');
+        const matchesSection = document.getElementById('matchesSection');
         const extras = document.getElementsByClassName('classCol-extra');
         const arrow = document.getElementById('expandClassArrow');
         const text = document.getElementById('expandClassText');
 
         if (classificationExpanded) {
-            container.classList.add('classification-expanded');
+            container.classList.remove('lg:col-span-1');
+            container.classList.add('lg:col-span-2', 'classification-expanded');
+            if (matchesSection) {
+                matchesSection.classList.remove('lg:col-span-1');
+                matchesSection.classList.add('lg:col-span-2');
+            }
             for (let i = 0; i < extras.length; i++) {
                 extras[i].classList.remove('hidden');
             }
             arrow.style.transform = 'rotate(180deg)';
             text.textContent = 'Reduir';
         } else {
-            container.classList.remove('classification-expanded');
+            container.classList.remove('lg:col-span-2', 'classification-expanded');
+            container.classList.add('lg:col-span-1');
+            if (matchesSection) {
+                matchesSection.classList.remove('lg:col-span-2');
+                matchesSection.classList.add('lg:col-span-1');
+            }
             for (let i = 0; i < extras.length; i++) {
                 extras[i].classList.add('hidden');
             }
@@ -102,9 +122,9 @@
 </div>
 @endif
 
-<div class='w-full lg:flex gap-6'>
+<div class='w-full grid grid-cols-1 lg:grid-cols-2 gap-6'>
 
-    <div id="classificationContainer" class='{{ count($classification)>0  ?  "w-full lg:w-1/2 mb-4" : "hidden"}}'>
+    <div id="classificationContainer" class='{{ count($classification)>0  ?  "col-span-1 lg:col-span-1 mb-4 transition-all duration-300" : "hidden"}}'>
         {{-- Expand/Collapse button --}}
         <div class="hidden md:flex justify-between items-center mb-3">
             <h3 class="font-display font-extrabold text-sm uppercase tracking-wider text-stone-900 dark:text-white">
@@ -263,7 +283,7 @@
     </div>
 
     <!-- COLUMN 2: JORNADES I PARTITS -->
-    <div class='{{ count($classification)>0  ? "w-full lg:w-1/2" : "w-full" }}'>
+    <div id="matchesSection" class='{{ count($classification)>0  ? "col-span-1 lg:col-span-1 transition-all duration-300" : "col-span-1 lg:col-span-2" }}'>
         <div class="mb-4">
             <h3 class="font-display font-extrabold text-sm uppercase tracking-wider text-stone-900 dark:text-white mb-3">
                 Jornades
@@ -280,7 +300,7 @@
                 $match->idRound="0".$match->idRound
                 @endphp
                 @endif
-                <button id="{{str_replace(" ","",$match->idRound)}}_button" class="min-w-9 h-9 px-2 rounded-lg font-display text-xs font-extrabold bg-stone-100 dark:bg-stone-850 text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-800 hover:bg-[#f5c310] hover:text-black transition-all cursor-pointer leagueButton" onClick="leagueShow('{{str_replace(" ","",$match->idRound)}}')">
+                <button id="{{str_replace(" ","",$match->idRound)}}_button" class="inline-flex items-center justify-center text-center {{ strlen($match->idRound) > 2 ? 'px-3 min-w-9 w-auto' : 'w-9' }} h-9 rounded-xl font-display text-xs font-extrabold leading-none bg-stone-100 dark:bg-stone-850 text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-800 hover:bg-[#f5c310] hover:text-black transition-all cursor-pointer leagueButton" onClick="leagueShow('{{str_replace(" ","",$match->idRound)}}')">
                     {{$match->idRound}}
                 </button>
                 @endif
@@ -333,3 +353,4 @@
 
 </script>
 @endsection
+
