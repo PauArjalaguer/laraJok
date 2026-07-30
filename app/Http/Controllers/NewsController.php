@@ -22,7 +22,7 @@ class NewsController extends Controller
             [
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
                 'userSavedData' => User::userSavedData(),
-                'newsListTop' => News::orderBy('newsDateTime', 'desc')->where('website','jokcat')->simplePaginate(5)
+                'newsListTop' => News::orderBy('newsDateTime', 'desc')->where('website','jokcat')->paginate(9)
             ]
         );
     }
