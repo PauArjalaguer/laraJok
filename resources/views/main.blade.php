@@ -141,8 +141,8 @@
                     <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style="background-image: url('{{ $n->newsImage }}')"></div>
                     <!-- Dark overlay gradient -->
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
-                    <!-- Tag stamp -->
-                    <div class="absolute top-3.5 left-3.5 hallmark-stamp bg-[#d4ff00] text-black shadow-md">
+                    <!-- Tag stamp sobre la foto (amagat provisionalment a petició de l'usuari, es conserva l'estructura) -->
+                    <div class="hidden absolute top-3.5 left-3.5 hallmark-stamp bg-[#d4ff00] text-black shadow-md">
                         CRÒNICA
                     </div>
                     <!-- Title info -->
@@ -150,7 +150,6 @@
                         <h3 class="font-display text-base md:text-lg font-black text-white leading-tight uppercase mb-1.5 drop-shadow-md group-hover:text-[#d4ff00] transition-colors">
                             {{ $n->newsTitle }}
                         </h3>
-                        <span class="font-display text-[10px] font-black text-[#d4ff00] uppercase tracking-wider">HOQUEI CATALUNYA</span>
                     </div>
                 </a>
             @endif
@@ -167,7 +166,8 @@
                             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
                             <!-- Content -->
                             <div class="relative p-3.5">
-                                <span class="hallmark-stamp bg-stone-900 text-[#d4ff00] text-[9px] mb-1">ACTUALITAT</span>
+                                <!-- Badge sobre la imatge (amagat provisionalment a petició de l'usuari) -->
+                                <span class="hidden hallmark-stamp bg-stone-900 text-[#d4ff00] text-[9px] mb-1">ACTUALITAT</span>
                                 <h4 class="font-display text-xs font-bold text-white leading-snug uppercase line-clamp-2 drop-shadow-sm group-hover:text-[#d4ff00] transition-colors">
                                     {{ $n->newsTitle }}
                                 </h4>

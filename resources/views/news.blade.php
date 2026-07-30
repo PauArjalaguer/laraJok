@@ -33,7 +33,8 @@
                             <i class="fa-regular fa-newspaper text-4xl"></i>
                         </div>
                     @endif
-                    <span class="absolute top-4 left-4 bg-[#d4ff00] text-black font-black text-[10px] uppercase px-3 py-1 rounded-full shadow-md tracking-wider">
+                    <!-- Badge sobre la imatge (amagat provisionalment a petició de l'usuari, es conserva l'estructura) -->
+                    <span class="hidden absolute top-4 left-4 bg-[#d4ff00] text-black font-black text-[10px] uppercase px-3 py-1 rounded-full shadow-md tracking-wider">
                         DESTACAT
                     </span>
                 </div>
@@ -79,7 +80,8 @@
                                     <i class="fa-regular fa-newspaper text-3xl"></i>
                                 </div>
                             @endif
-                            <span class="absolute top-3 left-3 bg-[#d4ff00] text-black font-black text-[9px] uppercase px-2.5 py-0.5 rounded-full shadow-xs">
+                            <!-- Badge sobre la foto de la notícia (amagat provisionalment a petició de l'usuari) -->
+                            <span class="hidden absolute top-3 left-3 bg-[#d4ff00] text-black font-black text-[9px] uppercase px-2.5 py-0.5 rounded-full shadow-xs">
                                 NOTÍCIA
                             </span>
                         </div>
