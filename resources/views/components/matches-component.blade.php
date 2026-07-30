@@ -111,7 +111,7 @@
                 @endif
                 @isset($match->localResult)
                     <a href="/acta/{{$match->idMatch}}/{{urlencode($match->localTeam)}}-{{urlencode($match->visitorTeam)}}" class="group flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-stone-100 hover:bg-stone-900 text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#d4ff00] dark:hover:text-black font-display text-[11px] font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800">
-                        Acta <i class="fa-solid fa-arrow-right text-[9px] text-stone-500 group-hover:text-white dark:text-[#d4ff00] dark:group-hover:text-black transition-colors"></i>
+                        <i class="fa-solid fa-file-lines text-stone-500 group-hover:text-white dark:text-[#d4ff00] dark:group-hover:text-black transition-colors"></i> Acta
                     </a>
                 @endisset
             </div>

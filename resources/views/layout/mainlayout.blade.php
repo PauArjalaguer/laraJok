@@ -273,19 +273,19 @@
             @vite(['resources/js/app.js'])
         <script src="{{ asset('pwa/pwa-install.js') }}"></script>
 
-        {{-- Cookie Banner - Only show on desktop --}}
-        <div id="cookie-banner" class="fixed bottom-0 left-0 right-0 bg-neutral-800 text-white p-4 z-50 hidden md:block">
+        {{-- Cookie Banner - Only show on desktop if no consent saved --}}
+        <div id="cookie-banner" class="fixed bottom-0 left-0 right-0 bg-stone-900/95 backdrop-blur-md text-white p-4 z-50 border-t border-stone-800 shadow-2xl font-display" style="display: none;">
             <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="text-sm text-center md:text-left text-gray-300">
+                <div class="text-xs md:text-sm text-center md:text-left text-stone-300">
                     <p>Utilitzem cookies per millorar la teva experiència. 
-                        <a href="/privacitat" class="text-white underline hover:text-gray-300">Més informació</a>
+                        <a href="/privacitat" class="text-[#d4ff00] underline hover:text-white transition-colors font-bold">Més informació</a>
                     </p>
                 </div>
                 <div class="flex gap-3">
-                    <button onclick="acceptCookies()" class="px-4 py-2 bg-neutral-600 hover:bg-neutral-500 rounded-lg text-sm font-semibold transition-colors">
+                    <button onclick="acceptCookies()" class="px-5 py-2 bg-[#d4ff00] hover:bg-[#c6f800] text-black rounded-full text-xs font-black uppercase tracking-wider transition-all shadow-sm">
                         Acceptar
                     </button>
-                    <button onclick="rejectCookies()" class="px-4 py-2 border border-neutral-500 hover:bg-neutral-700 rounded-lg text-sm text-gray-300 transition-colors">
+                    <button onclick="rejectCookies()" class="px-4 py-2 border border-stone-700 hover:bg-stone-800 rounded-full text-xs font-extrabold text-stone-300 transition-colors">
                         Rebutjar
                     </button>
                 </div>
@@ -295,20 +295,21 @@
         <script>
             // Cookie Banner functions
             function acceptCookies() {
-                console.log('accept clicked');
                 localStorage.setItem('cookie_consent', 'accepted');
-                document.getElementById('cookie-banner').style.display = 'none';
+                var banner = document.getElementById('cookie-banner');
+                if (banner) banner.style.display = 'none';
             }
 
             function rejectCookies() {
-                console.log('reject clicked');
                 localStorage.setItem('cookie_consent', 'rejected');
-                document.getElementById('cookie-banner').style.display = 'none';
+                var banner = document.getElementById('cookie-banner');
+                if (banner) banner.style.display = 'none';
             }
 
-            // Show banner if no consent
-            if (!localStorage.getItem('cookie_consent')) {
-                document.getElementById('cookie-banner').classList.remove('hidden');
+            // Show banner ONLY if no consent exists and screen width >= 768px
+            if (!localStorage.getItem('cookie_consent') && window.innerWidth >= 768) {
+                var banner = document.getElementById('cookie-banner');
+                if (banner) banner.style.display = 'block';
             }
 
             const canGoBack = () => window.history.length > 1;

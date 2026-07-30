@@ -15,29 +15,46 @@
 
 <script async src="https://tally.so/widgets/embed.js"></script>
 <script>
-    window.TallyConfig = {
-    "formId": "EkPjzA",
-    "popup": {
-        "emoji": {
-        "text": "👋",
-        "animation": "flash"
-        },
-        "hideTitle": true,
-        "autoClose": 0,
-        "formEventsForwarding": true,
-        "open": {
-        "trigger": "scroll",
-        "scrollPercent": 10
+    (function() {
+        const TALLY_KEY = 'jok_tally_last_popup';
+        const DAYS_INTERVAL = 14; // Només mostrar com a molt un cop cada 14 dies
+        const lastPopup = localStorage.getItem(TALLY_KEY);
+        const now = Date.now();
+
+        if (!lastPopup || (now - parseInt(lastPopup)) > DAYS_INTERVAL * 24 * 60 * 60 * 1000) {
+            window.TallyConfig = {
+                "formId": "EkPjzA",
+                "popup": {
+                    "emoji": {
+                        "text": "👋",
+                        "animation": "flash"
+                    },
+                    "hideTitle": true,
+                    "autoClose": 0,
+                    "doNotShowAfterClose": true,
+                    "formEventsForwarding": true,
+                    "open": {
+                        "trigger": "scroll",
+                        "scrollPercent": 60
+                    },
+                    "onClose": function() {
+                        localStorage.setItem(TALLY_KEY, Date.now());
+                    },
+                    "onSubmit": function() {
+                        localStorage.setItem(TALLY_KEY, Date.now() + 365 * 24 * 60 * 60 * 1000);
+                    }
+                }
+            };
+            localStorage.setItem(TALLY_KEY, Date.now());
         }
-    }
-    };
+    })();
 </script>
 
 <!-- TOP TICKER BAR (Apple Sports Scoreboard Ticker) -->
-<div class="w-full relative group mb-8">
+<div class="w-full relative group mb-8 hidden">
     <div class="font-display text-[11px] font-extrabold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-2 px-1 flex items-center gap-2">
         <span class="w-2 h-2 rounded-full bg-[#d4ff00] animate-pulse"></span>
-        MARCADORS DIRECTES I DARRERS RESULTATS
+        MARCADORS DIRECTES
     </div>
     <div class="w-full flex overflow-x-auto scroll-smooth gap-3 pb-2 snap-x snap-mandatory scrollbar-hide">
         @foreach($matchesListLastWithResults->take(8) as $match)
