@@ -104,7 +104,7 @@
             <!-- Large Featured News Card -->
             @if(isset($newsListTop[0]))
                 @php $n = $newsListTop[0]; @endphp
-                <a href="/noticies/detall/{{$n->idNew}}/{{urlencode($n->newsTitle)}}" class="group relative flex flex-col justify-end w-full md:w-7/12 h-84 rounded-3xl overflow-hidden shadow-xs hover:border-[#d4ff00] border border-stone-200 dark:border-stone-800 transition-all duration-300">
+                <a href="/noticies/detall/{{$n->idNew}}/{{urlencode(str_replace('/', '-', $n->newsTitle))}}" class="group relative flex flex-col justify-end w-full md:w-7/12 h-84 rounded-3xl overflow-hidden shadow-xs hover:border-[#d4ff00] border border-stone-200 dark:border-stone-800 transition-all duration-300">
                     <!-- Image -->
                     <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style="background-image: url('{{ $n->newsImage }}')"></div>
                     <!-- Dark overlay gradient -->
@@ -128,7 +128,7 @@
                 @for($i = 1; $i <= 2; $i++)
                     @if(isset($newsListTop[$i]))
                         @php $n = $newsListTop[$i]; @endphp
-                        <a href="/noticies/detall/{{$n->idNew}}/{{urlencode($n->newsTitle)}}" class="group relative flex flex-col justify-end w-full h-[9.8rem] rounded-2xl overflow-hidden shadow-xs hover:border-[#d4ff00] border border-stone-200 dark:border-stone-800 transition-all duration-300">
+                        <a href="/noticies/detall/{{$n->idNew}}/{{urlencode(str_replace('/', '-', $n->newsTitle))}}" class="group relative flex flex-col justify-end w-full h-[9.8rem] rounded-2xl overflow-hidden shadow-xs hover:border-[#d4ff00] border border-stone-200 dark:border-stone-800 transition-all duration-300">
                             <!-- Image -->
                             <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style="background-image: url('{{ $n->newsImage }}')"></div>
                             <!-- Overlay -->
@@ -146,22 +146,23 @@
             </div>
         </div>
 
-        <!-- Pavellons Banner -->
-        <a href="/pavellons" class="relative block w-full rounded-3xl bg-stone-950 border border-stone-800 p-5 shadow-xs overflow-hidden group mb-7 transition-all hover:border-[#d4ff00]">
-            <!-- Map background dots effect -->
-            <div class="absolute inset-0 opacity-20 hallmark-grid-bg"></div>
-            <div class="relative flex items-center justify-between">
+        <!-- Pavellons Banner with Map Background -->
+        <a href="/pavellons" class="relative block w-full rounded-3xl bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 shadow-xs overflow-hidden group mb-7 transition-all hover:border-[#d4ff00] p-6 md:p-7">
+            <!-- Background Map Image positioned on the right with smooth mask fade -->
+            <div class="absolute inset-y-0 right-0 w-full md:w-8/12 bg-cover bg-right bg-no-repeat opacity-40 dark:opacity-25 transition-transform duration-700 group-hover:scale-105 pointer-events-none" style="background-image: url('/images/catalonia_map_pavellons.jpg'); mask-image: linear-gradient(to right, transparent 0%, black 40%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 40%);"></div>
+
+            <div class="relative z-10 flex items-center justify-between">
                 <div>
-                    <span class="hallmark-stamp bg-[#d4ff00] text-black mb-1">GUIA PAVELLONS</span>
-                    <h3 class="font-display text-sm md:text-base font-black text-white uppercase tracking-wider mt-1">
-                        Cerca el teu pavelló d'hoquei
+                    <h3 class="font-display text-lg md:text-xl font-black text-stone-900 dark:text-white uppercase tracking-tight leading-tight group-hover:text-[#d4ff00] transition-colors">
+                        PAVELLONS D'HOQUEI A CATALUNYA
                     </h3>
-                    <p class="font-display text-xs font-medium text-stone-400 mt-1">
-                        Localització, horaris i indicacions GPS
+                    <p class="font-display text-xs font-black text-stone-500 dark:text-stone-400 uppercase tracking-wider mt-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-map-location-dot text-[#d4ff00]"></i>
+                        <span>CERCA EL TEU PAVELLÓ</span>
                     </p>
                 </div>
-                <div class="w-10 h-10 rounded-full bg-stone-900 border border-stone-700 flex items-center justify-center text-[#d4ff00] group-hover:bg-[#d4ff00] group-hover:text-black transition-colors duration-300 shadow">
-                    <i class="fa-solid fa-map-location-dot text-base"></i>
+                <div class="w-10 h-10 rounded-full bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-900 dark:text-[#d4ff00] group-hover:bg-[#d4ff00] group-hover:text-black group-hover:border-[#d4ff00] transition-all duration-300 shadow-xs flex-shrink-0">
+                    <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-0.5"></i>
                 </div>
             </div>
         </a>

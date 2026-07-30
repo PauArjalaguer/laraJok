@@ -11,10 +11,6 @@
 
 <!-- PAVELLÓ DETAIL HERO HEADER -->
 <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl p-5 md:p-6 mb-7 shadow-xs font-display">
-    <div class="flex items-center gap-2 mb-1.5">
-        <span class="hallmark-stamp bg-[#d4ff00] text-black font-black">PAVELLÓ</span>
-        <span class="hallmark-stamp bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800">PARTITS PROGRAMATS</span>
-    </div>
     <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white tracking-tight">
         {{ count($partits_pavello) > 0 ? $partits_pavello[0]->placeName : 'Pavelló' }}
     </h1>

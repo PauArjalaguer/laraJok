@@ -19,13 +19,7 @@
 <div class="w-full mt-2 mb-6 font-display">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-200 dark:border-stone-800 pb-4">
         <div>
-            <div class="flex items-center gap-2">
-                <span class="hallmark-stamp bg-[#d4ff00] text-black font-black">UBICACIONS</span>
-                <span id="locationStatus" class="hallmark-stamp bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800">
-                    Cercant ubicació...
-                </span>
-            </div>
-            <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white mt-2 tracking-tight">
+            <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white tracking-tight">
                 Pavellons i Pistes d'Hoquei
             </h1>
         </div>
@@ -100,16 +94,8 @@
                 if (b.distance === null) return -1;
                 return a.distance - b.distance;
             });
-            const statusBadge = document.getElementById('locationStatus');
-            if (statusBadge) {
-                statusBadge.innerHTML = '📍 Proximitat activada';
-            }
         } else {
             list.sort((a, b) => a.placeName.localeCompare(b.placeName));
-            const statusBadge = document.getElementById('locationStatus');
-            if (statusBadge) {
-                statusBadge.innerHTML = '📍 Resum alfabètic';
-            }
         }
 
         tbody.innerHTML = '';

@@ -14,8 +14,6 @@
         <div>
             <!-- Fila de Badges enganxats -->
             <div class="flex flex-wrap items-center gap-2 mb-1">
-                <span class="hallmark-stamp bg-[#d4ff00] text-black font-black">EQUIP</span>
-                
                 <a href="/club/{{$teamInfo[0]->idClub}}/{{urlencode($teamInfo[0]->clubName)}}" class="hallmark-stamp bg-stone-100 text-stone-700 border border-stone-200/80 dark:bg-stone-900 dark:text-stone-300 hover:text-stone-900 dark:hover:text-[#d4ff00] transition-colors">
                     {{$teamInfo[0]->clubName}}
                 </a>

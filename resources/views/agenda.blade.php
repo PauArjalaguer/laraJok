@@ -6,10 +6,7 @@
 <div class="w-full mt-2 mb-6 font-display">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-200 dark:border-stone-800 pb-4">
         <div>
-            <div class="flex items-center gap-2">
-                <span class="hallmark-stamp bg-[#d4ff00] text-black font-black">AGENDA</span>
-            </div>
-            <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white mt-2 tracking-tight">
+            <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white tracking-tight">
                 Agenda de Partits Programats
             </h1>
         </div>

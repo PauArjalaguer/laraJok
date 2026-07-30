@@ -41,7 +41,7 @@ Route::get("/merchandising", [MerchandisingsController::class, 'index']);
 Route::get("/anuncis", [AnuncisController::class, 'index'])->name('anuncis.index');
 Route::get("/anuncis/{id}/{slug?}", [AnuncisController::class, 'show'])->name('anuncis.show');
 
-Route::get("/noticies/detall/{id}/{label}", [NewsController::class, 'detall']);
+Route::get("/noticies/detall/{id}/{label?}", [NewsController::class, 'detall'])->where('label', '.*');
 Route::get("/noticies", [NewsController::class, 'index']);
 Route::get("/agenda", [AgendaController::class, 'index']);
 Route::get("/calendari", [AgendaController::class, 'calendari']);

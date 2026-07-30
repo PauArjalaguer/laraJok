@@ -18,7 +18,6 @@
 <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl p-6 md:p-8 mb-7 shadow-xs font-display">
     <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
         <div class="flex items-center gap-2">
-            <span class="hallmark-stamp bg-[#d4ff00] text-black font-black">ACTUALITAT</span>
             <span class="hallmark-stamp bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800">
                 <i class="fa-regular fa-calendar text-[#d4ff00] mr-1"></i>
                 {{ \Carbon\Carbon::parse($news->newsDatetime)->format('d/m/Y') }}

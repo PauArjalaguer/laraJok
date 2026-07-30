@@ -14,8 +14,6 @@
         <div>
             <!-- Fila de Badges enganxats -->
             <div class="flex items-center gap-2 mb-1">
-                <span class="hallmark-stamp bg-[#d4ff00] text-black font-black">CLUB D'HOQUEI</span>
-                
                 <a href="/desa/club/{{$clubInfo[0]->idClub}}" title="{{ $checkIfSaved==1 ? 'Treu de favorits' : 'Desa als favorits' }}" class="hallmark-stamp inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#d4ff00] dark:hover:text-black transition-all text-[10px] font-black uppercase tracking-wider border border-stone-200/80 dark:border-stone-800">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="{{ $checkIfSaved==1 ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3 {{ $checkIfSaved==1 ? 'text-red-600' : 'text-stone-400' }}">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />

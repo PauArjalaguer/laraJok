@@ -6,11 +6,7 @@
 <div class="w-full mt-2 mb-6 font-display">
     <div class="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-4">
         <div>
-            <div class="flex items-center gap-2">
-                <span class="hallmark-stamp bg-[#d4ff00] text-black font-black">ACTUALITAT</span>
-                <span class="hallmark-stamp bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800">HOQUEI PATINS</span>
-            </div>
-            <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white mt-2 tracking-tight">
+            <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white tracking-tight">
                 Notícies i Novetats
             </h1>
         </div>
@@ -26,7 +22,7 @@
 
     <!-- FEATURED ARTICLE (Top Big Card) -->
     @if($featuredNews)
-        <a href="/noticies/detall/{{$featuredNews->idNew}}/{{urlencode($featuredNews->newsTitle)}}" class="group block bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl overflow-hidden shadow-xs hover:border-stone-400 dark:hover:border-[#d4ff00] transition-all mb-7">
+        <a href="/noticies/detall/{{$featuredNews->idNew}}/{{urlencode(str_replace('/', '-', $featuredNews->newsTitle))}}" class="group block bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl overflow-hidden shadow-xs hover:border-stone-400 dark:hover:border-[#d4ff00] transition-all mb-7">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-0">
                 <!-- Featured Image -->
                 <div class="lg:col-span-6 relative aspect-video lg:aspect-auto overflow-hidden bg-stone-100 dark:bg-stone-900">
@@ -72,7 +68,7 @@
     @if(count($otherNews) > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             @foreach($otherNews as $news)
-                <a href="/noticies/detall/{{$news->idNew}}/{{urlencode($news->newsTitle)}}" class="group bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl p-4 md:p-5 shadow-xs hover:border-stone-400 dark:hover:border-[#d4ff00] transition-all flex flex-col justify-between">
+                <a href="/noticies/detall/{{$news->idNew}}/{{urlencode(str_replace('/', '-', $news->newsTitle))}}" class="group bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl p-4 md:p-5 shadow-xs hover:border-stone-400 dark:hover:border-[#d4ff00] transition-all flex flex-col justify-between">
                     <div>
                         <!-- Image Container -->
                         <div class="relative aspect-video w-full rounded-2xl overflow-hidden bg-stone-100 dark:bg-stone-900 mb-4">

@@ -5,11 +5,7 @@
 <div class="w-full mt-2 mb-6 font-display">
     <div class="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-4">
         <div>
-            <div class="flex items-center gap-2">
-                <span class="hallmark-stamp bg-[#d4ff00] text-black font-black">ÀRBITRE</span>
-                <span class="hallmark-stamp bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700">Darrers {{ count($matchesList) }} partits</span>
-            </div>
-            <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white font-display mt-2 flex items-center gap-2 tracking-tight">
+            <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white font-display flex items-center gap-2 tracking-tight">
                 <i class="fa-solid fa-user-shield text-[#d4ff00] text-xl md:text-2xl"></i>
                 {{ App\Http\Controllers\TeamsController::teamFormat($refereeName) }}
             </h1>

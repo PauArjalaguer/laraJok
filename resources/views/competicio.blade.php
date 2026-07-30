@@ -112,10 +112,7 @@
 <div class="w-full mt-2 mb-6">
     <div class="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-4">
         <div>
-            <div class="flex items-center gap-2">
-                <span class="hallmark-stamp bg-[#d4ff00] text-black font-black">CLASSIFICACIÓ I JORNADES</span>
-            </div>
-            <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white font-display mt-2 tracking-tight">
+            <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white font-display tracking-tight">
                 {{$matchesList[0]->groupName}}
             </h1>
         </div>
