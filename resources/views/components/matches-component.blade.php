@@ -55,22 +55,24 @@
             </a>
         </div>
         
-        <!-- Teams Content -->
-        <div class="flex items-center justify-between mb-3.5 gap-2">
-            <!-- Local Team Name -->
-            <div class="w-[38%] text-right font-extrabold text-xs md:text-sm truncate" title="{{ App\Http\Controllers\TeamsController::teamFormat($match->localTeam) }}">
-                <a href="/equip/{{$match->idLocal}}/{{urlencode($match->localTeam)}}" class="{{ $isLocalSelected ? 'text-stone-900 font-black dark:text-[#d4ff00]' : 'text-stone-900 dark:text-stone-100 hover:text-stone-600 dark:hover:text-[#d4ff00]' }} transition-colors">
-                    {{ App\Http\Controllers\TeamsController::teamFormat($match->localTeam) }}
-                </a>
-            </div>
-
-            <!-- Local Logo (Sense border) -->
-            <div class="w-8 h-8 md:w-10 md:h-10 bg-white dark:bg-transparent rounded-xl p-0.5 flex-shrink-0 flex items-center justify-center">
-                <img class="max-w-full max-h-full object-contain" src="{{ $match->clubImage1 }}" alt="Escut de {{ App\Http\Controllers\TeamsController::teamFormat($match->localTeam) }}">
+        <!-- Teams Content (Shield top, Name below, Score center) -->
+        <div class="flex items-center justify-between mb-3 gap-2 font-display">
+            <!-- Local Team Side (Shield + Name Below) -->
+            <div class="w-[40%] min-w-0 flex flex-col items-center text-center">
+                <!-- Local Logo -->
+                <div class="w-7 h-7 md:w-8 md:h-8 bg-white dark:bg-transparent rounded-lg p-0.5 flex-shrink-0 flex items-center justify-center mb-1">
+                    <img class="max-w-full max-h-full object-contain" src="{{ $match->clubImage1 }}" alt="Escut de {{ App\Http\Controllers\TeamsController::teamFormat($match->localTeam) }}">
+                </div>
+                <!-- Local Team Name -->
+                <div class="w-full font-extrabold text-[11px] md:text-xs leading-tight line-clamp-2" title="{{ App\Http\Controllers\TeamsController::teamFormat($match->localTeam) }}">
+                    <a href="/equip/{{$match->idLocal}}/{{urlencode($match->localTeam)}}" class="{{ $isLocalSelected ? 'text-stone-900 font-black dark:text-[#d4ff00]' : 'text-stone-900 dark:text-stone-100 hover:text-stone-600 dark:hover:text-[#d4ff00]' }} transition-colors">
+                        {{ App\Http\Controllers\TeamsController::teamFormat($match->localTeam) }}
+                    </a>
+                </div>
             </div>
             
             <!-- Mid Center Box (Negre sobre Verd-Lima Apple Sports) -->
-            <div class="flex items-center justify-center flex-shrink-0 bg-[#d4ff00] text-black px-3.5 py-1.5 rounded-full shadow-xs min-w-[4.4rem] text-center font-display">
+            <div class="flex items-center justify-center flex-shrink-0 bg-[#d4ff00] text-black px-3 py-1.5 rounded-full shadow-xs min-w-[3.6rem] text-center font-display">
                 <span class="text-xs md:text-sm font-black text-black leading-none">
                     @if($isPlayed)
                         {{ $match->localResult }} - {{ $match->visitorResult }}
@@ -80,16 +82,18 @@
                 </span>
             </div>
             
-            <!-- Visitor Logo (Sense border) -->
-            <div class="w-8 h-8 md:w-10 md:h-10 bg-white dark:bg-transparent rounded-xl p-0.5 flex-shrink-0 flex items-center justify-center">
-                <img class="max-w-full max-h-full object-contain" src="{{ $match->clubImage2 }}" alt="Escut de {{ App\Http\Controllers\TeamsController::teamFormat($match->visitorTeam) }}">
-            </div>
-
-            <!-- Visitor Team Name -->
-            <div class="w-[38%] text-left font-extrabold text-xs md:text-sm truncate" title="{{ App\Http\Controllers\TeamsController::teamFormat($match->visitorTeam) }}">
-                <a href="/equip/{{$match->idVisitor}}/{{urlencode($match->visitorTeam)}}" class="{{ $isVisitorSelected ? 'text-stone-900 font-black dark:text-[#d4ff00]' : 'text-stone-900 dark:text-stone-100 hover:text-stone-600 dark:hover:text-[#d4ff00]' }} transition-colors">
-                    {{ App\Http\Controllers\TeamsController::teamFormat($match->visitorTeam) }}
-                </a>
+            <!-- Visitor Team Side (Shield + Name Below) -->
+            <div class="w-[40%] min-w-0 flex flex-col items-center text-center">
+                <!-- Visitor Logo -->
+                <div class="w-7 h-7 md:w-8 md:h-8 bg-white dark:bg-transparent rounded-lg p-0.5 flex-shrink-0 flex items-center justify-center mb-1">
+                    <img class="max-w-full max-h-full object-contain" src="{{ $match->clubImage2 }}" alt="Escut de {{ App\Http\Controllers\TeamsController::teamFormat($match->visitorTeam) }}">
+                </div>
+                <!-- Visitor Team Name -->
+                <div class="w-full font-extrabold text-[11px] md:text-xs leading-tight line-clamp-2" title="{{ App\Http\Controllers\TeamsController::teamFormat($match->visitorTeam) }}">
+                    <a href="/equip/{{$match->idVisitor}}/{{urlencode($match->visitorTeam)}}" class="{{ $isVisitorSelected ? 'text-stone-900 font-black dark:text-[#d4ff00]' : 'text-stone-900 dark:text-stone-100 hover:text-stone-600 dark:hover:text-[#d4ff00]' }} transition-colors">
+                        {{ App\Http\Controllers\TeamsController::teamFormat($match->visitorTeam) }}
+                    </a>
+                </div>
             </div>
         </div>
 
