@@ -1,151 +1,204 @@
 @extends('layout.mainlayout')
-@section('title',$clubInfo[0]->clubName." :: JOK.cat ")
+@section('title', $clubInfo[0]->clubName." :: JOK.cat ")
 @section('content')
 
-<div class="w-full mt-2 mb-4">
-    <div class="flex items-center justify-between border-b border-neutral-200 pb-3">
-        <div class="flex items-center gap-3">
-            <img onerror="this.style.display='none'" class="w-10 h-10 object-contain mix-blend-multiply" src={{$clubInfo[0]->clubImage}} />
-            <div>
-                <h1 class="text-2xl font-bold text-neutral-800 font-['Comfortaa']">
-                    {{$clubInfo[0]->clubName}}
-                </h1>
-                <p class="text-sm text-neutral-500 mt-0.5">
-                    <i class="fa-solid fa-building text-neutral-400 mr-1"></i>Club
-                </p>
-            </div>
+<!-- CLUB HERO HEADER (Clean, Compact & Badges Enganxats) -->
+<div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl p-5 md:p-6 mb-7 shadow-xs">
+    <div class="flex items-center gap-4">
+        <!-- Escut (Sense fons blanc en dark) -->
+        <div class="w-14 h-14 md:w-18 md:h-18 bg-white dark:bg-transparent rounded-2xl p-2 flex-shrink-0 flex items-center justify-center">
+            <img class="max-w-full max-h-full object-contain" src="{{$clubInfo[0]->clubImage}}" alt="{{$clubInfo[0]->clubName}}" onerror="this.style.display='none'" />
         </div>
-        <div class="text-right">
-            <a href="/desa/club/{{$clubInfo[0]->idClub}}" title="{{ $checkIfSaved==1 ? 'Treu de favorits' : 'Desa als favorits' }}">
-                <svg xmlns="http://www.w3.org/2000/svg" fill={{$checkIfSaved==1 ? 'currentColor':'none'}} viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 cursor-pointer transition-colors hover:text-red-700 {{$checkIfSaved==1 ? 'text-red-700':'text-neutral-400'}}">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                </svg>
-            </a>
+        
+        <!-- Detalls & Badges Enganxats -->
+        <div>
+            <!-- Fila de Badges enganxats -->
+            <div class="flex items-center gap-2 mb-1">
+                <span class="hallmark-stamp bg-[#d4ff00] text-black font-black">CLUB D'HOQUEI</span>
+                
+                <a href="/desa/club/{{$clubInfo[0]->idClub}}" title="{{ $checkIfSaved==1 ? 'Treu de favorits' : 'Desa als favorits' }}" class="hallmark-stamp inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#d4ff00] dark:hover:text-black transition-all text-[10px] font-black uppercase tracking-wider border border-stone-200/80 dark:border-stone-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="{{ $checkIfSaved==1 ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3 {{ $checkIfSaved==1 ? 'text-red-600' : 'text-stone-400' }}">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                    </svg>
+                    <span>{{ $checkIfSaved==1 ? 'Favorit' : 'Favorit' }}</span>
+                </a>
+            </div>
+
+            <!-- Nom del Club -->
+            <h1 class="font-['Comfortaa'] font-bold text-xl md:text-3xl text-stone-900 dark:text-white leading-tight">
+                {{$clubInfo[0]->clubName}}
+            </h1>
         </div>
     </div>
 </div>
-<div class='md:flex '>
-    <div class="w-full md:w-2/3 md:mr-5">
-        <h1 class="text-xl font-bold hidden">Classificacions</h1>
-        <div class="bg-whitew-full  border-solid border-t-[1px]  shadow-md  hover:bg-neutral-300 transition-all  duration-500 shadow-neutral-700 flex  items-center">
-            <div class="w-full flex justify-between bg-neutral-700 border-t-[1px]  border-neutral-400  text-white">
-                <div class="w-7/12 border-r-[1px] border-neutral-400 py-2 px-2 font-bold">
-                    Classificacions del club
-                </div>
-                <div class="w-1/12  text-center  border-r-[1px] border-neutral-400 py-2 font-bold">
-                    <span class="hidden lg:inline">Pos</span>
-                    <span class="w-full lg:hidden">Po</span>
-                </div>
-                <div class="w-1/12 text-center border-r-[1px] border-neutral-400 py-2 font-bold">
-                    <span class="hidden lg:inline">Punts</span>
-                    <span class="w-full lg:hidden">P</span>
-                </div>
-                <div class="w-1/12 text-center border-r-[1px] border-neutral-400 py-2 font-bold">
-                    <span class="hidden lg:inline">Guanyats</span>
-                    <span class="w-full lg:hidden">G</span>
-                </div>
-                <div class="w-1/12 text-center border-r-[1px] border-neutral-400 py-2 font-bold">
-                    <span class="hidden lg:inline">Empats</span>
-                    <span class="w-full lg:hidden">E</span>
-                </div>
-                <div class="w-1/12 text-center py-2 font-bold">
-                    <span class="hidden lg:inline">Perduts</span>
-                    <span class="w-full lg:hidden">Pe</span>
-                </div>
-            </div>
-        </div>
-        @foreach($classifications as $classification)
-        <div class="bg-white w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-300 transition-all  duration-500 shadow-neutral-700 flex  items-center 
-                                    capitalize flex  ">
-            <div class="w-full flex justify-between">
-                <div class="w-7/12 py-2 px-2 text-sm md:text-base">
-                    <a class="active:text-neutral-300" href="/competicio/{{$classification->idGroup}}/{{urlencode($classification->groupName)}}"> {{$classification->groupName}}</a>
-                </div>
-                <div class="w-1/12 py-2 items-center justify-center flex bg-neutral-700 text-white font-bold">
-                    {{$classification->position}}
-                </div>
-                <div class="w-1/12 py-2 border-r-[1px] border-neutral-400 items-center justify-center flex">
-                    {{$classification->points}}
-                </div>
-                <div class="w-1/12 py-2 border-r-[1px] border-neutral-400 items-center justify-center flex">
-                    {{$classification->won}}
-                </div>
-                <div class="w-1/12 py-2 border-r-[1px] border-neutral-400 items-center justify-center flex">
-                    {{$classification->draw}}
-                </div>
-                <div class="w-1/12 py-2 border-r-[1px] border-neutral-400 items-center justify-center flex">
-                    {{$classification->lost}}
-                </div>
-            </div>
-        </div>
-        @endforeach
-        <div class="pr-1 mt-3">
-            <div class="block mb-2">
-                <h1 class="font-bold text-xl text-neutral-700">Propers partits</h1>
-            </div>
-            @foreach($matchesListNext as $match)
-            <x-matches-component :match="$match" />
-            @endforeach
-        </div>
-        <div class="s pl-1">
-            <div class="block mb-2">
-                <h1 class="font-bold text-xl text-neutral-700">Darrers resultats</h1>
-            </div>
-            @foreach($matchesListLastWithResults as $match)
-            <x-matches-component :match="$match" />
-            @endforeach
-        </div>
-        <div id="propersPartits" class="hidden">
-            <h1 class="text-xl font-bold">Propers partits</h1>
-        </div>
-        <div id="darrersResultats" class="hidden">
-            <h1 class="text-xl font-bold">Darrers resultats</h1>
-        </div>
-    </div>
-    <div class="md:w-1/3 justify-center items-start pt-12   ">
-        <div class="hidden md:flex justify-center">
-            <a href="/club/{{$clubInfo[0]->idClub}}/{{urlencode($clubInfo[0]->clubName)}}">
-                <img onerror="this.style.display='none'" className=' w-full p-8 pt-0  ' src={{$clubInfo[0]->clubImage}} />
-            </a>
-        </div>
-        <div class="flex flex-col gap-2 mb-6 px-4">
-            <a href="/acta_club/{{$clubInfo[0]->idClub}}/actes-setmana" class="w-full bg-neutral-700 hover:bg-neutral-600 text-white font-bold py-2 px-4 rounded text-center transition-colors">
-                Actes de la setmana
-            </a>
-            <a href="/acta_header/{{$clubInfo[0]->idClub}}" target="_blank" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded text-center transition-colors">
-                Generar gràfic resultats
-            </a>
-        </div>
-        <div class="w-full">
 
-            @php
-            $currentSeason=1;
-            @endphp
-            @foreach($teamsList as $team)
-            @if ($currentSeason!=$team->seasonName)
-            <div class="block rounded-t-xl my-2 text-neutral-700 font-bold text-sm flex justify-between">
-                <h1 class="text-xl inline font-bold ">{{$currentSeason==1? "Equips":""}}</h1><span class="inline"> {{$team->seasonName}}</span>
-            </div>
-            @endif
-            <!--  <div class='block rounded-t-xl my-2 text-neutral-700 font-bold'>{{$team->seasonName}}</div> -->
-            <div class="bg-white cursor-pointer w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-300 transition-all  duration-500 shadow-neutral-700 flex  items-center 
-                                     p-4 capitalize flex  ">
-                <div class="w-full">
-                    <a class="active:text-neutral-300" href="/equip/{{$team->idTeam}}/{{urlencode($team->teamName)}}">
-                        <img onerror="this.style.display='none'" class='w-1/12  inline md:hidden  mix-blend-multiply' src={{$clubInfo[0]->clubImage}} /> {{App\Http\Controllers\TeamsController::teamFormat($team->teamName)}}
-                        {{$team->categoryName}}
-                    </a>
+<!-- MAIN GRID LAYOUT -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-7">
+
+    <!-- LEFT / MAIN CONTENT (Classificacions, Propers Partits, Darrers Resultats) -->
+    <div class="col-span-1 lg:col-span-8">
+
+        <!-- CLASSIFICACIONS DEL CLUB (Amagat si no hi ha classificacions) -->
+        @if(isset($classifications) && count($classifications) > 0)
+            <div class="mb-7">
+                <div class="flex items-center justify-between pb-2 border-b border-stone-200 dark:border-stone-800 mb-3 px-0.5">
+                    <h2 class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
+                        CLASSIFICACIONS DEL CLUB
+                    </h2>
+                    <span class="hallmark-stamp bg-stone-900 text-[#d4ff00] dark:bg-[#d4ff00] dark:text-black">LLIGUES</span>
+                </div>
+
+                <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl overflow-hidden shadow-xs">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left font-display text-xs">
+                            <thead class="bg-stone-900 text-[#d4ff00] dark:bg-black dark:text-[#d4ff00] text-[10px] uppercase font-black tracking-wider">
+                                <tr>
+                                    <th class="py-3 px-4">Competició</th>
+                                    <th class="py-3 px-2 text-center">Pos</th>
+                                    <th class="py-3 px-2 text-center">Pts</th>
+                                    <th class="py-3 px-2 text-center">G</th>
+                                    <th class="py-3 px-2 text-center">E</th>
+                                    <th class="py-3 px-2 text-center">P</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-stone-100 dark:divide-stone-800/80">
+                                @foreach($classifications as $classification)
+                                    <tr class="hover:bg-stone-50 dark:hover:bg-stone-900/50 transition-colors">
+                                        <td class="py-3 px-4 font-bold text-stone-900 dark:text-stone-100 capitalize">
+                                            <a href="/competicio/{{$classification->idGroup}}/{{urlencode($classification->groupName)}}" class="hover:text-stone-600 dark:hover:text-[#d4ff00] transition-colors">
+                                                {{$classification->groupName}}
+                                            </a>
+                                        </td>
+                                        <td class="py-3 px-2 text-center">
+                                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#d4ff00] text-black font-black text-xs">
+                                                {{$classification->position}}
+                                            </span>
+                                        </td>
+                                        <td class="py-3 px-2 text-center font-black text-stone-900 dark:text-stone-100">
+                                            {{$classification->points}}
+                                        </td>
+                                        <td class="py-3 px-2 text-center text-stone-600 dark:text-stone-400 font-bold">
+                                            {{$classification->won}}
+                                        </td>
+                                        <td class="py-3 px-2 text-center text-stone-600 dark:text-stone-400 font-bold">
+                                            {{$classification->draw}}
+                                        </td>
+                                        <td class="py-3 px-2 text-center text-stone-600 dark:text-stone-400 font-bold">
+                                            {{$classification->lost}}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            @php
-            $currentSeason=$team->seasonName;
-            @endphp
+        @endif
 
-            @endforeach
-        </div>
+        <!-- PROPERS PARTITS DEL CLUB -->
+        @if(isset($matchesListNext) && count($matchesListNext) > 0)
+            <div class="mb-7">
+                <div class="flex items-center justify-between pb-2 border-b border-stone-200 dark:border-stone-800 mb-3 px-0.5">
+                    <h2 class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
+                        PROPERS PARTITS
+                    </h2>
+                </div>
+                <div class="flex flex-col gap-1">
+                    @foreach($matchesListNext as $match)
+                        <x-matches-component :match="$match" type="upcoming" />
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
+        <!-- DARRERS RESULTATS DEL CLUB -->
+        @if(isset($matchesListLastWithResults) && count($matchesListLastWithResults) > 0)
+            <div class="mb-7">
+                <div class="flex items-center justify-between pb-2 border-b border-stone-200 dark:border-stone-800 mb-3 px-0.5">
+                    <h2 class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
+                        DARRERS RESULTATS
+                    </h2>
+                    <span class="hallmark-stamp bg-stone-900 text-[#d4ff00] dark:bg-[#d4ff00] dark:text-black">RESULTATS</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    @foreach($matchesListLastWithResults as $match)
+                        <x-matches-component :match="$match" type="result" />
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
     </div>
 
-    <div className="clear-both"></div>
+    <!-- RIGHT SIDEBAR (Logo, Equips del Club Desplegable - Subtil Gris Suau) -->
+    <div class="col-span-1 lg:col-span-4">
+        
+        <!-- Big Shield Container (Sense fons blanc en dark) -->
+        <div class="hidden lg:flex justify-center mb-6">
+            <div class="w-36 h-36 bg-white dark:bg-transparent rounded-3xl p-4 flex items-center justify-center">
+                <img onerror="this.style.display='none'" class="max-w-full max-h-full object-contain" src="{{$clubInfo[0]->clubImage}}" alt="{{$clubInfo[0]->clubName}}" />
+            </div>
+        </div>
+
+        <!-- Teams List (Desplegable per Temporada - Estil Suau & Subtil) -->
+        <div class="w-full mb-6">
+            <div class="flex items-center justify-between pb-1.5 border-b border-stone-200 dark:border-stone-800 mb-3 px-0.5">
+                <h3 class="font-display text-xs font-black uppercase tracking-wider text-stone-900 dark:text-white">
+                    EQUIPS DEL CLUB
+                </h3>
+                <span class="hallmark-stamp bg-stone-100 text-stone-700 border border-stone-200/80 dark:bg-stone-900 dark:text-stone-300">TEMPORADES</span>
+            </div>
+
+            @php
+                $groupedTeams = $teamsList->groupBy('seasonName');
+            @endphp
+
+            @foreach($groupedTeams as $seasonName => $teams)
+                <div x-data="{ open: {{ $loop->first ? 'true' : 'false' }} }" class="mb-3">
+                    <!-- Season Accordion Header (Negre sobre Verd-Lima Apple Sports) -->
+                    <button @click="open = !open" class="group w-full flex items-center justify-between py-2.5 px-4 bg-[#d4ff00] text-black rounded-2xl font-display text-xs font-black uppercase tracking-wider hover:bg-[#c6f800] transition-all shadow-xs mb-2">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-users text-black text-xs"></i>
+                            <span class="text-black font-black">{{ $seasonName }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <!-- Badge de numero d'equips subtil en grisos -->
+                            <span class="text-[10px] font-black text-stone-900 bg-stone-900/15 px-2.5 py-0.5 rounded-full">
+                                {{ count($teams) }} {{ count($teams) == 1 ? 'equip' : 'equips' }}
+                            </span>
+                            <i class="fa-solid fa-chevron-down text-black transition-transform duration-200 text-[10px]" :class="{ 'rotate-180': open }"></i>
+                        </div>
+                    </button>
+
+                    <!-- Collapsible Teams Content -->
+                    <div x-show="open" class="space-y-1.5 transition-all">
+                        @foreach($teams as $team)
+                            <a href="/equip/{{$team->idTeam}}/{{urlencode($team->teamName)}}" class="group flex items-center justify-between bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-3 hover:border-stone-400 dark:hover:border-[#d4ff00] transition-all shadow-xs">
+                                <span class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-stone-100 group-hover:text-stone-600 dark:group-hover:text-[#d4ff00] transition-colors capitalize">
+                                    {{App\Http\Controllers\TeamsController::teamFormat($team->teamName)}}
+                                </span>
+                                <span class="font-display text-[10px] font-bold text-stone-600 dark:text-stone-400 bg-stone-100 dark:bg-stone-900 px-2.5 py-0.5 rounded-full">
+                                    {{$team->categoryName}}
+                                </span>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <!-- Quick Action Buttons -->
+        <div class="flex flex-col gap-2.5 mb-6">
+            <a href="/acta_club/{{$clubInfo[0]->idClub}}/actes-setmana" class="group flex items-center justify-center gap-2 py-2.5 px-4 bg-stone-100 hover:bg-stone-900 text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#d4ff00] dark:hover:text-black font-display text-xs font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
+                <i class="fa-solid fa-file-lines text-stone-500 group-hover:text-white dark:text-[#d4ff00] dark:group-hover:text-black transition-colors"></i> Actes de la setmana
+            </a>
+            <a href="/acta_header/{{$clubInfo[0]->idClub}}" target="_blank" class="group flex items-center justify-center gap-2 py-2.5 px-4 bg-stone-100 hover:bg-stone-900 text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#d4ff00] dark:hover:text-black font-display text-xs font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
+                <i class="fa-solid fa-chart-column text-xs"></i> Generar gràfic resultats
+            </a>
+        </div>
+
+    </div>
 
 </div>
+
 @endsection

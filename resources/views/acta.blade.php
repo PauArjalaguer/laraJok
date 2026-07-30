@@ -37,7 +37,7 @@
                 </h2>
             </a>
             <a href="/equip/{{$matchGetInfoById[0]->idLocal}}/{{urlencode($matchGetInfoById[0]->teamName)}}" class="order-1 md:order-2 flex-shrink-0">
-                <div class="w-14 h-14 md:w-24 md:h-24 bg-white rounded-2xl p-1.5 flex items-center justify-center border border-stone-200 dark:border-stone-700/80 shadow-xs">
+                <div class="w-14 h-14 md:w-24 md:h-24 bg-white dark:bg-transparent rounded-2xl p-1.5 flex items-center justify-center border border-stone-200 dark:border-stone-700/80 shadow-xs">
                     <img class="max-w-full max-h-full object-contain" src="{{$matchGetInfoById[0]->clubImage1}}" alt="{{$matchGetInfoById[0]->teamName}}" />
                 </div>
             </a>
@@ -62,7 +62,7 @@
         <!-- Visitor Team -->
         <div class="w-[40%] flex flex-col md:flex-row items-center justify-start text-left gap-3">
             <a href="/equip/{{$matchGetInfoById[0]->idVisitor}}/{{urlencode($matchGetInfoById[0]->teamName2)}}" class="flex-shrink-0">
-                <div class="w-14 h-14 md:w-24 md:h-24 bg-white rounded-2xl p-1.5 flex items-center justify-center border border-stone-200 dark:border-stone-700/80 shadow-xs">
+                <div class="w-14 h-14 md:w-24 md:h-24 bg-white dark:bg-transparent rounded-2xl p-1.5 flex items-center justify-center border border-stone-200 dark:border-stone-700/80 shadow-xs">
                     <img class="max-w-full max-h-full object-contain" src="{{$matchGetInfoById[0]->clubImage2}}" alt="{{$matchGetInfoById[0]->teamName2}}" />
                 </div>
             </a>

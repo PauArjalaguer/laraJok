@@ -38,7 +38,7 @@
             <li>
                 <a href="/anuncis" class="py-1.5 hover:text-stone-900 dark:hover:text-[#d4ff00] transition-colors {{ request()->is('anuncis*') ? 'border-b-2 border-stone-900 dark:border-[#d4ff00] text-stone-900 dark:text-[#d4ff00]' : '' }} flex items-center gap-1.5">
                     Segona Mà
-                    <span class="bg-stone-900 text-white dark:bg-[#d4ff00] dark:text-black text-[9px] font-black px-2 py-0.5 rounded-full uppercase">Nou</span>
+                    <span class="bg-[#d4ff00] text-black text-[9px] font-black px-2 py-0.5 rounded-full uppercase shadow-xs">Nou</span>
                 </a>
             </li>
         </ul>
@@ -54,8 +54,8 @@
             </svg>
         </div>
 
-        <!-- App Store Download Button -->
-        <a href="https://apps.apple.com/ca/app/jok/id6743651881" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full font-black text-xs md:text-sm bg-stone-900 text-white dark:bg-[#d4ff00] dark:text-black hover:bg-stone-800 dark:hover:bg-[#c6f800] transition-all shadow-sm">
+        <!-- App Store Download Button (Negre sobre Verd-Lima Apple Sports) -->
+        <a href="https://apps.apple.com/ca/app/jok/id6743651881" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full font-black text-xs md:text-sm bg-[#d4ff00] text-black hover:bg-stone-900 hover:text-white dark:bg-[#d4ff00] dark:text-black dark:hover:bg-stone-900 dark:hover:text-[#d4ff00] transition-all shadow-xs">
             <i class="fa-brands fa-apple text-sm"></i> Descarrega l'App
         </a>
 
@@ -101,13 +101,13 @@
 @endif
 
 @if (!Auth::check())
-<div class="flex rounded-full my-3 bg-stone-100 dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800/80 p-3 px-5 shadow-xs" id='userSavedDataBanner'>
-    <div class="w-11/12 flex items-center">
+<div class="flex rounded-full my-3 bg-stone-100 dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800/80 p-3 px-5 shadow-xs items-center justify-between" id='userSavedDataBanner'>
+    <div class="flex items-center gap-2">
         <h1 class="font-bold text-xs md:text-sm text-stone-700 dark:text-stone-300">
-            <a href="/register" class="text-stone-900 dark:text-[#d4ff00] font-black underline hover:text-stone-600 dark:hover:text-white transition-colors">Registra't</a> o <a href="/login" class="text-stone-900 dark:text-white font-extrabold hover:underline">accedeix</a> per a guardar els teus accessos directes.
+            <a href="/register" class="bg-[#d4ff00] text-black font-black px-3 py-1 rounded-full text-xs hover:bg-stone-900 hover:text-white transition-all shadow-xs">Registra't</a> o <a href="/login" class="text-stone-900 dark:text-white font-extrabold hover:underline">accedeix</a> per a guardar els teus accessos directes.
         </h1>
     </div>
-    <div class="w-1/12 text-right flex justify-end cursor-pointer text-stone-400 dark:text-neutral-500 hover:text-stone-600 dark:hover:text-neutral-300" onClick="document.getElementById('userSavedDataBanner').style.display='none';">
+    <div class="cursor-pointer text-stone-400 dark:text-neutral-500 hover:text-stone-600 dark:hover:text-neutral-300" onClick="document.getElementById('userSavedDataBanner').style.display='none';">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
             <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
         </svg>
@@ -124,77 +124,3 @@
     </div>
     <div id="searchReturn" class="flex flex-wrap -mx-2"></div>
 </div>
-
-<script>
-    let length = 0;
-
-    function sleep(ms) {
-        document.getElementById('searchReturn').innerHTML = "";
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-    var timeout = null;
-    let totalDataLength = 0;
-    const search = (value) => {
-        totalDataLength = 0;
-        clearTimeout(timeout);
-        if (!value || value.length < 4) {
-            document.getElementById('search').style.display = 'none';
-            return;
-        }
-        timeout = setTimeout(function() {
-            document.getElementById('search').style.display = 'block';
-            document.getElementById('searchValue').innerHTML = value;
-            
-            const teamsFetch = fetch("https://jok.cat/api/search/teams/" + value).then(response => response.json());
-            const playersFetch = fetch("https://jok.cat/api/search/players/" + value).then(response => response.json());
-
-            Promise.all([teamsFetch, playersFetch])
-                .then(([teamsData, playersData]) => {
-                    const searchReturn = document.getElementById('searchReturn');
-                    searchReturn.innerHTML = ""; // Clear results
-                    
-                    // Process Teams
-                    totalDataLength += teamsData.length;
-                    searchReturn.insertAdjacentHTML('beforeend', "<div class='block w-full mx-2 my-3 font-bold text-stone-900 dark:text-white'>" + teamsData.length + " equips</div>");
-                    
-                    let lastSeason = null;
-                    teamsData.map((team) => {
-                        if (team.idSeason !== lastSeason) {
-                            searchReturn.insertAdjacentHTML(
-                                'beforeend',
-                                `<div class="w-full px-2 py-1 text-xs font-semibold text-stone-400 dark:text-neutral-500" >` + team.seasonName + `</div>`
-                            );
-                            lastSeason = team.idSeason;
-                        }
-                        searchReturn.insertAdjacentHTML('beforeend', `<div class='p-2 w-full sm:w-1/2 md:w-1/4'><div class='bg-stone-50 dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800/60 rounded-2xl p-4 cursor-pointer hover:border-[#d4ff00] dark:hover:border-[#d4ff00] transition-all' ><a class='text-sm font-semibold text-stone-850 dark:text-neutral-100' href='/equip/` + team.idTeam + `/` + team.teamName + `'>` + team.teamName + `<br /><small class='text-stone-500 dark:text-neutral-400 font-normal'>` + team.categoryName + `</small></a></div></div>`)
-                    });
-
-                    // Process Players
-                    totalDataLength += playersData.length;
-                    searchReturn.insertAdjacentHTML('beforeend', "<div class='block w-full mx-2 my-3 font-bold text-stone-900 dark:text-white'>" + playersData.length + " jugadors</div>");
-                    
-                    playersData.map((player) => {
-                        searchReturn.insertAdjacentHTML('beforeend', `<div class='p-2 w-full sm:w-1/2 md:w-1/4'><div class='bg-stone-50 dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800/60 rounded-2xl p-4 cursor-pointer hover:border-[#d4ff00] dark:hover:border-[#d4ff00] transition-all' ><a class='text-sm font-semibold text-stone-850 dark:text-neutral-100' href='/jugador/` + player.idPlayer + `/` + player.playerName + `'>` + player.playerName.substr(0, 36) + `</a></div></div>`)
-                    });
-
-                    // Update Sidebar Visibility
-                    const sidebarSearchResults = document.getElementById("sidebarSearchResults");
-                    if (sidebarSearchResults) {
-                         if (totalDataLength > 0) {
-                            sidebarSearchResults.style.display = 'block';
-                        } else {
-                            sidebarSearchResults.style.display = 'none';
-                        }
-                        sidebarSearchResults.innerHTML = totalDataLength + " resultats trobats";
-                    }
-                })
-                .catch(error => {
-                    console.error("Error fetching search results:", error);
-                });
-        }, 750);
-    }
-
-    function toggleMenu() {
-        document.getElementById('sidebar').classList.toggle('-translate-x-full');
-    }
-</script>

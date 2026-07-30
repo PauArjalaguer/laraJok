@@ -48,6 +48,7 @@ class Matches extends Model
                 'club2.clubImage as clubImage2',
                 'localResult',
                 'visitorResult',
+                'places.placeName',
                 'placeAddress',
                 'lat',
                 'lon',
