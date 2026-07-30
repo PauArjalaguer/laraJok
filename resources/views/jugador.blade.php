@@ -1,108 +1,138 @@
 @extends('layout.mainlayout')
-@section('title',$playerInfo[0]->playerName." :: JOK.cat ")
+@section('title', $playerInfo[0]->playerName." :: JOK.cat ")
 
 @section('content')
-<script>
-    const leagueShow = (league) => {
-        var leagueContainer = document.getElementsByClassName("leagueContainer");
-        var leagueButton = document.getElementsByClassName("leagueButton");
-        for (i = 0; i < leagueContainer.length; i++) {
-            leagueContainer[i].style.display = 'none';
-            leagueButton[i].style.backgroundColor = 'rgb(51 65 85 / 1)';
-        }
-        document.getElementById(league).style.display = "block";
-        document.getElementById(league + "_button").style.backgroundColor = "rgb(08 23 43 / 1)";
 
-    }
+@php
+    $seasons = $playerMatchesList->pluck('seasonName')->unique()->sortByDesc(function($s) { return $s; })->values();
+    $firstSeason = $seasons->first() ?? '';
+@endphp
 
-</script>
-<div class="w-full mt-2 mb-4">
-    <div class="flex items-center justify-between border-b border-neutral-200 pb-3">
+<!-- PLAYER HERO HEADER (Ultra-Clean Apple Sports) -->
+<div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl p-5 md:p-6 mb-7 shadow-xs">
+    <div class="flex items-center justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-neutral-800 font-['Comfortaa'] flex items-center gap-2">
-                <i class="fa-solid fa-person-running text-neutral-500"></i>
-                {{$playerInfo[0]->playerName}}
-                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-neutral-700 text-white font-bold text-xs flex-shrink-0">
-                    {{$playerInfo[0]->number}}
-                </span>
+            <!-- Badges enganxats -->
+            <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                <a href="/desa/jugador/{{$playerInfo[0]->idPlayer}}" title="{{ $checkIfSaved==1 ? 'Treu de favorits' : 'Desa als favorits' }}" class="hallmark-stamp inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#d4ff00] dark:hover:text-black transition-all text-[10px] font-black uppercase tracking-wider border border-stone-200/80 dark:border-stone-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="{{ $checkIfSaved==1 ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3 {{ $checkIfSaved==1 ? 'text-red-600' : 'text-stone-400' }}">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                    </svg>
+                    <span>{{ $checkIfSaved==1 ? 'Favorit' : 'Favorit' }}</span>
+                </a>
+            </div>
+
+            <!-- Nom del Jugador -->
+            <h1 class="font-['Comfortaa'] font-bold text-2xl md:text-3xl text-stone-900 dark:text-white leading-tight capitalize flex items-center gap-3">
+                <span>{{ mb_strtolower($playerInfo[0]->playerName) }}</span>
+                @if(isset($playerInfo[0]->number))
+                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-900 text-white dark:bg-[#d4ff00] dark:text-black font-black text-xs md:text-sm shadow-xs">
+                        #{{ $playerInfo[0]->number }}
+                    </span>
+                @endif
             </h1>
-            <p class="text-sm text-neutral-500 mt-0.5">
-                <i class="fa-solid fa-user text-neutral-400 mr-1"></i>Jugador
-            </p>
-        </div>
-        <div class="text-right">
-            <a href="/desa/jugador/{{$playerInfo[0]->idPlayer}}" title="{{ $checkIfSaved==1 ? 'Treu de favorits' : 'Desa als favorits' }}">
-                <svg xmlns="http://www.w3.org/2000/svg" fill={{$checkIfSaved==1 ? 'currentColor':'none'}} viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 cursor-pointer transition-colors hover:text-red-700 {{$checkIfSaved==1 ? 'text-red-700':'text-neutral-400'}}">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                </svg>
-            </a>
         </div>
     </div>
 </div>
 
-<div class='md:flex '>
-    <div class="w-full md:w-2/3 md:pr-2  ">
-        <div class="mb-3">
-            @php
-            $currentSeason=1;
-            $counter=0;
-            @endphp
-            @foreach($playerMatchesList as $match)
-            @if ($currentSeason!=$match->seasonName)
-            <div id="{{$match->seasonName}}_button" class="block rounded-xl p-2 my-2 bg-neutral-700 font-bold inline mr-2 text-white cursor-pointer leagueButton text-sm md:text-base" onClick="leagueShow('{{$match->seasonName}}')">{{$match->seasonName}}</div>
-            @endif
-            @php
-            $currentSeason=$match->seasonName;
-            $counter++;
-            @endphp
-            @endforeach
+<!-- MAIN GRID LAYOUT -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-7" x-data="{ activeSeason: '{{ $firstSeason }}' }">
 
-        </div>
-        <div id="season0">
-            @php
-            $currentSeason=1;
-            $counter=0;
-            @endphp
-            @foreach($playerMatchesList as $match)
-            @if ($currentSeason!=$match->seasonName)
-        </div>
-        <div id={{$match->seasonName}} class='leagueContainer @if ($counter!=0) hidden @endif'>
-            <div class='block rounded-t-xl my-2 text-neutral-700 font-bold hidden'>{{$match->seasonName}}</div>
-            @endif
-            <x-matches-component :match="$match" />
+    <!-- LEFT / MAIN CONTENT (Historial de Partits per Temporada) -->
+    <div class="col-span-1 lg:col-span-8">
 
-            @php
-            $currentSeason=$match->seasonName;
-            $counter++;
-            @endphp
+        <!-- Season Selector Pills (Apple Sports Style) -->
+        @if($seasons->count() > 0)
+            <div class="mb-4 flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+                @foreach($seasons as $season)
+                    <button @click="activeSeason = '{{ $season }}'"
+                        :class="activeSeason === '{{ $season }}' ? 'bg-[#d4ff00] text-black font-black shadow-xs' : 'bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-bold hover:bg-stone-200 dark:hover:bg-stone-800 border border-stone-200/80 dark:border-stone-800'"
+                        class="px-4 py-1.5 rounded-full text-xs font-display uppercase tracking-wider transition-all flex-shrink-0">
+                        {{ $season }}
+                    </button>
+                @endforeach
+            </div>
+        @endif
 
-
-            @endforeach
-        </div>
-    </div>
-    <div class="w-full md:block md:w-1/3  justify-center items-start md:pl-2   ">
-        <div class="w-full flex justify-center hidden ">
-            <a href="/jugador/{{$playerInfo[0]->idPlayer}}/{{urlencode($playerInfo[0]->playerName)}}">
-                <!-- <img class='p-10 ' src='http://ronaldmottram.co.nz/wp-content/uploads/2019/01/default-user-icon-8-300x300.jpg' /> -->
-                <img class='p-10' src="http://clubolesapati.cat/images/dynamic/playersImages/{{$playerInfo[0]->idPlayer}}.jpg" onerror="this.onerror=null;this.src='http://ronaldmottram.co.nz/wp-content/uploads/2019/01/default-user-icon-8-300x300.jpg';" />
-            </a>
-        </div>
-        <div>
-            <h1 class="text-neutral-700 font-bold  text-xl pb-2 ">Estadístiques</h1>
-            @foreach($playerStats as $stats)
-            <div class='mb-1'>
-                <div class='bg-neutral-700 text-center w-full border-[1px] border-b-[0px] border-neutral-500'>
-                    <span class='text-white font-bold text-xs'>{{$stats->seasonName}}</span>
+        <!-- Matches per Season -->
+        @if(count($playerMatchesList) > 0)
+            @foreach($seasons as $season)
+                <div x-show="activeSeason === '{{ $season }}'" class="space-y-1 transition-all">
+                    <div class="flex items-center justify-between pb-2 border-b border-stone-200 dark:border-stone-800 mb-3 px-0.5">
+                        <h2 class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
+                            PARTITS JUGATS ({{ $season }})
+                        </h2>
+                    </div>
+                    @foreach($playerMatchesList as $match)
+                        @if($match->seasonName === $season)
+                            <x-matches-component :match="$match" />
+                        @endif
+                    @endforeach
                 </div>
-                <div class='bg-white w-full h-full  border-solid  shadow-md  hover:bg-neutral-50 transition-all shadow-neutral-700   items-center p-4'>
-                    <div><span class='font-bold'>Partits jugats:</span> {{$stats->match_count}}</div>
-                    <div><span class='font-bold'>Gols:</span> {{$stats->total_goals}}</div>
-                    <div><span class='font-bold'>Tarjetes blaves:</span> {{$stats->total_blue}}</div>
-                    <div><span class='font-bold'>Tarjetes vermelles:</span> {{$stats->total_red}}</div>
+            @endforeach
+        @else
+            <div class="font-display text-xs text-stone-500 dark:text-stone-400 text-center py-10 bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl">
+                No hi ha partits registrats per a aquest jugador.
+            </div>
+        @endif
+
+    </div>
+
+    <!-- RIGHT SIDEBAR (Estadístiques per Temporada) -->
+    <div class="col-span-1 lg:col-span-4">
+
+        @if(count($playerStats) > 0)
+            <div class="w-full mb-6">
+                <div class="flex items-center justify-between pb-1.5 border-b border-stone-200 dark:border-stone-800 mb-3 px-0.5">
+                    <h3 class="font-display text-xs font-black uppercase tracking-wider text-stone-900 dark:text-white">
+                        ESTADÍSTIQUES DEL JUGADOR
+                    </h3>
+                </div>
+
+                <div class="space-y-3.5">
+                    @foreach(collect($playerStats)->sortByDesc('seasonName') as $stats)
+                        <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-4 shadow-xs">
+                            <!-- Season Badge Inside Card -->
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="font-display text-xs font-black text-black bg-[#d4ff00] px-3 py-1 rounded-full uppercase shadow-xs">
+                                    {{ $stats->seasonName }}
+                                </span>
+                            </div>
+
+                            <!-- Grid of 4 Stats Boxes -->
+                            <div class="grid grid-cols-2 gap-2.5 font-display">
+                                <!-- Partits -->
+                                <div class="bg-stone-100 dark:bg-stone-900/90 p-3 rounded-xl text-center border border-stone-200/50 dark:border-stone-800/50">
+                                    <div class="text-[10px] text-stone-500 dark:text-stone-400 font-extrabold uppercase tracking-wider mb-0.5">Partits</div>
+                                    <div class="text-base font-black text-stone-900 dark:text-white">{{ $stats->match_count }}</div>
+                                </div>
+
+                                <!-- Gols -->
+                                <div class="bg-stone-100 dark:bg-stone-900/90 p-3 rounded-xl text-center border border-stone-200/50 dark:border-stone-800/50">
+                                    <div class="text-[10px] text-stone-500 dark:text-stone-400 font-extrabold uppercase tracking-wider mb-0.5">Gols</div>
+                                    <div class="text-base font-black text-stone-900 dark:text-white">{{ $stats->total_goals }} ⚽</div>
+                                </div>
+
+                                <!-- Targetes Blaves -->
+                                <div class="bg-stone-100 dark:bg-stone-900/90 p-3 rounded-xl text-center border border-stone-200/50 dark:border-stone-800/50">
+                                    <div class="text-[10px] text-blue-600 dark:text-blue-400 font-extrabold uppercase tracking-wider mb-0.5">Blaves</div>
+                                    <div class="text-base font-black text-stone-900 dark:text-white">{{ $stats->total_blue }} 🟦</div>
+                                </div>
+
+                                <!-- Targetes Vermelles -->
+                                <div class="bg-stone-100 dark:bg-stone-900/90 p-3 rounded-xl text-center border border-stone-200/50 dark:border-stone-800/50">
+                                    <div class="text-[10px] text-red-600 dark:text-red-400 font-extrabold uppercase tracking-wider mb-0.5">Vermelles</div>
+                                    <div class="text-base font-black text-stone-900 dark:text-white">{{ $stats->total_red }} 🟥</div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
-            @endforeach
-        </div>
+        @endif
+
     </div>
+
 </div>
+
 @endsection

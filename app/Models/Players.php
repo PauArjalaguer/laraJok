@@ -32,7 +32,8 @@ class Players extends Model
                 's.seasonName'
             )
             ->where('pm.idPlayer', $id)
-            ->groupBy(  's.seasonName')
+            ->groupBy('s.seasonName', 's.idSeason')
+            ->orderBy('s.idSeason', 'DESC')
             ->get();
         return $results;
     }

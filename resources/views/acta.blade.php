@@ -11,7 +11,9 @@
         <div>
             <div class="flex items-center gap-2 mb-1.5">
                 <span class="hallmark-stamp bg-[#d4ff00] text-black font-black">ACTA OFICIAL</span>
-                <span class="hallmark-stamp bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700">Jornada {{$matchGetInfoById[0]->idRound}}</span>
+                <a href="/competicio/{{$matchGetInfoById[0]->idGroup}}/{{urlencode($matchGetInfoById[0]->groupName)}}" class="hallmark-stamp bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 hover:bg-[#d4ff00] hover:text-black dark:hover:bg-[#d4ff00] dark:hover:text-black transition-all">
+                    Jornada {{$matchGetInfoById[0]->idRound}}
+                </a>
             </div>
             <h1 class="text-xl md:text-2xl font-black text-stone-900 dark:text-white tracking-tight">
                 <a class="hover:text-[#d4ff00] transition-colors" href="/competicio/{{$matchGetInfoById[0]->idGroup}}/{{urlencode($matchGetInfoById[0]->groupName)}}">
@@ -74,15 +76,68 @@
         </div>
     </div>
 
-    <!-- Referee Info Bar -->
-    @if(isset($matchGetInfoById[0]->referee) && !empty($matchGetInfoById[0]->referee))
-    <div class="mt-6 pt-4 border-t border-stone-100 dark:border-stone-800 flex items-center justify-center gap-2 text-xs md:text-sm text-stone-500 dark:text-stone-400">
-        <i class="fa-solid fa-user-shield text-[#d4ff00]"></i>
-        <span class="font-extrabold text-stone-700 dark:text-stone-300">Àrbitre:</span>
-        <a href="/arbitre/{{ urlencode($matchGetInfoById[0]->referee) }}" class="font-black text-stone-900 dark:text-stone-100 hover:text-[#d4ff00] transition-colors underline decoration-stone-300 dark:decoration-stone-700 underline-offset-4">
-            {{App\Http\Controllers\TeamsController::teamFormat($matchGetInfoById[0]->referee)}}
-        </a>
-    </div>
+    <!-- Referee Info Bar (Detecció avançada per a 1 o múltiples Àrbitres) -->
+    @if(isset($matchGetInfoById[0]->referee) && !empty(trim($matchGetInfoById[0]->referee)))
+        @php
+            $refereeRaw = trim($matchGetInfoById[0]->referee);
+            $refereesList = [];
+
+            // 1. Si conté salts de línia \n
+            if (strpos($refereeRaw, "\n") !== false) {
+                $lines = explode("\n", $refereeRaw);
+                foreach ($lines as $line) {
+                    $line = trim($line);
+                    if (!empty($line)) { $refereesList[] = $line; }
+                }
+            }
+            // 2. Si conté barres / o punts i coma ;
+            elseif (strpos($refereeRaw, '/') !== false || strpos($refereeRaw, ';') !== false) {
+                $parts = preg_split('/[\/;]/', $refereeRaw);
+                foreach ($parts as $p) {
+                    $p = trim($p);
+                    if (!empty($p)) { $refereesList[] = $p; }
+                }
+            }
+            // 3. Si té més d'una coma (format "Cognoms , Nom")
+            elseif (substr_count($refereeRaw, ',') >= 2) {
+                preg_match_all('/([A-Za-zÀ-ÿ\s\'-]+,\s*[A-Za-zÀ-ÿ\s\'-]+)/u', $refereeRaw, $matches);
+                if (!empty($matches[0])) {
+                    foreach ($matches[0] as $matchName) {
+                        $m = trim($matchName);
+                        if (!empty($m)) { $refereesList[] = $m; }
+                    }
+                }
+            }
+
+            // 4. Fallback per a guiçons - o la paraula " i "
+            if (empty($refereesList)) {
+                $parts = preg_split('/(\s+-\s+|\s+i\s+|\s+y\s+|\s+and\s+)/i', $refereeRaw);
+                foreach ($parts as $p) {
+                    $p = trim($p);
+                    if (!empty($p)) { $refereesList[] = $p; }
+                }
+            }
+
+            if (empty($refereesList)) {
+                $refereesList = [$refereeRaw];
+            }
+        @endphp
+        <div class="mt-6 pt-4 border-t border-stone-100 dark:border-stone-800 flex flex-wrap items-center justify-center gap-2 text-xs md:text-sm text-stone-500 dark:text-stone-400">
+            <i class="fa-solid fa-user-shield text-[#d4ff00]"></i>
+            <span class="font-extrabold text-stone-700 dark:text-stone-300">
+                {{ count($refereesList) > 1 ? 'Àrbitres:' : 'Àrbitre:' }}
+            </span>
+            <div class="flex items-center gap-1.5 flex-wrap">
+                @foreach($refereesList as $index => $ref)
+                    <a href="/arbitre/{{ urlencode($ref) }}" class="font-black text-stone-900 dark:text-stone-100 hover:text-[#d4ff00] transition-colors underline decoration-stone-300 dark:decoration-stone-700 underline-offset-4 capitalize">
+                        {{ App\Http\Controllers\TeamsController::teamFormat($ref) }}
+                    </a>
+                    @if($index < count($refereesList) - 1)
+                        <span class="text-stone-400 font-bold">i</span>
+                    @endif
+                @endforeach
+            </div>
+        </div>
     @endif
 </div>
 
