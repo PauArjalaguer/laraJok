@@ -78,55 +78,60 @@
 
     </div>
 
-    <!-- RIGHT SIDEBAR (Estadístiques per Temporada) -->
+    <!-- RIGHT SIDEBAR (Estadístiques del Jugador per Temporada - Apple Sports Table) -->
     <div class="col-span-1 lg:col-span-4">
 
         @if(count($playerStats) > 0)
-            <div class="w-full mb-6">
+            <div class="w-full mb-6 font-display">
                 <div class="flex items-center justify-between pb-1.5 border-b border-stone-200 dark:border-stone-800 mb-3 px-0.5">
-                    <h3 class="font-display text-xs font-black uppercase tracking-wider text-stone-900 dark:text-white">
-                        ESTADÍSTIQUES DEL JUGADOR
+                    <h3 class="text-xs font-black uppercase tracking-wider text-stone-900 dark:text-white">
+                        ESTADÍSTIQUES PER TEMPORADA
                     </h3>
                 </div>
 
-                <div class="space-y-3.5">
-                    @foreach(collect($playerStats)->sortByDesc('seasonName') as $stats)
-                        <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-4 shadow-xs">
-                            <!-- Season Badge Inside Card -->
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="font-display text-xs font-black text-black bg-[#d4ff00] px-3 py-1 rounded-full uppercase shadow-xs">
-                                    {{ $stats->seasonName }}
-                                </span>
-                            </div>
-
-                            <!-- Grid of 4 Stats Boxes -->
-                            <div class="grid grid-cols-2 gap-2.5 font-display">
-                                <!-- Partits -->
-                                <div class="bg-stone-100 dark:bg-stone-900/90 p-3 rounded-xl text-center border border-stone-200/50 dark:border-stone-800/50">
-                                    <div class="text-[10px] text-stone-500 dark:text-stone-400 font-extrabold uppercase tracking-wider mb-0.5">Partits</div>
-                                    <div class="text-base font-black text-stone-900 dark:text-white">{{ $stats->match_count }}</div>
-                                </div>
-
-                                <!-- Gols -->
-                                <div class="bg-stone-100 dark:bg-stone-900/90 p-3 rounded-xl text-center border border-stone-200/50 dark:border-stone-800/50">
-                                    <div class="text-[10px] text-stone-500 dark:text-stone-400 font-extrabold uppercase tracking-wider mb-0.5">Gols</div>
-                                    <div class="text-base font-black text-stone-900 dark:text-white">{{ $stats->total_goals }} ⚽</div>
-                                </div>
-
-                                <!-- Targetes Blaves -->
-                                <div class="bg-stone-100 dark:bg-stone-900/90 p-3 rounded-xl text-center border border-stone-200/50 dark:border-stone-800/50">
-                                    <div class="text-[10px] text-blue-600 dark:text-blue-400 font-extrabold uppercase tracking-wider mb-0.5">Blaves</div>
-                                    <div class="text-base font-black text-stone-900 dark:text-white">{{ $stats->total_blue }} 🟦</div>
-                                </div>
-
-                                <!-- Targetes Vermelles -->
-                                <div class="bg-stone-100 dark:bg-stone-900/90 p-3 rounded-xl text-center border border-stone-200/50 dark:border-stone-800/50">
-                                    <div class="text-[10px] text-red-600 dark:text-red-400 font-extrabold uppercase tracking-wider mb-0.5">Vermelles</div>
-                                    <div class="text-base font-black text-stone-900 dark:text-white">{{ $stats->total_red }} 🟥</div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+                <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl overflow-hidden shadow-xs">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left font-display text-xs">
+                            <thead class="bg-stone-900 text-white dark:bg-black text-[10px] uppercase font-black tracking-wider">
+                                <tr>
+                                    <th class="py-2.5 px-3">Temporada</th>
+                                    <th class="py-2.5 px-2 text-center" title="Partits Jugats">PJ</th>
+                                    <th class="py-2.5 px-2 text-center text-[#d4ff00]" title="Gols Marcats">Gols</th>
+                                    <th class="py-2.5 px-2 text-center text-blue-400" title="Targetes Blaves">TB</th>
+                                    <th class="py-2.5 px-2 text-center text-red-400" title="Targetes Vermelles">TV</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-stone-100 dark:divide-stone-800/80">
+                                @foreach(collect($playerStats)->sortByDesc('seasonName') as $stats)
+                                    <tr class="hover:bg-stone-50 dark:hover:bg-stone-900/50 transition-colors">
+                                        <td class="py-3 px-3 font-bold text-stone-900 dark:text-stone-100">
+                                            <span class="inline-block bg-stone-100 dark:bg-stone-900 px-2 py-0.5 rounded-full text-[10px] font-black border border-stone-200/80 dark:border-stone-800">
+                                                {{ $stats->seasonName }}
+                                            </span>
+                                        </td>
+                                        <td class="py-3 px-2 text-center font-bold text-stone-700 dark:text-stone-300">
+                                            {{ $stats->match_count }}
+                                        </td>
+                                        <td class="py-3 px-2 text-center font-black">
+                                            @if($stats->total_goals > 0)
+                                                <span class="inline-flex items-center gap-1 bg-[#d4ff00] text-black px-2 py-0.5 rounded-full text-[11px] font-black shadow-xs">
+                                                    {{ $stats->total_goals }} ⚽
+                                                </span>
+                                            @else
+                                                <span class="text-stone-400 font-bold">0</span>
+                                            @endif
+                                        </td>
+                                        <td class="py-3 px-2 text-center font-bold text-stone-600 dark:text-stone-400">
+                                            {{ $stats->total_blue > 0 ? $stats->total_blue : '0' }}
+                                        </td>
+                                        <td class="py-3 px-2 text-center font-bold text-stone-600 dark:text-stone-400">
+                                            {{ $stats->total_red > 0 ? $stats->total_red : '0' }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         @endif
