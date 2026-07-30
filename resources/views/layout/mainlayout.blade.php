@@ -7,6 +7,24 @@
     <meta name="apple-mobile-web-app-status-bar" content="#ffffff">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            window.dispatchEvent(new Event('theme-changed'));
+        }
+    </script>
     @vite('resources/css/app.css')
     <title>@yield('title')</title>
     <link rel="manifest" href="/manifest.json">
@@ -134,83 +152,81 @@
         </style>
 </head>
 
-<body class="antialiased">
+<body class="antialiased bg-white text-stone-900 dark:bg-[#121214] dark:text-neutral-100 transition-colors duration-300 min-h-screen">
 
     <div class="relative">
-        <div id="sidebar" class="fixed left-0 top-0 w-[52%] h-full bg-neutral-800 text-white z-50 -translate-x-full transition-transform duration-1000 ease-in-out">
+        <div id="sidebar" class="fixed left-0 top-0 w-[65%] sm:w-[50%] md:w-[35%] h-full bg-white text-stone-800 border-r border-stone-200 dark:bg-neutral-900 dark:text-neutral-100 dark:border-neutral-800 z-50 -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl">
         @php
             $userAgent = $_SERVER['HTTP_USER_AGENT'];
             if(isset($userAgent) && $userAgent == 'iOSWebView'){
                 echo "<div class='mt-20'>&nbsp;</div>";
             }
         @endphp
-            <div class="text-gray-100 text-xl">
-                <div class="p-4 mt-1 flex items-center justify-between ">
-                    <i class="fa-solid fa-circle-xmark h-6 w-6 cursor-pointer lg:hidden hover:text-gray-300" onClick="toggleMenu()" onKeyPress="toggleMenu()" role="button" tabindex="0"></i>
-                    <h1 class="text-[15px]  ml-3 text-xl text-white font-bold  font-['Comfortaa']">Jok.cat</h1>
-
+            <div class="text-stone-800 dark:text-neutral-100 text-xl">
+                <div class="p-4 mt-1 flex items-center justify-between">
+                    <i class="fa-solid fa-circle-xmark h-6 w-6 cursor-pointer lg:hidden hover:text-stone-600 dark:hover:text-neutral-300" onClick="toggleMenu()" onKeyPress="toggleMenu()" role="button" tabindex="0"></i>
+                    <h1 class="text-[15px] ml-3 text-xl font-bold font-['Comfortaa'] text-stone-900 dark:text-white">Jok.cat</h1>
                 </div>
-                <hr class="my-2 text-gray-600">
+                <hr class="my-2 border-stone-200 dark:border-neutral-800">
 
-                <div>
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-solid fa-house-laptop"></i>
-                        <a href="/"><span class="text-[15px] ml-4 text-white">Inici</span></a>
+                <div class="px-2">
+                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
+                        <i class="fa-solid fa-house-laptop w-5 text-stone-500 dark:text-neutral-400"></i>
+                        <a href="/"><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Inici</span></a>
                     </div>
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-solid fa-person-skating"></i>
-                        <a href="/competicions"><span class="text-[15px] ml-4 text-white">Competicions</span></a>
+                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
+                        <i class="fa-solid fa-person-skating w-5 text-stone-500 dark:text-neutral-400"></i>
+                        <a href="/competicions"><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Competicions</span></a>
                     </div>
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-regular fa-newspaper"></i>
-                        <a href="/noticies"><span class="text-[15px] ml-4 text-white">Notícies</span></a>
+                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
+                        <i class="fa-regular fa-newspaper w-5 text-stone-500 dark:text-neutral-400"></i>
+                        <a href="/noticies"><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Notícies</span></a>
                     </div>
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-solid fa-location-pin"></i>
-                        <a href="/pavellons"><span class="text-[15px] ml-4 text-white">Pavellons</span></a>
+                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
+                        <i class="fa-solid fa-location-pin w-5 text-stone-500 dark:text-neutral-400"></i>
+                        <a href="/pavellons"><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Pavellons</span></a>
                     </div>
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer ">
-                        <i class="fa-brands fa-searchengin"></i>
-                        <input class="text-[15px] ml-4 w-full bg-transparent focus:outline-none outline-no" placeholder="Buscar" onKeyUp="search(this.value)" />
+                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer border border-stone-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
+                        <i class="fa-brands fa-searchengin w-5 text-stone-500 dark:text-neutral-400"></i>
+                        <input class="text-[15px] ml-4 w-full bg-transparent focus:outline-none border-none p-0 text-stone-800 dark:text-neutral-100 placeholder-stone-400 dark:placeholder-neutral-500" placeholder="Buscar" onKeyUp="search(this.value)" />
                     </div>
-                    <div id="sidebarSearchResults" class="p-2 text-sm text-center hidden"> resultats trobats</div>
-                    <hr class="my-4 text-gray-600">
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-solid fa-calendar-week text-white"></i>
-                        <a href="/agenda"><span class="text-[15px] ml-4 text-white">Agenda</span></a>
+                    <div id="sidebarSearchResults" class="p-2 text-sm text-center hidden text-stone-500 dark:text-neutral-400"> resultats trobats</div>
+                    <hr class="my-4 border-stone-200 dark:border-neutral-800">
+                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
+                        <i class="fa-solid fa-calendar-week w-5 text-stone-500 dark:text-neutral-400"></i>
+                        <a href="/agenda"><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Agenda</span></a>
                     </div>
                     @if (Auth::check())
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-regular fa-calendar-days text-white"></i>
-                        <a href="/calendari"><span class="text-[15px] ml-4 text-white">Calendari</span></a>
+                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
+                        <i class="fa-regular fa-calendar-days w-5 text-stone-500 dark:text-neutral-400"></i>
+                        <a href="/calendari"><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Calendari</span></a>
                     </div>
                     @endif
 
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-sharp-duotone fa-solid fa-shirt"></i>
-                        <a href="/merchandising"><span class="text-[15px] ml-4 text-white">Merchandising</span></a>
+                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
+                        <i class="fa-sharp-duotone fa-solid fa-shirt w-5 text-stone-500 dark:text-neutral-400"></i>
+                        <a href="/merchandising"><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Merchandising</span></a>
                     </div>
 
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-solid fa-tags"></i>
-                        <a href="/anuncis"><span class="text-[15px] ml-4 text-white">Segona Mà</span></a>
+                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
+                        <i class="fa-solid fa-tags w-5 text-stone-500 dark:text-neutral-400"></i>
+                        <a href="/anuncis"><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Segona Mà</span></a>
                     </div>
 
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500" id="install-btn" style="display: none;">
-                        <i class="fa-solid fa-mobile-screen"></i>
-                        <button class="text-[15px] ml-4 text-white">Instal·lar App</button>
+                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800" id="install-btn" style="display: none;">
+                        <i class="fa-solid fa-mobile-screen w-5 text-stone-500 dark:text-neutral-400"></i>
+                        <button class="text-[15px] ml-4 text-stone-850 dark:text-white font-semibold">Instal·lar App</button>
                     </div>
                     @if (Auth::check())
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                        <a href='/logout'><span class="text-[15px] ml-4 text-white">Logout</span></a>
+                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
+                        <i class="fa-solid fa-right-from-bracket w-5 text-stone-500 dark:text-neutral-400"></i>
+                        <a href='/logout'><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Logout</span></a>
                     </div>
                     @else
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                        <a href='/login'><span class="text-[15px] ml-4 text-white">Login</span></a>
-                        @endif
-
+                    <div class="m-1 flex items-center rounded-lg px-4 py-2.5 duration-200 cursor-pointer hover:bg-stone-200 dark:hover:bg-neutral-800">
+                        <i class="fa-solid fa-right-from-bracket w-5 text-stone-500 dark:text-neutral-400"></i>
+                        <a href='/login'><span class="text-[15px] ml-4 font-semibold text-stone-800 dark:text-neutral-200">Login</span></a>
+                    @endif
                     </div>
                 </div>
             </div>
@@ -218,10 +234,10 @@
 
         <div id="container" class="min-h-screen">
 
-            <div class="w-full lg:w-3/4 p-2 lg:p-0 mx-auto my-0 ">
-                <div id="pwaNav" class="px-4 pb-2 flex justify-between items-center w-full border-b border-gray-200 hidden lg:hidden">
-                    <div id="pwaNavBack"><i class="fa-solid fa-backward-step" onClick="goBack()" onKeyPress="goBack()" role="button" tabindex="0"></i></div>
-                    <div id="pwaNavFordward" class="hidden"><i class="fa-solid fa-forward-step" onClick="goForward()" onKeyPress="goForward()" role="button" tabindex="0"></i></div>
+            <div class="w-full lg:w-11/12 xl:w-10/12 max-w-[1400px] p-4 lg:p-6 mx-auto my-0">
+                <div id="pwaNav" class="px-4 pb-2 flex justify-between items-center w-full border-b border-stone-200 dark:border-neutral-800 hidden lg:hidden">
+                    <div id="pwaNavBack"><i class="fa-solid fa-backward-step cursor-pointer text-stone-600 dark:text-neutral-400" onClick="goBack()" onKeyPress="goBack()" role="button" tabindex="0"></i></div>
+                    <div id="pwaNavFordward" class="hidden"><i class="fa-solid fa-forward-step cursor-pointer text-stone-600 dark:text-neutral-400" onClick="goForward()" onKeyPress="goForward()" role="button" tabindex="0"></i></div>
                 </div>
                 @include('layout.nav')
                 {{-- @include('layout.select-section') --}}

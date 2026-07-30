@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Anunci;
 use App\Models\Clubs;
 use App\Models\Leagues;
 use App\Models\Matches;
@@ -24,6 +25,7 @@ class MainController extends Controller
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
                 'userSavedData' =>  $userSavedData,
                 'newsListTop'=>News::orderBy('newsDateTime','desc')->where('website','jokcat')->limit(4)->get(),
+                'recentAds' => Anunci::with(['marca', 'estat', 'fotos'])->where('conforme_usuari_enviament_mail', 1)->latest()->take(5)->get(),
                 'userAgent' => request()->userAgent()
 
             ]

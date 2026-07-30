@@ -4,171 +4,197 @@
         echo "<div class='mt-20'>&nbsp;</div>";
     }
 @endphp
-<nav class="flex">
-    <div class="py-2 lg:py-2 w-2/12">
-        <h1><a href="/" class="webtitle font-['Comfortaa'] text-bold text-2xl md:text-4xl  font-bold">JOK.cat</a></h1>
+<nav class="flex items-center justify-between py-4 border-b border-stone-200/60 dark:border-neutral-800/60 mb-6 bg-transparent">
+    <!-- Logo -->
+    <div class="flex items-center">
+        <a href="/" class="webtitle font-['Comfortaa'] font-bold text-2xl md:text-3xl tracking-tight text-stone-900 dark:text-white flex items-center gap-0.5">
+            JOK.cat
+        </a>
     </div>
 
-    <div class="py-1 w-10/12 text-right text-neutral-700  flex justify-end">
-        <div class="p-2 inline lg:hidden" id="menuButton">
-            <svg onClick="toggleMenu()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
-        </div>
-        <ul class="pt-2 block  hidden lg:inline" id="menu_">
-            <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/competicions">Competició</a></li>
-          {{-- <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/clubs">Clubs</a></li> --}}
-            <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/noticies">Notícies</a></li>
-            <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/pavellons">Pavellons</a></li>
-            <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/agenda">Agenda</a></li>
-
-            @if (Auth::check())
-            <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/calendari">Calendari</a></li>
-            @endif
-            {{-- <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base hidden "><a href="/anuncis">Anuncis</a></li> --}}
-            <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/merchandising">Merchandising</a></li>
-            <li class="block lg:inline lg:p-2 cursor-pointer font-bold text-base "><a href="/anuncis">Segona Mà <span class="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full align-top ml-1">Nou</span></a></li>
-            <li class="lg:p-2 cursor-pointer font-bold text-base hidden ">Contacte</li>
-            <li class="block lg:inline p-  cursor-pointer font-bold mt-2 lg:mr-2 ">
-                <div class="hidden bg-neutral-200 rounded-xl  p-2  w-full   inline text-center" id="searchBarButton" onClick="(()=>{this.style.display='none'; document.getElementById('searchBar').style.display='inline'})()">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 inline ">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                </div>
-                <div class="bg-neutral-400 rounded-xl p-3 md:p-2 w-full inline border-solid border-2 border-neutral-500" id="searchBar">
-                    <input type="text" class='border-0 bg-transparent' onKeyUp="search(this.value)" />
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 inline">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-
-                </div>
-            </li>
-
-            @if (!Auth::check())
-            <li class="block lg:inline mt-4 p-2 cursor-pointer font-bold bg-neutral-700 rounded-xl  border-2 border-neutral-700 text-white text-center">
-                <a href='/dashboard'>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 inline">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                    </svg> Login
+    <!-- Center Navigation Links -->
+    <div class="hidden lg:flex items-center gap-6">
+        <ul class="flex items-center gap-6 text-stone-700 dark:text-neutral-300 font-semibold text-sm">
+            <li>
+                <a href="/competicions" class="py-1.5 hover:text-[#f5c310] transition-colors {{ request()->is('competicions*') ? 'border-b-2 border-[#f5c310] text-[#f5c310] dark:text-white' : '' }}">
+                    Competicions
                 </a>
             </li>
-            @else
-            <li class="block lg:inline mt-4 p-2 cursor-pointer font-bold border-solid border-2 border-neutral-700 rounded-xl text-neutral-700 text-center mb-5">
-                <a href='/dashboard' class='inline'>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 inline my-">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                    </svg> {{Auth::user()->name}} | </a> <a href='/logout'><span class="font-bold text-neutral-900 ">Sortir</span>
+            <li>
+                <a href="/noticies" class="py-1.5 hover:text-[#f5c310] transition-colors {{ request()->is('noticies*') ? 'border-b-2 border-[#f5c310] text-[#f5c310] dark:text-white' : '' }}">
+                    Notícies
                 </a>
             </li>
-            @endif
-
+            <li>
+                <a href="/pavellons" class="py-1.5 hover:text-[#f5c310] transition-colors {{ request()->is('pavellons*') ? 'border-b-2 border-[#f5c310] text-[#f5c310] dark:text-white' : '' }}">
+                    Pavellons
+                </a>
+            </li>
+            <li>
+                <a href="/agenda" class="py-1.5 hover:text-[#f5c310] transition-colors {{ request()->is('agenda*') || request()->is('/') ? 'border-b-2 border-[#f5c310] text-[#f5c310] dark:text-white' : '' }}">
+                    Agenda
+                </a>
+            </li>
+            <li>
+                <a href="/anuncis" class="py-1.5 hover:text-[#f5c310] transition-colors {{ request()->is('anuncis*') ? 'border-b-2 border-[#f5c310] text-[#f5c310] dark:text-white' : '' }} flex items-center gap-1">
+                    Segona Mà
+                    <span class="bg-[#f5c310] text-stone-950 dark:bg-amber-450 dark:text-stone-950 text-[10px] font-black px-1.5 py-0.5 rounded-full">Nou</span>
+                </a>
+            </li>
         </ul>
     </div>
+
+    <!-- Right Actions -->
+    <div class="flex items-center gap-2 md:gap-4">
+        <!-- Search Button/Bar -->
+        <div class="relative flex items-center bg-stone-100 dark:bg-neutral-800 border border-stone-200 dark:border-neutral-700/60 rounded-xl px-3 py-1.5 w-32 md:w-48 transition-all">
+            <input type="text" placeholder="Cerca..." class="w-full bg-transparent border-0 p-0 text-xs md:text-sm text-stone-800 dark:text-neutral-100 placeholder-stone-400 dark:placeholder-neutral-500 focus:ring-0 focus:outline-none" onKeyUp="search(this.value)" />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-stone-400 dark:text-neutral-500 ml-1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+        </div>
+
+        <!-- App Store Download Button (mockup style) -->
+        <a href="https://apps.apple.com/ca/app/jok/id6743651881" target="_blank" class="hidden sm:inline-block px-4 py-1.5 rounded-lg text-xs md:text-sm font-bold bg-[#f5c310] text-stone-950 border border-transparent hover:bg-[#e5b50e] dark:bg-transparent dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-neutral-800 transition-all">
+            Descarrega l'App
+        </a>
+
+        <!-- Login / User Action -->
+        @if (!Auth::check())
+            <a href="/login" class="text-xs md:text-sm font-bold text-stone-700 dark:text-neutral-300 hover:text-[#f5c310] transition-colors">
+                Login / Registre
+            </a>
+        @else
+            <a href="/dashboard" class="text-xs md:text-sm font-bold text-stone-700 dark:text-neutral-300 hover:text-[#f5c310] transition-colors">
+                {{ Auth::user()->name }}
+            </a>
+        @endif
+
+        <!-- Theme Toggler -->
+        <button onClick="toggleTheme()" class="p-2 rounded-xl text-stone-600 dark:text-neutral-400 hover:bg-stone-200/50 dark:hover:bg-neutral-850 transition-colors focus:outline-none" aria-label="Toggle theme">
+            <i class="fa-solid fa-sun dark:hidden text-lg"></i>
+            <i class="fa-solid fa-moon hidden dark:block text-lg text-[#f5c310]"></i>
+        </button>
+
+        <!-- Mobile Menu Toggle -->
+        <button onClick="toggleMenu()" class="p-2 inline lg:hidden text-stone-700 dark:text-neutral-300 hover:bg-stone-200/50 dark:hover:bg-neutral-800 rounded-xl" id="menuButton">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+        </button>
+    </div>
 </nav>
+
 @if($userAgent != 'iOSWebView')
-<div class="flex rounded-xl my-1 bg-neutral-200 p-2 px-4 hidden " id='appStore'>
-    <div class="w-11/12">
-        <h1 class="font-bold font-sm md:text-xl text-neutral-700">
-            <a href="https://apps.apple.com/ca/app/jok/id6743651881" class='text-neutral-900'>Descarrega't ja l' aplicació per a IOS</a></h1>
+<div class="flex rounded-xl my-3 bg-stone-100 dark:bg-neutral-900 border border-stone-200/60 dark:border-neutral-800/80 p-3 px-4 hidden" id='appStore'>
+    <div class="w-11/12 flex items-center">
+        <h1 class="font-bold text-xs md:text-sm text-stone-700 dark:text-neutral-300">
+            <a href="https://apps.apple.com/ca/app/jok/id6743651881" class='hover:underline text-stone-900 dark:text-white'>Descarrega't ja l'aplicació per a iOS</a>
+        </h1>
     </div>
-    <div class="w-1/12 text-right flex justify-end cursor-pointer" onClick="document.getElementById('appStore').style.display='none';">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+    <div class="w-1/12 text-right flex justify-end cursor-pointer text-stone-400 dark:text-neutral-500 hover:text-stone-600 dark:hover:text-neutral-300" onClick="document.getElementById('appStore').style.display='none';">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
             <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
         </svg>
     </div>
 </div>
 @endif
+
 @if (!Auth::check())
-<div class="flex rounded-xl my-1 bg-neutral-200 p-2 px-4" id='userSavedDataBanner'>
-    <div class="w-11/12">
-        <h1 class="font-bold font-sm md:text-xl text-neutral-700"><a href="/register" class='text-neutral-900'>Registra't</a> o <a href="/login" class='text-neutral-900'>accedeix</a> per a guardar els teus accessos directes.</h1>
+<div class="flex rounded-xl my-3 bg-stone-100 dark:bg-neutral-900 border border-stone-200/60 dark:border-neutral-800/80 p-3 px-4 shadow-sm" id='userSavedDataBanner'>
+    <div class="w-11/12 flex items-center">
+        <h1 class="font-bold text-xs md:text-sm text-stone-700 dark:text-neutral-300">
+            <a href="/register" class='text-[#f5c310] hover:underline font-black'>Registra't</a> o <a href="/login" class='text-stone-900 dark:text-white hover:underline'>accedeix</a> per a guardar els teus accessos directes.
+        </h1>
     </div>
-    <div class="w-1/12 text-right flex justify-end cursor-pointer" onClick="document.getElementById('userSavedDataBanner').style.display='none';">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+    <div class="w-1/12 text-right flex justify-end cursor-pointer text-stone-400 dark:text-neutral-500 hover:text-stone-600 dark:hover:text-neutral-300" onClick="document.getElementById('userSavedDataBanner').style.display='none';">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
             <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
         </svg>
     </div>
 </div>
 @endif
+
 <x-shortcuts-component :userSavedData="$userSavedData" />
-<div id="search" class="hidden bg-neutral-100 rounded-xl my-6 p-2">Resultats de cerca per: <span class='font-bold' id="searchValue"></span>
-    <div id="searchReturn" class="flex flex-wrap"></div>
+
+<!-- Search results area -->
+<div id="search" class="hidden bg-white dark:bg-neutral-900 border border-stone-200 dark:border-neutral-800/80 rounded-xl my-6 p-4 shadow-xl">
+    <div class="text-sm text-stone-500 dark:text-neutral-400 mb-3">
+        Resultats de cerca per: <span class='font-bold text-stone-900 dark:text-white' id="searchValue"></span>
+    </div>
+    <div id="searchReturn" class="flex flex-wrap -mx-2"></div>
 </div>
+
 <script>
     let length = 0;
 
     function sleep(ms) {
         document.getElementById('searchReturn').innerHTML = "";
         return new Promise(resolve => setTimeout(resolve, ms));
-
     }
     var timeout = null;
     let totalDataLength = 0;
     const search = (value) => {
         totalDataLength = 0;
         clearTimeout(timeout);
+        if (!value || value.length < 4) {
+            document.getElementById('search').style.display = 'none';
+            return;
+        }
         timeout = setTimeout(function() {
-
             document.getElementById('search').style.display = 'block';
             document.getElementById('searchValue').innerHTML = value;
-            if (value.length >= 4) {
-                
-                const teamsFetch = fetch("https://jok.cat/api/search/teams/" + value).then(response => response.json());
-                const playersFetch = fetch("https://jok.cat/api/search/players/" + value).then(response => response.json());
+            
+            const teamsFetch = fetch("https://jok.cat/api/search/teams/" + value).then(response => response.json());
+            const playersFetch = fetch("https://jok.cat/api/search/players/" + value).then(response => response.json());
 
-                // QA FIX: Use Promise.all to wait for BOTH requests to complete before updating the UI.
-                // This prevents race conditions where one request might overwrite or clear the other's results.
-                Promise.all([teamsFetch, playersFetch])
-                    .then(([teamsData, playersData]) => {
-                        const searchReturn = document.getElementById('searchReturn');
-                        searchReturn.innerHTML = ""; // Clear results once
-                        
-                        // Process Teams
-                        totalDataLength += teamsData.length;
-                        searchReturn.insertAdjacentHTML('beforeend', "<div class='block w-full m-2 font-bold'>" + teamsData.length + " equips</div>");
-                        
-                        let lastSeason = null;
-                        teamsData.map((team) => {
-                            if (team.idSeason !== lastSeason) {
-                                searchReturn.insertAdjacentHTML(
-                                    'beforeend',
-                                    `<div class="w-full p-2 h-6" >` + team.seasonName + `</div>`
-                                );
-                                lastSeason = team.idSeason;
-                            }
-                            searchReturn.insertAdjacentHTML('beforeend', "<div class='p-1 w-1/4'><div class='bg-neutral-200 rounded-xl p-4 cursor-pointer' ><a class='text-sm' href='/equip/" + team.idTeam + "/" + team.teamName + "'>" + team.teamName + "<br /><small>" + team.categoryName + "</small></a></div></div>")
-                        });
-
-                        // Process Players
-                        totalDataLength += playersData.length;
-                        searchReturn.insertAdjacentHTML('beforeend', "<div class='block w-full m-2 font-bold'>" + playersData.length + " jugadors</div>");
-                        
-                        playersData.map((player) => {
-                            searchReturn.insertAdjacentHTML('beforeend', "<div class='p-1 w-1/4'><div class='bg-neutral-200 rounded-xl p-4 cursor-pointer' ><a  class='text-sm'  href='/jugador/" + player.idPlayer + "/" + player.playerName + "'>" + player.playerName.substr(0, 36) + "</a></div></div>")
-                        });
-
-                        // Update Sidebar Visibility
-                        const sidebarSearchResults = document.getElementById("sidebarSearchResults");
-                        if (sidebarSearchResults) {
-                             if (totalDataLength > 0) {
-                                sidebarSearchResults.style.display = 'block';
-                            } else {
-                                sidebarSearchResults.style.display = 'none';
-                            }
-                            sidebarSearchResults.innerHTML = totalDataLength + " resultats trobats";
+            Promise.all([teamsFetch, playersFetch])
+                .then(([teamsData, playersData]) => {
+                    const searchReturn = document.getElementById('searchReturn');
+                    searchReturn.innerHTML = ""; // Clear results
+                    
+                    // Process Teams
+                    totalDataLength += teamsData.length;
+                    searchReturn.insertAdjacentHTML('beforeend', "<div class='block w-full mx-2 my-3 font-bold text-stone-900 dark:text-white'>" + teamsData.length + " equips</div>");
+                    
+                    let lastSeason = null;
+                    teamsData.map((team) => {
+                        if (team.idSeason !== lastSeason) {
+                            searchReturn.insertAdjacentHTML(
+                                'beforeend',
+                                `<div class="w-full px-2 py-1 text-xs font-semibold text-stone-400 dark:text-neutral-500" >` + team.seasonName + `</div>`
+                            );
+                            lastSeason = team.idSeason;
                         }
-                       
-                    })
-                    .catch(error => {
-                        console.error("Error fetching search results:", error);
+                        searchReturn.insertAdjacentHTML('beforeend', `<div class='p-2 w-full sm:w-1/2 md:w-1/4'><div class='bg-stone-50 dark:bg-neutral-800 border border-stone-200/60 dark:border-neutral-700/60 rounded-xl p-4 cursor-pointer hover:border-[#f5c310] dark:hover:border-[#f5c310] transition-all' ><a class='text-sm font-semibold text-stone-850 dark:text-neutral-100' href='/equip/` + team.idTeam + `/` + team.teamName + `'>` + team.teamName + `<br /><small class='text-stone-500 dark:text-neutral-400 font-normal'>` + team.categoryName + `</small></a></div></div>`)
                     });
-            }
-        }, 750);
 
+                    // Process Players
+                    totalDataLength += playersData.length;
+                    searchReturn.insertAdjacentHTML('beforeend', "<div class='block w-full mx-2 my-3 font-bold text-stone-900 dark:text-white'>" + playersData.length + " jugadors</div>");
+                    
+                    playersData.map((player) => {
+                        searchReturn.insertAdjacentHTML('beforeend', `<div class='p-2 w-full sm:w-1/2 md:w-1/4'><div class='bg-stone-50 dark:bg-neutral-800 border border-stone-200/60 dark:border-neutral-700/60 rounded-xl p-4 cursor-pointer hover:border-[#f5c310] dark:hover:border-[#f5c310] transition-all' ><a class='text-sm font-semibold text-stone-850 dark:text-neutral-100' href='/jugador/` + player.idPlayer + `/` + player.playerName + `'>` + player.playerName.substr(0, 36) + `</a></div></div>`)
+                    });
+
+                    // Update Sidebar Visibility
+                    const sidebarSearchResults = document.getElementById("sidebarSearchResults");
+                    if (sidebarSearchResults) {
+                         if (totalDataLength > 0) {
+                            sidebarSearchResults.style.display = 'block';
+                        } else {
+                            sidebarSearchResults.style.display = 'none';
+                        }
+                        sidebarSearchResults.innerHTML = totalDataLength + " resultats trobats";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching search results:", error);
+                });
+        }, 750);
     }
 
     function toggleMenu() {
         document.getElementById('sidebar').classList.toggle('-translate-x-full');
     }
-
 </script>
