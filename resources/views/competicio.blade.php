@@ -31,9 +31,9 @@
         const activeBtn = document.getElementById(league + "_button");
         if (activeContainer) activeContainer.style.display = "block";
         if (activeBtn) {
-            activeBtn.style.backgroundColor = '#f5c310';
+            activeBtn.style.backgroundColor = '#d4ff00';
             activeBtn.style.color = '#000000';
-            activeBtn.style.borderColor = '#f5c310';
+            activeBtn.style.borderColor = '#d4ff00';
             activeBtn.classList.add('font-black');
         }
     }
@@ -94,17 +94,17 @@
     <div class="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-4">
         <div>
             <div class="flex items-center gap-2">
-                <span class="hallmark-stamp bg-[#f5c310] text-black">CLASSIFICACIÓ I JORNADES</span>
+                <span class="hallmark-stamp bg-[#d4ff00] text-black font-black">CLASSIFICACIÓ I JORNADES</span>
             </div>
-            <h1 class="text-2xl md:text-3xl font-extrabold text-stone-900 dark:text-white font-display mt-2">
+            <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white font-display mt-2 tracking-tight">
                 {{$matchesList[0]->groupName}}
             </h1>
-            <p class="text-xs md:text-sm text-stone-500 dark:text-stone-400 mt-1 font-display flex items-center gap-1.5">
-                <i class="fa-solid fa-trophy text-[#f5c310]"></i> {{ $matchesList[0]->leagueName ?? 'Competició' }}
+            <p class="text-xs md:text-sm text-stone-500 dark:text-stone-400 mt-1 font-display flex items-center gap-1.5 font-bold">
+                <i class="fa-solid fa-trophy text-[#d4ff00]"></i> {{ $matchesList[0]->leagueName ?? 'Competició' }}
             </p>
         </div>
         <div class="text-right">
-            <a href="/desa/competicio/{{$matchesList[0]->idGroup}}" title="{{ $checkIfSaved==1 ? 'Treu de favorits' : 'Desa als favorits' }}" class="inline-flex p-2 rounded-xl bg-stone-100 dark:bg-stone-850 hover:bg-stone-200 dark:hover:bg-stone-800 transition-colors">
+            <a href="/desa/competicio/{{$matchesList[0]->idGroup}}" title="{{ $checkIfSaved==1 ? 'Treu de favorits' : 'Desa als favorits' }}" class="inline-flex p-2.5 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-stone-200 dark:hover:bg-stone-800 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" fill={{$checkIfSaved==1 ? 'currentColor':'none'}} viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer transition-colors {{$checkIfSaved==1 ? 'text-red-600':'text-stone-400'}}">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                 </svg>
@@ -114,8 +114,8 @@
 </div>
 
 @if ($totalPlayed['percentage_played']>0)
-<div class="bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 w-full my-4 rounded-xl overflow-hidden p-1 shadow-sm">
-    <div id="percent" class="bg-stone-900 dark:bg-[#f5c310] text-white dark:text-black py-1.5 font-display text-xs font-extrabold rounded-lg transition-all ease-in text-center uppercase tracking-wider" style='width:0%'>
+<div class="bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 w-full my-4 rounded-full overflow-hidden p-1 shadow-xs">
+    <div id="percent" class="bg-stone-900 dark:bg-[#d4ff00] text-white dark:text-black py-1.5 font-display text-xs font-black rounded-full transition-all ease-in text-center uppercase tracking-wider" style='width:0%'>
       <span id="percentPlace" class='px-4'> &nbsp;</span>
       <span id="percentText" class='hidden px-4'>{{$totalPlayed['percentage_played']}}% COMPLETAT</span>
     </div>
@@ -127,10 +127,10 @@
     <div id="classificationContainer" class='{{ count($classification)>0  ?  "col-span-1 lg:col-span-1 mb-4 transition-all duration-300" : "hidden"}}'>
         {{-- Expand/Collapse button --}}
         <div class="hidden md:flex justify-between items-center mb-3">
-            <h3 class="font-display font-extrabold text-sm uppercase tracking-wider text-stone-900 dark:text-white">
+            <h3 class="font-display font-black text-sm uppercase tracking-wider text-stone-900 dark:text-white">
                 Classificació
             </h3>
-            <button id="expandClassBtn" onclick="toggleClassification()" class="flex items-center gap-1.5 text-xs font-display font-bold text-stone-500 hover:text-[#f5c310] transition-colors px-2.5 py-1 rounded-lg bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800">
+            <button id="expandClassBtn" onclick="toggleClassification()" class="flex items-center gap-1.5 text-xs font-display font-bold text-stone-500 hover:text-[#d4ff00] transition-colors px-3 py-1 rounded-full bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800">
                 <span id="expandClassText">Ampliar</span>
                 <svg id="expandClassArrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 transition-transform duration-300">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
@@ -139,10 +139,10 @@
         </div>
 
         {{-- Classification Header --}}
-        <div class='bg-stone-900 dark:bg-[#181920] w-full border border-stone-800 rounded-t-xl overflow-hidden text-white font-display text-xs font-bold uppercase tracking-wider flex items-center shadow-sm'>
+        <div class='bg-stone-950 dark:bg-[#121215] w-full border border-stone-800 rounded-t-2xl overflow-hidden text-white font-display text-xs font-black uppercase tracking-wider flex items-center shadow-xs'>
             <div class='p-3 w-1/12 text-center text-stone-400'>#</div>
             <div class='p-3 classCol-team text-left'>Equips</div>
-            <div class='p-3 w-1/12 text-center bg-black text-[#f5c310] font-black'>P</div>
+            <div class='p-3 w-1/12 text-center bg-black text-[#d4ff00] font-black'>P</div>
             <div class='p-3 w-1/12 text-center classCol-extra hidden'>PJ</div>
             <div class='p-3 w-1/12 text-center'>G</div>
             <div class='p-3 w-1/12 text-center'>E</div>
@@ -191,12 +191,12 @@
         @endphp
 
         @foreach($classification as $classificationRow)
-        <div class='bg-white dark:bg-[#131419] w-full border-x border-b border-stone-200 dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-850 transition-all font-display text-xs md:text-sm flex items-center text-stone-900 dark:text-stone-100'>
+        <div class='bg-white dark:bg-[#121215] w-full border-x border-b border-stone-200 dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-850 transition-all font-display text-xs md:text-sm flex items-center text-stone-900 dark:text-stone-100'>
             <div class='p-3 w-1/12 text-center font-bold text-stone-500 border-r border-stone-100 dark:border-stone-850'>{{$classificationRow->position}}</div>
-            <div class='p-3 classCol-team border-r border-stone-100 dark:border-stone-850 text-left font-bold truncate'>
-                <a class="hover:text-[#f5c310] transition-colors" href="/equip/{{$classificationRow->idTeam}}/{{urlencode($classificationRow->teamName)}}">{{App\Http\Controllers\TeamsController::teamFormat($classificationRow->teamName)}}</a>
+            <div class='p-3 classCol-team border-r border-stone-100 dark:border-stone-850 text-left font-extrabold truncate'>
+                <a class="hover:text-[#d4ff00] transition-colors" href="/equip/{{$classificationRow->idTeam}}/{{urlencode($classificationRow->teamName)}}">{{App\Http\Controllers\TeamsController::teamFormat($classificationRow->teamName)}}</a>
             </div>
-            <div class='p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-black bg-stone-100 dark:bg-black text-stone-900 dark:text-[#f5c310]'>{{$classificationRow->points}}</div>
+            <div class='p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-black bg-stone-100 dark:bg-black text-stone-900 dark:text-[#d4ff00]'>{{$classificationRow->points}}</div>
             <div class='p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center classCol-extra hidden text-stone-500'>{{$classificationRow->played}}</div>
           
             <div class='p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center'>{{$classificationRow->won}}</div>
@@ -226,51 +226,51 @@
         <!-- Highlight Stats Section -->
         <div class="mt-6 space-y-3 font-display">
             <!-- Equip més golejador -->
-            <div class="bg-white dark:bg-[#131419] border border-stone-200 dark:border-stone-800 rounded-xl p-3.5 shadow-sm flex items-center justify-between">
+            <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800 rounded-2xl p-4 shadow-xs flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <img alt="{{count($bestGoalsMade)>0 ? App\Http\Controllers\TeamsController::teamFormat($bestGoalsMade[0]->teamName) : ''}}" src={{ count($bestGoalsMade)>0 ? $bestGoalsMade[0]->clubImage:'' }} class="w-9 h-9 object-contain" />
                     <div>
-                        <span class="text-[10px] font-bold text-[#f5c310] uppercase tracking-wider block">MÉS GOLEJADOR</span>
-                        <a class="font-bold text-xs md:text-sm text-stone-900 dark:text-stone-100 hover:text-[#f5c310]" href="/equip/{{count($bestGoalsMade)>0 ? $bestGoalsMade[0]->idTeam : ''}}/{{count($bestGoalsMade)>0 ? urlencode($bestGoalsMade[0]->teamName ) :''}}">
+                        <span class="text-[10px] font-black text-[#d4ff00] uppercase tracking-wider block">MÉS GOLEJADOR</span>
+                        <a class="font-extrabold text-xs md:text-sm text-stone-900 dark:text-stone-100 hover:text-[#d4ff00]" href="/equip/{{count($bestGoalsMade)>0 ? $bestGoalsMade[0]->idTeam : ''}}/{{count($bestGoalsMade)>0 ? urlencode($bestGoalsMade[0]->teamName ) :''}}">
                             {{count($bestGoalsMade)>0 ? App\Http\Controllers\TeamsController::teamFormat($bestGoalsMade[0]->teamName) : ''}}
                         </a>
                     </div>
                 </div>
-                <div class="text-right font-extrabold text-sm md:text-base text-stone-900 dark:text-white bg-stone-100 dark:bg-stone-850 px-2.5 py-1 rounded-lg">
+                <div class="text-right font-black text-sm md:text-base text-stone-900 dark:text-white bg-stone-100 dark:bg-stone-900 px-3 py-1 rounded-full">
                     {{count($bestGoalsMade)>0 ? $bestGoalsMade[0]->goalsMade : '0'}} <span class="text-[10px] text-stone-500 font-normal">gols</span>
                 </div>
             </div>
 
             <!-- Equip menys golejat -->
-            <div class="bg-white dark:bg-[#131419] border border-stone-200 dark:border-stone-800 rounded-xl p-3.5 shadow-sm flex items-center justify-between">
+            <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800 rounded-2xl p-4 shadow-xs flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <img alt="{{count($leastGoalsReceived)>0 ? App\Http\Controllers\TeamsController::teamFormat($leastGoalsReceived[0]->teamName) : ''}}" src={{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->clubImage : ''}} class="w-9 h-9 object-contain" />
                     <div>
-                        <span class="text-[10px] font-bold text-emerald-500 uppercase tracking-wider block">MENYS GOLEJAT</span>
-                        <a class="font-bold text-xs md:text-sm text-stone-900 dark:text-stone-100 hover:text-[#f5c310]" href="/equip/{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->idTeam : ''}}/{{count($leastGoalsReceived)>0 ? urlencode($leastGoalsReceived[0]->teamName) :''}}">
+                        <span class="text-[10px] font-black text-emerald-500 uppercase tracking-wider block">MENYS GOLEJAT</span>
+                        <a class="font-extrabold text-xs md:text-sm text-stone-900 dark:text-stone-100 hover:text-[#d4ff00]" href="/equip/{{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->idTeam : ''}}/{{count($leastGoalsReceived)>0 ? urlencode($leastGoalsReceived[0]->teamName) :''}}">
                             {{count($leastGoalsReceived)>0 ? App\Http\Controllers\TeamsController::teamFormat($leastGoalsReceived[0]->teamName) : ''}}
                         </a>
                     </div>
                 </div>
-                <div class="text-right font-extrabold text-sm md:text-base text-stone-900 dark:text-white bg-stone-100 dark:bg-stone-850 px-2.5 py-1 rounded-lg">
+                <div class="text-right font-black text-sm md:text-base text-stone-900 dark:text-white bg-stone-100 dark:bg-stone-900 px-3 py-1 rounded-full">
                     {{count($leastGoalsReceived)>0 ? $leastGoalsReceived[0]->goalsReceived : '0'}} <span class="text-[10px] text-stone-500 font-normal">gols</span>
                 </div>
             </div>
 
             <!-- Golejadors -->
             @if(count($maxGoalsPerLeague)>0)
-            <div class="bg-white dark:bg-[#131419] border border-stone-200 dark:border-stone-800 rounded-xl p-3.5 shadow-sm mt-4">
-                <h4 class="text-xs font-extrabold uppercase tracking-wider text-stone-900 dark:text-white mb-3 flex items-center justify-between">
+            <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800 rounded-2xl p-4 shadow-xs mt-4">
+                <h4 class="text-xs font-black uppercase tracking-wider text-stone-900 dark:text-white mb-3 flex items-center justify-between">
                     <span>MÀXIMS GOLEJADORS</span>
-                    <i class="fa-solid fa-futbol text-[#f5c310]"></i>
+                    <i class="fa-solid fa-futbol text-[#d4ff00]"></i>
                 </h4>
                 <div class="space-y-2">
                     @foreach($maxGoalsPerLeague->take(5) as $player)
                     <div class="flex items-center justify-between text-xs py-1 border-b border-stone-100 dark:border-stone-850 last:border-0">
-                        <a class="font-semibold text-stone-800 dark:text-stone-200 hover:text-[#f5c310] transition-colors" href="/jugador/{{$player->idPlayer}}/{{urlencode($player->playerName)}}">
+                        <a class="font-extrabold text-stone-800 dark:text-stone-200 hover:text-[#d4ff00] transition-colors" href="/jugador/{{$player->idPlayer}}/{{urlencode($player->playerName)}}">
                             {{App\Http\Controllers\TeamsController::teamFormat($player->playerName)}}
                         </a>
-                        <span class="font-extrabold text-[#f5c310] bg-stone-900 dark:bg-black px-2 py-0.5 rounded text-[11px]">
+                        <span class="font-black text-black bg-[#d4ff00] px-2.5 py-0.5 rounded-full text-[11px]">
                             {{$player->goals}} Gols
                         </span>
                     </div>
@@ -285,7 +285,7 @@
     <!-- COLUMN 2: JORNADES I PARTITS -->
     <div id="matchesSection" class='{{ count($classification)>0  ? "col-span-1 lg:col-span-1 transition-all duration-300" : "col-span-1 lg:col-span-2" }}'>
         <div class="mb-4">
-            <h3 class="font-display font-extrabold text-sm uppercase tracking-wider text-stone-900 dark:text-white mb-3">
+            <h3 class="font-display font-black text-sm uppercase tracking-wider text-stone-900 dark:text-white mb-3">
                 Jornades
             </h3>
             <div class='flex justify-start flex-wrap gap-1.5'>
@@ -300,7 +300,7 @@
                 $match->idRound="0".$match->idRound
                 @endphp
                 @endif
-                <button id="{{str_replace(" ","",$match->idRound)}}_button" class="inline-flex items-center justify-center text-center {{ strlen($match->idRound) > 2 ? 'px-3 min-w-9 w-auto' : 'w-9' }} h-9 rounded-xl font-display text-xs font-extrabold leading-none bg-stone-100 dark:bg-stone-850 text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-800 hover:bg-[#f5c310] hover:text-black transition-all cursor-pointer leagueButton" onClick="leagueShow('{{str_replace(" ","",$match->idRound)}}')">
+                <button id="{{str_replace(" ","",$match->idRound)}}_button" class="inline-flex items-center justify-center text-center {{ strlen($match->idRound) > 2 ? 'px-3 min-w-9 w-auto' : 'w-9' }} h-9 rounded-full font-display text-xs font-black leading-none bg-stone-100 dark:bg-stone-900 text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-800 hover:bg-[#d4ff00] hover:text-black transition-all cursor-pointer leagueButton" onClick="leagueShow('{{str_replace(" ","",$match->idRound)}}')">
                     {{$match->idRound}}
                 </button>
                 @endif

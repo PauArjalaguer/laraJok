@@ -143,7 +143,7 @@
             from { opacity: 1; transform: scale(1); }
             to   { opacity: 0; transform: scale(1.04); }
         }
-        /* ── Hallmark Modern Utility Classes ── */
+        /* ── Apple Sports Utility Classes ── */
         .font-display { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
         .font-syne { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
         .font-mono-score { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
@@ -151,22 +151,22 @@
         .hallmark-stamp {
             display: inline-flex;
             align-items: center;
-            padding: 0.2rem 0.55rem;
+            padding: 0.22rem 0.65rem;
             font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
-            border-radius: 6px;
+            letter-spacing: 0.08em;
+            border-radius: 9999px;
         }
         .hallmark-grid-bg {
-            background-image: radial-gradient(rgba(245, 195, 16, 0.15) 1.5px, transparent 1.5px);
+            background-image: radial-gradient(rgba(212, 255, 0, 0.12) 1.5px, transparent 1.5px);
             background-size: 16px 16px;
         }
         </style>
 </head>
 
-<body class="antialiased bg-white text-stone-900 dark:bg-[#0b0c10] dark:text-stone-100 font-display transition-colors duration-300 min-h-screen">
+<body class="antialiased bg-white text-stone-900 dark:bg-[#09090b] dark:text-stone-100 font-display transition-colors duration-300 min-h-screen">
 
 
 

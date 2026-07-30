@@ -5,9 +5,9 @@
     <div class="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-4">
         <div>
             <div class="flex items-center gap-2">
-                <span class="hallmark-stamp bg-[#f5c310] text-black">HOQUEI CATALUNYA</span>
+                <span class="hallmark-stamp bg-[#d4ff00] text-black font-black">HOQUEI CATALUNYA</span>
             </div>
-            <h1 class="text-2xl md:text-3xl font-extrabold text-stone-900 dark:text-white font-display mt-2">
+            <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white font-display mt-2 tracking-tight">
                 Competicions
             </h1>
             <p class="text-xs md:text-sm text-stone-500 dark:text-stone-400 mt-1 font-display">
@@ -19,8 +19,8 @@
 
 <div class="mb-8">
     <div class="relative max-w-xl">
-        <input type="text" id="leagueSearch" placeholder="Cerca competició o categoria..." class="w-full p-3 pl-10 border border-stone-200 dark:border-stone-800 rounded-xl bg-white dark:bg-[#131419] text-stone-800 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-[#f5c310] shadow-sm font-display text-sm transition-all">
-        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400"></i>
+        <input type="text" id="leagueSearch" placeholder="Cerca competició o categoria..." class="w-full p-3.5 pl-11 border border-stone-200 dark:border-stone-800 rounded-full bg-white dark:bg-[#121215] text-stone-800 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-[#d4ff00] shadow-xs font-display text-sm transition-all">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"></i>
     </div>
 </div>
 
@@ -39,9 +39,9 @@
         @endif
 
         <div class="season-section mb-10" data-season="{{ $league->seasonName }}">
-            <div class="flex items-center gap-2 pb-2 border-b-2 border-stone-900 dark:border-[#f5c310] mb-6">
-                <i class="fa-solid fa-trophy text-[#f5c310] text-lg"></i>
-                <h2 class="text-xl md:text-2xl font-extrabold text-stone-900 dark:text-white font-display uppercase tracking-tight season-title">
+            <div class="flex items-center gap-2 pb-2 border-b-2 border-stone-900 dark:border-[#d4ff00] mb-6">
+                <i class="fa-solid fa-trophy text-[#d4ff00] text-lg"></i>
+                <h2 class="text-xl md:text-2xl font-black text-stone-900 dark:text-white font-display uppercase tracking-tight season-title">
                     Temporada {{ $league->seasonName }}
                 </h2>
             </div>
@@ -59,8 +59,8 @@
         @endif
 
         <div class="category-section mb-8" data-category="{{ $league->categoryName }}">
-            <h3 class="text-sm font-bold text-stone-500 dark:text-stone-400 uppercase tracking-wider mt-4 mb-3 font-display flex items-center gap-2 category-title">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#f5c310]"></span>
+            <h3 class="text-sm font-black text-stone-500 dark:text-stone-400 uppercase tracking-wider mt-4 mb-3 font-display flex items-center gap-2 category-title">
+                <span class="w-2 h-2 rounded-full bg-[#d4ff00]"></span>
                 {{ $league->categoryName }}
             </h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5">
@@ -68,11 +68,11 @@
     @endif
 
     {{-- Contingut targeta de competició --}}
-    <div class="bg-white dark:bg-[#131419] border border-stone-200 dark:border-stone-800 p-4 rounded-xl shadow-sm hover:border-[#f5c310] hover:shadow-md transition-all group league-item flex items-center justify-between" data-label="{{ strtolower($league->label) }}">
-        <a href="{{ url('competicio/' . $league->value . '/' . Str::slug($league->label)) }}" class="league-link font-display text-xs md:text-sm font-bold text-stone-800 dark:text-stone-200 group-hover:text-[#f5c310] transition-colors truncate pr-2">
+    <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800 p-4 rounded-2xl shadow-xs hover:border-[#d4ff00] hover:shadow-sm transition-all group league-item flex items-center justify-between" data-label="{{ strtolower($league->label) }}">
+        <a href="{{ url('competicio/' . $league->value . '/' . Str::slug($league->label)) }}" class="league-link font-display text-xs md:text-sm font-extrabold text-stone-800 dark:text-stone-200 group-hover:text-[#d4ff00] transition-colors truncate pr-2">
             {{ $league->label }}
         </a>
-        <i class="fa-solid fa-chevron-right text-[10px] text-stone-400 group-hover:text-[#f5c310] group-hover:translate-x-0.5 transition-all flex-shrink-0"></i>
+        <i class="fa-solid fa-chevron-right text-[10px] text-stone-400 group-hover:text-[#d4ff00] group-hover:translate-x-0.5 transition-all flex-shrink-0"></i>
     </div>
 
 @endforeach
