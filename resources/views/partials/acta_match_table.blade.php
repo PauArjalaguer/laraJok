@@ -12,14 +12,25 @@
         </div>
         @foreach($matchData as $m)
         @if($m->idLocal==$m->idTeam)
+        @php
+            $dorsal = $m->playerNumber ?? $m->number ?? null;
+        @endphp
         <div class='bg-white dark:bg-[#121215] w-full border-x border-b border-stone-200 dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-850 transition-all text-xs md:text-sm flex items-center text-stone-900 dark:text-stone-100'>
             <div class='p-2.5 md:p-3 w-7/12 border-r border-stone-100 dark:border-stone-850 text-left font-extrabold truncate flex items-center gap-1.5'>
-                @if($m->captain==1)
+                <!-- Dorsal Badge -->
+                @if(isset($dorsal) && $dorsal !== '')
+                <span class="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded-full bg-stone-900 text-white dark:bg-black dark:text-[#d4ff00] font-black text-[10px] flex-shrink-0" title="Dorsal {{ $dorsal }}">
+                    {{ $dorsal }}
+                </span>
+                @endif
+                <!-- Captain Badge -->
+                @if(isset($m->captain) && $m->captain==1)
                 <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#d4ff00] text-black font-black text-[10px] flex-shrink-0" title="Capità">
                     C
                 </span>
                 @endif
-                @if($m->gk==1)
+                <!-- GK Badge -->
+                @if(isset($m->gk) && $m->gk==1)
                 <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-extrabold text-[10px] flex-shrink-0" title="Porter">
                     P
                 </span>
@@ -50,15 +61,26 @@
         </div>
         @foreach($matchData as $m)
         @if($m->idVisitor==$m->idTeam)
+        @php
+            $dorsal = $m->playerNumber ?? $m->number ?? null;
+        @endphp
         <div class="bg-white dark:bg-[#121215] w-full border-x border-b border-stone-200 dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-850 transition-all text-xs md:text-sm flex items-center text-stone-900 dark:text-stone-100">
             <div class="p-2.5 md:p-3 w-7/12 border-r border-stone-100 dark:border-stone-850 text-left font-extrabold truncate flex items-center gap-1.5">
-                @if($m->captain==1)
+                <!-- Dorsal Badge -->
+                @if(isset($dorsal) && $dorsal !== '')
+                <span class="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded-full bg-stone-900 text-white dark:bg-black dark:text-[#d4ff00] font-black text-[10px] flex-shrink-0" title="Dorsal {{ $dorsal }}">
+                    {{ $dorsal }}
+                </span>
+                @endif
+                <!-- Captain Badge -->
+                @if(isset($m->captain) && $m->captain==1)
                 <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#d4ff00] text-black font-black text-[10px] flex-shrink-0" title="Capità">
                     C
                 </span>
                 @endif
-                @if($m->gk==1)
-                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-stone-100 dark:bg-stone-880 text-stone-800 dark:text-stone-200 font-extrabold text-[10px] flex-shrink-0" title="Porter">
+                <!-- GK Badge -->
+                @if(isset($m->gk) && $m->gk==1)
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-extrabold text-[10px] flex-shrink-0" title="Porter">
                     P
                 </span>
                 @endif
@@ -76,5 +98,3 @@
         @endforeach
     </div>
 </div>
-
-

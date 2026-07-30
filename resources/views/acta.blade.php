@@ -11,7 +11,7 @@
         <div>
             <div class="flex items-center gap-2 mb-1.5">
                 <span class="hallmark-stamp bg-[#d4ff00] text-black font-black">ACTA OFICIAL</span>
-                <a href="/competicio/{{$matchGetInfoById[0]->idGroup}}/{{urlencode($matchGetInfoById[0]->groupName)}}" class="hallmark-stamp bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 hover:bg-[#d4ff00] hover:text-black dark:hover:bg-[#d4ff00] dark:hover:text-black transition-all">
+                <a href="/competicio/{{$matchGetInfoById[0]->idGroup}}/{{urlencode($matchGetInfoById[0]->groupName)}}/{{urlencode($matchGetInfoById[0]->idRound)}}" class="hallmark-stamp bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 hover:bg-[#d4ff00] hover:text-black dark:hover:bg-[#d4ff00] dark:hover:text-black transition-all">
                     Jornada {{$matchGetInfoById[0]->idRound}}
                 </a>
             </div>

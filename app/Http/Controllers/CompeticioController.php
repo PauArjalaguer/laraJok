@@ -17,7 +17,7 @@ class CompeticioController extends Controller
     public function index(Request $request)
     {
         $id = $request->id;
-        $round = $request->round;
+        $round = $request->round ?? $request->jornada;
         return view(
             'competicio',            [
 

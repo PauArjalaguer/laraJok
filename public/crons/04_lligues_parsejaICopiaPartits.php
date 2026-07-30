@@ -65,7 +65,7 @@ include("curl.php");
             return $matchDate;
         }
 
-        function parseLeague($idLliga, $mysqli, $idSeason = 39)
+        function parseLeague($idLliga, $mysqli, $idSeason = 41)
         {
             $dom   = new DOMDocument('1.0');
             $curled = getCurl("https://www.server2.sidgad.es/fecapa/fecapa_cal_idc_" . $idLliga . "_1.php");
@@ -252,8 +252,8 @@ include("curl.php");
         if ($_GET['idLeague']) {
             $subquery = " and idLeague=" . $_GET['idLeague'] . " ";
         }
-        echo "select idLeague from leagues where enddate>now() and  idSeason=39  $subquery order by lastupdated asc, idLeague desc limit 0,2";
-        $result = $mysqli->query("select idLeague from leagues where  idSeason=39  $subquery order by lastupdated asc, idLeague desc limit 0,10");
+        echo "select idLeague from leagues where   idSeason=41  $subquery order by lastupdated asc, idLeague desc limit 0,2";
+        $result = $mysqli->query("select idLeague from leagues where  idSeason=41  $subquery order by lastupdated asc, idLeague desc limit 0,10");
         while ($row = mysqli_fetch_array($result)) {
             //echo $row['idLeague']." - ";
             parseLeague($row['idLeague'], $mysqli);
