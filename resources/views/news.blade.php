@@ -2,20 +2,17 @@
 @section('title',"Notícies :: JOK.cat ")
 @section('content')
 
-<!-- NEWS HERO HEADER (Ultra-Clean Apple Sports) -->
-<div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl p-5 md:p-6 mb-7 shadow-xs">
-    <div class="flex items-center justify-between">
+<!-- UNIFIED HEADER (Ultra-Clean Apple Sports) -->
+<div class="w-full mt-2 mb-6 font-display">
+    <div class="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-4">
         <div>
-            <div class="flex items-center gap-2 mb-1.5">
+            <div class="flex items-center gap-2">
                 <span class="hallmark-stamp bg-[#d4ff00] text-black font-black">ACTUALITAT</span>
                 <span class="hallmark-stamp bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800">HOQUEI PATINS</span>
             </div>
-            <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white font-display tracking-tight">
+            <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white mt-2 tracking-tight">
                 Notícies i Novetats
             </h1>
-            <p class="text-xs md:text-sm font-bold text-stone-500 dark:text-stone-400 mt-1">
-                Les darreres cròniques, resultats i novetats de l'hoquei patins
-            </p>
         </div>
     </div>
 </div>
