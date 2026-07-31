@@ -305,7 +305,7 @@
                 @yield('content')
             </div>
             <!-- ULTRA-PREMIUM APPLE SPORTS FOOTER (Fons Unificat #09090b) -->
-            <footer class="w-full bg-[#09090b] border-t border-stone-800 text-stone-300 font-display sticky top-[100vh]">
+            <footer class="w-full bg-[#09090b] text-stone-300 font-display sticky top-[100vh] mt-12 lg:mt-24">
                 @include('layout.merchandising')
                 
                 <div class="max-w-[1400px] w-full lg:w-11/12 xl:w-10/12 mx-auto px-6 py-12">
