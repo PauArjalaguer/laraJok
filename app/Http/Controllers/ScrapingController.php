@@ -15,11 +15,34 @@ use \DOMXPath;
 class ScrapingController extends Controller
 {
     const ERROR_FETCH_CONTENT = 'Error fetching content';
+
+    protected static function encodeUrlPath(string $url): string
+    {
+        $parsed = parse_url($url);
+        if (!isset($parsed['path'])) return $url;
+
+        $pathSegments = explode('/', $parsed['path']);
+        $encodedSegments = array_map(function ($segment) {
+            return rawurlencode(rawurldecode($segment));
+        }, $pathSegments);
+
+        $scheme   = isset($parsed['scheme']) ? $parsed['scheme'] . '://' : '';
+        $host     = $parsed['host'] ?? '';
+        $port     = isset($parsed['port']) ? ':' . $parsed['port'] : '';
+        $path     = implode('/', $encodedSegments);
+        $query    = isset($parsed['query']) ? '?' . $parsed['query'] : '';
+        $fragment = isset($parsed['fragment']) ? '#' . $parsed['fragment'] : '';
+
+        return "$scheme$host$port$path$query$fragment";
+    }
+
     protected static function getWebContent($url, $userAgent = null)
     {
+        $url = self::encodeUrlPath($url);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_USERAGENT, $userAgent ?? 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
 
         $html = curl_exec($ch);
@@ -508,6 +531,214 @@ class ScrapingController extends Controller
         }
 
         return ['content' => trim($textNoticia)];
+    }
+
+    public static function scrapeCaldes()
+    {
+        $baseUrl = 'https://www.clubhoqueicaldes.com';
+        $url = $baseUrl . '/blog';
+        $html = self::getWebContent($url);
+        if (!$html) {
+            return response()->json(['error' => self::ERROR_FETCH_CONTENT], 500);
+        }
+
+        $xpath = self::getDOM($html);
+        $articles = [];
+        $nodes = $xpath->query("//a[contains(@href, '/post/')]");
+        $seenUrls = [];
+
+        foreach ($nodes as $node) {
+            $href = $node->getAttribute('href');
+            if (!str_starts_with($href, 'http')) {
+                $href = $baseUrl . $href;
+            }
+
+            if (in_array($href, $seenUrls)) {
+                continue;
+            }
+            $seenUrls[] = $href;
+
+            $detailHtml = self::getWebContent($href);
+            if ($detailHtml) {
+                $detailXpath = self::getDOM($detailHtml);
+
+                $h1Node = $detailXpath->query("//h1")->item(0);
+                $title = $h1Node ? trim($h1Node->textContent) : '';
+
+                if (empty($title) || $title === 'Error: Bad Request') {
+                    continue;
+                }
+
+                $textNoticia = "";
+                $paragraphs = $detailXpath->query("//article//p | //p[contains(@class, 'font_')]");
+                foreach ($paragraphs as $p) {
+                    $t = trim($p->textContent);
+                    if (!empty($t) && !str_contains($t, 'Premsa Club') && !str_contains($t, 'min de lectura') && !str_contains($t, 'Ver todo') && !str_contains($t, 'Inici') && !str_contains($t, 'Botiga')) {
+                        $textNoticia .= $t . "\n\n";
+                    }
+                }
+
+                $image = '';
+                $metaImg = $detailXpath->query("//meta[@property='og:image']")->item(0);
+                if ($metaImg) {
+                    $image = $metaImg->getAttribute('content');
+                }
+
+                $date = Carbon::now()->format('Y-m-d H:i:s');
+                $metaTime = $detailXpath->query("//meta[@property='article:published_time']")->item(0);
+                if ($metaTime) {
+                    $date = Carbon::parse($metaTime->getAttribute('content'))->format('Y-m-d H:i:s');
+                }
+
+                $articleData = [
+                    'title' => $title,
+                    'url' => $href,
+                    'date' => $date,
+                    'image' => $image,
+                    'content' => trim($textNoticia),
+                    'source' => 'Caldes'
+                ];
+
+                if (self::saveArticle($articleData)) {
+                    $articles[] = $articleData;
+                }
+            }
+        }
+
+        return response()->json(['articles' => $articles]);
+    }
+
+    public static function scrapeShum()
+    {
+        $baseUrl = 'https://shummassanet.com';
+        $url = $baseUrl . '/website/noticies.php';
+        $html = self::getWebContent($url);
+        if (!$html) {
+            return response()->json(['error' => self::ERROR_FETCH_CONTENT], 500);
+        }
+
+        $xpath = self::getDOM($html);
+        $articles = [];
+
+        // 1. Featured main article
+        $mainDiv = $xpath->query("//div[@id='container_noticia']")->item(0);
+        if ($mainDiv) {
+            $titleNode = $xpath->query(".//h2", $mainDiv)->item(0);
+            $title = $titleNode ? trim($titleNode->textContent) : '';
+
+            $dateNode = $xpath->query(".//p[@class='data_noticia']", $mainDiv)->item(0);
+            $dateRaw = $dateNode ? trim($dateNode->textContent) : '';
+            try {
+                $date = Carbon::createFromFormat('d/m/Y', $dateRaw)->format('Y-m-d 00:00:00');
+            } catch (\Exception $e) {
+                $date = Carbon::now()->format('Y-m-d H:i:s');
+            }
+
+            $imgNode = $xpath->query(".//img[contains(@class, 'img_noticia_gran')]", $mainDiv)->item(0);
+            $image = '';
+            if ($imgNode) {
+                $src = $imgNode->getAttribute('src');
+                if (str_contains($src, 'file=')) {
+                    parse_str(parse_url($src, PHP_URL_QUERY), $query);
+                    if (isset($query['file'])) {
+                        $image = str_replace('../', $baseUrl . '/', $query['file']);
+                    }
+                }
+            }
+
+            $overflowDiv = $xpath->query(".//div[@class='overflow']", $mainDiv)->item(0);
+            $content = '';
+            if ($overflowDiv) {
+                $paragraphs = $xpath->query(".//p | .//ol | .//ul", $overflowDiv);
+                foreach ($paragraphs as $p) {
+                    $t = trim($p->textContent);
+                    if (!empty($t)) {
+                        $content .= $t . "\n\n";
+                    }
+                }
+            }
+
+            if (!empty($title)) {
+                $articleData = [
+                    'title' => $title,
+                    'url' => $url,
+                    'date' => $date,
+                    'image' => $image,
+                    'content' => trim($content),
+                    'source' => 'SHUM'
+                ];
+                if (self::saveArticle($articleData)) {
+                    $articles[] = $articleData;
+                }
+            }
+        }
+
+        // 2. Altres noticies links
+        $otherNodes = $xpath->query("//a[contains(@class, 'link_fosc')]");
+        foreach ($otherNodes as $linkNode) {
+            $href = $linkNode->getAttribute('href');
+            $title = trim($linkNode->textContent);
+
+            if (str_starts_with($href, '../')) {
+                $fullUrl = $baseUrl . '/' . ltrim(substr($href, 3), '/');
+            } else {
+                $fullUrl = $baseUrl . '/' . ltrim($href, '/');
+            }
+
+            $detailHtml = self::getWebContent($fullUrl);
+            if ($detailHtml) {
+                $detailXpath = self::getDOM($detailHtml);
+                $dMainDiv = $detailXpath->query("//div[@id='container_noticia']")->item(0);
+                if ($dMainDiv) {
+                    $dDateNode = $detailXpath->query(".//p[@class='data_noticia']", $dMainDiv)->item(0);
+                    $dDateRaw = $dDateNode ? trim($dDateNode->textContent) : '';
+                    try {
+                        $dDate = Carbon::createFromFormat('d/m/Y', $dDateRaw)->format('Y-m-d 00:00:00');
+                    } catch (\Exception $e) {
+                        $dDate = Carbon::now()->format('Y-m-d H:i:s');
+                    }
+
+                    $dImgNode = $detailXpath->query(".//img[contains(@class, 'img_noticia_gran')]", $dMainDiv)->item(0);
+                    $dImage = '';
+                    if ($dImgNode) {
+                        $src = $dImgNode->getAttribute('src');
+                        if (str_contains($src, 'file=')) {
+                            parse_str(parse_url($src, PHP_URL_QUERY), $query);
+                            if (isset($query['file'])) {
+                                $dImage = str_replace('../', $baseUrl . '/', $query['file']);
+                            }
+                        }
+                    }
+
+                    $dOverflowDiv = $detailXpath->query(".//div[@class='overflow']", $dMainDiv)->item(0);
+                    $dContent = '';
+                    if ($dOverflowDiv) {
+                        $paragraphs = $detailXpath->query(".//p | .//ol | .//ul", $dOverflowDiv);
+                        foreach ($paragraphs as $p) {
+                            $t = trim($p->textContent);
+                            if (!empty($t)) {
+                                $dContent .= $t . "\n\n";
+                            }
+                        }
+                    }
+
+                    $articleData = [
+                        'title' => $title,
+                        'url' => $fullUrl,
+                        'date' => $dDate,
+                        'image' => $dImage,
+                        'content' => trim($dContent),
+                        'source' => 'SHUM'
+                    ];
+
+                    if (self::saveArticle($articleData)) {
+                        $articles[] = $articleData;
+                    }
+                }
+            }
+        }
+
+        return response()->json(['articles' => $articles]);
     }
     public static function scrapeFecapaResults()
     {

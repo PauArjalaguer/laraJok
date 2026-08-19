@@ -124,6 +124,14 @@ Route::get("scraping/noia", function () {
     return ScrapingController::scrapeNoia();
 });
 
+Route::get("scraping/caldes", function () {
+    return ScrapingController::scrapeCaldes();
+});
+
+Route::get("scraping/shum", function () {
+    return ScrapingController::scrapeShum();
+});
+
 
 Route::get("scraping/resultats", function () {
     return ScrapingController::scrapeFecapaResults();
