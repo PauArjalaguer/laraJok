@@ -23,20 +23,33 @@ class SyncYoutubeVideos extends Command
 
         $totalSynced = $service->syncAll();
 
-        // Auto-fix any stream videos whose published_at was set to today
-        $query = Video::where('description', 'like', '%Retransmissió en directe%');
-        if (!$this->option('fix-dates')) {
-            $query->whereDate('published_at', now()->toDateString());
+        // Fix dates for videos
+        if ($this->option('fix-dates')) {
+            $query = Video::orderBy('id', 'asc');
+        } else {
+            $query = Video::where(function ($q) {
+                $q->whereDate('published_at', now()->toDateString())
+                  ->orWhere('description', 'like', '%Retransmissió en directe%');
+            });
         }
 
         $count = $query->count();
         if ($count > 0) {
-            $this->info("Fixing dates for {$count} live stream videos...");
+            $this->info("Fixing dates for {$count} videos...");
+            $current = 0;
             foreach ($query->cursor() as $stream) {
+                $current++;
                 $realDate = $service->fetchRealVideoDate($stream->youtube_id);
                 if ($realDate) {
-                    $stream->update(['published_at' => $realDate]);
-                    $this->line(" - Fixed Video #{$stream->id} ({$stream->title}): {$realDate}");
+                    $existingDate = $stream->published_at ? $stream->published_at->format('Y-m-d H:i:s') : null;
+                    if ($existingDate !== $realDate) {
+                        $stream->update(['published_at' => $realDate]);
+                        $this->line(" - [{$current}/{$count}] Updated Video #{$stream->id} ({$stream->title}): {$existingDate} -> {$realDate}");
+                    } else {
+                        $this->line(" - [{$current}/{$count}] OK Video #{$stream->id}: {$realDate}");
+                    }
+                } else {
+                    $this->line(" - [{$current}/{$count}] Checked Video #{$stream->id}: date unchanged");
                 }
                 unset($stream);
                 if (function_exists('gc_collect_cycles')) {
