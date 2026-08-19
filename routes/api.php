@@ -132,6 +132,11 @@ Route::get("scraping/shum", function () {
     return ScrapingController::scrapeShum();
 });
 
+Route::get("scraping/all", function () {
+    \Illuminate\Support\Facades\Artisan::call('news:scrape');
+    return response()->json(['status' => 'OK', 'message' => 'Scraping de tots els clubs completat amb èxit']);
+});
+
 
 Route::get("scraping/resultats", function () {
     return ScrapingController::scrapeFecapaResults();
