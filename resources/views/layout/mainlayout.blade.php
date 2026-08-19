@@ -179,8 +179,8 @@
             <div>
                 <!-- Header -->
                 <div class="flex items-center justify-between pb-4 border-b border-stone-200 dark:border-stone-800 mb-4">
-                    <a href="/" class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
-                        JOK<span class="text-stone-900 dark:text-white">.cat</span>
+                    <a href="/" class="webtitle font-['Comfortaa'] font-bold text-2xl tracking-tight text-stone-900 dark:text-white flex items-center gap-0.5">
+                        JOK.cat
                     </a>
                     <button onclick="toggleMenu()" class="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-600 dark:text-stone-300 hover:bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:hover:bg-primary dark:hover:text-primary-text transition-colors flex items-center justify-center">
                         <i class="fa-solid fa-xmark text-sm"></i>
@@ -278,6 +278,16 @@
                         </div>
                         <i class="fa-solid fa-chevron-right text-[10px] text-stone-400 group-hover:translate-x-0.5 transition-transform"></i>
                     </a>
+
+                    <button onclick="openAppModal(); toggleMenu();" class="w-full group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-primary transition-colors cursor-pointer text-left">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary group-hover:text-primary-text dark:bg-stone-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                <i class="fa-solid fa-mobile-screen-button"></i>
+                            </span>
+                            <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-stone-900 dark:hover:text-white">Descarrega l'App</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-stone-400 group-hover:translate-x-0.5 transition-transform"></i>
+                    </button>
                 </div>
             </div>
 
@@ -325,8 +335,8 @@
                         
                         <!-- Col 1: Brand & Info -->
                         <div>
-                            <a href="/" class="text-2xl font-black tracking-tight text-white inline-block mb-3">
-                                JOK<span class="text-white">.cat</span>
+                            <a href="/" class="webtitle font-['Comfortaa'] font-bold text-2xl tracking-tight text-white flex items-center gap-0.5 mb-3">
+                                JOK.cat
                             </a>
                             <p class="text-xs text-stone-400 leading-relaxed font-medium mb-4">
                                 El portal de referència de l'Hoquei Patins a Catalunya. Resultats, classificacions, notícies en temps real i mercat de segona mà.
