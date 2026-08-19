@@ -102,7 +102,7 @@
 
         list.forEach(pavello => {
             const tr = document.createElement('tr');
-            tr.className = 'pavello-row hover:bg-stone-50 dark:hover:bg-[#ffcc00]/50 transition-colors text-xs font-display';
+            tr.className = 'pavello-row hover:bg-stone-50 dark:hover:bg-primary/50 transition-colors text-xs font-display';
 
             const distanceText = (pavello.distance !== undefined && pavello.distance !== null) 
                 ? `${pavello.distance.toFixed(1)} km` 
@@ -130,11 +130,11 @@
                 </td>
                 <td class="p-3.5 border-b border-stone-100 dark:border-stone-850 text-center">
                     ${pavello.matches > 0 
-                        ? `<a href="${detailUrl}" class="inline-flex items-center gap-1 bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-xs px-2.5 py-1 rounded-full shadow-xs hover:scale-105 transition-transform">${pavello.matches} partits avui</a>` 
+                        ? `<a href="${detailUrl}" class="inline-flex items-center gap-1 bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-xs px-2.5 py-1 rounded-full shadow-xs hover:scale-105 transition-transform">${pavello.matches} partits avui</a>` 
                         : `<span class="text-stone-400 font-bold text-[11px]">Sense partits</span>`}
                 </td>
                 <td class="p-3.5 border-b border-stone-100 dark:border-stone-850 text-right">
-                    <a href="${mapUrl}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#ffcc00] text-black dark:bg-black dark:text-white hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black transition-all text-xs font-black shadow-xs">
+                    <a href="${mapUrl}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-primary-text dark:bg-black dark:text-white hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black transition-all text-xs font-black shadow-xs">
                         <i class="fa-solid fa-map-location-dot"></i> Com anar-hi
                     </a>
                 </td>

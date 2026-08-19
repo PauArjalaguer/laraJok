@@ -18,7 +18,7 @@
                 {{ count($merchandisingListAll) }} {{ count($merchandisingListAll) == 1 ? 'PRODUCTE' : 'PRODUCTES' }}
             </span>
             <a href="https://www.latostadora.com/shop/jokcat/?ord=reciente#shop" target="_blank" rel="noreferrer"
-               class="inline-flex items-center gap-1.5 px-4 py-[0.22rem] bg-[#ffcc00] text-black hover:bg-amber-400 font-black text-[0.62rem] uppercase tracking-wider rounded-full transition-all shadow-xs active:scale-95">
+               class="inline-flex items-center gap-1.5 px-4 py-[0.22rem] bg-primary text-primary-text hover:bg-primary-hover font-black text-[0.62rem] uppercase tracking-wider rounded-full transition-all shadow-xs active:scale-95">
                 <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
                 <span>Veure tot</span>
             </a>
@@ -50,7 +50,7 @@
         <div class="merch-item" data-category="{{ $merch->assetCategory }}">
             <a href="{{ $merch->assetUrl }}" target="_blank" rel="noreferrer"
                aria-label="{{ $merch->assetName }}"
-               class="group flex flex-col bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl overflow-hidden shadow-xs hover:border-[#ffcc00] dark:hover:border-[#ffcc00] transition-all duration-300">
+               class="group flex flex-col bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl overflow-hidden shadow-xs hover:border-primary dark:hover:border-primary transition-all duration-300">
 
                 {{-- Product Image --}}
                 <div class="relative aspect-square w-full overflow-hidden bg-stone-100 dark:bg-stone-900">
@@ -86,7 +86,7 @@
                         @endif
                     </div>
                     @if($merch->assetPrice)
-                        <span class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full text-xs font-black bg-stone-100 text-stone-800 dark:bg-stone-900 dark:text-stone-200 group-hover:bg-[#ffcc00] group-hover:text-black transition-all border border-stone-200/80 dark:border-stone-800 whitespace-nowrap">
+                        <span class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full text-xs font-black bg-stone-100 text-stone-800 dark:bg-stone-900 dark:text-stone-200 group-hover:bg-primary group-hover:text-black transition-all border border-stone-200/80 dark:border-stone-800 whitespace-nowrap">
                             Comprar <i class="fa-solid fa-arrow-right text-[9px] group-hover:translate-x-0.5 transition-transform"></i>
                         </span>
                     @endif
@@ -107,7 +107,7 @@
 {{-- LINK TO EXTERNAL SHOP --}}
 <div class="mt-10 mb-2 flex justify-center font-display">
     <a href="https://www.latostadora.com/shop/jokcat/?ord=reciente#shop" target="_blank" rel="noreferrer"
-       class="group inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-full text-xs font-black text-stone-700 dark:text-stone-300 hover:border-[#ffcc00] dark:hover:border-[#ffcc00] hover:text-stone-900 dark:hover:text-white transition-all shadow-xs">
+       class="group inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-full text-xs font-black text-stone-700 dark:text-stone-300 hover:border-primary dark:hover:border-primary hover:text-stone-900 dark:hover:text-white transition-all shadow-xs">
         <i class="fa-solid fa-shirt text-[11px]"></i>
         Veure tota la botiga a La Tostadora
         <i class="fa-solid fa-arrow-up-right-from-square text-[10px] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
@@ -127,15 +127,15 @@
     }
     .category-pill:hover,
     .category-pill.active {
-        background-color: #ffcc00;
+        background-color: var(--color-primary);
         color: #000;
-        border-color: #ffcc00;
+        border-color: var(--color-primary);
     }
     .dark .category-pill:hover,
     .dark .category-pill.active {
-        background-color: #ffcc00;
+        background-color: var(--color-primary);
         color: #000;
-        border-color: #ffcc00;
+        border-color: var(--color-primary);
     }
     .merch-item {
         transition: opacity 0.35s ease, transform 0.35s ease;

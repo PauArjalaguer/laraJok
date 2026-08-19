@@ -15,7 +15,7 @@
             @foreach($merchandisingList as $merch)
                 <a href="{{ $merch->assetUrl }}" target="_blank" rel="noreferrer" 
                    style="transition-delay: {{ $loop->index * 120 }}ms;"
-                   class="merch-card opacity-0 translate-x-8 transition-all duration-700 ease-out group relative flex-shrink-0 w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800/60 rounded-2xl p-2.5 shadow-sm hover:border-[#ffcc00] dark:hover:border-[#ffcc00] hover:shadow-md hover:-translate-y-1.5 flex items-center justify-center">
+                   class="merch-card opacity-0 translate-x-8 transition-all duration-700 ease-out group relative flex-shrink-0 w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800/60 rounded-2xl p-2.5 shadow-sm hover:border-primary dark:hover:border-primary hover:shadow-md hover:-translate-y-1.5 flex items-center justify-center">
                     <img class="max-w-full max-h-full object-contain rounded-xl transition-transform duration-350 group-hover:scale-105" src="{{ $merch->assetThumbnail }}" alt="{{ $merch->assetName }}">
                     
                     <!-- Premium minimal tooltip shown on hover -->

@@ -22,7 +22,7 @@
 
     <!-- FEATURED ARTICLE (Top Big Card) -->
     @if($featuredNews)
-        <a href="/noticies/detall/{{$featuredNews->idNew}}/{{urlencode(str_replace('/', '-', $featuredNews->newsTitle))}}" class="group block bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl overflow-hidden shadow-xs hover:border-[#ffcc00] dark:hover:border-[#ffcc00] dark:hover:border-stone-600 transition-all mb-7">
+        <a href="/noticies/detall/{{$featuredNews->idNew}}/{{urlencode(str_replace('/', '-', $featuredNews->newsTitle))}}" class="group block bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl overflow-hidden shadow-xs hover:border-primary dark:hover:border-primary dark:hover:border-stone-600 transition-all mb-7">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-0">
                 <!-- Featured Image -->
                 <div class="lg:col-span-6 relative aspect-video lg:aspect-auto overflow-hidden bg-stone-100 dark:bg-stone-900">
@@ -34,7 +34,7 @@
                         </div>
                     @endif
                     <!-- Badge sobre la imatge (amagat provisionalment a petició de l'usuari, es conserva l'estructura) -->
-                    <span class="hidden absolute top-4 left-4 bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-[10px] uppercase px-3 py-1 rounded-full shadow-md tracking-wider">
+                    <span class="hidden absolute top-4 left-4 bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-[10px] uppercase px-3 py-1 rounded-full shadow-md tracking-wider">
                         DESTACAT
                     </span>
                 </div>
@@ -56,7 +56,7 @@
                         @endif
                     </div>
                     <div>
-                        <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-black bg-[#ffcc00] text-black dark:bg-black dark:text-white group-hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white group-hover:text-black dark:group-hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:group-hover:text-black transition-all shadow-xs">
+                        <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-black bg-primary text-primary-text dark:bg-black dark:text-white group-hover:bg-primary text-black dark:bg-stone-800 dark:text-white group-hover:text-black dark:group-hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:group-hover:text-black transition-all shadow-xs">
                             Llegir crònica completa <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
                         </span>
                     </div>
@@ -69,7 +69,7 @@
     @if(count($otherNews) > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             @foreach($otherNews as $news)
-                <a href="/noticies/detall/{{$news->idNew}}/{{urlencode(str_replace('/', '-', $news->newsTitle))}}" class="group bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl p-4 md:p-5 shadow-xs hover:border-[#ffcc00] dark:hover:border-[#ffcc00] dark:hover:border-stone-600 transition-all flex flex-col justify-between">
+                <a href="/noticies/detall/{{$news->idNew}}/{{urlencode(str_replace('/', '-', $news->newsTitle))}}" class="group bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl p-4 md:p-5 shadow-xs hover:border-primary dark:hover:border-primary dark:hover:border-stone-600 transition-all flex flex-col justify-between">
                     <div>
                         <!-- Image Container -->
                         <div class="relative aspect-video w-full rounded-2xl overflow-hidden bg-stone-100 dark:bg-stone-900 mb-4">
@@ -81,7 +81,7 @@
                                 </div>
                             @endif
                             <!-- Badge sobre la foto de la notícia (amagat provisionalment a petició de l'usuari) -->
-                            <span class="hidden absolute top-3 left-3 bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-[9px] uppercase px-2.5 py-0.5 rounded-full shadow-xs">
+                            <span class="hidden absolute top-3 left-3 bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-[9px] uppercase px-2.5 py-0.5 rounded-full shadow-xs">
                                 NOTÍCIA
                             </span>
                         </div>
@@ -103,7 +103,7 @@
 
                     <!-- Action Button -->
                     <div class="pt-2 border-t border-stone-100 dark:border-stone-800/80">
-                        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-stone-100 text-stone-800 dark:bg-stone-900 dark:text-stone-200 group-hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white group-hover:text-black dark:group-hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:group-hover:text-black transition-all border border-stone-200/80 dark:border-stone-800">
+                        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-stone-100 text-stone-800 dark:bg-stone-900 dark:text-stone-200 group-hover:bg-primary text-black dark:bg-stone-800 dark:text-white group-hover:text-black dark:group-hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:group-hover:text-black transition-all border border-stone-200/80 dark:border-stone-800">
                             Llegir notícia <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
                         </span>
                     </div>
@@ -118,7 +118,7 @@
             
             {{-- Botó Primera Pàgina (Només Icona) --}}
             @if (!$newsListTop->onFirstPage())
-                <a href="{{ $newsListTop->url(1) }}" class="w-9 h-9 rounded-full bg-stone-100 hover:bg-[#ffcc00] text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-black flex items-center justify-center transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs" title="Primera pàgina">
+                <a href="{{ $newsListTop->url(1) }}" class="w-9 h-9 rounded-full bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-black flex items-center justify-center transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs" title="Primera pàgina">
                     <i class="fa-solid fa-angles-left text-xs"></i>
                 </a>
             @endif
@@ -129,7 +129,7 @@
                     « Anterior
                 </span>
             @else
-                <a href="{{ $newsListTop->previousPageUrl() }}" class="px-4 py-2 rounded-full bg-stone-100 hover:bg-[#ffcc00] text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-black transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
+                <a href="{{ $newsListTop->previousPageUrl() }}" class="px-4 py-2 rounded-full bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-black transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
                     « Anterior
                 </a>
             @endif
@@ -137,7 +137,7 @@
             {{-- Números de pàgina --}}
             @foreach ($newsListTop->getUrlRange(max(1, $newsListTop->currentPage() - 2), min($newsListTop->lastPage(), $newsListTop->currentPage() + 2)) as $page => $url)
                 @if ($page == $newsListTop->currentPage())
-                    <span class="w-9 h-9 rounded-full bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black flex items-center justify-center shadow-xs">
+                    <span class="w-9 h-9 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black flex items-center justify-center shadow-xs">
                         {{ $page }}
                     </span>
                 @else
@@ -149,7 +149,7 @@
 
             {{-- Botó Següent --}}
             @if ($newsListTop->hasMorePages())
-                <a href="{{ $newsListTop->nextPageUrl() }}" class="px-4 py-2 rounded-full bg-stone-100 hover:bg-[#ffcc00] text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-black transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
+                <a href="{{ $newsListTop->nextPageUrl() }}" class="px-4 py-2 rounded-full bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-black transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
                     Següent »
                 </a>
             @else
@@ -160,7 +160,7 @@
 
             {{-- Botó Última Pàgina (Només Icona) --}}
             @if ($newsListTop->currentPage() < $newsListTop->lastPage())
-                <a href="{{ $newsListTop->url($newsListTop->lastPage()) }}" class="w-9 h-9 rounded-full bg-stone-100 hover:bg-[#ffcc00] text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-black flex items-center justify-center transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs" title="Última pàgina">
+                <a href="{{ $newsListTop->url($newsListTop->lastPage()) }}" class="w-9 h-9 rounded-full bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-black flex items-center justify-center transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs" title="Última pàgina">
                     <i class="fa-solid fa-angles-right text-xs"></i>
                 </a>
             @endif

@@ -19,13 +19,13 @@
             <div class='p-2.5 md:p-3 w-7/12 border-r border-stone-100 dark:border-stone-850 text-left font-extrabold truncate flex items-center gap-1.5'>
                 <!-- Dorsal Badge -->
                 @if(isset($dorsal) && $dorsal !== '')
-                <span class="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded-full bg-[#ffcc00] text-black dark:bg-black dark:text-white font-black text-[10px] flex-shrink-0" title="Dorsal {{ $dorsal }}">
+                <span class="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded-full bg-primary text-primary-text dark:bg-black dark:text-white font-black text-[10px] flex-shrink-0" title="Dorsal {{ $dorsal }}">
                     {{ $dorsal }}
                 </span>
                 @endif
                 <!-- Captain Badge -->
                 @if(isset($m->captain) && $m->captain==1)
-                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-[10px] flex-shrink-0" title="Capità">
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-[10px] flex-shrink-0" title="Capità">
                     C
                 </span>
                 @endif
@@ -68,13 +68,13 @@
             <div class="p-2.5 md:p-3 w-7/12 border-r border-stone-100 dark:border-stone-850 text-left font-extrabold truncate flex items-center gap-1.5">
                 <!-- Dorsal Badge -->
                 @if(isset($dorsal) && $dorsal !== '')
-                <span class="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded-full bg-[#ffcc00] text-black dark:bg-black dark:text-white font-black text-[10px] flex-shrink-0" title="Dorsal {{ $dorsal }}">
+                <span class="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded-full bg-primary text-primary-text dark:bg-black dark:text-white font-black text-[10px] flex-shrink-0" title="Dorsal {{ $dorsal }}">
                     {{ $dorsal }}
                 </span>
                 @endif
                 <!-- Captain Badge -->
                 @if(isset($m->captain) && $m->captain==1)
-                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-[10px] flex-shrink-0" title="Capità">
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-[10px] flex-shrink-0" title="Capità">
                     C
                 </span>
                 @endif

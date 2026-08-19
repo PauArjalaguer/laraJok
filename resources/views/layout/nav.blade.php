@@ -38,7 +38,7 @@
             <li>
                 <a href="/anuncis" class="py-1.5 hover:text-stone-900 dark:hover:text-white transition-colors {{ request()->is('anuncis*') ? 'border-b-2 border-stone-900 dark:border-[#1c1917] text-stone-900 dark:text-white' : '' }} flex items-center gap-1.5">
                     Segona Mà
-                    <span class="bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 text-[9px] font-black px-2 py-0.5 rounded-full uppercase shadow-xs">Nou</span>
+                    <span class="bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 text-[9px] font-black px-2 py-0.5 rounded-full uppercase shadow-xs">Nou</span>
                 </a>
             </li>
             <li>
@@ -60,7 +60,7 @@
         </div>
 
         <!-- App Store Download Button (Groc Daurat en Light / Monocrom en Dark) -->
-        <a href="https://apps.apple.com/ca/app/jok/id6743651881" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full font-black text-xs md:text-sm bg-[#ffcc00] text-black hover:bg-amber-400 dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 dark:hover:bg-stone-700 transition-all shadow-xs">
+        <a href="https://apps.apple.com/ca/app/jok/id6743651881" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full font-black text-xs md:text-sm bg-primary text-primary-text hover:bg-primary-hover dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 dark:hover:bg-stone-700 transition-all shadow-xs">
             <i class="fa-brands fa-apple text-sm"></i> Descarrega l'App
         </a>
 
@@ -76,7 +76,7 @@
         @endif
 
         <!-- Theme Toggler -->
-        <button onClick="toggleTheme()" class="p-2 rounded-full text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-[#ffcc00] transition-colors focus:outline-none flex items-center justify-center" aria-label="Toggle theme">
+        <button onClick="toggleTheme()" class="p-2 rounded-full text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-primary transition-colors focus:outline-none flex items-center justify-center" aria-label="Toggle theme">
             <span class="dark:hidden flex items-center"><i class="fa-solid fa-sun text-lg text-amber-500"></i></span>
             <span class="hidden dark:flex items-center"><i class="fa-solid fa-moon text-lg text-stone-900 dark:text-white"></i></span>
         </button>
@@ -168,7 +168,7 @@
                             );
                             lastSeason = team.idSeason;
                         }
-                        searchReturn.insertAdjacentHTML('beforeend', `<div class='p-2 w-full sm:w-1/2 md:w-1/4'><div class='bg-stone-50 dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800 rounded-2xl p-4 cursor-pointer hover:border-[#ffcc00] dark:hover:border-stone-600 transition-all' ><a class='text-xs font-black text-stone-900 dark:text-white hover:text-stone-900 dark:hover:text-white' href='/equip/` + team.idTeam + `/` + encodeURIComponent(team.teamName) + `'>` + team.teamName + `<br /><small class='text-stone-500 dark:text-stone-400 font-extrabold text-[10px]'>` + team.categoryName + `</small></a></div></div>`);
+                        searchReturn.insertAdjacentHTML('beforeend', `<div class='p-2 w-full sm:w-1/2 md:w-1/4'><div class='bg-stone-50 dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800 rounded-2xl p-4 cursor-pointer hover:border-primary dark:hover:border-stone-600 transition-all' ><a class='text-xs font-black text-stone-900 dark:text-white hover:text-stone-900 dark:hover:text-white' href='/equip/` + team.idTeam + `/` + encodeURIComponent(team.teamName) + `'>` + team.teamName + `<br /><small class='text-stone-500 dark:text-stone-400 font-extrabold text-[10px]'>` + team.categoryName + `</small></a></div></div>`);
                     });
 
                     // Players
@@ -176,7 +176,7 @@
                     searchReturn.insertAdjacentHTML('beforeend', "<div class='block w-full mx-2 my-3 font-black text-stone-900 dark:text-white text-xs uppercase tracking-wider'>" + playersData.length + " jugadors trobats</div>");
                     
                     playersData.forEach((player) => {
-                        searchReturn.insertAdjacentHTML('beforeend', `<div class='p-2 w-full sm:w-1/2 md:w-1/4'><div class='bg-stone-50 dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800 rounded-2xl p-4 cursor-pointer hover:border-[#ffcc00] dark:hover:border-stone-600 transition-all' ><a class='text-xs font-black text-stone-900 dark:text-white hover:text-stone-900 dark:hover:text-white' href='/jugador/` + player.idPlayer + `/` + encodeURIComponent(player.playerName) + `'>` + player.playerName.substr(0, 36) + `</a></div></div>`);
+                        searchReturn.insertAdjacentHTML('beforeend', `<div class='p-2 w-full sm:w-1/2 md:w-1/4'><div class='bg-stone-50 dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800 rounded-2xl p-4 cursor-pointer hover:border-primary dark:hover:border-stone-600 transition-all' ><a class='text-xs font-black text-stone-900 dark:text-white hover:text-stone-900 dark:hover:text-white' href='/jugador/` + player.idPlayer + `/` + encodeURIComponent(player.playerName) + `'>` + player.playerName.substr(0, 36) + `</a></div></div>`);
                     });
                 })
                 .catch(error => {

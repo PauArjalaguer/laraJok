@@ -1,0 +1,20 @@
+/* ==========================================================================
+   VARIABLES DE COLOR GLOBALS
+   ==========================================================================
+   Modifica els valors HEX d'aquesta secció per canviar el color de tota
+   la pàgina web a l'instant (sense haver de reiniciar res).
+   ========================================================================== */
+
+:root {
+  /* Color principal (Primary) - Pots canviar aquest codi HEX pel que vulguis (#ffcc00, #ff0055, #0066ff, etc.) */
+  --color-primary: #64748b;
+  /* oklch(37.2% 0.044 257.287)*/
+  /* Variant de hover del color principal */
+  --color-primary-hover: #a1a1a1;
+
+  /* Color de text sobre fons principal */
+  --color-primary-text: #424242;
+
+  /* Color secundari / d'accent (Accent) */
+  --color-accent: #e2e8f0;
+}

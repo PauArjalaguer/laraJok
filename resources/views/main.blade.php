@@ -53,7 +53,7 @@
 <!-- TOP TICKER BAR (Apple Sports Scoreboard Ticker) -->
 <div class="w-full relative group mb-8 hidden">
     <div class="font-display text-[11px] font-extrabold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-2 px-1 flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white animate-pulse"></span>
+        <span class="w-2 h-2 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white animate-pulse"></span>
         MARCADORS DIRECTES
     </div>
     <div class="w-full flex overflow-x-auto scroll-smooth gap-3 pb-2 snap-x snap-mandatory scrollbar-hide">
@@ -93,14 +93,14 @@
             <h2 class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
                 MERCAT SEGONA MÀ
             </h2>
-            <a href="/anuncis" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-[#ffcc00] text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-[10px] font-black uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
+            <a href="/anuncis" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-[10px] font-black uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
                 <span>Anuncis</span>
                 <i class="fa-solid fa-arrow-right text-[9px] transition-transform group-hover:translate-x-0.5"></i>
             </a>
         </div>
 
         <!-- Segona Mà Promo Banner (Over News) -->
-        <a href="/anuncis" class="relative block w-full rounded-3xl bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 shadow-xs overflow-hidden group mb-6 transition-all hover:border-[#ffcc00] dark:hover:border-stone-600 p-5 md:p-6">
+        <a href="/anuncis" class="relative block w-full rounded-3xl bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 shadow-xs overflow-hidden group mb-6 transition-all hover:border-primary dark:hover:border-stone-600 p-5 md:p-6">
             <!-- Background Image with gradient mask fade -->
             <div class="absolute inset-y-0 right-0 w-full md:w-8/12 bg-cover bg-right bg-no-repeat opacity-40 dark:opacity-30 transition-transform duration-700 group-hover:scale-105 pointer-events-none" style="background-image: url('/images/segona_ma_promo_banner.jpg'); mask-image: linear-gradient(to right, transparent 0%, black 40%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 40%);"></div>
 
@@ -121,7 +121,7 @@
             <h2 class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
                 NOTÍCIES DESTACADES
             </h2>
-            <a href="/noticies" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-[#ffcc00] text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-[10px] font-black uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
+            <a href="/noticies" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-[10px] font-black uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
                 <span>Més Notícies</span>
                 <i class="fa-solid fa-arrow-right text-[9px] transition-transform group-hover:translate-x-0.5"></i>
             </a>
@@ -132,7 +132,7 @@
             <!-- Large Featured News Card -->
             @if(isset($newsListTop[0]))
                 @php $n = $newsListTop[0]; @endphp
-                <a href="/noticies/detall/{{$n->idNew}}/{{urlencode(str_replace('/', '-', $n->newsTitle))}}" class="group relative flex flex-col justify-end w-full md:w-7/12 h-84 rounded-3xl overflow-hidden shadow-xs hover:border-[#ffcc00] dark:hover:border-stone-600 border border-stone-200 dark:border-stone-800 transition-all duration-300">
+                <a href="/noticies/detall/{{$n->idNew}}/{{urlencode(str_replace('/', '-', $n->newsTitle))}}" class="group relative flex flex-col justify-end w-full md:w-7/12 h-84 rounded-3xl overflow-hidden shadow-xs hover:border-primary dark:hover:border-stone-600 border border-stone-200 dark:border-stone-800 transition-all duration-300">
                     <!-- Image -->
                     <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style="background-image: url('{{ $n->newsImage }}')"></div>
                     <!-- Dark overlay gradient -->
@@ -151,7 +151,7 @@
                 @for($i = 1; $i <= 2; $i++)
                     @if(isset($newsListTop[$i]))
                         @php $n = $newsListTop[$i]; @endphp
-                        <a href="/noticies/detall/{{$n->idNew}}/{{urlencode(str_replace('/', '-', $n->newsTitle))}}" class="group relative flex flex-col justify-end w-full h-[9.8rem] rounded-2xl overflow-hidden shadow-xs hover:border-[#ffcc00] dark:hover:border-stone-600 border border-stone-200 dark:border-stone-800 transition-all duration-300">
+                        <a href="/noticies/detall/{{$n->idNew}}/{{urlencode(str_replace('/', '-', $n->newsTitle))}}" class="group relative flex flex-col justify-end w-full h-[9.8rem] rounded-2xl overflow-hidden shadow-xs hover:border-primary dark:hover:border-stone-600 border border-stone-200 dark:border-stone-800 transition-all duration-300">
                             <!-- Image -->
                             <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style="background-image: url('{{ $n->newsImage }}')"></div>
                             <!-- Overlay -->
@@ -169,7 +169,7 @@
         </div>
 
         <!-- Pavellons Banner with Map Background -->
-        <a href="/pavellons" class="relative block w-full rounded-3xl bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 shadow-xs overflow-hidden group mb-7 transition-all hover:border-[#ffcc00] dark:hover:border-stone-600 p-6 md:p-7">
+        <a href="/pavellons" class="relative block w-full rounded-3xl bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 shadow-xs overflow-hidden group mb-7 transition-all hover:border-primary dark:hover:border-stone-600 p-6 md:p-7">
             <!-- Background Map Image positioned on the right with smooth mask fade -->
             <div class="absolute inset-y-0 right-0 w-full md:w-8/12 bg-cover bg-right bg-no-repeat opacity-40 dark:opacity-25 transition-transform duration-700 group-hover:scale-105 pointer-events-none" style="background-image: url('/images/catalonia_map_pavellons.jpg'); mask-image: linear-gradient(to right, transparent 0%, black 40%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 40%);"></div>
 
@@ -183,7 +183,7 @@
                         <span>CERCA EL TEU PROPER PAVELLÓ</span>
                     </p>
                 </div>
-                <div class="w-10 h-10 rounded-full bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-900 dark:text-white group-hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white group-hover:text-black group-hover:border-[#ffcc00] dark:hover:border-stone-600 transition-all duration-300 shadow-xs flex-shrink-0">
+                <div class="w-10 h-10 rounded-full bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-900 dark:text-white group-hover:bg-primary text-black dark:bg-stone-800 dark:text-white group-hover:text-black group-hover:border-primary dark:hover:border-stone-600 transition-all duration-300 shadow-xs flex-shrink-0">
                     <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-0.5"></i>
                 </div>
             </div>
@@ -195,7 +195,7 @@
                 <h2 class="font-display text-xs font-extrabold text-stone-900 dark:text-stone-100 uppercase tracking-wider">
                     MERCHANDISING DESTACAT
                 </h2>
-                <a href="/merchandising" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-[#ffcc00] text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-[10px] font-black uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
+                <a href="/merchandising" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-[10px] font-black uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
                     <span>Botiga</span>
                     <i class="fa-solid fa-arrow-right text-[9px] transition-transform group-hover:translate-x-0.5"></i>
                 </a>
@@ -208,7 +208,7 @@
                 <!-- Carousel -->
                 <div x-ref="carousel" class="w-full flex gap-3.5 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide py-1">
                     @foreach($merchandisingList as $merch)
-                        <a href="{{ $merch->assetUrl }}" target="_blank" class="snap-start flex-shrink-0 w-[44%] sm:w-[30%] bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800 rounded-2xl overflow-hidden shadow-xs hover:border-[#ffcc00] dark:hover:border-stone-600 transition-all flex flex-col">
+                        <a href="{{ $merch->assetUrl }}" target="_blank" class="snap-start flex-shrink-0 w-[44%] sm:w-[30%] bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800 rounded-2xl overflow-hidden shadow-xs hover:border-primary dark:hover:border-stone-600 transition-all flex flex-col">
                             <div class="w-full aspect-square bg-stone-50 dark:bg-stone-900 p-3 flex items-center justify-center relative overflow-hidden border-b border-stone-100 dark:border-stone-800">
                                 <img class="max-w-full max-h-full object-contain rounded-xl transition-transform duration-300 hover:scale-105" src="{{ $merch->assetThumbnail }}" alt="{{ $merch->assetName }}">
                             </div>
@@ -230,10 +230,10 @@
                 </div>
                 
                 <!-- Controls -->
-                <button @click="scrollPrev()" class="absolute left-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-black/90 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-800 dark:text-stone-200 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black focus:outline-none">
+                <button @click="scrollPrev()" class="absolute left-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-black/90 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-800 dark:text-stone-200 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black focus:outline-none">
                     <i class="fa-solid fa-chevron-left text-xs"></i>
                 </button>
-                <button @click="scrollNext()" class="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-black/90 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-800 dark:text-stone-200 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black focus:outline-none">
+                <button @click="scrollNext()" class="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-black/90 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-800 dark:text-stone-200 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black focus:outline-none">
                     <i class="fa-solid fa-chevron-right text-xs"></i>
                 </button>
             </div>
@@ -245,7 +245,7 @@
                 <h2 class="font-display text-xs font-extrabold text-stone-900 dark:text-stone-100 uppercase tracking-wider">
                     SEGONA MÀ (ANUNCIS)
                 </h2>
-                <a href="/anuncis" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-[#ffcc00] text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-[10px] font-black uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
+                <a href="/anuncis" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-[10px] font-black uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
                     <span>Veure Tots</span>
                     <i class="fa-solid fa-arrow-right text-[9px] transition-transform group-hover:translate-x-0.5"></i>
                 </a>
@@ -263,7 +263,7 @@
                                 ? asset($ad->fotos->first()->foto_ruta) 
                                 : 'https://picsum.photos/seed/'.$ad->id.'/200/150';
                         @endphp
-                        <a href="{{ route('anuncis.show', ['id' => $ad->id, 'slug' => $ad->slug]) }}" class="snap-start flex-shrink-0 w-[44%] sm:w-[30%] bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800 rounded-2xl overflow-hidden shadow-xs hover:border-[#ffcc00] dark:hover:border-stone-600 transition-all flex flex-col">
+                        <a href="{{ route('anuncis.show', ['id' => $ad->id, 'slug' => $ad->slug]) }}" class="snap-start flex-shrink-0 w-[44%] sm:w-[30%] bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800 rounded-2xl overflow-hidden shadow-xs hover:border-primary dark:hover:border-stone-600 transition-all flex flex-col">
                             <div class="w-full aspect-[4/3] bg-stone-100 dark:bg-stone-900 flex items-center justify-center relative overflow-hidden border-b border-stone-200 dark:border-stone-800">
                                 <img class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" src="{{ $coverFoto }}" alt="{{ $ad->titol }}">
                             </div>
@@ -294,10 +294,10 @@
                 </div>
                 
                 <!-- Controls -->
-                <button @click="scrollPrev()" class="absolute left-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-black/90 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-800 dark:text-stone-200 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black focus:outline-none">
+                <button @click="scrollPrev()" class="absolute left-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-black/90 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-800 dark:text-stone-200 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black focus:outline-none">
                     <i class="fa-solid fa-chevron-left text-xs"></i>
                 </button>
-                <button @click="scrollNext()" class="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-black/90 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-800 dark:text-stone-200 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black focus:outline-none">
+                <button @click="scrollNext()" class="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-black/90 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-800 dark:text-stone-200 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black focus:outline-none">
                     <i class="fa-solid fa-chevron-right text-xs"></i>
                 </button>
             </div>

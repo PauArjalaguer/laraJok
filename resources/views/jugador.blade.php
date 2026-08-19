@@ -16,7 +16,7 @@
                 {{ mb_strtolower($playerInfo[0]->playerName) }}
             </h1>
             @if(isset($playerInfo[0]->number))
-                <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#ffcc00] text-black dark:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:text-black font-black text-xs shadow-xs">
+                <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary text-primary-text dark:bg-primary text-black dark:bg-stone-800 dark:text-white dark:text-black font-black text-xs shadow-xs">
                     {{ $playerInfo[0]->number }}
                 </span>
             @endif
@@ -42,7 +42,7 @@
             <div class="mb-4 flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
                 @foreach($seasons as $season)
                     <button @click="activeSeason = '{{ $season }}'"
-                        :class="activeSeason === '{{ $season }}' ? 'bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black shadow-xs' : 'bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-bold hover:bg-stone-200 dark:hover:bg-stone-800 border border-stone-200/80 dark:border-stone-800'"
+                        :class="activeSeason === '{{ $season }}' ? 'bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black shadow-xs' : 'bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-bold hover:bg-stone-200 dark:hover:bg-stone-800 border border-stone-200/80 dark:border-stone-800'"
                         class="px-4 py-1.5 rounded-full text-xs font-display uppercase tracking-wider transition-all flex-shrink-0">
                         {{ $season }}
                     </button>
@@ -88,7 +88,7 @@
                 <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl overflow-hidden shadow-xs">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left font-display text-xs">
-                            <thead class="bg-[#ffcc00] text-black dark:bg-black text-[10px] uppercase font-black tracking-wider">
+                            <thead class="bg-primary text-primary-text dark:bg-black text-[10px] uppercase font-black tracking-wider">
                                 <tr>
                                     <th class="py-2.5 px-3">Temporada</th>
                                     <th class="py-2.5 px-2 text-center" title="Partits Jugats">PJ</th>
@@ -99,7 +99,7 @@
                             </thead>
                             <tbody class="divide-y divide-stone-100 dark:divide-stone-800/80">
                                 @foreach(collect($playerStats)->sortByDesc('seasonName') as $stats)
-                                    <tr class="hover:bg-stone-50 dark:hover:bg-[#ffcc00]/50 transition-colors">
+                                    <tr class="hover:bg-stone-50 dark:hover:bg-primary/50 transition-colors">
                                         <td class="py-3 px-3 font-bold text-stone-900 dark:text-stone-100">
                                             <span class="inline-block bg-stone-100 dark:bg-stone-900 px-2 py-0.5 rounded-full text-[10px] font-black border border-stone-200/80 dark:border-stone-800">
                                                 {{ $stats->seasonName }}
@@ -110,7 +110,7 @@
                                         </td>
                                         <td class="py-3 px-2 text-center font-black">
                                             @if($stats->total_goals > 0)
-                                                <span class="inline-flex items-center gap-1.5 bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 px-2.5 py-0.5 rounded-full text-[11px] font-black shadow-xs">
+                                                <span class="inline-flex items-center gap-1.5 bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 px-2.5 py-0.5 rounded-full text-[11px] font-black shadow-xs">
                                                     {{ $stats->total_goals }}
                                                     <svg class="w-3.5 h-3.5 inline-block drop-shadow-xs flex-shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" title="Bola d'Hoquei">
                                                         <defs>

@@ -56,9 +56,9 @@
         }
         if (activeBtn) {
             const isDark = document.documentElement.classList.contains('dark');
-            activeBtn.style.backgroundColor = isDark ? '#27272a' : '#ffcc00';
+            activeBtn.style.backgroundColor = isDark ? '#27272a' : 'var(--color-primary)';
             activeBtn.style.color = isDark ? '#ffffff' : '#000000';
-            activeBtn.style.borderColor = isDark ? '#3f3f46' : '#ffcc00';
+            activeBtn.style.borderColor = isDark ? '#3f3f46' : 'var(--color-primary)';
             activeBtn.classList.add('font-black');
         }
     }
@@ -170,7 +170,7 @@
             
             <div class="p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-extrabold flex items-center justify-center">
                 @if ($p==1)
-                    <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-xs">1</span>
+                    <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-xs">1</span>
                 @else
                     <span class="text-stone-500 dark:text-stone-400 font-bold">{{$p}}</span>
                 @endif
@@ -275,7 +275,7 @@
                                 {{App\Http\Controllers\TeamsController::teamFormat($player->playerName)}}
                             </a>
                         </div>
-                        <span class="font-black text-black bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white px-2.5 py-0.5 rounded-full text-[11px]">
+                        <span class="font-black text-black bg-primary text-primary-text dark:bg-stone-800 dark:text-white px-2.5 py-0.5 rounded-full text-[11px]">
                             {{$player->goals}} Gols
                         </span>
                     </div>
@@ -348,7 +348,7 @@
                     $isBtnActive = $hasActiveRoundMatch ? ($btnClean === $targetRoundId) : false;
                     @endphp
                     @if ($currentRound != $match->idRound)
-                    <button id="{{$btnClean}}_button" class="inline-flex items-center justify-center text-center {{ strlen($match->idRound) > 2 ? 'px-3 min-w-9 w-auto' : 'w-9' }} h-9 rounded-full font-display text-xs font-black leading-none {{ $isBtnActive ? 'bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 border-[#1c1917]' : 'bg-stone-100 dark:bg-stone-900 text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-800' }} hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black transition-all cursor-pointer leagueButton" onClick="leagueShow('{{$btnClean}}')">
+                    <button id="{{$btnClean}}_button" class="inline-flex items-center justify-center text-center {{ strlen($match->idRound) > 2 ? 'px-3 min-w-9 w-auto' : 'w-9' }} h-9 rounded-full font-display text-xs font-black leading-none {{ $isBtnActive ? 'bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 border-[#1c1917]' : 'bg-stone-100 dark:bg-stone-900 text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-800' }} hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black transition-all cursor-pointer leagueButton" onClick="leagueShow('{{$btnClean}}')">
                         {{$match->idRound}}
                     </button>
                     @endif

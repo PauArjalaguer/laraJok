@@ -9,7 +9,7 @@
 
 <!-- BACK TO NEWS BUTTON -->
 <div class="mb-5">
-    <a href="/noticies" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black bg-stone-100 dark:bg-stone-900 text-stone-800 dark:text-stone-200 hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs font-display">
+    <a href="/noticies" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black bg-stone-100 dark:bg-stone-900 text-stone-800 dark:text-stone-200 hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs font-display">
         <i class="fa-solid fa-arrow-left text-[10px]"></i> Torna a Notícies
     </a>
 </div>

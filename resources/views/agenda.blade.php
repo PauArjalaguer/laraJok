@@ -41,7 +41,7 @@
                     $matchLabel = $localName . '-' . $visitorName;
                     $hasResult = (isset($match->localResult) && isset($match->visitorResult) && $match->localResult !== '' && $match->visitorResult !== '');
                 @endphp
-                <tr class="agenda-row hover:bg-stone-50 dark:hover:bg-[#ffcc00]/50 transition-colors text-xs font-display">
+                <tr class="agenda-row hover:bg-stone-50 dark:hover:bg-primary/50 transition-colors text-xs font-display">
                     <!-- Date, Time & Round Badge -->
                     <td class="p-3.5 border-b border-stone-100 dark:border-stone-850 whitespace-nowrap">
                         <div class="flex items-center gap-1.5">
@@ -102,7 +102,7 @@
 
                     <!-- Match Report Link -->
                     <td class="p-3.5 border-b border-stone-100 dark:border-stone-850 text-right whitespace-nowrap">
-                        <a href="/acta/{{$match->idMatch}}/{{urlencode($matchLabel)}}" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-stone-100 text-stone-800 dark:bg-stone-900 dark:text-stone-200 hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black transition-all text-xs font-black border border-stone-200/80 dark:border-stone-800 shadow-xs">
+                        <a href="/acta/{{$match->idMatch}}/{{urlencode($matchLabel)}}" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-stone-100 text-stone-800 dark:bg-stone-900 dark:text-stone-200 hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black transition-all text-xs font-black border border-stone-200/80 dark:border-stone-800 shadow-xs">
                             Acta <i class="fa-solid fa-arrow-right text-[10px]"></i>
                         </a>
                     </td>

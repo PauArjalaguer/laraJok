@@ -36,7 +36,7 @@
                     <h2 class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
                         CLASSIFICACIONS DEL CLUB
                     </h2>
-                    <span class="hallmark-stamp bg-stone-900 text-stone-900 dark:text-white dark:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:text-black">LLIGUES</span>
+                    <span class="hallmark-stamp bg-stone-900 text-stone-900 dark:text-white dark:bg-primary text-black dark:bg-stone-800 dark:text-white dark:text-black">LLIGUES</span>
                 </div>
 
                 <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl overflow-hidden shadow-xs">
@@ -54,14 +54,14 @@
                             </thead>
                             <tbody class="divide-y divide-stone-100 dark:divide-stone-800/80">
                                 @foreach($classifications as $classification)
-                                    <tr class="hover:bg-stone-50 dark:hover:bg-[#ffcc00]/50 transition-colors">
+                                    <tr class="hover:bg-stone-50 dark:hover:bg-primary/50 transition-colors">
                                         <td class="py-3 px-4 font-bold text-stone-900 dark:text-stone-100 capitalize">
                                             <a href="/competicio/{{$classification->idGroup}}/{{urlencode($classification->groupName)}}" class="hover:text-stone-600 dark:hover:text-white transition-colors">
                                                 {{$classification->groupName}}
                                             </a>
                                         </td>
                                         <td class="py-3 px-2 text-center">
-                                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-xs">
+                                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-xs">
                                                 {{$classification->position}}
                                             </span>
                                         </td>
@@ -109,7 +109,7 @@
                     <h2 class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
                         DARRERS RESULTATS
                     </h2>
-                    <span class="hallmark-stamp bg-stone-900 text-stone-900 dark:text-white dark:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:text-black">RESULTATS</span>
+                    <span class="hallmark-stamp bg-stone-900 text-stone-900 dark:text-white dark:bg-primary text-black dark:bg-stone-800 dark:text-white dark:text-black">RESULTATS</span>
                 </div>
                 <div class="flex flex-col gap-1">
                     @foreach($matchesListLastWithResults as $match)
@@ -147,7 +147,7 @@
             @foreach($groupedTeams as $seasonName => $teams)
                 <div x-data="{ open: {{ $loop->first ? 'true' : 'false' }} }" class="mb-3">
                     <!-- Season Accordion Header (Negre sobre Verd-Lima Apple Sports) -->
-                    <button @click="open = !open" class="group w-full flex items-center justify-between py-2.5 px-4 bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 rounded-2xl font-display text-xs font-black uppercase tracking-wider hover:bg-[#c6f800] transition-all shadow-xs mb-2">
+                    <button @click="open = !open" class="group w-full flex items-center justify-between py-2.5 px-4 bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 rounded-2xl font-display text-xs font-black uppercase tracking-wider hover:bg-accent transition-all shadow-xs mb-2">
                         <div class="flex items-center gap-2">
                             <i class="fa-solid fa-users text-black text-xs"></i>
                             <span class="text-black font-black">{{ $seasonName }}</span>
@@ -164,7 +164,7 @@
                     <!-- Collapsible Teams Content -->
                     <div x-show="open" class="space-y-1.5 transition-all">
                         @foreach($teams as $team)
-                            <a href="/equip/{{$team->idTeam}}/{{urlencode($team->teamName)}}" class="group flex items-center justify-between bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-3 hover:border-[#ffcc00] dark:hover:border-[#ffcc00] dark:hover:border-stone-600 transition-all shadow-xs">
+                            <a href="/equip/{{$team->idTeam}}/{{urlencode($team->teamName)}}" class="group flex items-center justify-between bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-3 hover:border-primary dark:hover:border-primary dark:hover:border-stone-600 transition-all shadow-xs">
                                 <span class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-stone-100 group-hover:text-stone-600 dark:group-hover:text-stone-900 dark:hover:text-white transition-colors capitalize">
                                     {{App\Http\Controllers\TeamsController::teamFormat($team->teamName)}}
                                 </span>
@@ -180,10 +180,13 @@
 
         <!-- Quick Action Buttons -->
         <div class="flex flex-col gap-2.5 mb-6">
-            <a href="/acta_club/{{$clubInfo[0]->idClub}}/actes-setmana" class="group flex items-center justify-center gap-2 py-2.5 px-4 bg-stone-100 hover:bg-[#ffcc00] text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-xs font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
+            <a href="/acta_club/{{$clubInfo[0]->idClub}}/actes-setmana" class="group flex items-center justify-center gap-2 py-2.5 px-4 bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-xs font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
                 <i class="fa-solid fa-file-lines text-stone-500 group-hover:text-white dark:text-white dark:group-hover:text-black transition-colors"></i> Actes de la setmana
             </a>
-            <a href="/acta_header/{{$clubInfo[0]->idClub}}" target="_blank" class="group flex items-center justify-center gap-2 py-2.5 px-4 bg-stone-100 hover:bg-[#ffcc00] text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-xs font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
+            <a href="/acta_header/{{$clubInfo[0]->idClub}}" target="_blank" class="group flex items-center justify-center gap-2 py-2.5 px-4 bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-xs font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
+                <i class="fa-solid fa-chart-column text-xs"></i> Generar gràfic resultats
+            </a>
+        </div>
                 <i class="fa-solid fa-chart-column text-xs"></i> Generar gràfic resultats
             </a>
         </div>

@@ -57,7 +57,7 @@
 
         <div class="category-section mb-8" data-category="{{ $league->categoryName }}">
             <h3 class="text-sm font-black text-stone-500 dark:text-stone-400 uppercase tracking-wider mt-4 mb-3 font-display flex items-center gap-2 category-title">
-                <span class="w-2 h-2 rounded-full bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white"></span>
+                <span class="w-2 h-2 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white"></span>
                 {{ $league->categoryName }}
             </h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5">
@@ -65,7 +65,7 @@
     @endif
 
     {{-- Contingut targeta de competició --}}
-    <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800 p-4 rounded-2xl shadow-xs hover:border-[#ffcc00] dark:hover:border-stone-600 hover:shadow-sm transition-all group league-item flex items-center justify-between" data-label="{{ strtolower($league->label) }}">
+    <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800 p-4 rounded-2xl shadow-xs hover:border-primary dark:hover:border-stone-600 hover:shadow-sm transition-all group league-item flex items-center justify-between" data-label="{{ strtolower($league->label) }}">
         <a href="{{ url('competicio/' . $league->value . '/' . Str::slug($league->label)) }}" class="league-link font-display text-xs md:text-sm font-extrabold text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:hover:text-white transition-colors truncate pr-2">
             {{ $league->label }}
         </a>

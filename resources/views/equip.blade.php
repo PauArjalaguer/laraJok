@@ -48,9 +48,9 @@
 
                 <div class="space-y-1.5">
                     @foreach ($playersList as $player)
-                        <div class="group flex items-center justify-between bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-3 md:p-3.5 hover:border-[#ffcc00] dark:hover:border-[#ffcc00] dark:hover:border-stone-600 transition-all shadow-xs">
+                        <div class="group flex items-center justify-between bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-3 md:p-3.5 hover:border-primary dark:hover:border-primary dark:hover:border-stone-600 transition-all shadow-xs">
                             <div class="flex items-center">
-                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#ffcc00] text-black dark:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:text-black font-black text-xs mr-3 flex-shrink-0">
+                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary text-primary-text dark:bg-primary text-black dark:bg-stone-800 dark:text-white dark:text-black font-black text-xs mr-3 flex-shrink-0">
                                     {{ $player->number }}
                                 </span>
                                 <a href="/jugador/{{$player->idPlayer}}/{{urlencode($player->playerName)}}" class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-stone-100 group-hover:text-stone-600 dark:group-hover:text-stone-900 dark:hover:text-white transition-colors capitalize">
@@ -77,7 +77,7 @@
 
                 <div class="space-y-1.5">
                     @foreach($teamLeaguesList as $league)
-                        <a href="/competicio/{{$league->idGroup}}/{{urlencode($league->groupName)}}" class="group flex items-center justify-between bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-3.5 hover:border-[#ffcc00] dark:hover:border-[#ffcc00] dark:hover:border-stone-600 transition-all shadow-xs">
+                        <a href="/competicio/{{$league->idGroup}}/{{urlencode($league->groupName)}}" class="group flex items-center justify-between bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-3.5 hover:border-primary dark:hover:border-primary dark:hover:border-stone-600 transition-all shadow-xs">
                             <span class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-stone-100 group-hover:text-stone-600 dark:group-hover:text-stone-900 dark:hover:text-white transition-colors capitalize">
                                 {{ mb_strtolower($league->groupName) }}
                             </span>
@@ -107,7 +107,7 @@
                 <div class="space-y-1.5">
                     @foreach ($teamGoals as $goals)
                         @if($goals->goals != 0)
-                            <div class="group relative overflow-hidden bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-3 md:p-3.5 shadow-xs hover:border-[#ffcc00] dark:hover:border-[#ffcc00] dark:hover:border-stone-600 transition-all flex items-center justify-between">
+                            <div class="group relative overflow-hidden bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-3 md:p-3.5 shadow-xs hover:border-primary dark:hover:border-primary dark:hover:border-stone-600 transition-all flex items-center justify-between">
                                 <!-- Progress bar overlay background -->
                                 <div class="absolute top-0 left-0 h-full bg-stone-100/80 dark:bg-stone-800/40 transition-colors" style="width: {{$goals->percentage}}%;"></div>
                                 
@@ -120,7 +120,7 @@
                                     <span class="font-display text-[10px] font-bold text-stone-500 dark:text-stone-400">
                                         {{ sprintf('%04.1f', $goals->percentage) }}%
                                     </span>
-                                    <span class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full bg-[#ffcc00] text-black dark:bg-[#ffcc00] text-black dark:bg-stone-800 dark:text-white dark:text-black font-black text-xs shadow-xs">
+                                    <span class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full bg-primary text-primary-text dark:bg-primary text-black dark:bg-stone-800 dark:text-white dark:text-black font-black text-xs shadow-xs">
                                         {{ $goals->goals }}
                                     </span>
                                 </div>
