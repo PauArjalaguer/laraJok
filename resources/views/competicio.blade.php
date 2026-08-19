@@ -159,7 +159,7 @@
             <div class="w-1/12 text-center">PP</div>
             <div class="w-1/12 text-center classCol-extra hidden text-stone-400">GF</div>
             <div class="w-1/12 text-center classCol-extra hidden text-stone-400">GC</div>
-            <div class="classCol-form text-center classCol-extra hidden text-stone-400">Forma</div>
+            <div class="classCol-form text-center classCol-extra hidden text-stone-400">Darrers partits</div>
         </div>
 
         @php $p=0; @endphp
