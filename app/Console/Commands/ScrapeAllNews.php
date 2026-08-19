@@ -37,6 +37,7 @@ class ScrapeAllNews extends Command
             'noia'       => ['name' => 'CE Noia Freixenet', 'action' => fn() => ScrapingController::scrapeNoia()],
             'caldes'     => ['name' => 'CH Caldes', 'action' => fn() => ScrapingController::scrapeCaldes()],
             'shum'       => ['name' => 'SHUM Maçanet', 'action' => fn() => ScrapingController::scrapeShum()],
+            'amunt'      => ['name' => 'CE Arenys de Munt', 'action' => fn() => ScrapingController::scrapeAmunt()],
         ];
 
         $this->info("Iniciant scraping de notícies...");

@@ -740,6 +740,49 @@ class ScrapingController extends Controller
 
         return response()->json(['articles' => $articles]);
     }
+
+    public static function scrapeAmunt()
+    {
+        $url = 'https://amunthoquei.cat/wp-json/wp/v2/posts?_embed&per_page=15';
+        $json = self::getWebContent($url);
+        if (!$json) {
+            return response()->json(['error' => self::ERROR_FETCH_CONTENT], 500);
+        }
+
+        $posts = json_decode($json, true);
+        $articles = [];
+
+        if (is_array($posts)) {
+            foreach ($posts as $p) {
+                $title = html_entity_decode(strip_tags($p['title']['rendered'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $link = $p['link'] ?? '';
+                $date = isset($p['date']) ? date('Y-m-d H:i:s', strtotime($p['date'])) : Carbon::now()->format('Y-m-d H:i:s');
+                $image = $p['_embedded']['wp:featuredmedia'][0]['source_url'] ?? '';
+
+                $rawContent = $p['content']['rendered'] ?? '';
+                $content = html_entity_decode(trim(strip_tags($rawContent)), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $content = preg_replace("/\n\s*\n+/", "\n\n", $content);
+
+                if (!empty($title) && !empty($link)) {
+                    $articleData = [
+                        'title'   => $title,
+                        'url'     => $link,
+                        'date'    => $date,
+                        'image'   => $image,
+                        'content' => $content,
+                        'source'  => 'Amunt'
+                    ];
+
+                    if (self::saveArticle($articleData)) {
+                        $articles[] = $articleData;
+                    }
+                }
+            }
+        }
+
+        return response()->json(['articles' => $articles]);
+    }
+
     public static function scrapeFecapaResults()
     {
         $games = [];
