@@ -162,7 +162,7 @@
         <!-- Proximity Button -->
         <div>
             @if($proximitatActiva)
-            <a href="{{ route('anuncis.index', request()->except(['lat','lng'])) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black rounded-full border border-[#1c1917]/40 bg-stone-900 text-stone-900 dark:text-white dark:bg-black transition shadow-xs">
+            <a href="{{ route('anuncis.index', request()->except(['lat','lng'])) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black rounded-full border border-[#1c1917]/40 bg-stone-900 text-white dark:bg-black transition shadow-xs">
                 <i class="fa-solid fa-location-dot"></i> Proximitat activa
                 <i class="fa-solid fa-xmark text-[10px] ml-0.5"></i>
             </a>

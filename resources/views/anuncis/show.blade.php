@@ -152,7 +152,7 @@ $totalFotos = $fotos->count();
             <!-- Seller Card -->
             @if($anunci->usuari)
             <div class="flex items-center gap-3.5 p-4 rounded-3xl bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 shadow-xs mb-5">
-                <div class="w-10 h-10 rounded-full bg-stone-900 text-stone-900 dark:text-white dark:bg-black font-black flex items-center justify-center flex-none text-sm">
+                <div class="w-10 h-10 rounded-full bg-stone-900 text-white dark:bg-black font-black flex items-center justify-center flex-none text-sm">
                     <i class="fa-solid fa-user"></i>
                 </div>
                 <div class="min-w-0 flex-1">

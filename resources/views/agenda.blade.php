@@ -80,7 +80,7 @@
                     <!-- Result -->
                     <td class="p-3.5 border-b border-stone-100 dark:border-stone-850 text-center whitespace-nowrap">
                         @if($hasResult)
-                            <span class="inline-flex items-center justify-center bg-stone-900 text-stone-900 dark:text-white dark:bg-black font-black text-xs px-2.5 py-1 rounded-full shadow-xs">
+                            <span class="inline-flex items-center justify-center bg-stone-900 text-white dark:bg-black font-black text-xs px-2.5 py-1 rounded-full shadow-xs">
                                 {{$match->localResult}} - {{$match->visitorResult}}
                             </span>
                         @else

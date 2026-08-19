@@ -4,7 +4,7 @@
     <div class="w-full">
         <div class="bg-stone-950 dark:bg-[#121215] w-full border border-stone-800 rounded-t-2xl overflow-hidden text-white text-xs font-black uppercase tracking-wider flex items-center p-3 shadow-xs">
             <div class="w-7/12 text-left">Jugador (Local)</div>
-            <div class='w-1/12 text-center text-stone-900 dark:text-white font-black'>G</div>
+            <div class='w-1/12 text-center text-white font-black'>G</div>
             <div class='w-1/12 text-center text-stone-300'>B</div>
             <div class='w-1/12 text-center text-stone-300'>V</div>
             <div class='w-1/12 text-center text-stone-300'>FD</div>
@@ -39,7 +39,7 @@
                     {{App\Http\Controllers\TeamsController::teamFormat($m->playerName)}}
                 </a>
             </div>
-            <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-black {{ $m->goals > 0 ? 'text-stone-900 dark:text-white bg-stone-900 dark:bg-black' : 'text-stone-700 dark:text-stone-300' }}">{{$m->goals}}</div>
+            <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-black {{ $m->goals > 0 ? 'text-white bg-stone-900 dark:bg-black' : 'text-stone-700 dark:text-stone-300' }}">{{$m->goals}}</div>
             <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-bold text-stone-600 dark:text-stone-400">{{$m->blue}}</div>
             <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-bold text-stone-600 dark:text-stone-400">{{$m->red}}</div>
             <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center text-stone-500 dark:text-stone-400">{{$m->directes}}</div>
@@ -53,7 +53,7 @@
     <div class="w-full">
         <div class="bg-stone-950 dark:bg-[#121215] w-full border border-stone-800 rounded-t-2xl overflow-hidden text-white text-xs font-black uppercase tracking-wider flex items-center p-3 shadow-xs">
             <div class="w-7/12 text-left">Jugador (Visitant)</div>
-            <div class="w-1/12 text-center text-stone-900 dark:text-white font-black">G</div>
+            <div class="w-1/12 text-center text-white font-black">G</div>
             <div class="w-1/12 text-center text-stone-300">B</div>
             <div class="w-1/12 text-center text-stone-300">V</div>
             <div class="w-1/12 text-center text-stone-300">FD</div>
@@ -88,7 +88,7 @@
                     {{App\Http\Controllers\TeamsController::teamFormat($m->playerName)}}
                 </a>
             </div>
-            <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-black {{ $m->goals > 0 ? 'text-stone-900 dark:text-white bg-stone-900 dark:bg-black' : 'text-stone-700 dark:text-stone-300' }}">{{$m->goals}}</div>
+            <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-black {{ $m->goals > 0 ? 'text-white bg-stone-900 dark:bg-black' : 'text-stone-700 dark:text-stone-300' }}">{{$m->goals}}</div>
             <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-bold text-stone-600 dark:text-stone-400">{{$m->blue}}</div>
             <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-bold text-stone-600 dark:text-stone-400">{{$m->red}}</div>
             <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center text-stone-500 dark:text-stone-400">{{$m->directes}}</div>

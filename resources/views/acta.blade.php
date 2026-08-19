@@ -47,11 +47,11 @@
         <!-- Score Box & Faults -->
         <div class="flex flex-col items-center justify-center flex-shrink-0">
             <div class="bg-stone-900 dark:bg-black border border-stone-800 rounded-full px-4 py-2.5 md:px-7 md:py-4 shadow-inner flex items-center gap-2 md:gap-4">
-                <span class="text-2xl md:text-5xl font-black text-stone-900 dark:text-white">
+                <span class="text-2xl md:text-5xl font-black text-white">
                     {{$matchGetInfoById[0]->localResult}}
                 </span>
                 <span class="text-stone-500 text-lg md:text-3xl font-light">-</span>
-                <span class="text-2xl md:text-5xl font-black text-stone-900 dark:text-white">
+                <span class="text-2xl md:text-5xl font-black text-white">
                     {{$matchGetInfoById[0]->visitorResult}}
                 </span>
             </div>

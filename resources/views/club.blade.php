@@ -42,7 +42,7 @@
                 <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl overflow-hidden shadow-xs">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left font-display text-xs">
-                            <thead class="bg-stone-900 text-stone-900 dark:text-white dark:bg-black dark:text-white text-[10px] uppercase font-black tracking-wider">
+                            <thead class="bg-stone-900 text-white dark:bg-black text-[10px] uppercase font-black tracking-wider">
                                 <tr>
                                     <th class="py-3 px-4">Competició</th>
                                     <th class="py-3 px-2 text-center">Pos</th>
