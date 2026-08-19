@@ -33,6 +33,7 @@ class CompeticioController extends Controller
                 'userSavedData' => User::userSavedData(),
                 'round'=>$round,
                 'lastPlayedMatches' => Matches::lastPlayedMatchesByGroup($id),
+                'teamForm' => Matches::getTeamFormByGroup($id),
             ]
         );
     }

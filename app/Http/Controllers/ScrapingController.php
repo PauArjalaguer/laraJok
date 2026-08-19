@@ -786,6 +786,91 @@ class ScrapingController extends Controller
         return response()->json(['articles' => $articles]);
     }
 
+    public static function scrapeLesportiu()
+    {
+        $baseUrl = 'https://www.lesportiudecatalunya.cat';
+        $url = $baseUrl . '/hoquei/hoquei-patins.html';
+        $html = self::getWebContent($url);
+        if (!$html) {
+            return response()->json(['error' => self::ERROR_FETCH_CONTENT], 500);
+        }
+
+        $dom = new DOMDocument();
+        @$dom->loadHTML('<?xml encoding="utf-8" ?>' . $html, LIBXML_NOERROR);
+        $xpath = new DOMXPath($dom);
+
+        $articles = [];
+        $nodes = $xpath->query("//h2/a | //h3/a | //h4/a | //a[contains(@class, 'titol')]");
+        $seen = [];
+
+        foreach ($nodes as $node) {
+            $href = $node->getAttribute('href');
+            if (!str_starts_with($href, 'http')) {
+                $href = $baseUrl . $href;
+            }
+
+            if (in_array($href, $seen) || (!str_contains($href, '/hoquei/') && !str_contains($href, '/article/'))) {
+                continue;
+            }
+            $seen[] = $href;
+
+            $detailHtml = self::getWebContent($href);
+            if ($detailHtml) {
+                $detailDom = new DOMDocument();
+                @$detailDom->loadHTML('<?xml encoding="utf-8" ?>' . $detailHtml, LIBXML_NOERROR);
+                $detailXpath = new DOMXPath($detailDom);
+
+                $ogTitle = $detailXpath->query("//meta[@property='og:title']")->item(0);
+                $title = $ogTitle ? trim($ogTitle->getAttribute('content')) : '';
+
+                if (empty($title) || mb_strlen($title) < 5) {
+                    continue;
+                }
+
+                $subNode = $detailXpath->query("//div[contains(@class, 'entradeta')] | //h2[contains(@class, 'subtitol')] | //div[contains(@class, 'subtitol')]")->item(0);
+                $subtitle = $subNode ? trim($subNode->textContent) : '';
+
+                $imgNode = $detailXpath->query("//meta[@property='og:image']")->item(0);
+                $image = $imgNode ? $imgNode->getAttribute('content') : '';
+
+                $date = Carbon::now()->format('Y-m-d H:i:s');
+                $dateMeta = $detailXpath->query("//meta[@property='article:published_time'] | //meta[@name='DCTERMS.issued']")->item(0);
+                if ($dateMeta) {
+                    $date = date('Y-m-d H:i:s', strtotime($dateMeta->getAttribute('content')));
+                }
+
+                $textNoticia = "";
+                $paragraphs = $detailXpath->query("//div[contains(@class, 'cos-noticia') or contains(@class, 'article-text') or contains(@class, 'content-noticia')]//p | //article//p");
+                if ($paragraphs->length == 0) {
+                    $paragraphs = $detailXpath->query("//p");
+                }
+
+                foreach ($paragraphs as $p) {
+                    $t = trim($p->textContent);
+                    if (!empty($t) && mb_strlen($t) > 30 && !str_contains($t, 'L\'Esportiu de Catalunya') && !str_contains($t, 'Tots els drets reservats') && !str_contains($t, 'Cookie') && !str_contains($t, 'Preu:')) {
+                        $textNoticia .= $t . "\n\n";
+                    }
+                }
+
+                $articleData = [
+                    'title'        => $title,
+                    'newsSubtitle' => $subtitle,
+                    'url'          => $href,
+                    'date'         => $date,
+                    'image'        => $image,
+                    'content'      => trim($textNoticia),
+                    'source'       => 'Esportiu'
+                ];
+
+                if (self::saveArticle($articleData)) {
+                    $articles[] = $articleData;
+                }
+            }
+        }
+
+        return response()->json(['articles' => $articles]);
+    }
+
     public static function scrapeFecapaResults()
     {
         $games = [];

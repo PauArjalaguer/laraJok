@@ -38,6 +38,7 @@ class ScrapeAllNews extends Command
             'caldes'     => ['name' => 'CH Caldes', 'action' => fn() => ScrapingController::scrapeCaldes()],
             'shum'       => ['name' => 'SHUM Maçanet', 'action' => fn() => ScrapingController::scrapeShum()],
             'amunt'      => ['name' => 'CE Arenys de Munt', 'action' => fn() => ScrapingController::scrapeAmunt()],
+            'lesportiu'  => ['name' => "L'Esportiu de Catalunya", 'action' => fn() => ScrapingController::scrapeLesportiu()],
         ];
 
         $this->info("Iniciant scraping de notícies...");

@@ -18,6 +18,7 @@
             if (str_contains($host, 'clubhoqueicaldes')) return ['name' => 'CH Caldes', 'class' => 'bg-red-600 text-white'];
             if (str_contains($host, 'shummassanet')) return ['name' => 'SHUM Maçanet', 'class' => 'bg-red-900 text-amber-300'];
             if (str_contains($host, 'amunthoquei')) return ['name' => 'Arenys de Munt', 'class' => 'bg-amber-500 text-black'];
+            if (str_contains($host, 'lesportiudecatalunya')) return ['name' => "L'Esportiu", 'class' => 'bg-orange-600 text-white'];
             return ['name' => 'Notícia', 'class' => 'bg-stone-700 text-white'];
         }
     }

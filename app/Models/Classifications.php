@@ -10,7 +10,10 @@ class Classifications extends Model
     use HasFactory;
 
     public static function classificationGetByIdGroup($id){
-        return Classifications::join('teams', 'teams.idTeam', '=', 'classifications.idTeam')->where('idGroup', $id)
+        return Classifications::join('teams', 'teams.idTeam', '=', 'classifications.idTeam')
+            ->leftJoin('clubs as club', 'club.idClub', '=', 'teams.idClub')
+            ->where('classifications.idGroup', $id)
+            ->select('classifications.*', 'teams.teamName', 'teams.idClub', 'club.clubImage')
             ->orderByRaw('CAST(position AS UNSIGNED) ASC')
             ->orderByRaw('CAST(points AS UNSIGNED) DESC')
             ->get();

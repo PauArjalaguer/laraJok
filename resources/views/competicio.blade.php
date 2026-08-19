@@ -177,7 +177,16 @@
             </div>
 
             <div class="p-3 classCol-team border-r border-stone-100 dark:border-stone-850 text-left font-black capitalize flex items-center gap-2 truncate">
-                <img alt="{{App\Http\Controllers\TeamsController::teamFormat($classificationRow->teamName)}}" class="w-6 h-6 object-contain flex-shrink-0" src="{{$classificationRow->clubImage}}" />
+                @if(!empty($classificationRow->clubImage) && !str_contains($classificationRow->clubImage, 'no_logo'))
+                    <img alt="{{App\Http\Controllers\TeamsController::teamFormat($classificationRow->teamName)}}" class="w-6 h-6 object-contain flex-shrink-0" src="{{ str_replace('images//', 'images/', $classificationRow->clubImage) }}" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';" />
+                    <div class="w-6 h-6 rounded-full bg-stone-100 dark:bg-stone-800 hidden items-center justify-center flex-shrink-0 text-stone-400 text-[10px]">
+                        <i class="fa-solid fa-shield"></i>
+                    </div>
+                @else
+                    <div class="w-6 h-6 rounded-full bg-stone-100 dark:bg-stone-800 flex items-center justify-center flex-shrink-0 text-stone-400 text-[10px]">
+                        <i class="fa-solid fa-shield"></i>
+                    </div>
+                @endif
                 <a class="hover:text-stone-900 dark:hover:text-white transition-colors truncate" title="{{App\Http\Controllers\TeamsController::teamFormat($classificationRow->teamName)}}" href="/equip/{{$classificationRow->idTeam}}/{{urlencode($classificationRow->teamName)}}">
                     {{App\Http\Controllers\TeamsController::teamFormat($classificationRow->teamName)}}
                 </a>

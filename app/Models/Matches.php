@@ -18,6 +18,48 @@ class Matches extends Model
     public $timestamps = false;
     protected $dateFormat = 'U';
 
+    public static function getTeamFormByGroup($idGroup)
+    {
+        $allMatches = DB::table('matches')
+            ->where('idGroup', $idGroup)
+            ->whereNotNull('localResult')
+            ->whereNotNull('visitorResult')
+            ->where('localResult', '!=', '')
+            ->where('visitorResult', '!=', '')
+            ->orderBy('matchDate', 'desc')
+            ->get();
+
+        $teamForm = [];
+        foreach ($allMatches as $m) {
+            $lRes = (int)$m->localResult;
+            $vRes = (int)$m->visitorResult;
+
+            if (!isset($teamForm[$m->idLocal])) {
+                $teamForm[$m->idLocal] = [];
+            }
+            if (count($teamForm[$m->idLocal]) < 5) {
+                $res = ($lRes > $vRes) ? 'W' : (($lRes < $vRes) ? 'L' : 'D');
+                $teamForm[$m->idLocal][] = [
+                    'result'  => $res,
+                    'tooltip' => "Jornada {$m->idRound}: {$lRes}-{$vRes}"
+                ];
+            }
+
+            if (!isset($teamForm[$m->idVisitor])) {
+                $teamForm[$m->idVisitor] = [];
+            }
+            if (count($teamForm[$m->idVisitor]) < 5) {
+                $res = ($vRes > $lRes) ? 'W' : (($vRes < $lRes) ? 'L' : 'D');
+                $teamForm[$m->idVisitor][] = [
+                    'result'  => $res,
+                    'tooltip' => "Jornada {$m->idRound}: {$lRes}-{$vRes}"
+                ];
+            }
+        }
+
+        return $teamForm;
+    }
+
     private static function baseMatchesQuery()
     {
         return DB::table('matches')

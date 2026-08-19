@@ -59,6 +59,9 @@ class NewsController extends Controller
                 case 'amunt':
                     $query->where('externalLink', 'like', '%amunthoquei.cat%');
                     break;
+                case 'lesportiu':
+                    $query->where('externalLink', 'like', '%lesportiudecatalunya.cat%');
+                    break;
                 case 'jokcat':
                     $query->where(function ($q) {
                         $q->whereNull('externalLink')->orWhere('externalLink', '');
@@ -94,6 +97,7 @@ class NewsController extends Controller
             'caldes'     => 'CH Caldes',
             'shum'       => 'SHUM Maçanet',
             'amunt'      => 'CE Arenys de Munt',
+            'lesportiu'  => "L'Esportiu",
             'jokcat'     => 'JOK.cat',
         ];
 
