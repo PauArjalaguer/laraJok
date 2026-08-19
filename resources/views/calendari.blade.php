@@ -32,10 +32,22 @@
             $dies_del_mes = $primer_dia->daysInMonth;
             $dies = 0;
             $compta_setmanes = 0;
+
+            $hasMatchesInMonth = $agenda->contains(function($p) use ($any, $mes) {
+                $d = Carbon::parse($p->matchDate);
+                return $d->year == $any && $d->month == $mes;
+            });
+            $isCurrentMonth = ($any == Carbon::now()->year && $mes == Carbon::now()->month);
         @endphp
 
         <div class="mb-10">
             <h2 class="text-xl font-semibold text-gray-700 mb-3">{{$nom_mes}}</h2>
+
+            @if(!$hasMatchesInMonth && !$isCurrentMonth)
+                <div class="block md:hidden text-xs font-medium text-stone-400 italic mb-2">
+                    No hi ha partits programats aquest mes.
+                </div>
+            @endif
 
             <div class="grid grid-cols-1 md:grid-cols-7 border border-gray-300 rounded-lg overflow-hidden">
                 @for($a=1; $a<$num_primer_dia; $a++)
@@ -51,10 +63,14 @@
                         $dateObj = Carbon::create($any,$mes,$dia_del_mes);
                         $partits_del_dia = $agenda->where('matchDate', $dateObj->format("Y-m-d"));
                         $isToday = $dateObj->isToday();
+                        $isEmpty = $partits_del_dia->isEmpty();
                     @endphp
 
-                    <div {{ $isToday ? 'id=today' : '' }} class="min-h-[8rem] md:h-48 border border-gray-200 p-2 flex flex-col text-sm {{ $isToday ? 'bg-blue-50 ring-2 ring-blue-300' : '' }}">
-                        <div class="flex justify-end">
+                    <div {{ $isToday ? 'id=today' : '' }} class="{{ ($isEmpty && !$isToday) ? 'hidden md:flex' : 'flex' }} min-h-[8rem] md:h-48 border border-gray-200 p-2 flex-col text-sm {{ $isToday ? 'bg-blue-50 ring-2 ring-blue-300' : '' }}">
+                        <div class="flex justify-between items-center md:justify-end">
+                            <span class="md:hidden text-xs font-bold text-stone-600 capitalize">
+                                {{ $dateObj->isoFormat('dddd D') }}
+                            </span>
                             <div class="w-7 h-7 rounded-full bg-neutral-700 text-white flex items-center justify-center text-xs font-bold shadow">
                                 {{$dia_del_mes}}
                             </div>
