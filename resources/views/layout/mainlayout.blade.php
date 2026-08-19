@@ -251,7 +251,7 @@
                     <a href="/videos" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-primary transition-colors {{ request()->is('videos*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
                         <div class="flex items-center gap-3">
                             <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary group-hover:text-primary-text dark:bg-stone-800 dark:text-white flex items-center justify-center text-xs transition-colors">
-                                <i class="fa-solid fa-play text-red-500"></i>
+                                <i class="fa-solid fa-video"></i>
                             </span>
                             <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-stone-900 dark:hover:text-white">Vídeos</span>
                         </div>
@@ -386,7 +386,7 @@
                                 </li>
                                 <li>
                                     <a href="/videos" class="text-stone-300 hover:text-white transition-colors flex items-center gap-2">
-                                        <i class="fa-solid fa-play text-[10px] text-red-500"></i> Vídeos
+                                        <i class="fa-solid fa-video text-[10px] text-stone-500"></i> Vídeos
                                     </a>
                                 </li>
                                 <li>

@@ -494,12 +494,20 @@ class YoutubeVideoService
      */
     public function syncAll(): int
     {
+        @ini_set('memory_limit', '512M');
+        if (class_exists(\Illuminate\Support\Facades\DB::class)) {
+            \Illuminate\Support\Facades\DB::disableQueryLog();
+        }
+
         $channels = VideoChannel::where('is_active', true)->get();
         $total = 0;
 
         foreach ($channels as $channel) {
             $count = $this->syncChannel($channel);
             $total += $count;
+            if (function_exists('gc_collect_cycles')) {
+                gc_collect_cycles();
+            }
         }
 
         return $total;

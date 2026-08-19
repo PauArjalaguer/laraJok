@@ -14,26 +14,33 @@ class SyncYoutubeVideos extends Command
 
     public function handle(YoutubeVideoService $service): int
     {
+        @ini_set('memory_limit', '512M');
+        if (class_exists(\Illuminate\Support\Facades\DB::class)) {
+            \Illuminate\Support\Facades\DB::disableQueryLog();
+        }
+
         $this->info('Starting YouTube videos sync...');
 
         $totalSynced = $service->syncAll();
 
-        // Auto-fix any stream videos whose published_at was temporarily set to today
-        $streamsToFix = Video::where('description', 'like', '%Retransmissió en directe%')
-            ->whereDate('published_at', now()->toDateString())
-            ->get();
-
-        if ($this->option('fix-dates')) {
-            $streamsToFix = Video::where('description', 'like', '%Retransmissió en directe%')->get();
+        // Auto-fix any stream videos whose published_at was set to today
+        $query = Video::where('description', 'like', '%Retransmissió en directe%');
+        if (!$this->option('fix-dates')) {
+            $query->whereDate('published_at', now()->toDateString());
         }
 
-        if ($streamsToFix->count() > 0) {
-            $this->info("Fixing dates for {$streamsToFix->count()} live stream videos...");
-            foreach ($streamsToFix as $stream) {
+        $count = $query->count();
+        if ($count > 0) {
+            $this->info("Fixing dates for {$count} live stream videos...");
+            foreach ($query->cursor() as $stream) {
                 $realDate = $service->fetchRealVideoDate($stream->youtube_id);
                 if ($realDate) {
                     $stream->update(['published_at' => $realDate]);
                     $this->line(" - Fixed Video #{$stream->id} ({$stream->title}): {$realDate}");
+                }
+                unset($stream);
+                if (function_exists('gc_collect_cycles')) {
+                    gc_collect_cycles();
                 }
             }
         }
