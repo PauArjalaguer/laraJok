@@ -136,6 +136,10 @@ Route::get("scraping/amunt", function () {
     return ScrapingController::scrapeAmunt();
 });
 
+Route::get("scraping/lesportiu", function () {
+    return ScrapingController::scrapeLesportiu();
+});
+
 Route::get("scraping/all", function () {
     \Illuminate\Support\Facades\Artisan::call('news:scrape');
     return response()->json(['status' => 'OK', 'message' => 'Scraping de tots els clubs completat amb èxit']);
