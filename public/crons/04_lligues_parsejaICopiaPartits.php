@@ -252,8 +252,8 @@ include("curl.php");
         if ($_GET['idLeague']) {
             $subquery = " and idLeague=" . $_GET['idLeague'] . " ";
         }
-        echo "select idLeague from leagues where enddate>now() and  idSeason=39  $subquery order by lastupdated asc, idLeague desc limit 0,2";
-        $result = $mysqli->query("select idLeague from leagues where  idSeason=39  $subquery order by lastupdated asc, idLeague desc limit 0,10");
+        echo "select idLeague from leagues where idSeason=41  $subquery order by lastupdated asc, idLeague desc limit 0,2";
+        $result = $mysqli->query("select idLeague from leagues where  idSeason=41  $subquery order by lastupdated asc, idLeague desc limit 0,10");
         while ($row = mysqli_fetch_array($result)) {
             //echo $row['idLeague']." - ";
             parseLeague($row['idLeague'], $mysqli);
