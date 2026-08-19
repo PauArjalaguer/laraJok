@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class News extends Model
 {
     use HasFactory;
+
+    protected $primaryKey = 'idNew';
    
     protected $fillable=[
         'newsTitle',

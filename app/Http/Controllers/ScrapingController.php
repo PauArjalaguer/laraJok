@@ -582,6 +582,9 @@ class ScrapingController extends Controller
                 $metaImg = $detailXpath->query("//meta[@property='og:image']")->item(0);
                 if ($metaImg) {
                     $image = $metaImg->getAttribute('content');
+                    if (str_contains($image, '/v1/fill/')) {
+                        $image = explode('/v1/fill/', $image)[0];
+                    }
                 }
 
                 $date = Carbon::now()->format('Y-m-d H:i:s');
