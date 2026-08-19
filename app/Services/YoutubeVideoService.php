@@ -54,9 +54,10 @@ class YoutubeVideoService
         try {
             $url = "https://www.youtube.com/watch?v={$youtubeId}";
             $response = Http::withHeaders([
-                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept-Language' => 'ca,es;q=0.9,en;q=0.8',
                 'Cookie' => 'SOCS=CAESEwgDEgk2OTg5MjMwMTQaAmNhIAEaBgiA_LyaBg; CONSENT=YES+1',
-            ])->timeout(8)->get($url);
+            ])->timeout(10)->get($url);
 
             if ($response->successful()) {
                 return $this->extractPublishedDate($response->body());
@@ -89,7 +90,8 @@ class YoutubeVideoService
 
         try {
             $response = Http::withHeaders([
-                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept-Language' => 'ca,es;q=0.9,en;q=0.8',
                 'Cookie' => 'SOCS=CAESEwgDEgk2OTg5MjMwMTQaAmNhIAEaBgiA_LyaBg; CONSENT=YES+1',
             ])->timeout(10)->get($url);
 
@@ -184,7 +186,8 @@ class YoutubeVideoService
 
         try {
             $response = Http::withHeaders([
-                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept-Language' => 'ca,es;q=0.9,en;q=0.8',
                 'Cookie' => 'SOCS=CAESEwgDEgk2OTg5MjMwMTQaAmNhIAEaBgiA_LyaBg; CONSENT=YES+1',
             ])->timeout(10)->get($url);
 
@@ -199,6 +202,25 @@ class YoutubeVideoService
                 }
 
                 if ($youtubeId) {
+                    $existingVideo = Video::where('youtube_id', $youtubeId)->first();
+                    $publishedAt = null;
+
+                    // If existing video has a date and it's NOT today's date, preserve it
+                    if ($existingVideo && $existingVideo->published_at && !$existingVideo->published_at->isToday()) {
+                        $publishedAt = $existingVideo->published_at;
+                    } else {
+                        // Fetch the real video page to get exact datePublished/uploadDate
+                        $publishedAt = $this->fetchRealVideoDate($youtubeId);
+                    }
+
+                    if (!$publishedAt && $existingVideo) {
+                        $publishedAt = $existingVideo->published_at;
+                    }
+
+                    if (!$publishedAt) {
+                        $publishedAt = now();
+                    }
+
                     $title = null;
                     if (preg_match('/<title>(.*?)<\/title>/i', $html, $tm)) {
                         $title = str_replace([' - YouTube', ' - Youtube'], '', $tm[1]);
@@ -207,15 +229,6 @@ class YoutubeVideoService
 
                     if (empty($title) || $title === 'YouTube') {
                         $title = "Directe - {$channel->name}";
-                    }
-
-                    $existingVideo = Video::where('youtube_id', $youtubeId)->first();
-                    $publishedAt = $this->extractPublishedDate($html);
-
-                    if ($existingVideo && $existingVideo->published_at) {
-                        $publishedAt = $existingVideo->published_at;
-                    } elseif (!$publishedAt) {
-                        $publishedAt = now();
                     }
 
                     Video::updateOrCreate(
@@ -272,13 +285,16 @@ class YoutubeVideoService
             if ($channelId) {
                 $feedUrl = "https://www.youtube.com/feeds/videos.xml?channel_id={$channelId}";
             }
-
-            // Check for live stream / scheduled broadcast
-            $totalCount += $this->checkLiveStream($channel);
         }
 
+        // 1. Fetch RSS feed first so true dates from RSS are saved into DB
         if ($feedUrl) {
             $totalCount += $this->fetchAndSaveRssFeed($feedUrl, $channel);
+        }
+
+        // 2. Check for live stream / scheduled broadcast after RSS feed
+        if ($channel->type === 'channel') {
+            $totalCount += $this->checkLiveStream($channel);
         }
 
         return $totalCount;
@@ -291,7 +307,8 @@ class YoutubeVideoService
     {
         try {
             $response = Http::withHeaders([
-                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept-Language' => 'ca,es;q=0.9,en;q=0.8',
                 'Cookie' => 'SOCS=CAESEwgDEgk2OTg5MjMwMTQaAmNhIAEaBgiA_LyaBg; CONSENT=YES+1',
             ])->timeout(15)->get($feedUrl);
 
@@ -343,6 +360,7 @@ class YoutubeVideoService
 
                 $videoUrl = "https://www.youtube.com/watch?v={$youtubeId}";
 
+                // Check if video already exists with a valid date, or update with true RSS date
                 Video::updateOrCreate(
                     ['youtube_id' => $youtubeId],
                     [
