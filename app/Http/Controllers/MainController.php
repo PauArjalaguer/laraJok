@@ -12,6 +12,8 @@ use App\Models\User;
 
 use Illuminate\Http\Request;
 
+use App\Models\Video;
+
 class MainController extends Controller
 {
     public function index()
@@ -26,6 +28,7 @@ class MainController extends Controller
                 'userSavedData' =>  $userSavedData,
                 'newsListTop'=>News::orderBy('newsDateTime','desc')->where('website','jokcat')->limit(4)->get(),
                 'recentAds' => Anunci::with(['marca', 'estat', 'fotos'])->where('conforme_usuari_enviament_mail', 1)->latest()->take(5)->get(),
+                'latestVideos' => Video::with('channel')->orderBy('published_at', 'desc')->limit(8)->get(),
                 'userAgent' => request()->userAgent()
 
             ]

@@ -12,26 +12,30 @@ use App\Models\User;
 
 use Illuminate\Http\Request;
 
+use App\Models\Video;
+
 class ClubsController extends Controller
 {
    public function index(Request $request){
     $id = $request->id;
     $userSavedData="";
+    $clubInfo = Clubs::where('idClub', $id)->first();
+    $clubName = $clubInfo ? $clubInfo->clubName : '';
+
     return view(
         'club',
         [
-            'clubInfo' => Clubs::where('idClub', $id)->get(),
+            'clubInfo' => $clubInfo ? [$clubInfo] : [],
             'teamsList' => Teams::teamsByIdClub($id),
             'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
             'checkIfSaved' => User::checkIfSaved('club', $id),
             'userSavedData' => User::userSavedData(),
             'classifications' => Classifications::classificationGetByIdClub($id),
-            'matchesListNext' => Matches::matchesListNext( $userSavedData,$id),
-            'matchesListLastWithResults' => Matches::matchesListLastWithResults($userSavedData,$id)
+            'matchesListNext' => Matches::matchesListNext($userSavedData, $id),
+            'matchesListLastWithResults' => Matches::matchesListLastWithResults($userSavedData, $id),
+            'clubVideos' => $clubName ? Video::getVideosByClubName($clubName, 8) : collect(),
         ]
     );
-
-
    }
     public function acta_club(Request $request){
         $id = $request->id;

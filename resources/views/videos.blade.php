@@ -32,7 +32,7 @@
             </div>
 
             <!-- Filter by Channel with Logo -->
-            <div class="lg:col-span-3" x-data="{ open: false, selectedId: '{{ $channelId }}', selectedName: '{{ addslashes($channels->firstWhere('id', $channelId)->name ?? 'Tots els canals') }}', selectedAvatar: '{{ $channels->firstWhere('id', $channelId)->avatar_url ?? '' }}' }">
+            <div class="lg:col-span-4" x-data="{ open: false, selectedId: '{{ $channelId }}', selectedName: '{{ addslashes($channels->firstWhere('id', $channelId)->name ?? 'Tots els canals') }}', selectedAvatar: '{{ $channels->firstWhere('id', $channelId)->avatar_url ?? '' }}' }">
                 <label class="block text-[11px] font-black uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1">
                     Canal / Llista
                 </label>
@@ -55,7 +55,7 @@
 
                     <!-- Dropdown Panel -->
                     <div x-show="open" x-transition.origin.top.duration.150ms class="absolute z-50 mt-1.5 w-full bg-white dark:bg-[#18181b] border border-stone-200 dark:border-stone-700/90 rounded-2xl shadow-2xl max-h-64 overflow-y-auto p-1.5 space-y-0.5 font-display text-xs" style="display: none;">
-                        <div @click="selectedId = ''; selectedName = 'Tots els canals'; selectedAvatar = ''; open = false" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-stone-100 dark:hover:bg-stone-800/80 cursor-pointer transition-colors" :class="{ 'bg-stone-100 dark:bg-stone-800 font-extrabold': selectedId === '' }">
+                        <div @click="selectedId = ''; selectedName = 'Tots els canals'; selectedAvatar = ''; open = false; $nextTick(() => $el.closest('form').submit())" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-stone-100 dark:hover:bg-stone-800/80 cursor-pointer transition-colors" :class="{ 'bg-stone-100 dark:bg-stone-800 font-extrabold': selectedId === '' }">
                             <span class="w-6 h-6 rounded-full bg-stone-200 dark:bg-stone-800 text-stone-600 dark:text-stone-300 flex items-center justify-center text-xs flex-shrink-0 font-bold">
                                 <i class="fa-solid fa-layer-group"></i>
                             </span>
@@ -63,7 +63,7 @@
                         </div>
 
                         @foreach($channels as $channel)
-                            <div @click="selectedId = '{{ $channel->id }}'; selectedName = '{{ addslashes($channel->name) }}'; selectedAvatar = '{{ $channel->avatar_url }}'; open = false" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-stone-100 dark:hover:bg-stone-800/80 cursor-pointer transition-colors" :class="{ 'bg-stone-100 dark:bg-stone-800 font-extrabold': selectedId == '{{ $channel->id }}' }">
+                            <div @click="selectedId = '{{ $channel->id }}'; selectedName = '{{ addslashes($channel->name) }}'; selectedAvatar = '{{ $channel->avatar_url }}'; open = false; $nextTick(() => $el.closest('form').submit())" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-stone-100 dark:hover:bg-stone-800/80 cursor-pointer transition-colors" :class="{ 'bg-stone-100 dark:bg-stone-800 font-extrabold': selectedId == '{{ $channel->id }}' }">
                                 @if($channel->avatar_url)
                                     <img src="{{ $channel->avatar_url }}" alt="{{ $channel->name }}" class="w-6 h-6 rounded-full object-cover flex-shrink-0 border border-stone-200 dark:border-stone-700" />
                                 @else
@@ -79,30 +79,17 @@
             </div>
 
             <!-- Filter by Date -->
-            <div class="lg:col-span-2">
+            <div class="lg:col-span-3">
                 <label for="date" class="block text-[11px] font-black uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1">
                     Data de publicació
                 </label>
-                <select id="date" name="date" class="w-full py-2 px-3 rounded-xl bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-700/80 text-xs font-medium text-stone-900 dark:text-white focus:ring-2 focus:ring-primary focus:outline-none transition-all">
+                <select id="date" name="date" onchange="this.form.submit()" class="w-full py-2 px-3 rounded-xl bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-700/80 text-xs font-medium text-stone-900 dark:text-white focus:ring-2 focus:ring-primary focus:outline-none transition-all">
                     <option value="">Qualsevol data</option>
                     <option value="week" {{ $dateFilter === 'week' ? 'selected' : '' }}>Últims 7 dies</option>
                     <option value="month" {{ $dateFilter === 'month' ? 'selected' : '' }}>Últim mes</option>
                     <option value="3months" {{ $dateFilter === '3months' ? 'selected' : '' }}>Últims 3 mesos</option>
                     <option value="year" {{ $dateFilter === 'year' ? 'selected' : '' }}>Últim any</option>
                 </select>
-            </div>
-
-            <!-- Actions -->
-            <div class="lg:col-span-2 flex items-end gap-2 pt-2 lg:pt-0">
-                <button type="submit" class="flex-1 py-2 px-4 rounded-xl bg-stone-900 hover:bg-black dark:bg-stone-800 dark:hover:bg-stone-700 text-white font-black text-xs uppercase tracking-wider transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
-                    <i class="fa-solid fa-filter text-xs"></i>
-                    <span>Filtrar</span>
-                </button>
-                @if($search || $channelId || $dateFilter)
-                    <a href="{{ route('videos.index') }}" class="py-2 px-3 rounded-xl bg-stone-200 hover:bg-stone-300 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 font-bold text-xs transition-all flex items-center justify-center" title="Netejar filtres">
-                        <i class="fa-solid fa-xmark"></i>
-                    </a>
-                @endif
             </div>
 
         </div>
@@ -130,6 +117,10 @@
                     Data: {{ $dateFilter === 'week' ? 'Últims 7 dies' : ($dateFilter === 'month' ? 'Últim mes' : ($dateFilter === '3months' ? 'Últims 3 mesos' : 'Últim any')) }}
                 </span>
             @endif
+            <a href="{{ route('videos.index') }}" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-red-600/10 hover:bg-red-600/20 text-red-600 dark:text-red-400 font-black transition-colors" title="Netejar filtres">
+                <span>Netejar filtres</span>
+                <i class="fa-solid fa-xmark text-xs"></i>
+            </a>
         </div>
     @endif
 

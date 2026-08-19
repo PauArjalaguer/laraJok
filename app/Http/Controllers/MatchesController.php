@@ -179,7 +179,10 @@ class MatchesController extends Controller
         $match = Matches::where('idMatch', $id_match)
             ->whereNull('localResult')
             ->first();
-        if (!$match) return;
+        if (!$match) {
+            echo '<div class="font-display text-[10px] text-stone-400 dark:text-stone-500 text-center py-1 font-bold">Encara no hi ha dades per a fer la predicció</div>';
+            return;
+        }
         [$class_local, $class_visitor] = self::predict_by_classification($match);
         [$players_local, $players_visitor] = self::predict_by_players($match);
         [$matches_local, $matches_visitor] = self::predict_by_matches($match);
@@ -204,20 +207,18 @@ class MatchesController extends Controller
         $match->prediccio = $diff;
         $match->save();
 
+        if ($total == 0 || $barWidth == 0 || $diff == 0) {
+            echo '<div class="font-display text-[10px] text-stone-400 dark:text-stone-500 text-center py-1 font-bold">Encara no hi ha dades per a fer la predicció</div>';
+            return;
+        }
+
         // Direcció i color
         if ($diff > 0) {
             $translate = -$barWidth; // cap a l'esquerra
             $gradient = 'linear-gradient(to left, #f3f4f6, #404040)';
-        } elseif ($diff < 0) {
+        } else {
             $translate = $barWidth; // cap a la dreta
             $gradient = 'linear-gradient(to right, #f3f4f6, #404040)';
-        } else {
-            $translate = 0;
-            $gradient = '#A1A1AA';
-        }
-        if ($total == 0) {
-            echo "<div class=\"h-3\">&nbsp;</div>";
-            return;
         }
         echo '
 <div class="w-full  mx-auto mt-3 border-neutral-400">

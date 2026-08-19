@@ -70,6 +70,113 @@ class YoutubeVideoService
     }
 
     /**
+     * Scrape video IDs directly from channel /videos and /streams pages to bypass the 15-item RSS limit.
+     */
+    public function fetchChannelPageVideos(VideoChannel $channel): int
+    {
+        if ($channel->type !== 'channel') {
+            return 0;
+        }
+
+        $handleOrId = $channel->identifier ?: $channel->channel_id;
+        if (empty($handleOrId)) {
+            return 0;
+        }
+
+        $base = str_starts_with($handleOrId, '@')
+            ? "https://www.youtube.com/{$handleOrId}"
+            : "https://www.youtube.com/channel/{$handleOrId}";
+
+        $pages = ["{$base}/videos", "{$base}/streams"];
+        $videoIds = [];
+
+        foreach ($pages as $url) {
+            try {
+                $response = Http::withHeaders([
+                    'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    'Accept-Language' => 'ca,es;q=0.9,en;q=0.8',
+                    'Cookie' => 'SOCS=CAESEwgDEgk2OTg5MjMwMTQaAmNhIAEaBgiA_LyaBg; CONSENT=YES+1',
+                ])->timeout(12)->get($url);
+
+                if ($response->successful()) {
+                    $html = $response->body();
+                    if (preg_match_all('/"videoId":"([a-zA-Z0-9_-]{11})"/', $html, $m)) {
+                        foreach ($m[1] as $id) {
+                            $videoIds[$id] = true;
+                        }
+                    }
+                }
+            } catch (Exception $e) {
+                Log::warning("Error scraping page {$url}: " . $e->getMessage());
+            }
+        }
+
+        $imported = 0;
+        foreach (array_keys($videoIds) as $videoId) {
+            $existing = Video::where('youtube_id', $videoId)->first();
+            if ($existing && $existing->title && $existing->published_at && !$existing->published_at->isToday()) {
+                continue;
+            }
+
+            try {
+                $watchUrl = "https://www.youtube.com/watch?v={$videoId}";
+                $wResp = Http::withHeaders([
+                    'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    'Accept-Language' => 'ca,es;q=0.9,en;q=0.8',
+                    'Cookie' => 'SOCS=CAESEwgDEgk2OTg5MjMwMTQaAmNhIAEaBgiA_LyaBg; CONSENT=YES+1',
+                ])->timeout(8)->get($watchUrl);
+
+                if ($wResp->successful()) {
+                    $html = $wResp->body();
+                    $title = null;
+
+                    if (preg_match('/<title>(.*?)<\/title>/i', $html, $tm)) {
+                        $title = str_replace([' - YouTube', ' - Youtube'], '', $tm[1]);
+                        $title = $this->cleanUnicodeText(html_entity_decode($title));
+                    }
+
+                    if (empty($title) || $title === 'YouTube') {
+                        $oembed = Http::get("https://www.youtube.com/oembed?url={$watchUrl}&format=json")->json();
+                        if (!empty($oembed['title'])) {
+                            $title = $this->cleanUnicodeText($oembed['title']);
+                        }
+                    }
+
+                    if (empty($title)) {
+                        continue;
+                    }
+
+                    $publishedAt = $this->extractPublishedDate($html);
+                    if (!$publishedAt && $existing) {
+                        $publishedAt = $existing->published_at;
+                    }
+                    if (!$publishedAt) {
+                        $publishedAt = now();
+                    }
+
+                    Video::updateOrCreate(
+                        ['youtube_id' => $videoId],
+                        [
+                            'video_channel_id' => $channel->id,
+                            'title' => $title,
+                            'description' => $existing ? $existing->description : "Vídeo de {$channel->name}",
+                            'thumbnail_url' => "https://i.ytimg.com/vi/{$videoId}/hqdefault.jpg",
+                            'url' => $watchUrl,
+                            'published_at' => $publishedAt,
+                        ]
+                    );
+
+                    $imported++;
+                }
+            } catch (Exception $e) {
+                Log::warning("Error importing video {$videoId}: " . $e->getMessage());
+            }
+        }
+
+        return $imported;
+    }
+
+    /**
      * Resolve channel avatar image URL from YouTube page HTML.
      */
     public function resolveChannelAvatar(VideoChannel $channel): ?string
@@ -205,11 +312,9 @@ class YoutubeVideoService
                     $existingVideo = Video::where('youtube_id', $youtubeId)->first();
                     $publishedAt = null;
 
-                    // If existing video has a date and it's NOT today's date, preserve it
                     if ($existingVideo && $existingVideo->published_at && !$existingVideo->published_at->isToday()) {
                         $publishedAt = $existingVideo->published_at;
                     } else {
-                        // Fetch the real video page to get exact datePublished/uploadDate
                         $publishedAt = $this->fetchRealVideoDate($youtubeId);
                     }
 
@@ -287,13 +392,14 @@ class YoutubeVideoService
             }
         }
 
-        // 1. Fetch RSS feed first so true dates from RSS are saved into DB
+        // 1. Fetch RSS feed first
         if ($feedUrl) {
             $totalCount += $this->fetchAndSaveRssFeed($feedUrl, $channel);
         }
 
-        // 2. Check for live stream / scheduled broadcast after RSS feed
+        // 2. Scrape channel /videos and /streams pages to bypass 15-item RSS limit
         if ($channel->type === 'channel') {
+            $totalCount += $this->fetchChannelPageVideos($channel);
             $totalCount += $this->checkLiveStream($channel);
         }
 
@@ -360,7 +466,6 @@ class YoutubeVideoService
 
                 $videoUrl = "https://www.youtube.com/watch?v={$youtubeId}";
 
-                // Check if video already exists with a valid date, or update with true RSS date
                 Video::updateOrCreate(
                     ['youtube_id' => $youtubeId],
                     [

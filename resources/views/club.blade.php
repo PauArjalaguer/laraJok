@@ -119,6 +119,65 @@
             </div>
         @endif
 
+        <!-- VÍDEOS DEL CLUB -->
+        @if(isset($clubVideos) && count($clubVideos) > 0)
+            <div class="mb-7">
+                <div class="flex items-center justify-between pb-2 border-b border-stone-200 dark:border-stone-800 mb-4 px-0.5">
+                    <h2 class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
+                        Vídeos i Directes del Club
+                    </h2>
+                    <a href="/videos" class="text-[11px] font-bold text-red-600 dark:text-red-400 hover:underline flex items-center gap-1 font-display">
+                        <span>Tots els vídeos</span>
+                        <i class="fa-solid fa-chevron-right text-[9px]"></i>
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    @foreach($clubVideos as $video)
+                        <div class="group bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col cursor-pointer" onclick="openVideoModal('{{ $video->youtube_id }}', '{{ addslashes($video->title) }}')">
+                            <!-- Thumbnail Container -->
+                            <div class="relative aspect-video bg-stone-900 overflow-hidden">
+                                <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                
+                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <div class="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+                                        <i class="fa-solid fa-play text-sm ml-0.5"></i>
+                                    </div>
+                                </div>
+
+                                @if($video->channel)
+                                    <div class="absolute top-2 left-2 z-10 bg-black/75 backdrop-blur-md px-2 py-0.5 rounded-md text-[9px] font-black text-white flex items-center gap-1 border border-white/10">
+                                        @if($video->channel->avatar_url)
+                                            <img src="{{ $video->channel->avatar_url }}" class="w-3 h-3 rounded-full object-cover" />
+                                        @else
+                                            <i class="fa-brands fa-youtube text-red-500"></i>
+                                        @endif
+                                        <span class="truncate max-w-[110px]">{{ $video->channel->name }}</span>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- Card Content -->
+                            <div class="p-3 flex-1 flex flex-col justify-between space-y-2 font-display">
+                                <h3 class="text-xs font-black font-display text-stone-900 dark:text-white line-clamp-2 leading-tight group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
+                                    {{ $video->title }}
+                                </h3>
+                                <div class="flex items-center justify-between text-[10px] text-stone-400 font-bold pt-1.5 border-t border-stone-100 dark:border-stone-800/80">
+                                    <span class="flex items-center gap-1">
+                                        <i class="fa-regular fa-clock"></i>
+                                        {{ $video->published_at ? $video->published_at->format('d/m/Y') : '' }}
+                                    </span>
+                                    <span class="text-red-600 dark:text-red-400 font-black flex items-center gap-0.5">
+                                        Veure <i class="fa-solid fa-chevron-right text-[8px]"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
     </div>
 
     <!-- RIGHT SIDEBAR (Logo, Equips del Club Desplegable - Subtil Gris Suau) -->
@@ -187,12 +246,64 @@
                 <i class="fa-solid fa-chart-column text-xs text-stone-500 group-hover:text-primary-text dark:text-white dark:group-hover:text-primary-text transition-colors"></i> Generar gràfic resultats
             </a>
         </div>
-                <i class="fa-solid fa-chart-column text-xs"></i> Generar gràfic resultats
-            </a>
-        </div>
 
     </div>
 
 </div>
+
+<!-- Video Modal Player -->
+<div id="videoModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md font-display transition-opacity" onclick="closeVideoModalOnBackdrop(event)">
+    <div class="relative w-full max-w-4xl bg-stone-900 border border-stone-800 rounded-3xl overflow-hidden shadow-2xl">
+        <div class="flex items-center justify-between p-4 px-6 border-b border-stone-800 bg-stone-950">
+            <h3 id="videoModalTitle" class="text-xs md:text-sm font-black text-white truncate pr-4"></h3>
+            <button onclick="closeVideoModal()" class="w-8 h-8 rounded-full bg-stone-800 text-stone-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer" aria-label="Tancar">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+        </div>
+        <div class="relative aspect-video w-full bg-black">
+            <iframe id="videoModalIframe" class="w-full h-full" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openVideoModal(youtubeId, title) {
+        const modal = document.getElementById('videoModal');
+        const iframe = document.getElementById('videoModalIframe');
+        const titleEl = document.getElementById('videoModalTitle');
+
+        if (modal && iframe) {
+            titleEl.textContent = title || 'Vídeo';
+            iframe.src = 'https://www.youtube.com/embed/' + youtubeId + '?autoplay=1';
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeVideoModal() {
+        const modal = document.getElementById('videoModal');
+        const iframe = document.getElementById('videoModalIframe');
+
+        if (modal && iframe) {
+            iframe.src = '';
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    function closeVideoModalOnBackdrop(event) {
+        if (event.target.id === 'videoModal') {
+            closeVideoModal();
+        }
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeVideoModal();
+        }
+    });
+</script>
 
 @endsection

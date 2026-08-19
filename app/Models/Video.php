@@ -72,4 +72,45 @@ class Video extends Model
                 return $query;
         }
     }
+
+    /**
+     * Get videos associated with a club by matching core town/club keywords in title, description, or channel.
+     */
+    public static function getVideosByClubName(string $clubName, int $limit = 8)
+    {
+        // 1. Remove punctuation (commas, dots, dashes, quotes)
+        $clean = preg_replace('/[^\p{L}\p{N}\s]/u', ' ', $clubName);
+        
+        // 2. Remove single letter abbreviations and generic club prefixes/suffixes
+        $clean = preg_replace('/\b(Club|Hoquei|Patí|Pati|Associació|Esportiva|Secció|CP|HC|CE|CH|de|del|dels|d|i|esportiu|esportiva|oficial|femení|femeni|masculí|masculi|C|E|H|P|A|B|D|LES|LOS|LAS|EL|LA)\b/iu', ' ', $clean);
+        
+        // 3. Extract words >= 3 chars
+        $words = array_values(array_filter(explode(' ', trim(preg_replace('/\s+/', ' ', $clean))), fn($w) => mb_strlen($w) >= 3));
+
+        if (empty($words)) {
+            $fallback = trim(preg_replace('/[^\p{L}\p{N}\s]/u', ' ', $clubName));
+            $keywords = [$fallback];
+        } else {
+            $keywords = [implode(' ', $words)];
+            foreach ($words as $w) {
+                if (!in_array($w, $keywords)) {
+                    $keywords[] = $w;
+                }
+            }
+        }
+
+        return self::with('channel')
+            ->where(function ($query) use ($keywords) {
+                foreach ($keywords as $kw) {
+                    $query->orWhere('title', 'like', "%{$kw}%")
+                          ->orWhere('description', 'like', "%{$kw}%")
+                          ->orWhereHas('channel', function ($q) use ($kw) {
+                              $q->where('name', 'like', "%{$kw}%");
+                          });
+                }
+            })
+            ->orderBy('published_at', 'desc')
+            ->limit($limit)
+            ->get();
+    }
 }

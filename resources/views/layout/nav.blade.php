@@ -1,6 +1,6 @@
 @php
-    $userAgent = $_SERVER['HTTP_USER_AGENT'];
-    if(isset($userAgent) && $userAgent == 'iOSWebView'){
+    $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+    if(!empty($userAgent) && $userAgent == 'iOSWebView'){
         echo "<div class='mt-20'>&nbsp;</div>";
     }
 @endphp

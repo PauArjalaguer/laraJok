@@ -180,7 +180,7 @@
                     </h3>
                     <p class="font-display text-xs font-black text-stone-500 dark:text-stone-400 uppercase tracking-wider mt-2 flex items-center gap-1.5">
                         <i class="fa-solid fa-map-location-dot text-stone-900 dark:text-white"></i>
-                        <span>CERCA EL TEU PROPER PAVELLÓ</span>
+                        <span>CERCA EL TEU PAVELLÓ</span>
                     </p>
                 </div>
                 <div class="w-10 h-10 rounded-full bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-900 dark:text-white group-hover:bg-primary group-hover:text-primary-text group-hover:border-primary dark:hover:border-stone-600 transition-all duration-300 shadow-xs flex-shrink-0">
@@ -238,6 +238,73 @@
                 </button>
             </div>
         </div>
+
+        <!-- Darrers Vídeos Slider -->
+        @if(isset($latestVideos) && count($latestVideos) > 0)
+            <div class="mb-7">
+                <div class="flex items-center justify-between pb-2 border-b border-stone-200 dark:border-stone-800 mb-3 px-0.5">
+                    <h2 class="font-display text-xs font-extrabold text-stone-900 dark:text-stone-100 uppercase tracking-wider">
+                        DARRERS VÍDEOS
+                    </h2>
+                    <a href="{{ route('videos.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-primary text-stone-800 hover:text-primary-text dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary dark:hover:text-primary-text font-display text-[10px] font-black uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
+                        <span>Vídeos</span>
+                        <i class="fa-solid fa-arrow-right text-[9px] transition-transform group-hover:translate-x-0.5"></i>
+                    </a>
+                </div>
+                
+                <div x-data="{ 
+                    scrollNext() { this.$refs.carousel.scrollBy({ left: 260, behavior: 'smooth' }) },
+                    scrollPrev() { this.$refs.carousel.scrollBy({ left: -260, behavior: 'smooth' }) }
+                }" class="relative w-full group">
+                    <!-- Carousel -->
+                    <div x-ref="carousel" class="w-full flex gap-3.5 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide py-1">
+                        @foreach($latestVideos as $video)
+                            <div onclick="openVideoModal('{{ $video->youtube_id }}', '{{ addslashes($video->title) }}')" class="snap-start flex-shrink-0 w-[65%] sm:w-[46%] bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800 rounded-2xl overflow-hidden shadow-xs hover:border-primary dark:hover:border-stone-600 transition-all flex flex-col cursor-pointer group/card">
+                                <div class="w-full aspect-video bg-stone-900 relative overflow-hidden">
+                                    <img class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105" src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" loading="lazy">
+                                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover/card:opacity-100 transition-opacity flex items-center justify-center">
+                                        <div class="w-9 h-9 rounded-full bg-red-600 text-white flex items-center justify-center shadow-lg group-hover/card:scale-110 transition-transform">
+                                            <i class="fa-solid fa-play text-xs ml-0.5"></i>
+                                        </div>
+                                    </div>
+                                    @if($video->channel)
+                                        <div class="absolute top-2 left-2 z-10 bg-black/75 backdrop-blur-md px-2 py-0.5 rounded-md text-[9px] font-black text-white flex items-center gap-1 border border-white/10">
+                                            @if($video->channel->avatar_url)
+                                                <img src="{{ $video->channel->avatar_url }}" class="w-3.5 h-3.5 rounded-full object-cover" />
+                                            @else
+                                                <i class="fa-brands fa-youtube text-red-500"></i>
+                                            @endif
+                                            <span class="truncate max-w-[110px]">{{ $video->channel->name }}</span>
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="p-3 flex-grow flex flex-col justify-between font-display">
+                                    <h4 class="font-display text-xs font-extrabold text-stone-800 dark:text-stone-200 line-clamp-2 leading-tight group-hover/card:text-red-600 dark:group-hover/card:text-red-400 transition-colors" title="{{ $video->title }}">
+                                        {{ $video->title }}
+                                    </h4>
+                                    <div class="flex items-center justify-between mt-2.5 pt-2 border-t border-stone-100 dark:border-stone-800/80">
+                                        <span class="font-display text-[10px] font-bold text-stone-400">
+                                            {{ $video->published_at ? $video->published_at->format('d/m/Y') : '' }}
+                                        </span>
+                                        <span class="font-display text-[10px] font-black text-red-600 dark:text-red-400 uppercase tracking-wider flex items-center gap-0.5">
+                                            Veure <i class="fa-solid fa-chevron-right text-[8px]"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    
+                    <!-- Controls -->
+                    <button @click="scrollPrev()" class="absolute left-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-black/90 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-800 dark:text-stone-200 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary hover:text-primary-text dark:hover:bg-primary dark:hover:text-primary-text focus:outline-none">
+                        <i class="fa-solid fa-chevron-left text-xs"></i>
+                    </button>
+                    <button @click="scrollNext()" class="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-black/90 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-800 dark:text-stone-200 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary hover:text-primary-text dark:hover:bg-primary dark:hover:text-primary-text focus:outline-none">
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        @endif
 
         <!-- Segona Mà (Darrers Anuncis) Slider -->
         <div class="mb-7">
@@ -349,6 +416,61 @@
                 item.style.display = 'none';
             }
         });
+    });
+</script>
+
+<!-- Video Modal Player -->
+<div id="videoModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md font-display transition-opacity" onclick="closeVideoModalOnBackdrop(event)">
+    <div class="relative w-full max-w-4xl bg-stone-900 border border-stone-800 rounded-3xl overflow-hidden shadow-2xl">
+        <div class="flex items-center justify-between p-4 px-6 border-b border-stone-800 bg-stone-950">
+            <h3 id="videoModalTitle" class="text-xs md:text-sm font-black text-white truncate pr-4"></h3>
+            <button onclick="closeVideoModal()" class="w-8 h-8 rounded-full bg-stone-800 text-stone-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer" aria-label="Tancar">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+        </div>
+        <div class="relative aspect-video w-full bg-black">
+            <iframe id="videoModalIframe" class="w-full h-full" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openVideoModal(youtubeId, title) {
+        const modal = document.getElementById('videoModal');
+        const iframe = document.getElementById('videoModalIframe');
+        const titleEl = document.getElementById('videoModalTitle');
+
+        if (modal && iframe) {
+            titleEl.textContent = title || 'Vídeo';
+            iframe.src = 'https://www.youtube.com/embed/' + youtubeId + '?autoplay=1';
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeVideoModal() {
+        const modal = document.getElementById('videoModal');
+        const iframe = document.getElementById('videoModalIframe');
+
+        if (modal && iframe) {
+            iframe.src = '';
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    function closeVideoModalOnBackdrop(event) {
+        if (event.target.id === 'videoModal') {
+            closeVideoModal();
+        }
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeVideoModal();
+        }
     });
 </script>
 @endsection

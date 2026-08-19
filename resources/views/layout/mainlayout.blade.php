@@ -99,7 +99,8 @@
                 })
                 .catch(error => {
                     console.error('Error en el fetch:', error);
-                    document.getElementById(`predict_${id_match}`).innerHTML('');
+                    const el = document.getElementById(`predict_${id_match}`);
+                    if (el) el.innerHTML = '<div class="font-display text-[10px] text-stone-400 dark:text-stone-500 text-center py-1 font-bold">Encara no hi ha dades per a fer la predicció</div>';
             })
         }
     </script>
