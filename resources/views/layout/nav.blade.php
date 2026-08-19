@@ -66,10 +66,10 @@
             </svg>
         </div>
 
-        <!-- App Store Download Button (Groc Daurat en Light / Monocrom en Dark) -->
-        <a href="https://apps.apple.com/ca/app/jok/id6743651881" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full font-black text-xs md:text-sm bg-primary text-primary-text hover:bg-primary-hover dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 dark:hover:bg-stone-700 transition-all shadow-xs">
-            <i class="fa-brands fa-apple text-sm"></i> Descarrega l'App
-        </a>
+        <!-- App Download Button (Modal per a iOS / Android / PWA) -->
+        <button onclick="openAppModal()" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full font-black text-xs md:text-sm bg-primary text-primary-text hover:bg-primary-hover dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 dark:hover:bg-stone-700 transition-all shadow-xs cursor-pointer">
+            <i class="fa-solid fa-mobile-screen-button text-sm"></i> Descarrega l'App
+        </button>
 
         <!-- Login / User Action -->
         @if (!Auth::check())

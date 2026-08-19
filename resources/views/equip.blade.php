@@ -50,7 +50,7 @@
                     @foreach ($playersList as $player)
                         <div class="group flex items-center justify-between bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl p-3 md:p-3.5 hover:border-primary dark:hover:border-primary dark:hover:border-stone-600 transition-all shadow-xs">
                             <div class="flex items-center">
-                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white font-black text-xs mr-3 flex-shrink-0">
+                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary text-primary-text font-black text-xs mr-3 flex-shrink-0">
                                     {{ $player->number }}
                                 </span>
                                 <a href="/jugador/{{$player->idPlayer}}/{{urlencode($player->playerName)}}" class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-stone-100 group-hover:text-stone-600 dark:group-hover:text-stone-900 dark:hover:text-white transition-colors capitalize">

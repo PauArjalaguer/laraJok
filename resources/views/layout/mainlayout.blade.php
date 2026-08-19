@@ -378,9 +378,9 @@
                             </h4>
                             <ul class="space-y-2.5 text-xs font-bold">
                                 <li>
-                                    <a href="https://apps.apple.com/ca/app/jok/id6743651881" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-stone-900 border border-stone-800 text-stone-200 hover:border-stone-600 hover:text-white transition-all">
-                                        <i class="fa-brands fa-apple text-sm"></i> App iOS JOK.cat
-                                    </a>
+                                    <button onclick="openAppModal()" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-stone-900 border border-stone-800 text-stone-200 hover:border-stone-600 hover:text-white transition-all cursor-pointer">
+                                        <i class="fa-solid fa-mobile-screen-button text-sm"></i> App iOS / Android JOK.cat
+                                    </button>
                                 </li>
                                 <li>
                                     <a href="/merchandising" class="text-stone-300 hover:text-white transition-colors flex items-center gap-2">
@@ -493,6 +493,107 @@
                     el.dataset.idMatch = id_match;
                     observer.observe(el);
                 });
+            });
+        </script>
+
+        <!-- APP DOWNLOAD / INSTALL MODAL -->
+        <div id="appModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-stone-900/80 backdrop-blur-md transition-opacity font-display">
+            <div class="relative w-full max-w-md bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl p-6 shadow-2xl transition-all">
+                <!-- Close Button -->
+                <button onclick="closeAppModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-500 hover:text-stone-900 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer" aria-label="Tancar">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+
+                <!-- Header -->
+                <div class="text-center mb-6">
+                    <div class="w-12 h-12 rounded-2xl bg-primary text-primary-text flex items-center justify-center mx-auto mb-3 shadow-md">
+                        <i class="fa-solid fa-mobile-screen-button text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-black text-stone-900 dark:text-white tracking-tight">Descarrega o instal·la l'App</h3>
+                    <p class="text-xs text-stone-500 dark:text-stone-400 mt-1">Tria la millor opció segons el teu dispositiu</p>
+                </div>
+
+                <!-- Options List -->
+                <div class="space-y-3">
+                    <!-- Option 1: App Store (iOS) -->
+                    <a href="https://apps.apple.com/ca/app/jok/id6743651881" target="_blank" rel="noreferrer" class="group flex items-center gap-3.5 p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-900/60 border border-stone-200/80 dark:border-stone-800 hover:border-primary dark:hover:border-stone-600 transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-stone-900 dark:bg-stone-800 text-white flex items-center justify-center text-lg flex-shrink-0 group-hover:scale-105 transition-transform">
+                            <i class="fa-brands fa-apple"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between">
+                                <p class="text-xs font-black text-stone-900 dark:text-white">App Store (iOS)</p>
+                                <span class="text-[10px] font-bold text-stone-400 group-hover:text-stone-700 dark:group-hover:text-stone-300">iPhone / iPad <i class="fa-solid fa-arrow-right text-[9px] ml-0.5"></i></span>
+                            </div>
+                            <p class="text-[11px] text-stone-500 dark:text-stone-400 truncate">Aplicació nativa a l'App Store de Apple</p>
+                        </div>
+                    </a>
+
+                    <!-- Option 2: Android / Web App (PWA) -->
+                    <div class="rounded-2xl bg-stone-50 dark:bg-stone-900/60 border border-stone-200/80 dark:border-stone-800 p-3.5 transition-all">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-10 h-10 rounded-xl bg-primary text-primary-text flex items-center justify-center text-lg flex-shrink-0">
+                                <i class="fa-brands fa-android"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-black text-stone-900 dark:text-white">Instal·lar Web App (Android / PWA)</p>
+                                <p class="text-[11px] text-stone-500 dark:text-stone-400">Directament a la pantalla d'inici</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <button id="modalPwaInstallBtn" onclick="triggerPWAInstall()" class="w-full py-2.5 px-4 rounded-xl bg-primary text-primary-text hover:bg-primary-hover font-black text-xs uppercase tracking-wider transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer">
+                                <i class="fa-solid fa-download text-xs"></i>
+                                <span id="pwaInstallBtnText">Instal·lar Aplicació PWA</span>
+                            </button>
+
+                            <p id="pwaInstructions" class="hidden text-[11px] text-stone-500 dark:text-stone-400 mt-2.5 text-center leading-relaxed">
+                                <i class="fa-solid fa-circle-info text-stone-400 mr-1"></i>
+                                Vés al menú del navegador (<i class="fa-solid fa-ellipsis-vertical mx-0.5"></i> o <i class="fa-solid fa-share-nodes mx-0.5"></i>) i prem <strong>"Instal·lar aplicació"</strong> o <strong>"Afegir a la pantalla d'inici"</strong>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function openAppModal() {
+                const modal = document.getElementById("appModal");
+                if (modal) {
+                    modal.classList.remove("hidden");
+                    modal.classList.add("flex");
+                }
+            }
+
+            function closeAppModal() {
+                const modal = document.getElementById("appModal");
+                if (modal) {
+                    modal.classList.add("hidden");
+                    modal.classList.remove("flex");
+                }
+            }
+
+            async function triggerPWAInstall() {
+                if (window.deferredPrompt) {
+                    window.deferredPrompt.prompt();
+                    const { outcome } = await window.deferredPrompt.userChoice;
+                    console.log("L'usuari ha seleccionat PWA:", outcome);
+                    window.deferredPrompt = null;
+                    closeAppModal();
+                } else {
+                    const instructions = document.getElementById("pwaInstructions");
+                    if (instructions) {
+                        instructions.classList.toggle("hidden");
+                    }
+                }
+            }
+
+            window.addEventListener("click", function(e) {
+                const modal = document.getElementById("appModal");
+                if (modal && e.target === modal) {
+                    closeAppModal();
+                }
             });
         </script>
 </html>

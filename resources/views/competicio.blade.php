@@ -260,7 +260,7 @@
                                 <stop offset="100%" stop-color="#000000" />
                             </radialGradient>
                         </defs>
-                        <circle cx="12" cy="12" r="10" fill="url(#hockeyBallGradHeader)" stroke="#18181b" stroke-width="1"/>
+                        <circle cx="12" cy="12" r="9.5" fill="url(#hockeyBallGradHeader)" stroke="#ffffff" stroke-width="1.5"/>
                     </svg>
                     <span class="text-xs font-black text-stone-900 dark:text-white uppercase tracking-wider">MÀXIMS GOLEJADORS DE LA LLIGA</span>
                 </div>

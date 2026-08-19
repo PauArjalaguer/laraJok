@@ -16,7 +16,7 @@
                 {{ mb_strtolower($playerInfo[0]->playerName) }}
             </h1>
             @if(isset($playerInfo[0]->number))
-                <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white font-black text-xs shadow-xs">
+                <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary text-primary-text font-black text-xs shadow-xs">
                     {{ $playerInfo[0]->number }}
                 </span>
             @endif
@@ -92,7 +92,7 @@
                                 <tr>
                                     <th class="py-2.5 px-3">Temporada</th>
                                     <th class="py-2.5 px-2 text-center" title="Partits Jugats">PJ</th>
-                                    <th class="py-2.5 px-2 text-center text-stone-900 dark:text-white" title="Gols Marcats">Gols</th>
+                                    <th class="py-2.5 px-2 text-center text-white" title="Gols Marcats">Gols</th>
                                     <th class="py-2.5 px-2 text-center text-blue-400" title="Targetes Blaves">TB</th>
                                     <th class="py-2.5 px-2 text-center text-red-400" title="Targetes Vermelles">TV</th>
                                 </tr>
@@ -110,7 +110,7 @@
                                         </td>
                                         <td class="py-3 px-2 text-center font-black">
                                             @if($stats->total_goals > 0)
-                                                <span class="inline-flex items-center gap-1.5 bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 px-2.5 py-0.5 rounded-full text-[11px] font-black shadow-xs">
+                                                <span class="inline-flex items-center gap-1.5 bg-primary-hover text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 px-2.5 py-0.5 rounded-full text-[11px] font-black shadow-xs">
                                                     {{ $stats->total_goals }}
                                                     <svg class="w-3.5 h-3.5 inline-block drop-shadow-xs flex-shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" title="Bola d'Hoquei">
                                                         <defs>
@@ -121,7 +121,7 @@
                                                                 <stop offset="100%" stop-color="#000000" />
                                                             </radialGradient>
                                                         </defs>
-                                                        <circle cx="12" cy="12" r="10" fill="url(#hockeyBallGrad_{{$stats->seasonName}})" stroke="#18181b" stroke-width="1"/>
+                                                        <circle cx="12" cy="12" r="9.5" fill="url(#hockeyBallGrad_{{$stats->seasonName}})" stroke="#ffffff" stroke-width="1.5"/>
                                                     </svg>
                                                 </span>
                                             @else

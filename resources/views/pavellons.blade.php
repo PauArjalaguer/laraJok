@@ -36,12 +36,12 @@
 <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl overflow-hidden shadow-xs mb-6 font-display">
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse" id="agenda">
-            <thead class="bg-stone-950 text-white dark:bg-black text-[10px] uppercase font-black tracking-wider">
+            <thead class="bg-primary text-primary-text dark:bg-black text-[10px] uppercase font-black tracking-wider">
                 <tr>
                     <th class="py-3 px-4">Pavelló i Adreça</th>
                     <th class="py-3 px-3 text-center">Distància</th>
                     <th class="py-3 px-3 text-center">Partits Avui</th>
-                    <th class="py-3 px-4 text-right">Com anar-hi</th>
+                    <th class="py-3 px-4 text-right"><span class="hidden md:inline">Com anar-hi</span><span class="md:hidden">Mapa</span></th>
                 </tr>
             </thead>
             <tbody id="pavellonsTbody" class="divide-y divide-stone-100 dark:divide-stone-800/80">
@@ -134,8 +134,8 @@
                         : `<span class="text-stone-400 font-bold text-[11px]">Sense partits</span>`}
                 </td>
                 <td class="p-3.5 border-b border-stone-100 dark:border-stone-850 text-right">
-                    <a href="${mapUrl}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-primary-text hover:bg-primary-hover dark:bg-stone-800 dark:text-white dark:hover:bg-stone-700 transition-all text-xs font-black shadow-xs">
-                        <i class="fa-solid fa-map-location-dot"></i> Com anar-hi
+                    <a href="${mapUrl}" target="_blank" title="Com anar-hi" class="inline-flex items-center justify-center gap-1.5 px-2.5 md:px-3 py-1.5 rounded-full bg-primary text-primary-text hover:bg-primary-hover dark:bg-stone-800 dark:text-white dark:hover:bg-stone-700 transition-all text-xs font-black shadow-xs">
+                        <i class="fa-solid fa-map-location-dot"></i><span class="hidden md:inline"> Com anar-hi</span>
                     </a>
                 </td>
             `;
