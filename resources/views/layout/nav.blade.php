@@ -76,20 +76,20 @@
     </div>
 
     <!-- Right Actions -->
-    <div class="flex items-center gap-2 md:gap-3 flex-shrink-0 ml-3">
+    <div class="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0 ml-auto">
         <!-- Search Bar Reduïda -->
-        <div class="relative flex items-center bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-full px-2.5 py-1 w-24 sm:w-32 md:w-36 transition-all focus-within:w-36 sm:focus-within:w-44 focus-within:border-stone-400 dark:focus-within:border-[#1c1917]">
+        <div class="relative flex items-center bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-full px-2 py-1 w-20 sm:w-28 md:w-36 transition-all focus-within:w-32 sm:focus-within:w-44 focus-within:border-stone-400 dark:focus-within:border-[#1c1917]">
             <input type="text" placeholder="Cerca..." spellcheck="false" autocomplete="off" class="w-full bg-transparent border-0 p-0 text-xs text-stone-800 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:ring-0 focus:outline-none" onKeyUp="search(this.value)" />
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 text-stone-400 dark:text-stone-500 ml-1 flex-shrink-0">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
         </div>
 
-        <!-- App Button Reduït (Només Icones Apple/Android + Text Compacte) -->
-        <button onclick="openAppModal()" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-black text-xs bg-stone-900 text-white hover:bg-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 dark:hover:bg-stone-700 transition-all shadow-xs cursor-pointer whitespace-nowrap" title="Descarrega l'App de JOK.cat">
+        <!-- App Button Reduït (Visible només en tablet/desktop per no empènyer el menú mòbil) -->
+        <button onclick="openAppModal()" class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-black text-xs bg-stone-900 text-white hover:bg-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 dark:hover:bg-stone-700 transition-all shadow-xs cursor-pointer whitespace-nowrap" title="Descarrega l'App de JOK.cat">
             <i class="fa-brands fa-apple text-xs"></i>
             <i class="fa-brands fa-android text-xs"></i>
-            <span class="hidden sm:inline font-bold">App</span>
+            <span class="hidden lg:inline font-bold">App</span>
         </button>
 
         <!-- Login / User Action -->
@@ -98,19 +98,19 @@
                 Login
             </a>
         @else
-            <a href="/dashboard" class="text-xs md:text-sm font-extrabold text-stone-700 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white transition-colors truncate max-w-[100px] sm:max-w-[120px] xl:max-w-[150px] inline-block align-middle whitespace-nowrap" title="{{ Auth::user()->name }}">
+            <a href="/dashboard" class="text-xs md:text-sm font-extrabold text-stone-700 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white transition-colors truncate max-w-[60px] xs:max-w-[80px] sm:max-w-[120px] xl:max-w-[150px] inline-block align-middle whitespace-nowrap" title="{{ Auth::user()->name }}">
                 {{ Auth::user()->name }}
             </a>
         @endif
 
         <!-- Theme Toggler -->
-        <button onClick="toggleTheme()" class="p-1.5 rounded-full text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors focus:outline-none flex items-center justify-center flex-shrink-0" aria-label="Toggle theme">
+        <button onClick="toggleTheme()" class="p-1 rounded-full text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors focus:outline-none flex items-center justify-center flex-shrink-0" aria-label="Toggle theme">
             <span class="dark:hidden flex items-center"><i class="fa-solid fa-sun text-base text-slate-500"></i></span>
             <span class="hidden dark:flex items-center"><i class="fa-solid fa-moon text-base text-stone-900 dark:text-white"></i></span>
         </button>
 
         <!-- Mobile Menu Toggle -->
-        <button onClick="toggleMenu()" class="p-1.5 inline lg:hidden text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full flex-shrink-0" id="menuButton">
+        <button onClick="toggleMenu()" class="p-1 inline lg:hidden text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full flex-shrink-0" id="menuButton">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
