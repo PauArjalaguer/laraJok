@@ -4,17 +4,17 @@
         echo "<div class='mt-20'>&nbsp;</div>";
     }
 @endphp
-<nav class="sticky top-0 z-40 flex items-center justify-between py-3.5 px-4 md:px-6 border-b border-stone-200 dark:border-stone-800/80 mb-6 bg-white/90 dark:bg-[#09090b]/90 backdrop-blur-xl shadow-xs">
+<nav class="sticky top-0 z-40 flex items-center justify-between py-3 px-4 md:px-6 border-b border-stone-200 dark:border-stone-800/80 mb-6 bg-white/90 dark:bg-[#09090b]/90 backdrop-blur-xl shadow-xs">
     <!-- Logo Original (Comfortaa) -->
-    <div class="flex items-center">
+    <div class="flex items-center flex-shrink-0 mr-3 lg:mr-6">
         <a href="/" class="webtitle font-['Comfortaa'] font-bold text-2xl md:text-3xl tracking-tight text-stone-900 dark:text-white flex items-center gap-0.5">
             JOK.cat
         </a>
     </div>
 
     <!-- Center Navigation Links (Apple Sports Style) -->
-    <div class="hidden lg:flex items-center gap-6">
-        <ul class="flex items-center gap-6 font-display text-sm font-bold text-stone-700 dark:text-stone-300">
+    <div class="hidden lg:flex items-center gap-4 xl:gap-6 flex-1 justify-center min-w-0 px-2">
+        <ul class="flex items-center gap-3.5 xl:gap-6 font-display text-xs xl:text-sm font-bold text-stone-700 dark:text-stone-300 whitespace-nowrap">
             <li>
                 <a href="/competicions" class="py-1.5 hover:text-stone-900 dark:hover:text-white transition-colors {{ request()->is('competicions*') ? 'border-b-2 border-stone-900 dark:border-[#1c1917] text-stone-900 dark:text-white' : '' }}">
                     Competicions
@@ -30,23 +30,38 @@
                     Pavellons
                 </a>
             </li>
+            
+            @if (Auth::check())
+            <!-- Agenda i Calendari Dropdown (Només autenticats) -->
+            <li class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                <a href="/agenda" class="py-1.5 inline-flex items-center gap-1 hover:text-stone-900 dark:hover:text-white transition-colors {{ request()->is('agenda*') || request()->is('calendari*') ? 'border-b-2 border-stone-900 dark:border-[#1c1917] text-stone-900 dark:text-white' : '' }}">
+                    <span>Agenda</span>
+                    <svg class="w-3 h-3 text-stone-400 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </a>
+                
+                <div x-show="open" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="absolute left-0 mt-0.5 w-44 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-xl py-1.5 z-50 font-display text-xs" style="display: none;">
+                    <a href="/agenda" class="flex items-center gap-2 px-3.5 py-2 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold transition-colors">
+                        <i class="fa-regular fa-calendar-days text-stone-400"></i> Agenda de Partits
+                    </a>
+                    <a href="/calendari" class="flex items-center gap-2 px-3.5 py-2 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold transition-colors border-t border-stone-100 dark:border-stone-800">
+                        <i class="fa-solid fa-calendar text-stone-400"></i> Calendari Personal
+                    </a>
+                </div>
+            </li>
+            @else
+            <!-- Enllaç directe a Agenda si no està autenticat -->
             <li>
                 <a href="/agenda" class="py-1.5 hover:text-stone-900 dark:hover:text-white transition-colors {{ request()->is('agenda*') ? 'border-b-2 border-stone-900 dark:border-[#1c1917] text-stone-900 dark:text-white' : '' }}">
                     Agenda
                 </a>
             </li>
+            @endif
+
             <li>
                 <a href="/videos" class="py-1.5 hover:text-stone-900 dark:hover:text-white transition-colors {{ request()->is('videos*') ? 'border-b-2 border-stone-900 dark:border-[#1c1917] text-stone-900 dark:text-white' : '' }}">
                     Vídeos
                 </a>
             </li>
-            @if (Auth::check())
-            <li>
-                <a href="/calendari" class="py-1.5 hover:text-stone-900 dark:hover:text-white transition-colors {{ request()->is('calendari*') ? 'border-b-2 border-stone-900 dark:border-[#1c1917] text-stone-900 dark:text-white' : '' }}">
-                    Calendari
-                </a>
-            </li>
-            @endif
             <li>
                 <a href="/anuncis" class="py-1.5 hover:text-stone-900 dark:hover:text-white transition-colors {{ request()->is('anuncis*') ? 'border-b-2 border-stone-900 dark:border-[#1c1917] text-stone-900 dark:text-white' : '' }}">
                     Segona Mà
@@ -61,18 +76,20 @@
     </div>
 
     <!-- Right Actions -->
-    <div class="flex items-center gap-2 md:gap-4">
-        <!-- Search Bar -->
-        <div class="relative flex items-center bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-full px-3 py-1.5 w-32 md:w-48 transition-all focus-within:border-stone-400 dark:focus-within:border-[#1c1917]">
-            <input type="text" placeholder="Cerca..." spellcheck="false" autocomplete="off" class="w-full bg-transparent border-0 p-0 text-xs md:text-sm text-stone-800 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:ring-0 focus:outline-none" onKeyUp="search(this.value)" />
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-stone-400 dark:text-stone-500 ml-1">
+    <div class="flex items-center gap-2 md:gap-3 flex-shrink-0 ml-3">
+        <!-- Search Bar Reduïda -->
+        <div class="relative flex items-center bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-full px-2.5 py-1 w-24 sm:w-32 md:w-36 transition-all focus-within:w-36 sm:focus-within:w-44 focus-within:border-stone-400 dark:focus-within:border-[#1c1917]">
+            <input type="text" placeholder="Cerca..." spellcheck="false" autocomplete="off" class="w-full bg-transparent border-0 p-0 text-xs text-stone-800 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:ring-0 focus:outline-none" onKeyUp="search(this.value)" />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 text-stone-400 dark:text-stone-500 ml-1 flex-shrink-0">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
         </div>
 
-        <!-- App Download Button (Modal per a iOS / Android / PWA) -->
-        <button onclick="openAppModal()" class="hidden lg:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full font-black text-xs md:text-sm bg-primary text-primary-text hover:bg-primary-hover dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 dark:hover:bg-stone-700 transition-all shadow-xs cursor-pointer">
-            <i class="fa-solid fa-mobile-screen-button text-sm"></i> Descarrega l'App
+        <!-- App Button Reduït (Només Icones Apple/Android + Text Compacte) -->
+        <button onclick="openAppModal()" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-black text-xs bg-stone-900 text-white hover:bg-black dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 dark:hover:bg-stone-700 transition-all shadow-xs cursor-pointer whitespace-nowrap" title="Descarrega l'App de JOK.cat">
+            <i class="fa-brands fa-apple text-xs"></i>
+            <i class="fa-brands fa-android text-xs"></i>
+            <span class="hidden sm:inline font-bold">App</span>
         </button>
 
         <!-- Login / User Action -->
@@ -81,19 +98,19 @@
                 Login
             </a>
         @else
-            <a href="/dashboard" class="text-xs md:text-sm font-extrabold text-stone-700 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white transition-colors">
+            <a href="/dashboard" class="text-xs md:text-sm font-extrabold text-stone-700 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white transition-colors truncate max-w-[100px] sm:max-w-[120px] xl:max-w-[150px] inline-block align-middle whitespace-nowrap" title="{{ Auth::user()->name }}">
                 {{ Auth::user()->name }}
             </a>
         @endif
 
         <!-- Theme Toggler -->
-        <button onClick="toggleTheme()" class="p-2 rounded-full text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-primary transition-colors focus:outline-none flex items-center justify-center" aria-label="Toggle theme">
-            <span class="dark:hidden flex items-center"><i class="fa-solid fa-sun text-lg text-slate-500"></i></span>
-            <span class="hidden dark:flex items-center"><i class="fa-solid fa-moon text-lg text-stone-900 dark:text-white"></i></span>
+        <button onClick="toggleTheme()" class="p-1.5 rounded-full text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors focus:outline-none flex items-center justify-center flex-shrink-0" aria-label="Toggle theme">
+            <span class="dark:hidden flex items-center"><i class="fa-solid fa-sun text-base text-slate-500"></i></span>
+            <span class="hidden dark:flex items-center"><i class="fa-solid fa-moon text-base text-stone-900 dark:text-white"></i></span>
         </button>
 
         <!-- Mobile Menu Toggle -->
-        <button onClick="toggleMenu()" class="p-2 inline lg:hidden text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full" id="menuButton">
+        <button onClick="toggleMenu()" class="p-1.5 inline lg:hidden text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full flex-shrink-0" id="menuButton">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
