@@ -17,7 +17,7 @@ class CompeticioController extends Controller
     public function index(Request $request)
     {
         $id = $request->id;
-        $round = $request->round;
+        $round = $request->round ?? $request->jornada;
         return view(
             'competicio',            [
 
@@ -59,6 +59,22 @@ class CompeticioController extends Controller
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
                 'userSavedData' => User::userSavedData(),
 
+            ]
+        );
+    }
+
+    public static function arbitre(Request $request, $name)
+    {
+        $refereeName = urldecode($name);
+        $matchesList = Matches::matchesListByReferee($refereeName, 25);
+
+        return view(
+            'arbitre',
+            [
+                'refereeName' => $refereeName,
+                'matchesList' => $matchesList,
+                'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
+                'userSavedData' => User::userSavedData(),
             ]
         );
     }

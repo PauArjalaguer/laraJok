@@ -7,15 +7,31 @@
     <meta name="apple-mobile-web-app-status-bar" content="#ffffff">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            window.dispatchEvent(new Event('theme-changed'));
+        }
+    </script>
     @vite('resources/css/app.css')
     <title>@yield('title')</title>
     <link rel="manifest" href="/manifest.json">
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+    <!-- Fonts (Plus Jakarta Sans & Inter per a disseny ultra-modern i Comfortaa per al logo) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -127,113 +143,282 @@
             from { opacity: 1; transform: scale(1); }
             to   { opacity: 0; transform: scale(1.04); }
         }
-        @keyframes vt-hero-in {
-            from { opacity: 0; transform: scale(0.96); }
-            to   { opacity: 1; transform: scale(1); }
+        /* ── Apple Sports Utility Classes ── */
+        .font-display { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
+        .font-syne { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
+        .font-mono-score { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
+        
+        .hallmark-stamp {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.22rem 0.65rem;
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+            font-size: 0.62rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-radius: 9999px;
+        }
+        .hallmark-grid-bg {
+            background-image: radial-gradient(rgba(212, 255, 0, 0.12) 1.5px, transparent 1.5px);
+            background-size: 16px 16px;
         }
         </style>
 </head>
 
-<body class="antialiased">
+<body class="antialiased bg-white text-stone-900 dark:bg-[#09090b] dark:text-stone-100 font-display transition-colors duration-300 min-h-screen">
+
+
 
     <div class="relative">
-        <div id="sidebar" class="fixed left-0 top-0 w-[52%] h-full bg-neutral-800 text-white z-50 -translate-x-full transition-transform duration-1000 ease-in-out">
-        @php
-            $userAgent = $_SERVER['HTTP_USER_AGENT'];
-            if(isset($userAgent) && $userAgent == 'iOSWebView'){
-                echo "<div class='mt-20'>&nbsp;</div>";
-            }
-        @endphp
-            <div class="text-gray-100 text-xl">
-                <div class="p-4 mt-1 flex items-center justify-between ">
-                    <i class="fa-solid fa-circle-xmark h-6 w-6 cursor-pointer lg:hidden hover:text-gray-300" onClick="toggleMenu()" onKeyPress="toggleMenu()" role="button" tabindex="0"></i>
-                    <h1 class="text-[15px]  ml-3 text-xl text-white font-bold  font-['Comfortaa']">Jok.cat</h1>
+        <!-- Sidebar Backdrop Overlay -->
+        <div id="sidebarBackdrop" onclick="toggleMenu()" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-40 hidden transition-opacity duration-300"></div>
 
+        <!-- Sidebar Drawer -->
+        <div id="sidebar" class="fixed left-0 top-0 w-[80%] sm:w-[320px] max-w-sm h-full bg-white dark:bg-[#121215] text-stone-900 dark:text-white border-r border-stone-200 dark:border-stone-800/90 z-50 -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl p-5 flex flex-col justify-between overflow-y-auto font-display">
+            <div>
+                <!-- Header -->
+                <div class="flex items-center justify-between pb-4 border-b border-stone-200 dark:border-stone-800 mb-4">
+                    <a href="/" class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
+                        JOK<span class="text-stone-900 dark:text-white">.cat</span>
+                    </a>
+                    <button onclick="toggleMenu()" class="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-600 dark:text-stone-300 hover:bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:hover:bg-primary dark:hover:text-primary-text transition-colors flex items-center justify-center">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
                 </div>
-                <hr class="my-2 text-gray-600">
 
-                <div>
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-solid fa-house-laptop"></i>
-                        <a href="/"><span class="text-[15px] ml-4 text-white">Inici</span></a>
-                    </div>
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-solid fa-person-skating"></i>
-                        <a href="/competicions"><span class="text-[15px] ml-4 text-white">Competicions</span></a>
-                    </div>
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-regular fa-newspaper"></i>
-                        <a href="/noticies"><span class="text-[15px] ml-4 text-white">Notícies</span></a>
-                    </div>
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-solid fa-location-pin"></i>
-                        <a href="/pavellons"><span class="text-[15px] ml-4 text-white">Pavellons</span></a>
-                    </div>
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer ">
-                        <i class="fa-brands fa-searchengin"></i>
-                        <input class="text-[15px] ml-4 w-full bg-transparent focus:outline-none outline-no" placeholder="Buscar" onKeyUp="search(this.value)" />
-                    </div>
-                    <div id="sidebarSearchResults" class="p-2 text-sm text-center hidden"> resultats trobats</div>
-                    <hr class="my-4 text-gray-600">
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-solid fa-calendar-week text-white"></i>
-                        <a href="/agenda"><span class="text-[15px] ml-4 text-white">Agenda</span></a>
-                    </div>
+                <!-- Live Search inside Sidebar -->
+                <div class="relative mb-5">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
+                    <input type="text" placeholder="Cerca equip o jugador..." spellcheck="false" autocomplete="off" class="w-full pl-9 pr-4 py-2.5 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-900 dark:text-white border border-stone-200 dark:border-stone-800 focus:outline-none focus:border-[#1c1917] text-xs font-medium transition-colors" onkeyup="search(this.value)" />
+                </div>
+
+                <div id="sidebarSearchResults" class="text-xs font-bold text-stone-500 dark:text-stone-400 text-center mb-3 hidden"></div>
+
+                <!-- Navigation List -->
+                <div class="space-y-1">
+                    <a href="/" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-primary transition-colors {{ request()->is('/') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary group-hover:text-primary-text dark:bg-stone-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                <i class="fa-solid fa-house"></i>
+                            </span>
+                            <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-stone-900 dark:hover:text-white">Inici</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-stone-400 group-hover:translate-x-0.5 transition-transform"></i>
+                    </a>
+
+                    <a href="/competicions" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-primary transition-colors {{ request()->is('competicions*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary group-hover:text-primary-text dark:bg-stone-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                <i class="fa-solid fa-trophy"></i>
+                            </span>
+                            <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-stone-900 dark:hover:text-white">Competicions</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-stone-400 group-hover:translate-x-0.5 transition-transform"></i>
+                    </a>
+
+                    <a href="/noticies" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-primary transition-colors {{ request()->is('noticies*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary group-hover:text-primary-text dark:bg-stone-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                <i class="fa-regular fa-newspaper"></i>
+                            </span>
+                            <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-stone-900 dark:hover:text-white">Notícies</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-stone-400 group-hover:translate-x-0.5 transition-transform"></i>
+                    </a>
+
+                    <a href="/pavellons" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-primary transition-colors {{ request()->is('pavellons*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary group-hover:text-primary-text dark:bg-stone-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                            </span>
+                            <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-stone-900 dark:hover:text-white">Pavellons</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-stone-400 group-hover:translate-x-0.5 transition-transform"></i>
+                    </a>
+
+                    <a href="/agenda" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-primary transition-colors {{ request()->is('agenda*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary group-hover:text-primary-text dark:bg-stone-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                <i class="fa-regular fa-calendar-days"></i>
+                            </span>
+                            <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-stone-900 dark:hover:text-white">Agenda</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-stone-400 group-hover:translate-x-0.5 transition-transform"></i>
+                    </a>
+
                     @if (Auth::check())
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-regular fa-calendar-days text-white"></i>
-                        <a href="/calendari"><span class="text-[15px] ml-4 text-white">Calendari</span></a>
-                    </div>
+                    <a href="/calendari" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-primary transition-colors {{ request()->is('calendari*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary group-hover:text-primary-text dark:bg-stone-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                <i class="fa-solid fa-calendar font-black"></i>
+                            </span>
+                            <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-stone-900 dark:hover:text-white">Calendari</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-stone-400 group-hover:translate-x-0.5 transition-transform"></i>
+                    </a>
                     @endif
 
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-sharp-duotone fa-solid fa-shirt"></i>
-                        <a href="/merchandising"><span class="text-[15px] ml-4 text-white">Merchandising</span></a>
-                    </div>
+                    <a href="/anuncis" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-primary transition-colors {{ request()->is('anuncis*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary group-hover:text-primary-text dark:bg-stone-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                <i class="fa-solid fa-tags"></i>
+                            </span>
+                            <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-stone-900 dark:hover:text-white">Segona Mà</span>
+                        </div>
+                        <span class="bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 text-[9px] font-black px-2 py-0.5 rounded-full uppercase shadow-xs">Nou</span>
+                    </a>
 
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-solid fa-tags"></i>
-                        <a href="/anuncis"><span class="text-[15px] ml-4 text-white">Segona Mà</span></a>
-                    </div>
-
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500" id="install-btn" style="display: none;">
-                        <i class="fa-solid fa-mobile-screen"></i>
-                        <button class="text-[15px] ml-4 text-white">Instal·lar App</button>
-                    </div>
-                    @if (Auth::check())
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                        <a href='/logout'><span class="text-[15px] ml-4 text-white">Logout</span></a>
-                    </div>
-                    @else
-                    <div class=" m-1 flex items-center rounded-md px-4 duration-300 cursor-pointer  hover:bg-gray-500">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                        <a href='/login'><span class="text-[15px] ml-4 text-white">Login</span></a>
-                        @endif
-
-                    </div>
+                    <a href="/merchandising" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-primary transition-colors {{ request()->is('merchandising*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary group-hover:text-primary-text dark:bg-stone-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                <i class="fa-solid fa-shirt"></i>
+                            </span>
+                            <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-stone-900 dark:hover:text-white">Botiga</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-stone-400 group-hover:translate-x-0.5 transition-transform"></i>
+                    </a>
                 </div>
+            </div>
+
+            <!-- Footer User Action -->
+            <div class="pt-4 border-t border-stone-200 dark:border-stone-800 mt-6">
+                @if (Auth::check())
+                    <a href="/dashboard" class="flex items-center justify-between p-3 rounded-2xl bg-stone-100 dark:bg-stone-900 hover:border-primary dark:hover:border-stone-600 transition-colors border border-transparent">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black flex items-center justify-center text-xs">
+                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                            </div>
+                            <div class="truncate">
+                                <p class="text-xs font-black text-stone-900 dark:text-white truncate">{{ Auth::user()->name }}</p>
+                                <p class="text-[10px] text-stone-500 font-bold uppercase">Perfil</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-gear text-xs text-stone-400"></i>
+                    </a>
+                @else
+                    <a href="/login" class="flex items-center justify-center gap-2 py-3 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white hover:bg-primary-hover dark:hover:bg-stone-700 font-black text-xs uppercase tracking-wider transition-all shadow-xs">
+                        <i class="fa-solid fa-right-to-bracket text-xs"></i>
+                        <span>Iniciar Sessió</span>
+                    </a>
+                @endif
             </div>
         </div>
 
         <div id="container" class="min-h-screen">
 
-            <div class="w-full lg:w-3/4 p-2 lg:p-0 mx-auto my-0 ">
-                <div id="pwaNav" class="px-4 pb-2 flex justify-between items-center w-full border-b border-gray-200 hidden lg:hidden">
-                    <div id="pwaNavBack"><i class="fa-solid fa-backward-step" onClick="goBack()" onKeyPress="goBack()" role="button" tabindex="0"></i></div>
-                    <div id="pwaNavFordward" class="hidden"><i class="fa-solid fa-forward-step" onClick="goForward()" onKeyPress="goForward()" role="button" tabindex="0"></i></div>
+            <div class="w-full lg:w-11/12 xl:w-10/12 max-w-[1400px] p-4 lg:p-6 mx-auto my-0">
+                <div id="pwaNav" class="px-4 pb-2 flex justify-between items-center w-full border-b border-stone-200 dark:border-neutral-800 hidden lg:hidden">
+                    <div id="pwaNavBack"><i class="fa-solid fa-backward-step cursor-pointer text-stone-600 dark:text-neutral-400" onClick="goBack()" onKeyPress="goBack()" role="button" tabindex="0"></i></div>
+                    <div id="pwaNavFordward" class="hidden"><i class="fa-solid fa-forward-step cursor-pointer text-stone-600 dark:text-neutral-400" onClick="goForward()" onKeyPress="goForward()" role="button" tabindex="0"></i></div>
                 </div>
                 @include('layout.nav')
                 {{-- @include('layout.select-section') --}}
                 @yield('content')
             </div>
-            <footer class="w-full justify-center  sticky top-[100vh] bg-neutral-900">
+            <!-- ULTRA-PREMIUM APPLE SPORTS FOOTER (Fons Unificat #09090b) -->
+            <footer class="w-full bg-[#09090b] text-stone-300 font-display sticky top-[100vh] mt-12 lg:mt-24">
                 @include('layout.merchandising')
-                <div class="flex w-full justify-center py-8 ">
-                    <div class="w-3/4 flex">
-                        <div class="w-1/3 text-white text-left"><span class="jok">JOK.cat</span><br>http://www.jok.cat<br>jok@jok.cat<br><a href="/privacitat" class="text-sm text-gray-400 hover:text-white underline">Privacitat</a></div>
-                        <div class="w-1/3 text-white">&nbsp;</div>
-                        <div class="w-1/3  text-white">&nbsp;</div>
+                
+                <div class="max-w-[1400px] w-full lg:w-11/12 xl:w-10/12 mx-auto px-6 py-12">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+                        
+                        <!-- Col 1: Brand & Info -->
+                        <div>
+                            <a href="/" class="text-2xl font-black tracking-tight text-white inline-block mb-3">
+                                JOK<span class="text-white">.cat</span>
+                            </a>
+                            <p class="text-xs text-stone-400 leading-relaxed font-medium mb-4">
+                                El portal de referència de l'Hoquei Patins a Catalunya. Resultats, classificacions, notícies en temps real i mercat de segona mà.
+                            </p>
+                            <div class="flex items-center gap-2 text-xs font-bold text-stone-400">
+                                <i class="fa-solid fa-envelope text-white"></i>
+                                <a href="mailto:jok@jok.cat" class="hover:text-white transition-colors">jok@jok.cat</a>
+                            </div>
+                        </div>
+
+                        <!-- Col 2: Seccions Principal -->
+                        <div>
+                            <h4 class="font-black text-xs uppercase tracking-wider text-stone-400 mb-3.5">
+                                SECCIONS
+                            </h4>
+                            <ul class="space-y-2 text-xs font-bold">
+                                <li>
+                                    <a href="/competicions" class="text-stone-300 hover:text-white transition-colors flex items-center gap-2">
+                                        <i class="fa-solid fa-trophy text-[10px] text-stone-500"></i> Competicions
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/noticies" class="text-stone-300 hover:text-white transition-colors flex items-center gap-2">
+                                        <i class="fa-regular fa-newspaper text-[10px] text-stone-500"></i> Notícies i Novetats
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/pavellons" class="text-stone-300 hover:text-white transition-colors flex items-center gap-2">
+                                        <i class="fa-solid fa-map-location-dot text-[10px] text-stone-500"></i> Pavellons d'Hoquei
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/agenda" class="text-stone-300 hover:text-white transition-colors flex items-center gap-2">
+                                        <i class="fa-regular fa-calendar-days text-[10px] text-stone-500"></i> Agenda de Partits
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/anuncis" class="text-stone-300 hover:text-white transition-colors flex items-center gap-2">
+                                        <i class="fa-solid fa-tags text-[10px] text-stone-500"></i> Mercat Segona Mà
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Col 3: App & Botiga -->
+                        <div>
+                            <h4 class="font-black text-xs uppercase tracking-wider text-stone-400 mb-3.5">
+                                APLICACIÓ I SERVEIS
+                            </h4>
+                            <ul class="space-y-2.5 text-xs font-bold">
+                                <li>
+                                    <a href="https://apps.apple.com/ca/app/jok/id6743651881" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-stone-900 border border-stone-800 text-stone-200 hover:border-stone-600 hover:text-white transition-all">
+                                        <i class="fa-brands fa-apple text-sm"></i> App iOS JOK.cat
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/merchandising" class="text-stone-300 hover:text-white transition-colors flex items-center gap-2">
+                                        <i class="fa-solid fa-shirt text-[10px] text-stone-500"></i> Botiga de Merchandising
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Col 4: Legal -->
+                        <div>
+                            <h4 class="font-black text-xs uppercase tracking-wider text-stone-400 mb-3.5">
+                                INFORMACIÓ LEGAL
+                            </h4>
+                            <ul class="space-y-2 text-xs font-bold text-stone-400">
+                                <li>
+                                    <a href="/privacitat" class="hover:text-white underline transition-colors">Política de Privacitat</a>
+                                </li>
+                                <li>
+                                    <a href="/privacitat" class="hover:text-white underline transition-colors">Avís Legal i Termes</a>
+                                </li>
+                                <li>
+                                    <button onclick="localStorage.removeItem('cookie_consent');location.reload();" class="hover:text-white text-left transition-colors">
+                                        Gestionar Cookies
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <!-- Bottom Bar -->
+                    <div class="pt-6 border-t border-stone-800/80 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-stone-500 font-bold">
+                        <p>© 2026 JOK.cat — Tots els drets reservats.</p>
+                        <p class="flex items-center gap-1.5">
+                            <span>Fet amb passió per l'Hoquei Patins a Catalunya</span>
+                            <span class="inline-block w-2.5 h-2.5 rounded-full shadow-xs" style="background: radial-gradient(circle at 35% 35%, #a1a1aa 0%, #3f3f46 45%, #000000 100%);"></span>
+                        </p>
                     </div>
                 </div>
             </footer>
@@ -241,19 +426,19 @@
             @vite(['resources/js/app.js'])
         <script src="{{ asset('pwa/pwa-install.js') }}"></script>
 
-        {{-- Cookie Banner - Only show on desktop --}}
-        <div id="cookie-banner" class="fixed bottom-0 left-0 right-0 bg-neutral-800 text-white p-4 z-50 hidden md:block">
+        {{-- Cookie Banner - Only show on desktop if no consent saved --}}
+        <div id="cookie-banner" class="fixed bottom-0 left-0 right-0 bg-stone-900/95 backdrop-blur-md text-white p-4 z-50 border-t border-stone-800 shadow-2xl font-display" style="display: none;">
             <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="text-sm text-center md:text-left text-gray-300">
+                <div class="text-xs md:text-sm text-center md:text-left text-stone-300">
                     <p>Utilitzem cookies per millorar la teva experiència. 
-                        <a href="/privacitat" class="text-white underline hover:text-gray-300">Més informació</a>
+                        <a href="/privacitat" class="text-stone-900 dark:text-white underline hover:text-white transition-colors font-bold">Més informació</a>
                     </p>
                 </div>
                 <div class="flex gap-3">
-                    <button onclick="acceptCookies()" class="px-4 py-2 bg-neutral-600 hover:bg-neutral-500 rounded-lg text-sm font-semibold transition-colors">
+                    <button onclick="acceptCookies()" class="px-5 py-2 bg-primary text-primary-text dark:bg-stone-800 dark:text-white hover:bg-accent text-black rounded-full text-xs font-black uppercase tracking-wider transition-all shadow-sm">
                         Acceptar
                     </button>
-                    <button onclick="rejectCookies()" class="px-4 py-2 border border-neutral-500 hover:bg-neutral-700 rounded-lg text-sm text-gray-300 transition-colors">
+                    <button onclick="rejectCookies()" class="px-4 py-2 border border-stone-700 hover:bg-stone-800 rounded-full text-xs font-extrabold text-stone-300 transition-colors">
                         Rebutjar
                     </button>
                 </div>
@@ -263,20 +448,21 @@
         <script>
             // Cookie Banner functions
             function acceptCookies() {
-                console.log('accept clicked');
                 localStorage.setItem('cookie_consent', 'accepted');
-                document.getElementById('cookie-banner').style.display = 'none';
+                var banner = document.getElementById('cookie-banner');
+                if (banner) banner.style.display = 'none';
             }
 
             function rejectCookies() {
-                console.log('reject clicked');
                 localStorage.setItem('cookie_consent', 'rejected');
-                document.getElementById('cookie-banner').style.display = 'none';
+                var banner = document.getElementById('cookie-banner');
+                if (banner) banner.style.display = 'none';
             }
 
-            // Show banner if no consent
-            if (!localStorage.getItem('cookie_consent')) {
-                document.getElementById('cookie-banner').classList.remove('hidden');
+            // Show banner ONLY if no consent exists and screen width >= 768px
+            if (!localStorage.getItem('cookie_consent') && window.innerWidth >= 768) {
+                var banner = document.getElementById('cookie-banner');
+                if (banner) banner.style.display = 'block';
             }
 
             const canGoBack = () => window.history.length > 1;

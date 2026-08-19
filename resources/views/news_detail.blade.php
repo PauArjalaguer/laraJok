@@ -1,22 +1,63 @@
 @extends('layout.mainlayout')
-@section('title',$newsDetail[0]->newsTitle." :: JOK.cat ")
+@section('title', $newsDetail[0]->newsTitle." :: JOK.cat ")
 @section('content')
-<div class="text-neutral-700 text-xl mb-4 font-bold pb-2 border-b border-neutral-400 ">
-    <div class='float-left'>{{$newsDetail[0]->newsTitle}}</div>
-    <div class="text-sm lg:text-xl lg:float-right text-neutral-500">
-        {{ \Carbon\Carbon::parse($newsDetail[0]->newsDatetime)->format('d-m-Y')}}
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 inline pb-1 cursor-pointer hover:scale-110">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
-        </svg> </div>
-    <div class='clear-both'></div>
-</div>
-<div>
-    <img id='newsImage' src={{Str::contains($newsDetail[0]->newsImage,"http") ? $newsDetail[0]->newsImage : 'http://'.$_SERVER['SERVER_NAME']/$newsDetail[0]->newsImage}} class='w-full rounded-xl shadow-xl transition-all ease-in-out duration-1000 ' />
-</div>
-<h2 class='mt-6 mb-1 text-neutral-800 font-bold'>{{$newsDetail[0]->newsSubtitle}}</h2>
-<div class=' justify-center mt-2'>
-    <p class=' mt-4 text-neutral-800 antialiased'>{!! nl2br($newsDetail[0]->newsContent) !!}</p>
-    <p class=' mt-4 text-neutral-800 antialiased'><a href={{$newsDetail[0]->externalLink}} target=_blank>{{$newsDetail[0]->externalLink}}</a></p>
 
+@php
+    $news = $newsDetail[0];
+    $imageUrl = Str::contains($news->newsImage, 'http') ? $news->newsImage : (isset($_SERVER['SERVER_NAME']) ? 'http://' . $_SERVER['SERVER_NAME'] . '/' . $news->newsImage : $news->newsImage);
+@endphp
+
+<!-- BACK TO NEWS BUTTON -->
+<div class="mb-5">
+    <a href="/noticies" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black bg-stone-100 dark:bg-stone-900 text-stone-800 dark:text-stone-200 hover:bg-primary hover:text-primary-text dark:hover:bg-primary dark:hover:text-primary-text transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs font-display">
+        <i class="fa-solid fa-arrow-left text-[10px]"></i> Torna a Notícies
+    </a>
 </div>
+
+<!-- ARTICLE HEADER CARD -->
+<div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl p-6 md:p-8 mb-7 shadow-xs font-display">
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+        <div class="flex items-center gap-2">
+            <span class="hallmark-stamp bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800">
+                <i class="fa-regular fa-calendar text-stone-900 dark:text-white mr-1"></i>
+                {{ \Carbon\Carbon::parse($news->newsDatetime)->format('d/m/Y') }}
+            </span>
+        </div>
+    </div>
+
+    <h1 class="text-2xl md:text-4xl font-black text-stone-900 dark:text-white leading-tight tracking-tight mb-4">
+        {{ $news->newsTitle }}
+    </h1>
+
+    @if(!empty($news->newsSubtitle))
+        <p class="text-sm md:text-lg font-bold text-stone-600 dark:text-stone-300 leading-relaxed border-l-4 border-[#1c1917] pl-4 py-1 bg-stone-50 dark:bg-stone-900/50 rounded-r-xl">
+            {{ $news->newsSubtitle }}
+        </p>
+    @endif
+</div>
+
+<!-- FEATURED IMAGE -->
+@if(!empty($news->newsImage))
+    <div class="mb-8 rounded-3xl overflow-hidden border border-stone-200 dark:border-stone-800 shadow-xs bg-stone-100 dark:bg-stone-900">
+        <img id="newsImage" src="{{ $imageUrl }}" alt="{{ $news->newsTitle }}" class="w-full max-h-[500px] object-cover" />
+    </div>
+@endif
+
+<!-- ARTICLE CONTENT BODY -->
+<div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl p-6 md:p-10 shadow-xs mb-8">
+    <div class="prose dark:prose-invert max-w-none text-stone-800 dark:text-stone-200 font-display text-sm md:text-base leading-relaxed space-y-4">
+        {!! nl2br($news->newsContent) !!}
+    </div>
+
+    @if(!empty($news->externalLink))
+        <div class="mt-8 pt-6 border-t border-stone-100 dark:border-stone-800 flex items-center gap-2">
+            <i class="fa-solid fa-link text-stone-900 dark:text-white"></i>
+            <span class="text-xs font-bold text-stone-500 dark:text-stone-400">Enllaç extern:</span>
+            <a href="{{ $news->externalLink }}" target="_blank" class="text-xs md:text-sm font-black text-stone-900 dark:text-stone-100 hover:text-stone-900 dark:hover:text-white underline truncate">
+                {{ $news->externalLink }}
+            </a>
+        </div>
+    @endif
+</div>
+
 @endsection

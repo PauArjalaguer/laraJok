@@ -1,73 +1,99 @@
-<div class="w-full lg:flex">
+<div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-6 font-display">
     
-    <div class="lg:w-1/2 text-right lg:p-2">
-        <div class="bg-neutral-700 w-full  border-solid border-[1px]  border-b-[0px]  border-neutral-400 shadow-md transition-all shadow-neutral-100 flex text-white">
-            <div class="p-4 w-8/12  text-left font-bold">Jugador</div>
-            <div class='p-4 w-1/12  text-center bg-neutral-700 font-bold'>G</div>
-            <div class='p-4 w-1/12  text-center font-bold'>B</div>
-            <div class='p-4 w-1/12 text-center font-bold'>V</div>
-            <div class='p-4 w-1/12  text-center font-bold'>FD</div>
-            <div class='p-4 w-1/12  text-center font-bold'>Pe</div>
+    <!-- Local Team Players Table -->
+    <div class="w-full">
+        <div class="bg-stone-950 dark:bg-[#121215] w-full border border-stone-800 rounded-t-2xl overflow-hidden text-white text-xs font-black uppercase tracking-wider flex items-center p-3 shadow-xs">
+            <div class="w-7/12 text-left">Jugador (Local)</div>
+            <div class='w-1/12 text-center text-stone-900 dark:text-white font-black'>G</div>
+            <div class='w-1/12 text-center text-stone-300'>B</div>
+            <div class='w-1/12 text-center text-stone-300'>V</div>
+            <div class='w-1/12 text-center text-stone-300'>FD</div>
+            <div class='w-1/12 text-center text-stone-300'>Pe</div>
         </div>
         @foreach($matchData as $m)
         @if($m->idLocal==$m->idTeam)
-        <div class='bg-white w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-50 transition-all shadow-neutral-700 flex'>
-            <div class='p-2 md:p-4 w-8/12 border-r-[1px] text-left  text-xs md:text-sm '>
-                @if($m->captain==1)
-                <span class="inline-flex items-center justify-center w-6  h-6 rounded-full bg-neutral-700 text-white font-bold text-xs flex-shrink-0">
+        @php
+            $dorsal = $m->playerNumber ?? $m->number ?? null;
+        @endphp
+        <div class='bg-white dark:bg-[#121215] w-full border-x border-b border-stone-200 dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-850 transition-all text-xs md:text-sm flex items-center text-stone-900 dark:text-stone-100'>
+            <div class='p-2.5 md:p-3 w-7/12 border-r border-stone-100 dark:border-stone-850 text-left font-extrabold truncate flex items-center gap-1.5'>
+                <!-- Dorsal Badge -->
+                @if(isset($dorsal) && $dorsal !== '')
+                <span class="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded-full bg-primary text-primary-text dark:bg-black dark:text-white font-black text-[10px] flex-shrink-0" title="Dorsal {{ $dorsal }}">
+                    {{ $dorsal }}
+                </span>
+                @endif
+                <!-- Captain Badge -->
+                @if(isset($m->captain) && $m->captain==1)
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-[10px] flex-shrink-0" title="Capità">
                     C
                 </span>
                 @endif
-                @if($m->gk==1)
-                <span class="inline-flex items-center justify-center w-6  h-6 rounded-full bg-neutral-700 text-white font-bold text-xs flex-shrink-0">
+                <!-- GK Badge -->
+                @if(isset($m->gk) && $m->gk==1)
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-extrabold text-[10px] flex-shrink-0" title="Porter">
                     P
                 </span>
                 @endif
-                <a class="active:text-neutral-300" href="/jugador/{{$m->idPlayer}}/{{urlencode($m->playerName)}}">{{App\Http\Controllers\TeamsController::teamFormat($m->playerName)}}</a>
+                <a class="hover:text-stone-900 dark:hover:text-white transition-colors truncate" href="/jugador/{{$m->idPlayer}}/{{urlencode($m->playerName)}}">
+                    {{App\Http\Controllers\TeamsController::teamFormat($m->playerName)}}
+                </a>
             </div>
-            <div class="p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm">{{$m->goals}}</div>
-            <div class="p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm">{{$m->blue}}</div>
-            <div class="p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm">{{$m->red}}</div>
-            <div class="p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm">{{$m->directes}}</div>
-            <div class="p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm">{{$m->penalti}}</div>
+            <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-black {{ $m->goals > 0 ? 'text-stone-900 dark:text-white bg-stone-900 dark:bg-black' : 'text-stone-700 dark:text-stone-300' }}">{{$m->goals}}</div>
+            <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-bold text-stone-600 dark:text-stone-400">{{$m->blue}}</div>
+            <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-bold text-stone-600 dark:text-stone-400">{{$m->red}}</div>
+            <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center text-stone-500 dark:text-stone-400">{{$m->directes}}</div>
+            <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center text-stone-500 dark:text-stone-400">{{$m->penalti}}</div>
         </div>
-
         @endif
         @endforeach
     </div>
 
-    <div class="lg:w-1/2 lg:p-2 border-solid border-neutral-300 border-l-[1px] mt-2 lg:mt-0">
-        <div class="bg-neutral-700 w-full  border-solid border-[1px]  border-b-[0px]  border-neutral-400 shadow-md  transition-all shadow-neutral-100 flex text-white">
-            <div class="p-4 w-8/12 text-left font-bold">Jugador</div>
-            <div class="p-4 w-1/12 text-center bg-neutral-700 font-bold">G</div>
-            <div class="p-4 w-1/12 text-center font-bold">B</div>
-            <div class="p-4 w-1/12 text-center font-bold">V</div>
-            <div class="p-4 w-1/12 text-center font-bold">FD</div>
-            <div class="p-4 w-1/12 text-center font-bold">Pe</div>
+    <!-- Visitor Team Players Table -->
+    <div class="w-full">
+        <div class="bg-stone-950 dark:bg-[#121215] w-full border border-stone-800 rounded-t-2xl overflow-hidden text-white text-xs font-black uppercase tracking-wider flex items-center p-3 shadow-xs">
+            <div class="w-7/12 text-left">Jugador (Visitant)</div>
+            <div class="w-1/12 text-center text-stone-900 dark:text-white font-black">G</div>
+            <div class="w-1/12 text-center text-stone-300">B</div>
+            <div class="w-1/12 text-center text-stone-300">V</div>
+            <div class="w-1/12 text-center text-stone-300">FD</div>
+            <div class="w-1/12 text-center text-stone-300">Pe</div>
         </div>
         @foreach($matchData as $m)
         @if($m->idVisitor==$m->idTeam)
-        <div class="bg-white w-full  border-solid border-t-[1px] border-neutral-400 shadow-md  hover:bg-neutral-50 transition-all shadow-neutral-700 flex">
-            <div class="p-2 md:p-4 w-8/12 border-r-[1px] text-left  text-xs md:text-sm">
-                @if($m->captain==1)
-                <span class="inline-flex items-center justify-center w-6  h-6 rounded-full bg-neutral-700 text-white font-bold text-xs flex-shrink-0">
+        @php
+            $dorsal = $m->playerNumber ?? $m->number ?? null;
+        @endphp
+        <div class="bg-white dark:bg-[#121215] w-full border-x border-b border-stone-200 dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-850 transition-all text-xs md:text-sm flex items-center text-stone-900 dark:text-stone-100">
+            <div class="p-2.5 md:p-3 w-7/12 border-r border-stone-100 dark:border-stone-850 text-left font-extrabold truncate flex items-center gap-1.5">
+                <!-- Dorsal Badge -->
+                @if(isset($dorsal) && $dorsal !== '')
+                <span class="inline-flex items-center justify-center min-w-5 h-5 px-1 rounded-full bg-primary text-primary-text dark:bg-black dark:text-white font-black text-[10px] flex-shrink-0" title="Dorsal {{ $dorsal }}">
+                    {{ $dorsal }}
+                </span>
+                @endif
+                <!-- Captain Badge -->
+                @if(isset($m->captain) && $m->captain==1)
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 font-black text-[10px] flex-shrink-0" title="Capità">
                     C
                 </span>
                 @endif
-                @if($m->gk==1)
-                <span class="inline-flex items-center justify-center w-6  h-6 rounded-full bg-neutral-700 text-white font-bold text-xs flex-shrink-0">
+                <!-- GK Badge -->
+                @if(isset($m->gk) && $m->gk==1)
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-extrabold text-[10px] flex-shrink-0" title="Porter">
                     P
                 </span>
                 @endif
-                <a class="active:text-neutral-300" href="/jugador/{{$m->idPlayer}}/{{urlencode($m->playerName)}}">{{App\Http\Controllers\TeamsController::teamFormat($m->playerName)}}</a>
+                <a class="hover:text-stone-900 dark:hover:text-white transition-colors truncate" href="/jugador/{{$m->idPlayer}}/{{urlencode($m->playerName)}}">
+                    {{App\Http\Controllers\TeamsController::teamFormat($m->playerName)}}
+                </a>
             </div>
-            <div class="p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm">{{$m->goals}}</div>
-            <div class="p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm">{{$m->blue}}</div>
-            <div class="p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm">{{$m->red}}</div>
-            <div class="p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm">{{$m->directes}}</div>
-            <div class="p-2 md:p-4 w-1/12 border-r-[1px] text-center  text-xs md:text-sm">{{$m->penalti}}</div>
+            <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-black {{ $m->goals > 0 ? 'text-stone-900 dark:text-white bg-stone-900 dark:bg-black' : 'text-stone-700 dark:text-stone-300' }}">{{$m->goals}}</div>
+            <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-bold text-stone-600 dark:text-stone-400">{{$m->blue}}</div>
+            <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center font-bold text-stone-600 dark:text-stone-400">{{$m->red}}</div>
+            <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center text-stone-500 dark:text-stone-400">{{$m->directes}}</div>
+            <div class="p-2.5 md:p-3 w-1/12 border-r border-stone-100 dark:border-stone-850 text-center text-stone-500 dark:text-stone-400">{{$m->penalti}}</div>
         </div>
-
         @endif
         @endforeach
     </div>

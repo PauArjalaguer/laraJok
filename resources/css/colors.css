@@ -1,0 +1,20 @@
+/* ==========================================================================
+   VARIABLES DE COLOR GLOBALS
+   ==========================================================================
+   Modifica els valors HEX d'aquesta secció per canviar el color de tota
+   la pàgina web a l'instant (sense haver de reiniciar res).
+   ========================================================================== */
+
+:root {
+  /* Color principal (Slate 600 - Elegant blau/gris fosquet) */
+  --color-primary: #1e293b;
+
+  /* Variant hover del color principal (Slate 700 més intens) */
+  --color-primary-hover: #334155;
+
+  /* Color de text sobre fons principal: Blanc pur (#ffffff) per a un contrast i llegibilitat nítids */
+  --color-primary-text: #ffffff;
+
+  /* Color secundari / d'accent */
+  --color-accent: #e2e8f0;
+}

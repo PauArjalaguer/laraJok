@@ -48,10 +48,22 @@ class Matches extends Model
                 'club2.clubImage as clubImage2',
                 'localResult',
                 'visitorResult',
+                'places.placeName',
                 'placeAddress',
                 'lat',
-                'lon'
+                'lon',
+                'referee'
             ]);
+    }
+
+    public static function matchesListByReferee($refereeName, $limit = 25)
+    {
+        return self::baseMatchesQuery()
+            ->where('matches.referee', $refereeName)
+            ->orderBy('matches.matchDate', 'desc')
+            ->orderBy('matches.matchHour', 'desc')
+            ->limit($limit)
+            ->get();
     }
 
     public static  function matchesListNext($userSavedData, $idClub = 0,$limit=10)
@@ -159,7 +171,7 @@ class Matches extends Model
             ->join("clubs as c2", "t2.idClub", "=", "c2.idClub")
             ->leftJoin("players", "players.idPlayer", "=", "player_match.idPlayer")
             ->join("phases", "phases.idGroup", "=", "matches.idGroup")
-            ->select("matches.idMatch", "matches.idGroup", "idRound", "groupName", "idLocal", "idVisitor", "matchDate", "matchHour", "idRound", "localResult", "visitorResult", "localFaults", "visitorFaults", "referee", "player_match.idPlayer", "players.playerName", "goals", "blue", "red", "directes", "penalti", "player_match.idTeam", "t1.teamName", "t2.teamName as teamName2", "c1.clubImage as clubImage1", "c2.clubImage as clubImage2","captain","gk")
+            ->select("matches.idMatch", "matches.idGroup", "idRound", "groupName", "idLocal", "idVisitor", "matchDate", "matchHour", "idRound", "localResult", "visitorResult", "localFaults", "visitorFaults", "referee", "player_match.idPlayer", "players.playerName", "goals", "blue", "red", "directes", "penalti", "player_match.idTeam", "t1.teamName", "t2.teamName as teamName2", "c1.clubImage as clubImage1", "c2.clubImage as clubImage2","captain","gk", "players.number as playerNumber")
             ->orderBy('player_match.idTeam')
             ->orderBy('players.playerName')
             ->where("matches.idMatch", $idMatch)->get();
