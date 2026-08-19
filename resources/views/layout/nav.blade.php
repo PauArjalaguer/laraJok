@@ -35,6 +35,11 @@
                     Agenda
                 </a>
             </li>
+            <li>
+                <a href="/videos" class="py-1.5 hover:text-stone-900 dark:hover:text-white transition-colors {{ request()->is('videos*') ? 'border-b-2 border-stone-900 dark:border-[#1c1917] text-stone-900 dark:text-white' : '' }}">
+                    Vídeos
+                </a>
+            </li>
             @if (Auth::check())
             <li>
                 <a href="/calendari" class="py-1.5 hover:text-stone-900 dark:hover:text-white transition-colors {{ request()->is('calendari*') ? 'border-b-2 border-stone-900 dark:border-[#1c1917] text-stone-900 dark:text-white' : '' }}">
@@ -43,14 +48,13 @@
             </li>
             @endif
             <li>
-                <a href="/anuncis" class="py-1.5 hover:text-stone-900 dark:hover:text-white transition-colors {{ request()->is('anuncis*') ? 'border-b-2 border-stone-900 dark:border-[#1c1917] text-stone-900 dark:text-white' : '' }} flex items-center gap-1.5">
+                <a href="/anuncis" class="py-1.5 hover:text-stone-900 dark:hover:text-white transition-colors {{ request()->is('anuncis*') ? 'border-b-2 border-stone-900 dark:border-[#1c1917] text-stone-900 dark:text-white' : '' }}">
                     Segona Mà
-                    <span class="bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 text-[9px] font-black px-2 py-0.5 rounded-full uppercase shadow-xs">Nou</span>
                 </a>
             </li>
             <li>
-                <a href="/merchandising" class="py-1.5 hover:text-stone-900 dark:hover:text-white transition-colors {{ request()->is('merchandising*') ? 'border-b-2 border-stone-900 dark:border-[#1c1917] text-stone-900 dark:text-white' : '' }} flex items-center gap-1.5">
-                    <i class="fa-solid fa-shirt text-[11px]"></i> Botiga
+                <a href="/merchandising" class="py-1.5 hover:text-stone-900 dark:hover:text-white transition-colors {{ request()->is('merchandising*') ? 'border-b-2 border-stone-900 dark:border-[#1c1917] text-stone-900 dark:text-white' : '' }}">
+                    Botiga
                 </a>
             </li>
         </ul>

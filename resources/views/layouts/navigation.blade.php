@@ -31,6 +31,9 @@
                     <x-nav-link :href="route('dashboard.merchandising')" :active="request()->routeIs('dashboard.merchandising')">
                         Merchandising
                     </x-nav-link>
+                    <x-nav-link :href="route('dashboard.videos')" :active="request()->routeIs('dashboard.videos*')">
+                        Vídeos
+                    </x-nav-link>
                     @endif
                 </div>
             </div>

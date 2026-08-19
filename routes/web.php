@@ -15,6 +15,7 @@ use App\Http\Controllers\PlayersController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TeamsController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VideoController;
 use App\Models\Merchandisings;
 use Illuminate\Support\Facades\Route;
 
@@ -47,6 +48,13 @@ Route::get("/agenda", [AgendaController::class, 'index']);
 Route::get("/calendari", [AgendaController::class, 'calendari']);
 Route::get("/pavellons/{id}/{label}", [PavellonsController::class, 'detall']);
 Route::get("/pavellons", [PavellonsController::class, 'index']);
+Route::get("/videos", [VideoController::class, 'index'])->name('videos.index');
+
+// dashboard videos
+Route::get('/dashboard/videos', [VideoController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard.videos');
+Route::post('/dashboard/videos/channel', [VideoController::class, 'storeChannel'])->middleware(['auth', 'verified'])->name('dashboard.videos.channel.store');
+Route::get('/dashboard/videos/channel/delete/{id}', [VideoController::class, 'deleteChannel'])->middleware(['auth', 'verified'])->name('dashboard.videos.channel.delete');
+Route::post('/dashboard/videos/sync', [VideoController::class, 'sync'])->middleware(['auth', 'verified'])->name('dashboard.videos.sync');
 
 //dashboard noticies
 Route::get('/dashboard/news/new/', [NewsController::class,'create'])->middleware(['auth', 'verified'])->name('dashboard.news.new');
