@@ -93,7 +93,7 @@
             <h2 class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
                 MERCAT SEGONA MÀ
             </h2>
-            <a href="/anuncis" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-[10px] font-black uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
+            <a href="/anuncis" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-primary text-stone-800 hover:text-primary-text dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary dark:hover:text-primary-text font-display text-[10px] font-black uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
                 <span>Anuncis</span>
                 <i class="fa-solid fa-arrow-right text-[9px] transition-transform group-hover:translate-x-0.5"></i>
             </a>
@@ -121,7 +121,7 @@
             <h2 class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
                 NOTÍCIES DESTACADES
             </h2>
-            <a href="/noticies" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-[10px] font-black uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
+            <a href="/noticies" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-primary text-stone-800 hover:text-primary-text dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary dark:hover:text-primary-text font-display text-[10px] font-black uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
                 <span>Més Notícies</span>
                 <i class="fa-solid fa-arrow-right text-[9px] transition-transform group-hover:translate-x-0.5"></i>
             </a>
@@ -183,7 +183,7 @@
                         <span>CERCA EL TEU PROPER PAVELLÓ</span>
                     </p>
                 </div>
-                <div class="w-10 h-10 rounded-full bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-900 dark:text-white group-hover:bg-primary text-black dark:bg-stone-800 dark:text-white group-hover:text-black group-hover:border-primary dark:hover:border-stone-600 transition-all duration-300 shadow-xs flex-shrink-0">
+                <div class="w-10 h-10 rounded-full bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-900 dark:text-white group-hover:bg-primary group-hover:text-primary-text group-hover:border-primary dark:hover:border-stone-600 transition-all duration-300 shadow-xs flex-shrink-0">
                     <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-0.5"></i>
                 </div>
             </div>
@@ -195,7 +195,7 @@
                 <h2 class="font-display text-xs font-extrabold text-stone-900 dark:text-stone-100 uppercase tracking-wider">
                     MERCHANDISING DESTACAT
                 </h2>
-                <a href="/merchandising" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-[10px] font-black uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
+                <a href="/merchandising" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-primary text-stone-800 hover:text-primary-text dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary dark:hover:text-primary-text font-display text-[10px] font-black uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
                     <span>Botiga</span>
                     <i class="fa-solid fa-arrow-right text-[9px] transition-transform group-hover:translate-x-0.5"></i>
                 </a>
@@ -230,10 +230,10 @@
                 </div>
                 
                 <!-- Controls -->
-                <button @click="scrollPrev()" class="absolute left-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-black/90 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-800 dark:text-stone-200 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black focus:outline-none">
+                <button @click="scrollPrev()" class="absolute left-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-black/90 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-800 dark:text-stone-200 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary hover:text-primary-text dark:hover:bg-primary dark:hover:text-primary-text focus:outline-none">
                     <i class="fa-solid fa-chevron-left text-xs"></i>
                 </button>
-                <button @click="scrollNext()" class="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-black/90 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-800 dark:text-stone-200 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black focus:outline-none">
+                <button @click="scrollNext()" class="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-black/90 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-800 dark:text-stone-200 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary hover:text-primary-text dark:hover:bg-primary dark:hover:text-primary-text focus:outline-none">
                     <i class="fa-solid fa-chevron-right text-xs"></i>
                 </button>
             </div>
@@ -245,7 +245,7 @@
                 <h2 class="font-display text-xs font-extrabold text-stone-900 dark:text-stone-100 uppercase tracking-wider">
                     SEGONA MÀ (ANUNCIS)
                 </h2>
-                <a href="/anuncis" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-[10px] font-black uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
+                <a href="/anuncis" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-primary text-stone-800 hover:text-primary-text dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary dark:hover:text-primary-text font-display text-[10px] font-black uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
                     <span>Veure Tots</span>
                     <i class="fa-solid fa-arrow-right text-[9px] transition-transform group-hover:translate-x-0.5"></i>
                 </a>
@@ -294,10 +294,10 @@
                 </div>
                 
                 <!-- Controls -->
-                <button @click="scrollPrev()" class="absolute left-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-black/90 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-800 dark:text-stone-200 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black focus:outline-none">
+                <button @click="scrollPrev()" class="absolute left-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-black/90 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-800 dark:text-stone-200 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary hover:text-primary-text dark:hover:bg-primary dark:hover:text-primary-text focus:outline-none">
                     <i class="fa-solid fa-chevron-left text-xs"></i>
                 </button>
-                <button @click="scrollNext()" class="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-black/90 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-800 dark:text-stone-200 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black focus:outline-none">
+                <button @click="scrollNext()" class="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 dark:bg-black/90 border border-stone-200 dark:border-stone-800 flex items-center justify-center text-stone-800 dark:text-stone-200 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary hover:text-primary-text dark:hover:bg-primary dark:hover:text-primary-text focus:outline-none">
                     <i class="fa-solid fa-chevron-right text-xs"></i>
                 </button>
             </div>

@@ -86,7 +86,7 @@
                         @endif
                     </div>
                     @if($merch->assetPrice)
-                        <span class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full text-xs font-black bg-stone-100 text-stone-800 dark:bg-stone-900 dark:text-stone-200 group-hover:bg-primary group-hover:text-black transition-all border border-stone-200/80 dark:border-stone-800 whitespace-nowrap">
+                        <span class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full text-xs font-black bg-stone-100 text-stone-800 dark:bg-stone-900 dark:text-stone-200 group-hover:bg-primary group-hover:text-primary-text transition-all border border-stone-200/80 dark:border-stone-800 whitespace-nowrap">
                             Comprar <i class="fa-solid fa-arrow-right text-[9px] group-hover:translate-x-0.5 transition-transform"></i>
                         </span>
                     @endif
@@ -128,13 +128,13 @@
     .category-pill:hover,
     .category-pill.active {
         background-color: var(--color-primary);
-        color: #000;
+        color: var(--color-primary-text);
         border-color: var(--color-primary);
     }
     .dark .category-pill:hover,
     .dark .category-pill.active {
         background-color: var(--color-primary);
-        color: #000;
+        color: var(--color-primary-text);
         border-color: var(--color-primary);
     }
     .merch-item {

@@ -31,10 +31,17 @@
                 </a>
             </li>
             <li>
-                <a href="/agenda" class="py-1.5 hover:text-stone-900 dark:hover:text-white transition-colors {{ request()->is('agenda*') || request()->is('/') ? 'border-b-2 border-stone-900 dark:border-[#1c1917] text-stone-900 dark:text-white' : '' }}">
+                <a href="/agenda" class="py-1.5 hover:text-stone-900 dark:hover:text-white transition-colors {{ request()->is('agenda*') ? 'border-b-2 border-stone-900 dark:border-[#1c1917] text-stone-900 dark:text-white' : '' }}">
                     Agenda
                 </a>
             </li>
+            @if (Auth::check())
+            <li>
+                <a href="/calendari" class="py-1.5 hover:text-stone-900 dark:hover:text-white transition-colors {{ request()->is('calendari*') ? 'border-b-2 border-stone-900 dark:border-[#1c1917] text-stone-900 dark:text-white' : '' }}">
+                    Calendari
+                </a>
+            </li>
+            @endif
             <li>
                 <a href="/anuncis" class="py-1.5 hover:text-stone-900 dark:hover:text-white transition-colors {{ request()->is('anuncis*') ? 'border-b-2 border-stone-900 dark:border-[#1c1917] text-stone-900 dark:text-white' : '' }} flex items-center gap-1.5">
                     Segona Mà
@@ -77,7 +84,7 @@
 
         <!-- Theme Toggler -->
         <button onClick="toggleTheme()" class="p-2 rounded-full text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-primary transition-colors focus:outline-none flex items-center justify-center" aria-label="Toggle theme">
-            <span class="dark:hidden flex items-center"><i class="fa-solid fa-sun text-lg text-amber-500"></i></span>
+            <span class="dark:hidden flex items-center"><i class="fa-solid fa-sun text-lg text-slate-500"></i></span>
             <span class="hidden dark:flex items-center"><i class="fa-solid fa-moon text-lg text-stone-900 dark:text-white"></i></span>
         </button>
 

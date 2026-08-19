@@ -19,7 +19,7 @@
             <span class="hallmark-stamp bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800">
                 {{ $anuncis->total() }} {{ $anuncis->total() == 1 ? 'ANUNCI' : 'ANUNCIS' }}
             </span>
-            <a href="{{ route('dashboard.anuncis.new') }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-primary text-primary-text dark:bg-stone-800 dark:text-white hover:bg-primary-hover dark:hover:bg-stone-700 text-black font-black text-xs uppercase tracking-wider rounded-full transition-all shadow-xs active:scale-95">
+            <a href="{{ route('dashboard.anuncis.new') }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-primary text-primary-text hover:bg-primary-hover dark:bg-stone-800 dark:text-white dark:hover:bg-stone-700 font-black text-xs uppercase tracking-wider rounded-full transition-all shadow-xs active:scale-95">
                 <i class="fa-solid fa-plus text-xs"></i>
                 <span>Publica el teu Anunci</span>
             </a>
@@ -181,7 +181,7 @@
         <i class="fa-solid fa-box-open text-4xl text-stone-300 dark:text-stone-700 mb-3 block"></i>
         <h3 class="text-base font-black text-stone-900 dark:text-white">No s'han trobat anuncis</h3>
         <p class="text-xs text-stone-500 dark:text-stone-400 mt-1 font-medium">Prova de canviar els filtres de cerca o la ubicació</p>
-        <a href="{{ route('anuncis.index') }}" class="mt-4 inline-flex items-center gap-1 px-4 py-2 rounded-full bg-primary text-primary-text dark:bg-black dark:text-white font-black text-xs uppercase tracking-wider hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black transition-all">
+        <a href="{{ route('anuncis.index') }}" class="mt-4 inline-flex items-center gap-1 px-4 py-2 rounded-full bg-primary text-primary-text hover:bg-primary-hover dark:bg-stone-800 dark:text-white font-black text-xs uppercase tracking-wider transition-all">
             Veure tots els anuncis
         </a>
     </div>
@@ -267,18 +267,18 @@
                 <i class="fa-solid fa-chevron-left"></i>
             </span>
         @else
-            <a href="{{ $anuncis->previousPageUrl() }}" class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black text-stone-800 dark:text-stone-200 flex items-center justify-center text-xs font-black transition-all border border-stone-200/80 dark:border-stone-800">
+            <a href="{{ $anuncis->previousPageUrl() }}" class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-primary hover:text-primary-text dark:hover:bg-primary dark:hover:text-primary-text text-stone-800 dark:text-stone-200 flex items-center justify-center text-xs font-black transition-all border border-stone-200/80 dark:border-stone-800">
                 <i class="fa-solid fa-chevron-left"></i>
             </a>
         @endif
 
         @foreach($anuncis->getUrlRange(1, $anuncis->lastPage()) as $page => $url)
             @if($page == $anuncis->currentPage())
-                <span class="w-9 h-9 rounded-full bg-primary text-primary-text dark:bg-primary text-black dark:bg-stone-800 dark:text-white dark:text-black flex items-center justify-center text-xs font-black shadow-xs">
+                <span class="w-9 h-9 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white flex items-center justify-center text-xs font-black shadow-xs">
                     {{ $page }}
                 </span>
             @elseif($page == 1 || $page == $anuncis->lastPage() || abs($page - $anuncis->currentPage()) <= 2)
-                <a href="{{ $url }}" class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black text-stone-800 dark:text-stone-200 flex items-center justify-center text-xs font-black transition-all border border-stone-200/80 dark:border-stone-800">
+                <a href="{{ $url }}" class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-primary hover:text-primary-text dark:hover:bg-primary dark:hover:text-primary-text text-stone-800 dark:text-stone-200 flex items-center justify-center text-xs font-black transition-all border border-stone-200/80 dark:border-stone-800">
                     {{ $page }}
                 </a>
             @elseif(abs($page - $anuncis->currentPage()) == 3)
@@ -287,7 +287,7 @@
         @endforeach
 
         @if($anuncis->hasMorePages())
-            <a href="{{ $anuncis->nextPageUrl() }}" class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black text-stone-800 dark:text-stone-200 flex items-center justify-center text-xs font-black transition-all border border-stone-200/80 dark:border-stone-800">
+            <a href="{{ $anuncis->nextPageUrl() }}" class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-primary hover:text-primary-text dark:hover:bg-primary dark:hover:text-primary-text text-stone-800 dark:text-stone-200 flex items-center justify-center text-xs font-black transition-all border border-stone-200/80 dark:border-stone-800">
                 <i class="fa-solid fa-chevron-right"></i>
             </a>
         @else
@@ -320,9 +320,8 @@
     border-color: #292524;
     color: #d6d3d1;
 }
-.filter-btn:hover { border-color: #1c1917; }
-.filter-btn-active { background-color: #1c1917; color: #ffffff; border-color: #1c1917; }
-.dark .filter-btn-active { background-color: #1c1917; color: #000000; border-color: #1c1917; }
+.filter-btn-active { background-color: var(--color-primary); color: var(--color-primary-text); border-color: var(--color-primary); }
+.dark .filter-btn-active { background-color: var(--color-primary); color: var(--color-primary-text); border-color: var(--color-primary); }
 
 .filter-badge {
     display: inline-flex;

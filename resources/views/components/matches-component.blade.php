@@ -23,7 +23,7 @@
         <div class="flex items-center justify-between font-display">
             <div class="flex items-center gap-1.5 truncate max-w-[78%]">
                 <span class="truncate font-bold text-stone-800 dark:text-stone-200" title="{{ App\Http\Controllers\TeamsController::teamFormat($match->localTeam) }}">{{ App\Http\Controllers\TeamsController::teamFormat($match->localTeam) }}</span>
-                <span class="font-black text-black px-2 py-0.5 bg-primary text-primary-text dark:bg-stone-800 dark:text-white rounded-full text-[11px]">{{ $match->localResult }} - {{ $match->visitorResult }}</span>
+                <span class="font-black px-2 py-0.5 bg-primary text-primary-text dark:bg-stone-800 dark:text-white rounded-full text-[11px]">{{ $match->localResult }} - {{ $match->visitorResult }}</span>
                 <span class="truncate font-bold text-stone-800 dark:text-stone-200" title="{{ App\Http\Controllers\TeamsController::teamFormat($match->visitorTeam) }}">{{ App\Http\Controllers\TeamsController::teamFormat($match->visitorTeam) }}</span>
             </div>
             <!-- LIVE/FI Status Stamp -->
@@ -31,7 +31,7 @@
                 @if(isset($match->localResult))
                     <span class="font-display text-[9px] font-bold text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded-full">FI</span>
                 @else
-                    <span class="font-display text-[9px] font-black text-black bg-primary text-primary-text dark:bg-stone-800 dark:text-white px-2 py-0.5 rounded-full animate-pulse">LIVE</span>
+                    <span class="font-display text-[9px] font-black bg-primary text-primary-text dark:bg-stone-800 dark:text-white px-2 py-0.5 rounded-full animate-pulse">LIVE</span>
                 @endif
             </div>
         </div>
@@ -73,7 +73,7 @@
             
             <!-- Mid Center Box (Groc Daurat en Light / Monocrom en Dark) -->
             <div class="flex items-center justify-center flex-shrink-0 bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 px-3.5 py-1.5 rounded-full shadow-xs min-w-[3.6rem] text-center font-display">
-                <span class="text-xs md:text-sm font-black text-black dark:text-white leading-none">
+                <span class="text-xs md:text-sm font-black text-primary-text dark:text-white leading-none">
                     @if($isPlayed)
                         {{ $match->localResult }} - {{ $match->visitorResult }}
                     @else
@@ -118,13 +118,13 @@
         @if(isset($match->lat) || $isPlayed)
             <div class="flex items-center gap-2 mt-3 pt-1">
                 @if(isset($match->lat))
-                    <a href="{{ $mapUrl }}" target="_blank" class="group flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-[11px] font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
-                        <i class="fa-solid fa-location-dot text-stone-500 group-hover:text-white dark:text-white dark:group-hover:text-black transition-colors"></i> Pavelló
+                    <a href="{{ $mapUrl }}" target="_blank" class="group flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-stone-100 hover:bg-primary text-stone-800 hover:text-primary-text dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary dark:hover:text-primary-text font-display text-[11px] font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
+                        <i class="fa-solid fa-location-dot text-stone-500 group-hover:text-primary-text dark:text-white dark:group-hover:text-primary-text transition-colors"></i> Pavelló
                     </a>
                 @endif
                 @if($isPlayed)
-                    <a href="/acta/{{$match->idMatch}}/{{urlencode($match->localTeam)}}-{{urlencode($match->visitorTeam)}}" class="group flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-[11px] font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
-                        <i class="fa-solid fa-file-lines text-stone-500 group-hover:text-white dark:text-white dark:group-hover:text-black transition-colors"></i> Acta
+                    <a href="/acta/{{$match->idMatch}}/{{urlencode($match->localTeam)}}-{{urlencode($match->visitorTeam)}}" class="group flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-stone-100 hover:bg-primary text-stone-800 hover:text-primary-text dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary dark:hover:text-primary-text font-display text-[11px] font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
+                        <i class="fa-solid fa-file-lines text-stone-500 group-hover:text-primary-text dark:text-white dark:group-hover:text-primary-text transition-colors"></i> Acta
                     </a>
                 @endif
             </div>

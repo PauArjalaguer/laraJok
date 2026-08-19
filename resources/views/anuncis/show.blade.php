@@ -18,7 +18,7 @@ $totalFotos = $fotos->count();
 <!-- BACK BUTTON & BREADCRUMB -->
 <div class="w-full mt-2 mb-6 font-display">
     <div class="flex flex-wrap items-center justify-between gap-3 border-b border-stone-200 dark:border-stone-800 pb-4">
-        <a href="{{ route('anuncis.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 dark:bg-stone-900 hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black text-stone-700 dark:text-stone-300 font-display text-xs font-black rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
+        <a href="{{ route('anuncis.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 dark:bg-stone-900 hover:bg-primary hover:text-primary-text dark:hover:bg-primary dark:hover:text-primary-text text-stone-700 dark:text-stone-300 font-display text-xs font-black rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs group">
             <i class="fa-solid fa-arrow-left text-[10px] group-hover:-translate-x-0.5 transition-transform"></i>
             <span>Tornar als anuncis</span>
         </a>
@@ -59,64 +59,64 @@ $totalFotos = $fotos->count();
 
             <!-- Navigation Arrows -->
             @if($totalFotos > 1)
-            <button id="prevBtn" onclick="changePhoto(-1)" class="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 dark:bg-stone-900/90 shadow-md flex items-center justify-center text-stone-900 dark:text-white hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black transition-all">
+            <button id="prevBtn" onclick="changePhoto(-1)" class="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 dark:bg-stone-900/90 shadow-md flex items-center justify-center text-stone-900 dark:text-white hover:bg-primary hover:text-primary-text dark:hover:bg-primary dark:hover:text-primary-text transition-all">
                 <i class="fa-solid fa-chevron-left text-xs"></i>
             </button>
-            <button id="nextBtn" onclick="changePhoto(1)" class="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 dark:bg-stone-900/90 shadow-md flex items-center justify-center text-stone-900 dark:text-white hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black transition-all">
+            <button id="nextBtn" onclick="changePhoto(1)" class="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 dark:bg-stone-900/90 shadow-md flex items-center justify-center text-stone-900 dark:text-white hover:bg-primary hover:text-primary-text dark:hover:bg-primary dark:hover:text-primary-text transition-all">
                 <i class="fa-solid fa-chevron-right text-xs"></i>
             </button>
             @endif
         </div>
 
-        <!-- Thumbnails -->
+        <!-- Thumbnail Row -->
         @if($totalFotos > 1)
-        <div class="flex gap-2.5 overflow-x-auto pb-2 scrollbar-hide">
-            @foreach($fotos as $i => $foto)
-            <button onclick="selectPhoto({{ $i }})" id="thumb-{{ $i }}" class="thumb-btn flex-none w-16 h-16 md:w-20 md:h-20 rounded-2xl overflow-hidden border-2 transition-all duration-200 {{ $i === 0 ? 'border-[#1c1917]' : 'border-transparent opacity-60 hover:opacity-100' }}">
-                <img src="{{ $foto->foto_ruta }}" alt="Foto {{ $i+1 }}" class="w-full h-full object-cover"/>
+        <div class="flex items-center gap-2.5 overflow-x-auto pb-2 scrollbar-none">
+            @foreach($fotos as $index => $foto)
+            <button onclick="selectPhoto({{ $index }}, '{{ $foto->foto_ruta }}')" class="photo-thumb relative w-16 h-16 md:w-20 md:h-20 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 {{ $index === 0 ? 'border-primary shadow-xs' : 'border-stone-200 dark:border-stone-800 opacity-60 hover:opacity-100' }}">
+                <img src="{{ $foto->foto_ruta }}" alt="" class="w-full h-full object-cover" />
             </button>
             @endforeach
         </div>
         @endif
     </div>
 
-    <!-- RIGHT COLUMN: PRODUCT DETAILS & SELLER -->
-    <div class="lg:w-[45%] xl:w-[42%] mt-6 lg:mt-0">
-        <div class="lg:sticky lg:top-4">
-
-            <!-- Brand & Category -->
-            <div class="flex items-center gap-2 mb-2">
-                <span class="text-xs font-black uppercase tracking-wider text-stone-400 dark:text-stone-500">{{ $anunci->marca->nom_marca }}</span>
-                <span class="text-stone-300 dark:text-stone-700">·</span>
-                <span class="text-xs bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 px-2.5 py-0.5 rounded-full font-extrabold border border-stone-200/60 dark:border-stone-800">
+    <!-- RIGHT COLUMN: DETAILS & ACTIONS -->
+    <div class="lg:w-[45%] xl:w-[42%] flex flex-col justify-between mt-6 lg:mt-0">
+        <div>
+            <!-- Header Badges -->
+            <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="hallmark-stamp bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800">
                     {{ $anunci->tipus->nom_tipus }}
+                </span>
+                <span class="text-xs font-bold text-stone-400 dark:text-stone-500">
+                    Publicat {{ $anunci->created_at->diffForHumans() }}
                 </span>
             </div>
 
             <!-- Title -->
-            <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white leading-tight tracking-tight mb-4">
+            <h1 class="text-2xl md:text-3xl font-black text-stone-900 dark:text-white tracking-tight leading-tight mb-2">
                 {{ $anunci->titol }}
             </h1>
 
             <!-- Price -->
-            <div class="flex items-end gap-3 mb-6">
+            <div class="mb-6">
                 @if($anunci->preu)
-                    <span class="text-3xl md:text-4xl font-black text-stone-900 dark:text-white tracking-tight">
-                        {{ number_format($anunci->preu, 0, ',', '.') }} €
+                    <span class="text-3xl font-black text-stone-900 dark:text-white tracking-tight">
+                        {{ number_format($anunci->preu, 2, ',', '.') }} €
                     </span>
                 @else
-                    <span class="text-xl font-bold text-stone-400 italic">Preu a consultar</span>
+                    <span class="text-lg font-bold text-stone-400 italic">Preu a consultar</span>
                 @endif
             </div>
 
-            <!-- Details Box -->
-            <div class="bg-white dark:bg-[#121215] rounded-3xl border border-stone-200 dark:border-stone-800/90 p-5 mb-5 shadow-xs">
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="rounded-2xl p-3.5 bg-stone-50 dark:bg-stone-900 border border-stone-100 dark:border-stone-800/80">
-                        <p class="text-[10px] font-black uppercase tracking-wider text-stone-400 dark:text-stone-500 mb-0.5">Estat</p>
-                        <p class="text-sm font-black text-stone-900 dark:text-white">{{ $anunci->estat->nom_estat }}</p>
+            <!-- Main Specs Grid -->
+            <div class="bg-stone-50 dark:bg-stone-900/50 border border-stone-200/80 dark:border-stone-800 rounded-3xl p-5 mb-6 space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-wider text-stone-400 dark:text-stone-500 mb-0.5">Marca</p>
+                        <p class="text-sm font-black text-stone-900 dark:text-white">{{ $anunci->marca->nom_marca }}</p>
                     </div>
-                    <div class="rounded-2xl p-3.5 bg-stone-50 dark:bg-stone-900 border border-stone-100 dark:border-stone-800/80">
+                    <div>
                         <p class="text-[10px] font-black uppercase tracking-wider text-stone-400 dark:text-stone-500 mb-0.5">Mida</p>
                         <p class="text-sm font-black text-stone-900 dark:text-white">{{ $anunci->mida->nom_mida }}</p>
                     </div>
@@ -126,23 +126,23 @@ $totalFotos = $fotos->count();
             <!-- CTA Buttons -->
             <div class="flex flex-col gap-3 mb-6">
                 @auth
-                    <button type="button" onclick="showContactModal()" class="w-full flex items-center justify-center gap-2 py-3.5 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white hover:bg-primary-hover dark:hover:bg-stone-700 text-black font-black text-xs uppercase tracking-wider transition-all shadow-xs active:scale-[0.98]">
+                    <button type="button" onclick="showContactModal()" class="w-full flex items-center justify-center gap-2 py-3.5 rounded-full bg-primary text-primary-text hover:bg-primary-hover dark:bg-stone-800 dark:text-white dark:hover:bg-stone-700 font-black text-xs uppercase tracking-wider transition-all shadow-xs active:scale-[0.98]">
                         <i class="fa-solid fa-envelope"></i>
                         <span>Contactar amb el venedor</span>
                     </button>
                 @else
-                    <a href="{{ route('login') }}?redirect_url={{ urlencode(request()->fullUrl()) }}" class="w-full flex items-center justify-center gap-2 py-3.5 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white hover:bg-primary-hover dark:hover:bg-stone-700 text-black font-black text-xs uppercase tracking-wider transition-all shadow-xs active:scale-[0.98]">
+                    <a href="{{ route('login') }}?redirect_url={{ urlencode(request()->fullUrl()) }}" class="w-full flex items-center justify-center gap-2 py-3.5 rounded-full bg-primary text-primary-text hover:bg-primary-hover dark:bg-stone-800 dark:text-white dark:hover:bg-stone-700 font-black text-xs uppercase tracking-wider transition-all shadow-xs active:scale-[0.98]">
                         <i class="fa-solid fa-envelope"></i>
                         <span>Contactar amb el venedor</span>
                     </a>
                 @endauth
 
                 @if(session('status'))
-                <div class="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-2xl text-xs font-bold text-emerald-700 dark:text-emerald-300 flex items-center gap-2">
-                    <i class="fa-solid fa-check-circle"></i><span>{{ session('status') }}</span>
-                </div>
+                    <div class="p-3.5 bg-green-100 dark:bg-green-900/40 border border-green-300 dark:border-green-800 text-green-800 dark:text-green-200 rounded-2xl text-xs font-bold text-center">
+                        {{ session('status') }}
+                    </div>
                 @endif
-
+                
                 <button onclick="shareAnunci()" class="w-full flex items-center justify-center gap-2 py-3 rounded-full border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-black text-xs uppercase tracking-wider hover:border-primary dark:hover:border-stone-600 transition-all shadow-xs">
                     <i class="fa-solid fa-share-nodes text-xs"></i>
                     <span>Compartir anunci</span>

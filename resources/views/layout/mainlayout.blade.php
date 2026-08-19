@@ -182,7 +182,7 @@
                     <a href="/" class="text-2xl font-black tracking-tight text-stone-900 dark:text-white">
                         JOK<span class="text-stone-900 dark:text-white">.cat</span>
                     </a>
-                    <button onclick="toggleMenu()" class="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-600 dark:text-stone-300 hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black transition-colors flex items-center justify-center">
+                    <button onclick="toggleMenu()" class="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-600 dark:text-stone-300 hover:bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:hover:bg-primary dark:hover:text-primary-text transition-colors flex items-center justify-center">
                         <i class="fa-solid fa-xmark text-sm"></i>
                     </button>
                 </div>
@@ -199,7 +199,7 @@
                 <div class="space-y-1">
                     <a href="/" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-primary transition-colors {{ request()->is('/') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
                         <div class="flex items-center gap-3">
-                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary text-black dark:bg-stone-800 dark:text-white group-hover:text-black flex items-center justify-center text-xs transition-colors">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary group-hover:text-primary-text dark:bg-stone-800 dark:text-white flex items-center justify-center text-xs transition-colors">
                                 <i class="fa-solid fa-house"></i>
                             </span>
                             <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-stone-900 dark:hover:text-white">Inici</span>
@@ -209,7 +209,7 @@
 
                     <a href="/competicions" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-primary transition-colors {{ request()->is('competicions*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
                         <div class="flex items-center gap-3">
-                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary text-black dark:bg-stone-800 dark:text-white group-hover:text-black flex items-center justify-center text-xs transition-colors">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary group-hover:text-primary-text dark:bg-stone-800 dark:text-white flex items-center justify-center text-xs transition-colors">
                                 <i class="fa-solid fa-trophy"></i>
                             </span>
                             <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-stone-900 dark:hover:text-white">Competicions</span>
@@ -219,7 +219,7 @@
 
                     <a href="/noticies" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-primary transition-colors {{ request()->is('noticies*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
                         <div class="flex items-center gap-3">
-                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary text-black dark:bg-stone-800 dark:text-white group-hover:text-black flex items-center justify-center text-xs transition-colors">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary group-hover:text-primary-text dark:bg-stone-800 dark:text-white flex items-center justify-center text-xs transition-colors">
                                 <i class="fa-regular fa-newspaper"></i>
                             </span>
                             <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-stone-900 dark:hover:text-white">Notícies</span>
@@ -229,7 +229,7 @@
 
                     <a href="/pavellons" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-primary transition-colors {{ request()->is('pavellons*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
                         <div class="flex items-center gap-3">
-                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary text-black dark:bg-stone-800 dark:text-white group-hover:text-black flex items-center justify-center text-xs transition-colors">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary group-hover:text-primary-text dark:bg-stone-800 dark:text-white flex items-center justify-center text-xs transition-colors">
                                 <i class="fa-solid fa-map-location-dot"></i>
                             </span>
                             <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-stone-900 dark:hover:text-white">Pavellons</span>
@@ -239,7 +239,7 @@
 
                     <a href="/agenda" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-primary transition-colors {{ request()->is('agenda*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
                         <div class="flex items-center gap-3">
-                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary text-black dark:bg-stone-800 dark:text-white group-hover:text-black flex items-center justify-center text-xs transition-colors">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary group-hover:text-primary-text dark:bg-stone-800 dark:text-white flex items-center justify-center text-xs transition-colors">
                                 <i class="fa-regular fa-calendar-days"></i>
                             </span>
                             <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-stone-900 dark:hover:text-white">Agenda</span>
@@ -247,9 +247,21 @@
                         <i class="fa-solid fa-chevron-right text-[10px] text-stone-400 group-hover:translate-x-0.5 transition-transform"></i>
                     </a>
 
+                    @if (Auth::check())
+                    <a href="/calendari" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-primary transition-colors {{ request()->is('calendari*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary group-hover:text-primary-text dark:bg-stone-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                <i class="fa-solid fa-calendar font-black"></i>
+                            </span>
+                            <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-stone-900 dark:hover:text-white">Calendari</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-stone-400 group-hover:translate-x-0.5 transition-transform"></i>
+                    </a>
+                    @endif
+
                     <a href="/anuncis" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-primary transition-colors {{ request()->is('anuncis*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
                         <div class="flex items-center gap-3">
-                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary text-black dark:bg-stone-800 dark:text-white group-hover:text-black flex items-center justify-center text-xs transition-colors">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary group-hover:text-primary-text dark:bg-stone-800 dark:text-white flex items-center justify-center text-xs transition-colors">
                                 <i class="fa-solid fa-tags"></i>
                             </span>
                             <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-stone-900 dark:hover:text-white">Segona Mà</span>
@@ -259,7 +271,7 @@
 
                     <a href="/merchandising" class="group flex items-center justify-between p-2.5 rounded-2xl hover:bg-stone-100 dark:hover:bg-primary transition-colors {{ request()->is('merchandising*') ? 'bg-stone-100 dark:bg-stone-900' : '' }}">
                         <div class="flex items-center gap-3">
-                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary text-black dark:bg-stone-800 dark:text-white group-hover:text-black flex items-center justify-center text-xs transition-colors">
+                            <span class="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 group-hover:bg-primary group-hover:text-primary-text dark:bg-stone-800 dark:text-white flex items-center justify-center text-xs transition-colors">
                                 <i class="fa-solid fa-shirt"></i>
                             </span>
                             <span class="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-stone-900 dark:hover:text-white">Botiga</span>
@@ -285,7 +297,7 @@
                         <i class="fa-solid fa-gear text-xs text-stone-400"></i>
                     </a>
                 @else
-                    <a href="/login" class="flex items-center justify-center gap-2 py-3 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white hover:bg-primary-hover dark:hover:bg-stone-700 text-black font-black text-xs uppercase tracking-wider transition-all shadow-xs">
+                    <a href="/login" class="flex items-center justify-center gap-2 py-3 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white hover:bg-primary-hover dark:hover:bg-stone-700 font-black text-xs uppercase tracking-wider transition-all shadow-xs">
                         <i class="fa-solid fa-right-to-bracket text-xs"></i>
                         <span>Iniciar Sessió</span>
                     </a>

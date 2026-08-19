@@ -36,7 +36,7 @@
                     <h2 class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
                         CLASSIFICACIONS DEL CLUB
                     </h2>
-                    <span class="hallmark-stamp bg-stone-900 text-stone-900 dark:text-white dark:bg-primary text-black dark:bg-stone-800 dark:text-white dark:text-black">LLIGUES</span>
+                    <span class="hallmark-stamp bg-stone-900 text-white dark:bg-stone-800 dark:text-stone-300">LLIGUES</span>
                 </div>
 
                 <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl overflow-hidden shadow-xs">
@@ -109,7 +109,7 @@
                     <h2 class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
                         DARRERS RESULTATS
                     </h2>
-                    <span class="hallmark-stamp bg-stone-900 text-stone-900 dark:text-white dark:bg-primary text-black dark:bg-stone-800 dark:text-white dark:text-black">RESULTATS</span>
+                    <span class="hallmark-stamp bg-stone-900 text-white dark:bg-stone-800 dark:text-stone-300">RESULTATS</span>
                 </div>
                 <div class="flex flex-col gap-1">
                     @foreach($matchesListLastWithResults as $match)
@@ -146,18 +146,18 @@
 
             @foreach($groupedTeams as $seasonName => $teams)
                 <div x-data="{ open: {{ $loop->first ? 'true' : 'false' }} }" class="mb-3">
-                    <!-- Season Accordion Header (Negre sobre Verd-Lima Apple Sports) -->
-                    <button @click="open = !open" class="group w-full flex items-center justify-between py-2.5 px-4 bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 rounded-2xl font-display text-xs font-black uppercase tracking-wider hover:bg-accent transition-all shadow-xs mb-2">
+                    <!-- Season Accordion Header -->
+                    <button @click="open = !open" class="group w-full flex items-center justify-between py-2.5 px-4 bg-primary text-primary-text dark:bg-stone-800 dark:text-white dark:border dark:border-stone-700 rounded-2xl font-display text-xs font-black uppercase tracking-wider hover:bg-primary-hover transition-all shadow-xs mb-2">
                         <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-users text-black text-xs"></i>
-                            <span class="text-black font-black">{{ $seasonName }}</span>
+                            <i class="fa-solid fa-users text-primary-text dark:text-white text-xs"></i>
+                            <span class="text-primary-text dark:text-white font-black">{{ $seasonName }}</span>
                         </div>
                         <div class="flex items-center gap-2">
                             <!-- Badge de numero d'equips subtil en grisos -->
-                            <span class="text-[10px] font-black text-stone-900 bg-stone-900/15 px-2.5 py-0.5 rounded-full">
+                            <span class="text-[10px] font-black text-primary-text dark:text-white bg-black/15 dark:bg-stone-700/50 px-2.5 py-0.5 rounded-full">
                                 {{ count($teams) }} {{ count($teams) == 1 ? 'equip' : 'equips' }}
                             </span>
-                            <i class="fa-solid fa-chevron-down text-black transition-transform duration-200 text-[10px]" :class="{ 'rotate-180': open }"></i>
+                            <i class="fa-solid fa-chevron-down text-primary-text dark:text-white transition-transform duration-200 text-[10px]" :class="{ 'rotate-180': open }"></i>
                         </div>
                     </button>
 
@@ -180,11 +180,11 @@
 
         <!-- Quick Action Buttons -->
         <div class="flex flex-col gap-2.5 mb-6">
-            <a href="/acta_club/{{$clubInfo[0]->idClub}}/actes-setmana" class="group flex items-center justify-center gap-2 py-2.5 px-4 bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-xs font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
-                <i class="fa-solid fa-file-lines text-stone-500 group-hover:text-white dark:text-white dark:group-hover:text-black transition-colors"></i> Actes de la setmana
+            <a href="/acta_club/{{$clubInfo[0]->idClub}}/actes-setmana" class="group flex items-center justify-center gap-2 py-2.5 px-4 bg-stone-100 hover:bg-primary text-stone-800 hover:text-primary-text dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary dark:hover:text-primary-text font-display text-xs font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
+                <i class="fa-solid fa-file-lines text-stone-500 group-hover:text-primary-text dark:text-white dark:group-hover:text-primary-text transition-colors"></i> Actes de la setmana
             </a>
-            <a href="/acta_header/{{$clubInfo[0]->idClub}}" target="_blank" class="group flex items-center justify-center gap-2 py-2.5 px-4 bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-display text-xs font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
-                <i class="fa-solid fa-chart-column text-xs"></i> Generar gràfic resultats
+            <a href="/acta_header/{{$clubInfo[0]->idClub}}" target="_blank" class="group flex items-center justify-center gap-2 py-2.5 px-4 bg-stone-100 hover:bg-primary text-stone-800 hover:text-primary-text dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary dark:hover:text-primary-text font-display text-xs font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
+                <i class="fa-solid fa-chart-column text-xs text-stone-500 group-hover:text-primary-text dark:text-white dark:group-hover:text-primary-text transition-colors"></i> Generar gràfic resultats
             </a>
         </div>
                 <i class="fa-solid fa-chart-column text-xs"></i> Generar gràfic resultats

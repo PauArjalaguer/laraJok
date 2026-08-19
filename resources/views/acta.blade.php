@@ -10,7 +10,7 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-4 gap-2">
         <div>
             <div class="flex items-center gap-2 mb-1.5">
-                <a href="/competicio/{{$matchGetInfoById[0]->idGroup}}/{{urlencode($matchGetInfoById[0]->groupName)}}/{{urlencode($matchGetInfoById[0]->idRound)}}" class="hallmark-stamp bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black transition-all">
+                <a href="/competicio/{{$matchGetInfoById[0]->idGroup}}/{{urlencode($matchGetInfoById[0]->groupName)}}/{{urlencode($matchGetInfoById[0]->idRound)}}" class="hallmark-stamp bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 hover:bg-primary hover:text-primary-text dark:hover:bg-primary dark:hover:text-primary-text transition-all">
                     Jornada {{$matchGetInfoById[0]->idRound}}
                 </a>
             </div>

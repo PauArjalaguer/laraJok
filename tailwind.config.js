@@ -53,6 +53,16 @@ export default {
   ],
     theme: {
         extend: {
+            colors: {
+                primary: {
+                    DEFAULT: 'var(--color-primary)',
+                    hover: 'var(--color-primary-hover)',
+                    text: 'var(--color-primary-text)',
+                },
+                accent: {
+                    DEFAULT: 'var(--color-accent)',
+                },
+            },
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },

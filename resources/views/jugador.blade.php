@@ -16,7 +16,7 @@
                 {{ mb_strtolower($playerInfo[0]->playerName) }}
             </h1>
             @if(isset($playerInfo[0]->number))
-                <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary text-primary-text dark:bg-primary text-black dark:bg-stone-800 dark:text-white dark:text-black font-black text-xs shadow-xs">
+                <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white font-black text-xs shadow-xs">
                     {{ $playerInfo[0]->number }}
                 </span>
             @endif

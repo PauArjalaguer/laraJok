@@ -134,7 +134,7 @@
                         : `<span class="text-stone-400 font-bold text-[11px]">Sense partits</span>`}
                 </td>
                 <td class="p-3.5 border-b border-stone-100 dark:border-stone-850 text-right">
-                    <a href="${mapUrl}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-primary-text dark:bg-black dark:text-white hover:bg-primary text-black dark:bg-stone-800 dark:text-white hover:text-black dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black transition-all text-xs font-black shadow-xs">
+                    <a href="${mapUrl}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-primary-text hover:bg-primary-hover dark:bg-stone-800 dark:text-white dark:hover:bg-stone-700 transition-all text-xs font-black shadow-xs">
                         <i class="fa-solid fa-map-location-dot"></i> Com anar-hi
                     </a>
                 </td>

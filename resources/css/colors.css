@@ -6,15 +6,15 @@
    ========================================================================== */
 
 :root {
-  /* Color principal (Primary) - Pots canviar aquest codi HEX pel que vulguis (#ffcc00, #ff0055, #0066ff, etc.) */
-  --color-primary: #64748b;
-  /* oklch(37.2% 0.044 257.287)*/
-  /* Variant de hover del color principal */
-  --color-primary-hover: #a1a1a1;
+  /* Color principal (Slate 600 - Elegant blau/gris fosquet) */
+  --color-primary: #1e293b;
 
-  /* Color de text sobre fons principal */
-  --color-primary-text: #424242;
+  /* Variant hover del color principal (Slate 700 més intens) */
+  --color-primary-hover: #334155;
 
-  /* Color secundari / d'accent (Accent) */
+  /* Color de text sobre fons principal: Blanc pur (#ffffff) per a un contrast i llegibilitat nítids */
+  --color-primary-text: #ffffff;
+
+  /* Color secundari / d'accent */
   --color-accent: #e2e8f0;
 }

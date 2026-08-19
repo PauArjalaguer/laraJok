@@ -56,7 +56,7 @@
                         @endif
                     </div>
                     <div>
-                        <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-black bg-primary text-primary-text dark:bg-black dark:text-white group-hover:bg-primary text-black dark:bg-stone-800 dark:text-white group-hover:text-black dark:group-hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:group-hover:text-black transition-all shadow-xs">
+                        <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-black bg-primary text-primary-text hover:bg-primary-hover dark:bg-stone-800 dark:text-white transition-all shadow-xs">
                             Llegir crònica completa <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
                         </span>
                     </div>
@@ -103,7 +103,7 @@
 
                     <!-- Action Button -->
                     <div class="pt-2 border-t border-stone-100 dark:border-stone-800/80">
-                        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-stone-100 text-stone-800 dark:bg-stone-900 dark:text-stone-200 group-hover:bg-primary text-black dark:bg-stone-800 dark:text-white group-hover:text-black dark:group-hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:group-hover:text-black transition-all border border-stone-200/80 dark:border-stone-800">
+                        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-stone-100 text-stone-800 dark:bg-stone-900 dark:text-stone-200 group-hover:bg-primary group-hover:text-primary-text dark:group-hover:bg-primary dark:group-hover:text-primary-text transition-all border border-stone-200/80 dark:border-stone-800">
                             Llegir notícia <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
                         </span>
                     </div>
@@ -118,7 +118,7 @@
             
             {{-- Botó Primera Pàgina (Només Icona) --}}
             @if (!$newsListTop->onFirstPage())
-                <a href="{{ $newsListTop->url(1) }}" class="w-9 h-9 rounded-full bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-black flex items-center justify-center transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs" title="Primera pàgina">
+                <a href="{{ $newsListTop->url(1) }}" class="w-9 h-9 rounded-full bg-stone-100 hover:bg-primary hover:text-primary-text dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary dark:hover:text-primary-text font-black flex items-center justify-center transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs" title="Primera pàgina">
                     <i class="fa-solid fa-angles-left text-xs"></i>
                 </a>
             @endif
@@ -129,7 +129,7 @@
                     « Anterior
                 </span>
             @else
-                <a href="{{ $newsListTop->previousPageUrl() }}" class="px-4 py-2 rounded-full bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-black transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
+                <a href="{{ $newsListTop->previousPageUrl() }}" class="px-4 py-2 rounded-full bg-stone-100 hover:bg-primary hover:text-primary-text dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary dark:hover:text-primary-text font-black transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
                     « Anterior
                 </a>
             @endif
@@ -149,7 +149,7 @@
 
             {{-- Botó Següent --}}
             @if ($newsListTop->hasMorePages())
-                <a href="{{ $newsListTop->nextPageUrl() }}" class="px-4 py-2 rounded-full bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-black transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
+                <a href="{{ $newsListTop->nextPageUrl() }}" class="px-4 py-2 rounded-full bg-stone-100 hover:bg-primary hover:text-primary-text dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary dark:hover:text-primary-text font-black transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
                     Següent »
                 </a>
             @else
@@ -160,7 +160,7 @@
 
             {{-- Botó Última Pàgina (Només Icona) --}}
             @if ($newsListTop->currentPage() < $newsListTop->lastPage())
-                <a href="{{ $newsListTop->url($newsListTop->lastPage()) }}" class="w-9 h-9 rounded-full bg-stone-100 hover:bg-primary text-stone-800 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary text-black dark:bg-stone-800 dark:text-white dark:hover:text-black font-black flex items-center justify-center transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs" title="Última pàgina">
+                <a href="{{ $newsListTop->url($newsListTop->lastPage()) }}" class="w-9 h-9 rounded-full bg-stone-100 hover:bg-primary hover:text-primary-text dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary dark:hover:text-primary-text font-black flex items-center justify-center transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs" title="Última pàgina">
                     <i class="fa-solid fa-angles-right text-xs"></i>
                 </a>
             @endif
