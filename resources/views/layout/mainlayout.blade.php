@@ -378,13 +378,18 @@
                             </h4>
                             <ul class="space-y-2.5 text-xs font-bold">
                                 <li>
-                                    <button onclick="openAppModal()" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-stone-900 border border-stone-800 text-stone-200 hover:border-stone-600 hover:text-white transition-all cursor-pointer">
-                                        <i class="fa-solid fa-mobile-screen-button text-sm"></i> App iOS / Android JOK.cat
+                                    <button onclick="openAppModal()" class="text-stone-300 hover:text-white transition-colors flex items-center gap-2 text-xs font-bold cursor-pointer bg-transparent border-0 p-0">
+                                        <i class="fa-solid fa-mobile-screen-button text-[10px] text-stone-500"></i> Descarrega app
                                     </button>
                                 </li>
                                 <li>
                                     <a href="/merchandising" class="text-stone-300 hover:text-white transition-colors flex items-center gap-2">
                                         <i class="fa-solid fa-shirt text-[10px] text-stone-500"></i> Botiga de Merchandising
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/anuncis" class="text-stone-300 hover:text-white transition-colors flex items-center gap-2">
+                                        <i class="fa-solid fa-tags text-[10px] text-stone-500"></i> Mercat Segona Mà
                                     </a>
                                 </li>
                             </ul>
