@@ -451,6 +451,104 @@ class YoutubeVideoService
     }
 
     /**
+     * Fetch all videos for a channel using official YouTube Data API v3 (playlistItems endpoint with maxResults=50 & nextPageToken).
+     */
+    public function fetchChannelVideosViaApi(VideoChannel $channel, string $apiKey): int
+    {
+        $channelId = $channel->channel_id;
+        if (empty($channelId)) {
+            $channelId = $this->resolveChannelId($channel->identifier ?: $channel->url);
+            if ($channelId) {
+                $channel->update(['channel_id' => $channelId]);
+            }
+        }
+
+        $playlistId = null;
+        if ($channel->type === 'playlist' || !empty($channel->playlist_id)) {
+            $playlistId = $channel->playlist_id ?: $channel->identifier;
+        } elseif ($channelId && str_starts_with($channelId, 'UC')) {
+            $playlistId = 'UU' . substr($channelId, 2);
+        }
+
+        if (empty($playlistId)) {
+            return 0;
+        }
+
+        $nextPageToken = null;
+        $importedCount = 0;
+
+        do {
+            $url = "https://www.googleapis.com/youtube/v3/playlistItems";
+            $params = [
+                'part' => 'snippet',
+                'playlistId' => $playlistId,
+                'maxResults' => 50,
+                'key' => $apiKey,
+            ];
+            if ($nextPageToken) {
+                $params['pageToken'] = $nextPageToken;
+            }
+
+            try {
+                $response = Http::timeout(15)->get($url, $params);
+                if (!$response->successful()) {
+                    Log::error("YouTube Data API error for channel #{$channel->id} ({$channel->name}): HTTP {$response->status()} - " . $response->body());
+                    break;
+                }
+
+                $data = $response->json();
+                $items = $data['items'] ?? [];
+
+                foreach ($items as $item) {
+                    $snippet = $item['snippet'] ?? [];
+                    $videoId = $snippet['resourceId']['videoId'] ?? null;
+                    if (!$videoId) {
+                        continue;
+                    }
+
+                    $title = $this->cleanUnicodeText($snippet['title'] ?? '');
+                    $description = $this->cleanUnicodeText($snippet['description'] ?? '');
+
+                    if ($this->isShort($title, $description)) {
+                        continue;
+                    }
+
+                    $publishedAt = isset($snippet['publishedAt'])
+                        ? date('Y-m-d H:i:s', strtotime($snippet['publishedAt']))
+                        : now()->format('Y-m-d H:i:s');
+
+                    $thumbnailUrl = $snippet['thumbnails']['high']['url']
+                        ?? $snippet['thumbnails']['medium']['url']
+                        ?? $snippet['thumbnails']['default']['url']
+                        ?? "https://i.ytimg.com/vi/{$videoId}/hqdefault.jpg";
+
+                    Video::updateOrCreate(
+                        ['youtube_id' => $videoId],
+                        [
+                            'video_channel_id' => $channel->id,
+                            'title' => $title,
+                            'description' => $description,
+                            'thumbnail_url' => $thumbnailUrl,
+                            'url' => "https://www.youtube.com/watch?v={$videoId}",
+                            'published_at' => $publishedAt,
+                        ]
+                    );
+
+                    $importedCount++;
+                }
+
+                $nextPageToken = $data['nextPageToken'] ?? null;
+            } catch (Exception $e) {
+                Log::error("Exception in YouTube Data API sync for channel #{$channel->id}: " . $e->getMessage());
+                break;
+            }
+
+        } while ($nextPageToken);
+
+        return $importedCount;
+    }
+
+    /**
      * Sync videos for a specific VideoChannel.
      */
     public function syncChannel(VideoChannel $channel): int
@@ -461,6 +559,15 @@ class YoutubeVideoService
 
         if (empty($channel->avatar_url)) {
             $this->resolveChannelAvatar($channel);
+        }
+
+        // 0. Use official YouTube Data API v3 if API key is provided
+        $apiKey = config('services.youtube.api_key') ?: env('YOUTUBE_API_KEY');
+        if (!empty($apiKey)) {
+            $apiCount = $this->fetchChannelVideosViaApi($channel, $apiKey);
+            if ($apiCount > 0) {
+                return $apiCount;
+            }
         }
 
         $totalCount = 0;
