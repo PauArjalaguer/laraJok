@@ -62,15 +62,6 @@ class YoutubeVideoService
             if ($ts && $ts > 0) return date('Y-m-d H:i:s', $ts);
         }
 
-        // 4. Fallback: Check if title or HTML contains explicit date pattern like 11/05/2025 or 11-05-2025
-        if (preg_match('/<title>(.*?)<\/title>/i', $html, $tm)) {
-            if (preg_match('/(\d{1,2})[\/\.-](\d{1,2})[\/\.-](\d{4})/', $tm[1], $dm)) {
-                $d = sprintf('%04d-%02d-%02d 12:00:00', $dm[3], $dm[2], $dm[1]);
-                $ts = strtotime($d);
-                if ($ts && $ts > 0) return date('Y-m-d H:i:s', $ts);
-            }
-        }
-
         return null;
     }
 
@@ -79,20 +70,39 @@ class YoutubeVideoService
      */
     public function fetchRealVideoDate(string $youtubeId): ?string
     {
+        // 1. Try desktop watch page
         try {
             $url = "https://www.youtube.com/watch?v={$youtubeId}";
             $response = Http::withHeaders([
                 'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
                 'Accept-Language' => 'ca,es;q=0.9,en;q=0.8',
-                'Cookie' => 'SOCS=CAESEwgDEgk2OTg5MjMwMTQaAmNhIAEaBgiA_LyaBg; CONSENT=YES+1',
+                'Cookie' => 'SOCS=CAESEwgDEgk2OTg5MjMwMTQaAmNhIAEaBgiA_LyaBg; CONSENT=YES+cb.20210328-17-p0.en+FX+417',
             ])->timeout(10)->get($url);
 
             if ($response->successful()) {
-                return $this->extractPublishedDate($response->body());
+                $date = $this->extractPublishedDate($response->body());
+                if ($date) {
+                    return $date;
+                }
             }
         } catch (Exception $e) {
             Log::warning("Error fetching real date for video {$youtubeId}: " . $e->getMessage());
         }
+
+        // 2. Try mobile watch page
+        try {
+            $url = "https://m.youtube.com/watch?v={$youtubeId}";
+            $response = Http::withHeaders([
+                'User-Agent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+            ])->timeout(8)->get($url);
+
+            if ($response->successful()) {
+                $date = $this->extractPublishedDate($response->body());
+                if ($date) {
+                    return $date;
+                }
+            }
+        } catch (Exception $e) {}
 
         return null;
     }
@@ -232,6 +242,9 @@ class YoutubeVideoService
                     }
 
                     $publishedAt = $this->extractPublishedDate($html);
+                    if (!$publishedAt) {
+                        $publishedAt = $this->fetchRealVideoDate($videoId);
+                    }
                     if (!$publishedAt && $existing) {
                         $publishedAt = $existing->published_at;
                     }
