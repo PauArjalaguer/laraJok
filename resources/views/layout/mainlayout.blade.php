@@ -627,4 +627,25 @@
                 }
             });
         </script>
+
+        <!-- FLOATING SCROLL TO TOP BUTTON (Amunt) -->
+        <div x-data="{ showTopBtn: false }" 
+             @scroll.window="showTopBtn = (window.pageYOffset > 300)"
+             class="fixed bottom-5 right-5 z-50">
+            <button x-show="showTopBtn" 
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 translate-y-3 scale-95"
+                    x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                    x-transition:leave="transition ease-in duration-150"
+                    x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                    x-transition:leave-end="opacity-0 translate-y-3 scale-95"
+                    @click="window.scrollTo({top: 0, behavior: 'smooth'})"
+                    class="group flex items-center gap-2 py-2 px-3.5 bg-stone-900/90 text-white dark:bg-stone-800/90 dark:text-stone-100 backdrop-blur-md rounded-full shadow-2xl hover:bg-black dark:hover:bg-primary dark:hover:text-primary-text transition-all border border-white/20 dark:border-stone-700/80 cursor-pointer font-display text-xs font-black"
+                    style="display: none;"
+                    title="Tornar a dalt">
+                <span>Amunt</span>
+                <i class="fa-solid fa-arrow-up text-[10px] group-hover:-translate-y-0.5 transition-transform"></i>
+            </button>
+        </div>
+    </body>
 </html>

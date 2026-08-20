@@ -126,9 +126,9 @@
 
     <!-- Videos Grid -->
     @if($videos->count() > 0)
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-3.5">
             @foreach($videos as $video)
-                <div class="group bg-white dark:bg-[#121215] border border-stone-200/80 dark:border-stone-800/90 rounded-2xl overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer"
+                <div class="group bg-white dark:bg-[#121215] border border-stone-200/80 dark:border-stone-800/90 rounded-xl overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer"
                      onclick="openVideoModal('{{ $video->youtube_id }}', '{{ addslashes($video->title) }}')">
                     
                     <!-- Thumbnail Container -->
@@ -137,38 +137,38 @@
                         
                         <!-- Dark Overlay on Hover -->
                         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <div class="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
-                                <i class="fa-solid fa-play text-lg ml-1"></i>
+                            <div class="w-9 h-9 rounded-full bg-red-600 text-white flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-play text-sm ml-0.5"></i>
                             </div>
                         </div>
 
                         <!-- Channel Badge -->
                         @if($video->channel)
-                            <div class="absolute top-2.5 left-2.5 z-10 bg-black/75 backdrop-blur-md px-2.5 py-1 rounded-lg text-[10px] font-black text-white flex items-center gap-1.5 border border-white/10 shadow-md">
+                            <div class="absolute top-2 left-2 z-10 bg-black/75 backdrop-blur-md px-2 py-0.5 rounded-md text-[9px] font-black text-white flex items-center gap-1 border border-white/10 shadow-md">
                                 @if($video->channel->avatar_url)
-                                    <img src="{{ $video->channel->avatar_url }}" alt="{{ $video->channel->name }}" class="w-3.5 h-3.5 rounded-full object-cover flex-shrink-0" />
+                                    <img src="{{ $video->channel->avatar_url }}" alt="{{ $video->channel->name }}" class="w-3 h-3 rounded-full object-cover flex-shrink-0" />
                                 @else
                                     <i class="fa-brands fa-youtube text-red-500"></i>
                                 @endif
-                                <span class="truncate max-w-[140px]">{{ $video->channel->name }}</span>
+                                <span class="truncate max-w-[100px]">{{ $video->channel->name }}</span>
                             </div>
                         @endif
                     </div>
 
                     <!-- Card Body -->
-                    <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
-                        <h3 class="text-xs md:text-sm font-black font-display text-stone-900 dark:text-white line-clamp-2 leading-snug group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
+                    <div class="p-2.5 md:p-3 flex-1 flex flex-col justify-between space-y-2 font-display">
+                        <h3 class="text-xs font-black font-display text-stone-900 dark:text-white line-clamp-2 leading-snug group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
                             {{ $video->title }}
                         </h3>
 
-                        <div class="flex items-center justify-between text-[11px] text-stone-400 dark:text-stone-500 font-bold pt-2 border-t border-stone-100 dark:border-stone-800/80">
+                        <div class="flex items-center justify-between text-[10px] text-stone-400 dark:text-stone-500 font-bold pt-1.5 border-t border-stone-100 dark:border-stone-800/80">
                             <span class="flex items-center gap-1">
                                 <i class="fa-regular fa-clock"></i>
                                 {{ $video->published_at ? $video->published_at->format('d/m/Y') : '' }}
                             </span>
-                            <span class="text-red-600 dark:text-red-400 font-extrabold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                            <span class="text-red-600 dark:text-red-400 font-extrabold flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
                                 <span>Veure</span>
-                                <i class="fa-solid fa-chevron-right text-[9px]"></i>
+                                <i class="fa-solid fa-chevron-right text-[8px]"></i>
                             </span>
                         </div>
                     </div>

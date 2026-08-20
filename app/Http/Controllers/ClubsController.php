@@ -33,7 +33,7 @@ class ClubsController extends Controller
             'classifications' => Classifications::classificationGetByIdClub($id),
             'matchesListNext' => Matches::matchesListNext($userSavedData, $id),
             'matchesListLastWithResults' => Matches::matchesListLastWithResults($userSavedData, $id),
-            'clubVideos' => $clubName ? Video::getVideosByClubName($clubName, 8) : collect(),
+            'clubVideos' => $clubName ? Video::getVideosByClubName($clubName, 100) : collect(),
         ]
     );
    }

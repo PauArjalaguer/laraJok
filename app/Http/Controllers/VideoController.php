@@ -25,7 +25,7 @@ class VideoController extends Controller
             ->byChannel($channelId)
             ->byDateFilter($dateFilter)
             ->orderBy('published_at', 'desc')
-            ->paginate(12)
+            ->paginate(30)
             ->withQueryString();
 
         $channels = VideoChannel::where('is_active', true)->orderBy('name')->get();

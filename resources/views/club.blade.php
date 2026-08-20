@@ -3,7 +3,7 @@
 @section('content')
 
 <!-- CLUB HEADER (Clean Unified Style) -->
-<div class="w-full mt-2 mb-6">
+<div class="w-full mt-2 mb-4">
     <div class="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-4">
         <div class="flex items-center gap-3.5">
             <div class="w-10 h-10 md:w-12 md:h-12 bg-white dark:bg-transparent rounded-xl p-1 flex-shrink-0 flex items-center justify-center">
@@ -23,6 +23,54 @@
     </div>
 </div>
 
+<!-- MINIMALIST QUICK SECTION NAVIGATION BAR -->
+<div class="sticky top-14 z-20 mb-5 py-1 font-display">
+    <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+        @if(isset($classifications) && count($classifications) > 0)
+            <a href="#sec-classificacions" onclick="smoothScrollToTarget('sec-classificacions'); return false;" class="px-3.5 py-1.5 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 hover:bg-stone-900 hover:text-white dark:hover:bg-stone-800 dark:hover:text-white font-extrabold text-xs transition-all border border-stone-200/80 dark:border-stone-800 flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+                <i class="fa-solid fa-list-ol text-[10px] text-stone-400"></i> Classificacions
+            </a>
+        @endif
+
+        @if(isset($matchesListNext) && count($matchesListNext) > 0)
+            <a href="#sec-propers-partits" onclick="smoothScrollToTarget('sec-propers-partits'); return false;" class="px-3.5 py-1.5 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 hover:bg-stone-900 hover:text-white dark:hover:bg-stone-800 dark:hover:text-white font-extrabold text-xs transition-all border border-stone-200/80 dark:border-stone-800 flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+                <i class="fa-regular fa-calendar-days text-[10px] text-stone-400"></i> Propers Partits
+            </a>
+        @endif
+
+        @if(isset($matchesListLastWithResults) && count($matchesListLastWithResults) > 0)
+            <a href="#sec-darrers-resultats" onclick="smoothScrollToTarget('sec-darrers-resultats'); return false;" class="px-3.5 py-1.5 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 hover:bg-stone-900 hover:text-white dark:hover:bg-stone-800 dark:hover:text-white font-extrabold text-xs transition-all border border-stone-200/80 dark:border-stone-800 flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+                <i class="fa-solid fa-trophy text-[10px] text-stone-400"></i> Darrers Resultats
+            </a>
+        @endif
+
+        @if(isset($clubVideos) && count($clubVideos) > 0)
+            <a href="#sec-videos" onclick="smoothScrollToTarget('sec-videos'); return false;" class="px-3.5 py-1.5 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 hover:bg-stone-900 hover:text-white dark:hover:bg-stone-800 dark:hover:text-white font-extrabold text-xs transition-all border border-stone-200/80 dark:border-stone-800 flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+                <i class="fa-solid fa-video text-[10px] text-stone-400"></i> Vídeos
+            </a>
+        @endif
+
+        <a href="#sec-equips" onclick="smoothScrollToTarget('sec-equips'); return false;" class="px-3.5 py-1.5 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-700 dark:text-stone-300 hover:bg-stone-900 hover:text-white dark:hover:bg-stone-800 dark:hover:text-white font-extrabold text-xs transition-all border border-stone-200/80 dark:border-stone-800 flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+            <i class="fa-solid fa-users text-[10px] text-stone-400"></i> Equips
+        </a>
+    </div>
+</div>
+
+<script>
+function smoothScrollToTarget(id) {
+    const target = document.getElementById(id);
+    if (!target) return;
+    const navOffset = 90;
+    const elementPosition = target.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - navOffset;
+
+    window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+    });
+}
+</script>
+
 <!-- MAIN GRID LAYOUT -->
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-7">
 
@@ -31,12 +79,18 @@
 
         <!-- CLASSIFICACIONS DEL CLUB (Amagat si no hi ha classificacions) -->
         @if(isset($classifications) && count($classifications) > 0)
-            <div class="mb-7">
+            <div id="sec-classificacions" class="scroll-mt-28 mb-7">
                 <div class="flex items-center justify-between pb-2 border-b border-stone-200 dark:border-stone-800 mb-3 px-0.5">
                     <h2 class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
                         CLASSIFICACIONS DEL CLUB
                     </h2>
-                    <span class="hallmark-stamp bg-stone-900 text-white dark:bg-stone-800 dark:text-stone-300">LLIGUES</span>
+                    <div class="flex items-center gap-2">
+                        <span class="hallmark-stamp bg-stone-900 text-white dark:bg-stone-800 dark:text-stone-300">LLIGUES</span>
+                        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="group text-[11px] font-bold text-stone-400 hover:text-stone-900 dark:hover:text-white transition-colors flex items-center gap-1 cursor-pointer" title="Tornar a dalt">
+    <span>Amunt</span>
+    <i class="fa-solid fa-arrow-up text-[9px] group-hover:-translate-y-0.5 transition-transform"></i>
+</button>
+                    </div>
                 </div>
 
                 <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl overflow-hidden shadow-xs">
@@ -88,11 +142,15 @@
 
         <!-- PROPERS PARTITS DEL CLUB -->
         @if(isset($matchesListNext) && count($matchesListNext) > 0)
-            <div class="mb-7">
+            <div id="sec-propers-partits" class="scroll-mt-28 mb-7">
                 <div class="flex items-center justify-between pb-2 border-b border-stone-200 dark:border-stone-800 mb-3 px-0.5">
                     <h2 class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
                         PROPERS PARTITS
                     </h2>
+                    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="group text-[11px] font-bold text-stone-400 hover:text-stone-900 dark:hover:text-white transition-colors flex items-center gap-1 cursor-pointer" title="Tornar a dalt">
+    <span>Amunt</span>
+    <i class="fa-solid fa-arrow-up text-[9px] group-hover:-translate-y-0.5 transition-transform"></i>
+</button>
                 </div>
                 <div class="flex flex-col gap-1">
                     @foreach($matchesListNext as $match)
@@ -104,12 +162,18 @@
 
         <!-- DARRERS RESULTATS DEL CLUB -->
         @if(isset($matchesListLastWithResults) && count($matchesListLastWithResults) > 0)
-            <div class="mb-7">
+            <div id="sec-darrers-resultats" class="scroll-mt-28 mb-7">
                 <div class="flex items-center justify-between pb-2 border-b border-stone-200 dark:border-stone-800 mb-3 px-0.5">
                     <h2 class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
                         DARRERS RESULTATS
                     </h2>
-                    <span class="hallmark-stamp bg-stone-900 text-white dark:bg-stone-800 dark:text-stone-300">RESULTATS</span>
+                    <div class="flex items-center gap-2">
+                        <span class="hallmark-stamp bg-stone-900 text-white dark:bg-stone-800 dark:text-stone-300">RESULTATS</span>
+                        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="group text-[11px] font-bold text-stone-400 hover:text-stone-900 dark:hover:text-white transition-colors flex items-center gap-1 cursor-pointer" title="Tornar a dalt">
+    <span>Amunt</span>
+    <i class="fa-solid fa-arrow-up text-[9px] group-hover:-translate-y-0.5 transition-transform"></i>
+</button>
+                    </div>
                 </div>
                 <div class="flex flex-col gap-1">
                     @foreach($matchesListLastWithResults as $match)
@@ -121,59 +185,82 @@
 
         <!-- VÍDEOS DEL CLUB -->
         @if(isset($clubVideos) && count($clubVideos) > 0)
-            <div class="mb-7">
+            <div id="sec-videos" class="scroll-mt-28 mb-7" x-data="{ showCount: 6, totalCount: {{ count($clubVideos) }} }">
                 <div class="flex items-center justify-between pb-2 border-b border-stone-200 dark:border-stone-800 mb-4 px-0.5">
                     <h2 class="font-display text-xs md:text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
-                        Vídeos i Directes del Club
+                        Vídeos i Directes del Club (<span x-text="Math.min(showCount, totalCount)"></span>/<span x-text="totalCount"></span>)
                     </h2>
-                    <a href="/videos" class="text-[11px] font-bold text-red-600 dark:text-red-400 hover:underline flex items-center gap-1 font-display">
-                        <span>Tots els vídeos</span>
-                        <i class="fa-solid fa-chevron-right text-[9px]"></i>
-                    </a>
+                    <div class="flex items-center gap-3 font-display">
+                        <a href="/videos?search={{ urlencode($clubInfo[0]->clubName) }}" class="text-[11px] font-bold text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white transition-colors flex items-center gap-1">
+                            <span>Cercador de vídeos</span>
+                            <i class="fa-solid fa-chevron-right text-[9px]"></i>
+                        </a>
+                        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="group text-[11px] font-bold text-stone-400 hover:text-stone-900 dark:hover:text-white transition-colors flex items-center gap-1 cursor-pointer" title="Tornar a dalt">
+                            <span>Amunt</span>
+                            <i class="fa-solid fa-arrow-up text-[9px] group-hover:-translate-y-0.5 transition-transform"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                     @foreach($clubVideos as $video)
-                        <div class="group bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col cursor-pointer" onclick="openVideoModal('{{ $video->youtube_id }}', '{{ addslashes($video->title) }}')">
+                        <div x-show="{{ $loop->index }} < showCount"
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 scale-95"
+                             x-transition:enter-end="opacity-100 scale-100"
+                             class="group bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-xl overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col cursor-pointer" 
+                             onclick="openVideoModal('{{ $video->youtube_id }}', '{{ addslashes($video->title) }}')">
                             <!-- Thumbnail Container -->
                             <div class="relative aspect-video bg-stone-900 overflow-hidden">
                                 <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                 
                                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                    <div class="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
-                                        <i class="fa-solid fa-play text-sm ml-0.5"></i>
+                                    <div class="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+                                        <i class="fa-solid fa-play text-xs ml-0.5"></i>
                                     </div>
                                 </div>
 
                                 @if($video->channel)
-                                    <div class="absolute top-2 left-2 z-10 bg-black/75 backdrop-blur-md px-2 py-0.5 rounded-md text-[9px] font-black text-white flex items-center gap-1 border border-white/10">
+                                    <div class="absolute top-1.5 left-1.5 z-10 bg-black/75 backdrop-blur-md px-1.5 py-0.5 rounded-md text-[8px] font-black text-white flex items-center gap-1 border border-white/10">
                                         @if($video->channel->avatar_url)
                                             <img src="{{ $video->channel->avatar_url }}" class="w-3 h-3 rounded-full object-cover" />
                                         @else
                                             <i class="fa-brands fa-youtube text-red-500"></i>
                                         @endif
-                                        <span class="truncate max-w-[110px]">{{ $video->channel->name }}</span>
+                                        <span class="truncate max-w-[90px]">{{ $video->channel->name }}</span>
                                     </div>
                                 @endif
                             </div>
 
                             <!-- Card Content -->
-                            <div class="p-3 flex-1 flex flex-col justify-between space-y-2 font-display">
-                                <h3 class="text-xs font-black font-display text-stone-900 dark:text-white line-clamp-2 leading-tight group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
+                            <div class="p-2.5 flex-1 flex flex-col justify-between space-y-1.5 font-display">
+                                <h3 class="text-[11px] font-black font-display text-stone-900 dark:text-white line-clamp-2 leading-tight group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
                                     {{ $video->title }}
                                 </h3>
-                                <div class="flex items-center justify-between text-[10px] text-stone-400 font-bold pt-1.5 border-t border-stone-100 dark:border-stone-800/80">
+                                <div class="flex items-center justify-between text-[9px] text-stone-400 font-bold pt-1 border-t border-stone-100 dark:border-stone-800/80">
                                     <span class="flex items-center gap-1">
                                         <i class="fa-regular fa-clock"></i>
                                         {{ $video->published_at ? $video->published_at->format('d/m/Y') : '' }}
                                     </span>
                                     <span class="text-red-600 dark:text-red-400 font-black flex items-center gap-0.5">
-                                        Veure <i class="fa-solid fa-chevron-right text-[8px]"></i>
+                                        Veure <i class="fa-solid fa-chevron-right text-[7px]"></i>
                                     </span>
                                 </div>
                             </div>
                         </div>
                     @endforeach
+                </div>
+
+                <!-- Load More / Load All Action Buttons -->
+                <div x-show="showCount < totalCount" class="mt-4 flex flex-wrap items-center justify-center gap-2 font-display">
+                    <button @click="showCount += 6" class="px-4 py-2 rounded-full bg-stone-100 hover:bg-stone-900 hover:text-white dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-stone-800 font-black text-xs transition-all border border-stone-200/80 dark:border-stone-800 shadow-2xs flex items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-plus text-[10px] text-stone-400"></i>
+                        <span>Carregar més vídeos</span>
+                    </button>
+                    <button @click="showCount = totalCount" class="px-4 py-2 rounded-full bg-stone-900 text-white hover:bg-black dark:bg-stone-800 dark:hover:bg-stone-700 font-black text-xs transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-layer-group text-[10px] text-stone-300"></i>
+                        <span>Carregar tots (<span x-text="totalCount"></span>)</span>
+                    </button>
                 </div>
             </div>
         @endif
@@ -191,12 +278,18 @@
         </div>
 
         <!-- Teams List (Desplegable per Temporada - Estil Suau & Subtil) -->
-        <div class="w-full mb-6">
+        <div id="sec-equips" class="scroll-mt-28 w-full mb-6">
             <div class="flex items-center justify-between pb-1.5 border-b border-stone-200 dark:border-stone-800 mb-3 px-0.5">
                 <h3 class="font-display text-xs font-black uppercase tracking-wider text-stone-900 dark:text-white">
                     EQUIPS DEL CLUB
                 </h3>
-                <span class="hallmark-stamp bg-stone-100 text-stone-700 border border-stone-200/80 dark:bg-stone-900 dark:text-stone-300">TEMPORADES</span>
+                <div class="flex items-center gap-2 hidden">
+                    <span class="hallmark-stamp bg-stone-100 text-stone-700 border border-stone-200/80 dark:bg-stone-900 dark:text-stone-300">TEMPORADES</span>
+                    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="group text-[11px] font-bold text-stone-400 hover:text-stone-900 dark:hover:text-white transition-colors flex items-center gap-1 cursor-pointer" title="Tornar a dalt">
+    <span>Amunt</span>
+    <i class="fa-solid fa-arrow-up text-[9px] group-hover:-translate-y-0.5 transition-transform"></i>
+</button>
+                </div>
             </div>
 
             @php
