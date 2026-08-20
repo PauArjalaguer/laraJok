@@ -27,22 +27,50 @@ class YoutubeVideoService
     }
 
     /**
-     * Extract exact published date from YouTube page HTML.
+     * Check if a video is a YouTube Short based on title, description, or URL.
+     */
+    public function isShort(string $title, ?string $description = null): bool
+    {
+        $text = strtolower($title . ' ' . ($description ?? ''));
+        return str_contains($text, '#shorts') || str_contains($text, '#short') || str_contains($text, '/shorts/');
+    }
+
+    /**
+     * Extract exact published date from YouTube page HTML using multiple fallback patterns.
      */
     public function extractPublishedDate(string $html): ?string
     {
-        if (preg_match('/itemprop="datePublished"\s+content="([^"]+)"/', $html, $m)) {
-            return date('Y-m-d H:i:s', strtotime($m[1]));
+        // 1. Meta itemprop datePublished / uploadDate (both attribute orders)
+        if (preg_match('/itemprop="(?:datePublished|uploadDate)"\s+content="([^"]+)"/i', $html, $m)) {
+            $ts = strtotime($m[1]);
+            if ($ts && $ts > 0) return date('Y-m-d H:i:s', $ts);
         }
-        if (preg_match('/itemprop="uploadDate"\s+content="([^"]+)"/', $html, $m)) {
-            return date('Y-m-d H:i:s', strtotime($m[1]));
+        if (preg_match('/content="([^"]+)"\s+itemprop="(?:datePublished|uploadDate)"/i', $html, $m)) {
+            $ts = strtotime($m[1]);
+            if ($ts && $ts > 0) return date('Y-m-d H:i:s', $ts);
         }
-        if (preg_match('/"publishDate":"([^"]+)"/', $html, $m)) {
-            return date('Y-m-d H:i:s', strtotime($m[1]));
+
+        // 2. OpenGraph / Meta release_date
+        if (preg_match('/property="(?:og:video:release_date|video:release_date)"\s+content="([^"]+)"/i', $html, $m)) {
+            $ts = strtotime($m[1]);
+            if ($ts && $ts > 0) return date('Y-m-d H:i:s', $ts);
         }
-        if (preg_match('/"uploadDate":"([^"]+)"/', $html, $m)) {
-            return date('Y-m-d H:i:s', strtotime($m[1]));
+
+        // 3. JSON properties in ytInitialData / playerMicroformatRenderer
+        if (preg_match('/"(?:publishDate|uploadDate|publishedAt|startTimestamp|startDate)":"([^"]+)"/i', $html, $m)) {
+            $ts = strtotime($m[1]);
+            if ($ts && $ts > 0) return date('Y-m-d H:i:s', $ts);
         }
+
+        // 4. Fallback: Check if title or HTML contains explicit date pattern like 11/05/2025 or 11-05-2025
+        if (preg_match('/<title>(.*?)<\/title>/i', $html, $tm)) {
+            if (preg_match('/(\d{1,2})[\/\.-](\d{1,2})[\/\.-](\d{4})/', $tm[1], $dm)) {
+                $d = sprintf('%04d-%02d-%02d 12:00:00', $dm[3], $dm[2], $dm[1]);
+                $ts = strtotime($d);
+                if ($ts && $ts > 0) return date('Y-m-d H:i:s', $ts);
+            }
+        }
+
         return null;
     }
 
@@ -70,7 +98,7 @@ class YoutubeVideoService
     }
 
     /**
-     * Scrape video IDs directly from channel /videos and /streams pages to bypass the 15-item RSS limit.
+     * Scrape video IDs directly from channel /videos, /streams, and /shorts pages with full continuation pagination.
      */
     public function fetchChannelPageVideos(VideoChannel $channel): int
     {
@@ -100,9 +128,62 @@ class YoutubeVideoService
 
                 if ($response->successful()) {
                     $html = $response->body();
+
+                    // Extract initial video IDs
                     if (preg_match_all('/"videoId":"([a-zA-Z0-9_-]{11})"/', $html, $m)) {
                         foreach ($m[1] as $id) {
                             $videoIds[$id] = true;
+                        }
+                    }
+
+                    // Extract API key and follow continuation tokens for full pagination
+                    $apiKey = null;
+                    if (preg_match('/"INNERTUBE_API_KEY":"([^"]+)"/', $html, $m)) {
+                        $apiKey = $m[1];
+                    }
+
+                    $currentHtml = $html;
+                    $pageCount = 0;
+                    while ($pageCount < 15 && $apiKey) {
+                        $pageCount++;
+                        $token = null;
+                        if (preg_match('/"continuationCommand":\{"token":"([^"]+)"/', $currentHtml, $m)) {
+                            $token = urldecode($m[1]);
+                        }
+
+                        if (!$token) {
+                            break;
+                        }
+
+                        $apiUrl = "https://www.youtube.com/youtubei/v1/browse?key={$apiKey}";
+                        $cResp = Http::withHeaders([
+                            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                            'Content-Type' => 'application/json',
+                        ])->timeout(10)->post($apiUrl, [
+                            'context' => [
+                                'client' => [
+                                    'clientName' => 'WEB',
+                                    'clientVersion' => '2.20240815.01.00',
+                                ]
+                            ],
+                            'continuation' => $token
+                        ]);
+
+                        if ($cResp->successful()) {
+                            $jsonStr = json_encode($cResp->json());
+                            $prevCount = count($videoIds);
+                            if (preg_match_all('/"videoId":"([a-zA-Z0-9_-]{11})"/', $jsonStr, $m)) {
+                                foreach ($m[1] as $id) {
+                                    $videoIds[$id] = true;
+                                }
+                            }
+
+                            if (count($videoIds) === $prevCount) {
+                                break;
+                            }
+                            $currentHtml = $jsonStr;
+                        } else {
+                            break;
                         }
                     }
                 }
@@ -143,6 +224,10 @@ class YoutubeVideoService
                     }
 
                     if (empty($title)) {
+                        continue;
+                    }
+
+                    if ($this->isShort($title, $existing ? $existing->description : '')) {
                         continue;
                     }
 
@@ -229,7 +314,6 @@ class YoutubeVideoService
      */
     public function resolveChannelId(string $handleOrUrl): ?string
     {
-        // If it's already a channel ID starting with UC
         if (preg_match('/^UC[a-zA-Z0-9_-]{22}$/', $handleOrUrl)) {
             return $handleOrUrl;
         }
@@ -249,10 +333,6 @@ class YoutubeVideoService
 
             if ($response->successful()) {
                 $html = $response->body();
-
-                if (preg_match('/itemprop="channelId"\s+content="(UC[a-zA-Z0-9_-]+)"/', $html, $matches)) {
-                    return $matches[1];
-                }
                 if (preg_match('/"externalId":"(UC[a-zA-Z0-9_-]+)"/', $html, $matches)) {
                     return $matches[1];
                 }
@@ -366,7 +446,6 @@ class YoutubeVideoService
             return 0;
         }
 
-        // Fetch channel avatar if missing
         if (empty($channel->avatar_url)) {
             $this->resolveChannelAvatar($channel);
         }
@@ -392,12 +471,19 @@ class YoutubeVideoService
             }
         }
 
-        // 1. Fetch RSS feed first
+        // 1. Fetch main RSS feed
         if ($feedUrl) {
             $totalCount += $this->fetchAndSaveRssFeed($feedUrl, $channel);
         }
 
-        // 2. Scrape channel /videos and /streams pages to bypass 15-item RSS limit
+        // 2. Fetch Uploads RSS playlist if channel_id starts with UC (replace UC with UU)
+        if ($channel->type === 'channel' && !empty($channel->channel_id) && str_starts_with($channel->channel_id, 'UC')) {
+            $uploadsPlaylistId = 'UU' . substr($channel->channel_id, 2);
+            $uuFeedUrl = "https://www.youtube.com/feeds/videos.xml?playlist_id={$uploadsPlaylistId}";
+            $totalCount += $this->fetchAndSaveRssFeed($uuFeedUrl, $channel);
+        }
+
+        // 3. Scrape channel /videos, /streams, and /shorts pages to bypass RSS limits & fetch all videos
         if ($channel->type === 'channel') {
             $totalCount += $this->fetchChannelPageVideos($channel);
             $totalCount += $this->checkLiveStream($channel);
@@ -465,6 +551,10 @@ class YoutubeVideoService
                 }
 
                 $videoUrl = "https://www.youtube.com/watch?v={$youtubeId}";
+
+                if ($this->isShort($title, $description)) {
+                    continue;
+                }
 
                 Video::updateOrCreate(
                     ['youtube_id' => $youtubeId],
