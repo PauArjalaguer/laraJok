@@ -135,7 +135,8 @@ include("curl.php");
 
                                     //data i hora del partit
                                     $matchDate = prepareDate($ch2->childNodes[3]->nodeValue);
-                                    $matchHour = trim($ch2->childNodes[5]->nodeValue);
+                                    //$matchHour = trim($ch2->childNodes[5]->nodeValue);
+                                      $matchHour = trim($ch2->childNodes[5]->nodeValue ?? '') ?: '00:00:00';
                                     echo "\n\t<div class='bg-slate-100 border-l border-t border-slate-700 w-2/12 p-2 text-center'>$idGrup $matchDate <br /> $matchHour</div>";
 
                                     //lloc
