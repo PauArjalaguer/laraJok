@@ -72,6 +72,7 @@ class Matches extends Model
             ->join('seasons', 'seasons.idSeason', '=', 'leagues.idSeason')
             ->join('phases', 'phases.idGroup', '=', 'matches.idGroup')
             ->leftJoin('places', 'places.idPlace', '=', 'matches.idPlace')
+            ->leftJoin('videos', 'videos.idMatch', '=', 'matches.idMatch')
             ->select([
                 'seasons.seasonName',
                 'phases.groupName',
@@ -94,7 +95,10 @@ class Matches extends Model
                 'placeAddress',
                 'lat',
                 'lon',
-                'referee'
+                'referee',
+                'videos.id as hasVideo',
+                'videos.youtube_id as videoYoutubeId',
+                'videos.url as videoUrl'
             ]);
     }
 

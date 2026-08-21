@@ -14,7 +14,7 @@ class MatchVideosToMatchesCommand extends Command
      * @var string
      */
     protected $signature = 'videos:match-to-acta 
-                            {--limit=10 : Limit de videos a processar} 
+                            {--limit=300 : Limit de videos a processar} 
                             {--max-tries=1 : Nombre maxim de reintents per video abans de descartar-lo} 
                             {--reset-tries : Reinicia el comptador de reintents de tots els videos pendents} 
                             {--id= : ID de video concret a processar}';

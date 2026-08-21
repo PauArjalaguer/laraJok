@@ -48,11 +48,16 @@
     @endphp
     <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-2xl mb-3.5 overflow-hidden shadow-xs hover:border-primary dark:hover:border-primary dark:hover:border-stone-600 transition-all p-4">
         <!-- Top header info -->
-        <div class="font-display text-[10px] font-extrabold text-stone-500 dark:text-stone-400 uppercase tracking-wider mb-3 truncate flex items-center justify-between" title="{{ $match->groupName }}">
+        <div class="font-display text-[10px] font-extrabold text-stone-500 dark:text-stone-400 uppercase tracking-wider mb-3 truncate flex items-center justify-between gap-2" title="{{ $match->groupName }}">
             <a href="/competicio/{{ $match->idGroup }}/{{ urlencode($match->groupName) }}" class="hover:text-stone-900 dark:hover:text-white transition-colors truncate flex items-center gap-1.5">
                 <span class="w-1.5 h-1.5 rounded-full bg-primary text-primary-text dark:bg-stone-800 dark:text-white inline-block flex-shrink-0 shadow-xs"></span>
                 <span class="truncate">{{ $match->groupName }}</span>
             </a>
+            @if(!empty($match->hasVideo))
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-red-600/10 text-red-600 dark:bg-red-950/50 dark:text-red-400 text-[9px] font-black tracking-wider uppercase border border-red-200 dark:border-red-900/60 shadow-2xs flex-shrink-0">
+                    <i class="fa-brands fa-youtube"></i> Amb Vídeo
+                </span>
+            @endif
         </div>
         
         <!-- Teams Content (Shield top, Name below, Score center) -->
