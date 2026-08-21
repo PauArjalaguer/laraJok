@@ -461,7 +461,11 @@ class AiService
 
         $channelInfo = !empty($channelName) ? "CANAL DE YOUTUBE: {$channelName}\n" : "";
 
-        // 1. Extracció de dades del títol i descripció
+        // 1. Extracció heurística inicial directa (garanteix cobertura 100% fins i tot sense quota de IA)
+        $heuristic = $this->extractEntitiesHeuristically($title, $description, $channelName);
+        $extracted = $heuristic;
+
+        // 2. Intent d'enriquiment amb IA si hi ha servei disponible
         $prompt = "Analitza el següent títol i descripció d'un vídeo de YouTube d'un partit d'hoquei patins:\n\n" .
             $channelInfo .
             "TÍTOL: {$title}\n" .
@@ -478,9 +482,13 @@ class AiService
             "- date (string format YYYY-MM-DD o MM-DD o null)";
 
         $json = $this->generateText($prompt, "Retorna ÚNICAMENT un objecte JSON sense comentaris ni markdown.");
-        $extracted = $this->parseJsonSafe($json);
+        $aiExtracted = $this->parseJsonSafe($json);
 
-        // 2. Si no hi ha categoria/grup ni resultat i tenim thumbnail, fem servir visió multimodal
+        if (!empty($aiExtracted)) {
+            $extracted = array_merge(array_filter($heuristic), array_filter($aiExtracted));
+        }
+
+        // 3. Si no hi ha categoria/grup ni resultat i tenim thumbnail, fem servir visió multimodal
         if ((empty($extracted['group']) && empty($extracted['localResult'])) && !empty($thumbnailUrl)) {
             $visionData = $this->analyzeThumbnailWithVision($thumbnailUrl);
             if (!empty($visionData)) {
@@ -489,7 +497,7 @@ class AiService
             }
         }
 
-        // 3. Fallback d'equip utilitzant el canal si només s'ha detectat un equip
+        // 4. Fallback d'equip utilitzant el canal si només s'ha detectat un equip
         if (!empty($channelName)) {
             if (empty($extracted['local']) && !empty($extracted['visitor'])) {
                 $extracted['local'] = $channelName;
@@ -576,17 +584,30 @@ class AiService
         $local = trim($extracted['local'] ?? '');
         $visitor = trim($extracted['visitor'] ?? '');
 
-        $extractMainClubWord = function($name) {
-            $cleaned = preg_replace('/(club|patí|pati|ch|cp|ce|hc|esportiu|hoquei|de|del|d\')/iu', ' ', $name);
-            $words = array_values(array_filter(explode(' ', trim($cleaned))));
-            return !empty($words) ? $words[0] : $name;
+        $extractSearchKeywords = function($name) {
+            $cleaned = preg_replace('/\b(patí\s*hoquei\s*club|club\s*patí|club\s*hoquei|club\s*esportiu|hoquei\s*club|pati\s*hoquei\s*club|club|patí|pati|hoquei|phc|chp|ch|cp|ce|hc|c\.p\.|c\.h\.|p\.h\.c\.|h\.c\.|esportiu|de|del|d\'|la|les|el|els)\b/iu', ' ', $name);
+            $cleaned = preg_replace('/\b[A-E]\b/u', ' ', $cleaned);
+            $words = array_values(array_filter(array_map('trim', explode(' ', $cleaned))));
+            $words = array_values(array_filter($words, fn($w) => mb_strlen($w) >= 2));
+            return !empty($words) ? implode(' ', $words) : $name;
         };
 
-        $localKey = $extractMainClubWord($local);
-        $visKey = $extractMainClubWord($visitor);
+        $extractTeamLetter = function($name) {
+            if (preg_match('/\b([A-E])\b/u', $name, $m)) {
+                return strtoupper($m[1]);
+            }
+            return null;
+        };
+
+        $localKey = $extractSearchKeywords($local);
+        $visKey = $extractSearchKeywords($visitor);
+        $localLetter = $extractTeamLetter($local);
+        $visLetter = $extractTeamLetter($visitor);
 
         $trace['filters']['local_key'] = $localKey;
         $trace['filters']['visitor_key'] = $visKey;
+        if ($localLetter) $trace['filters']['local_letter'] = $localLetter;
+        if ($visLetter) $trace['filters']['visitor_letter'] = $visLetter;
 
         $query = \Illuminate\Support\Facades\DB::table('matches')
             ->join('teams as t1', 'matches.idLocal', '=', 't1.idTeam')
@@ -684,14 +705,40 @@ class AiService
             return $candidates->first()->idMatch;
         }
 
-        // Si hi ha múltiples candidats i tenim data exacta
-        if ($candidates->count() > 1 && $publishedAt) {
+        // Si hi ha múltiples candidats, avaluem per puntuació (scoring)
+        if ($candidates->count() > 1) {
+            $bestCandidate = null;
+            $bestScore = -1;
+
             foreach ($candidates as $c) {
-                if ($c->matchDate <= $publishedAt->format('Y-m-d')) {
-                    return $c->idMatch;
+                $score = 0;
+                $cLocalLetter = $extractTeamLetter($c->local);
+                $cVisLetter = $extractTeamLetter($c->visitor);
+
+                // Concordança de lletra d'equip (+40 punts)
+                if ($localLetter && $cLocalLetter === $localLetter) $score += 40;
+                if ($visLetter && $cVisLetter === $visLetter) $score += 40;
+
+                // Concordança de categoria/grup (+30 punts)
+                if (!empty($extracted['group']) && stripos($c->groupName, $extracted['group']) !== false) {
+                    $score += 30;
+                }
+
+                // Proximitat de dates (+30 punts max)
+                if ($publishedAt && $c->matchDate) {
+                    $diffDays = abs(\Carbon\Carbon::parse($c->matchDate)->diffInDays($publishedAt));
+                    $score += max(0, 30 - $diffDays * 3);
+                }
+
+                if ($score > $bestScore) {
+                    $bestScore = $score;
+                    $bestCandidate = $c;
                 }
             }
-            return $candidates->first()->idMatch;
+
+            if ($bestCandidate && $bestScore >= 40) {
+                return $bestCandidate->idMatch;
+            }
         }
 
         return null;
@@ -716,5 +763,70 @@ class AiService
 
         $data = json_decode($clean, true);
         return is_array($data) ? $data : null;
+    }
+
+    /**
+     * Extracció heurística directa sense dependència de la IA
+     */
+    public function extractEntitiesHeuristically(string $title, string $description = '', string $channelName = ''): array
+    {
+        $data = [
+            'local' => null,
+            'visitor' => null,
+            'localResult' => null,
+            'visitorResult' => null,
+            'round' => null,
+            'group' => null,
+            'date' => null
+        ];
+
+        $titleClean = trim($title);
+
+        // 1. Categoria entre parèntesis o al text (ex: (Aleví), (Benjamí), FEM 13...)
+        if (preg_match('/\(([^)]*(?:alevi|aleví|benjami|benjamí|prebenjami|prebenjamí|infantil|juvenil|junior|júnior|fem|sènior|senior|3a)[^)]*)\)/iu', $titleClean, $mCat)) {
+            $data['group'] = trim($mCat[1]);
+            $titleClean = trim(str_replace($mCat[0], '', $titleClean));
+        } elseif (preg_match('/(alevi|aleví|benjami|benjamí|prebenjami|prebenjamí|infantil|juvenil|junior|júnior|fem\s*\d+|fem|3a\s*catalana|segona\s*cat|primera\s*cat)/iu', $titleClean . ' ' . $description, $mCat)) {
+            $data['group'] = trim($mCat[1]);
+        }
+
+        // 2. Patró directe: "Equip Local 1 - 1 Equip Visitant" o "Equip Local 2_5 Equip Visitant"
+        if (preg_match('/^(.+?)\s+(\d{1,2})\s*[-_]\s*(\d{1,2})\s+(.+)$/u', $titleClean, $mMatchScore)) {
+            $data['local'] = trim($mMatchScore[1]);
+            $data['localResult'] = (int)$mMatchScore[2];
+            $data['visitorResult'] = (int)$mMatchScore[3];
+            $data['visitor'] = trim($mMatchScore[4]);
+        } else {
+            // Marcador aïllat si n'hi ha (ex: al final o amb format "8-3")
+            if (preg_match('/(\d{1,2})\s*[-_]\s*(\d{1,2})/', $titleClean, $mScore)) {
+                $data['localResult'] = (int)$mScore[1];
+                $data['visitorResult'] = (int)$mScore[2];
+                $titleClean = trim(str_replace($mScore[0], '', $titleClean));
+            }
+
+            // Separadors de partit (🆚, vs, vs., v.s., -, –)
+            $splitRegex = '/\s*(?:🆚|vs\.|v\.s\.|vs|–|-)\s*/iu';
+            $parts = preg_split($splitRegex, $titleClean);
+
+            if (count($parts) >= 2) {
+                $data['local'] = trim($parts[0]);
+                $data['visitor'] = trim($parts[1]);
+            } elseif (count($parts) === 1 && !empty($channelName)) {
+                $data['local'] = $channelName;
+                $data['visitor'] = trim($parts[0]);
+            }
+        }
+
+        // 3. Data a la descripció o títol (ex: 03/05/2026, 12/12/2021 o 02-11)
+        if (preg_match('/(\d{1,2}[\/\-]\d{1,2}(?:[\/\-]\d{2,4})?)/', $description . ' ' . $title, $mDate)) {
+            $data['date'] = $mDate[1];
+        }
+
+        // 4. Jornada (ex: Jornada 13 o JORNADA 8)
+        if (preg_match('/jornada\s*(\d+)/iu', $title . ' ' . $description, $mRound)) {
+            $data['round'] = (int)$mRound[1];
+        }
+
+        return $data;
     }
 }

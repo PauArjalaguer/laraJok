@@ -15,7 +15,7 @@ class MatchVideosToMatchesCommand extends Command
      */
     protected $signature = 'videos:match-to-acta 
                             {--limit=300 : Limit de videos a processar} 
-                            {--max-tries=1 : Nombre maxim de reintents per video abans de descartar-lo} 
+                            {--max-tries=5 : Nombre maxim de reintents per video abans de descartar-lo} 
                             {--reset-tries : Reinicia el comptador de reintents de tots els videos pendents} 
                             {--id= : ID de video concret a processar}';
 
@@ -65,8 +65,8 @@ class MatchVideosToMatchesCommand extends Command
                 });
             }
 
-            $videos = $query->orderBy('published_at', 'asc')
-                ->orderBy('id', 'asc')
+            $videos = $query->orderBy('published_at', 'desc')
+                ->orderBy('id', 'desc')
                 ->limit($limit)
                 ->get();
         }
