@@ -140,6 +140,34 @@
     @endif
 </div>
 
+<!-- Match Video (YouTube) -->
+@if(isset($matchVideo) && $matchVideo)
+<div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl p-5 md:p-8 shadow-xs font-display mb-6">
+    <div class="flex items-center justify-between gap-3 border-b border-stone-100 dark:border-stone-800 pb-4 mb-5">
+        <div class="flex items-center gap-2.5">
+            <span class="w-8 h-8 rounded-xl bg-red-600/10 text-red-600 flex items-center justify-center text-sm font-black shadow-xs">
+                <i class="fa-brands fa-youtube"></i>
+            </span>
+            <div>
+                <h3 class="text-base md:text-lg font-black text-stone-900 dark:text-white tracking-tight">
+                    Vídeo del Partit
+                </h3>
+                <p class="text-[11px] font-semibold text-stone-400 dark:text-stone-500">
+                    {{ $matchVideo->title }}
+                </p>
+            </div>
+        </div>
+        <a href="{{ $matchVideo->url }}" target="_blank" class="hallmark-stamp bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/60 text-[10px] uppercase font-black tracking-wider flex items-center gap-1.5 py-1 px-2.5 hover:bg-red-600 hover:text-white transition-all">
+            <i class="fa-brands fa-youtube"></i> Veure a YouTube
+        </a>
+    </div>
+
+    <div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-sm bg-black">
+        <iframe class="w-full h-full" src="https://www.youtube.com/embed/{{ $matchVideo->youtube_id }}" title="{{ $matchVideo->title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+</div>
+@endif
+
 <!-- Match Table Partial -->
 <div class="w-full mb-6">
     @if($matchGetInfoById->count()>1)

@@ -129,7 +129,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-3.5">
             @foreach($videos as $video)
                 <div class="group bg-white dark:bg-[#121215] border border-stone-200/80 dark:border-stone-800/90 rounded-xl overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer"
-                     onclick="openVideoModal('{{ $video->youtube_id }}', '{{ addslashes($video->title) }}')">
+                     onclick="openVideoModal('{{ $video->youtube_id }}', '{{ addslashes($video->title) }}', '{{ $video->idMatch ?? '' }}')">
                     
                     <!-- Thumbnail Container -->
                     <div class="relative aspect-video bg-stone-900 overflow-hidden">
@@ -153,6 +153,16 @@
                                 <span class="truncate max-w-[100px]">{{ $video->channel->name }}</span>
                             </div>
                         @endif
+
+                        <!-- Badge Veure Acta sobre la miniatura -->
+                        @if($video->idMatch)
+                            <a href="/acta/{{ $video->idMatch }}/{{ urlencode($video->title) }}" 
+                               onclick="event.stopPropagation();" 
+                               class="absolute top-2 right-2 z-10 bg-primary text-primary-text font-black px-2 py-0.5 rounded-md text-[9px] uppercase tracking-wider flex items-center gap-1 shadow-md hover:brightness-110 transition-all border border-black/10" title="Veure acta oficial">
+                                <i class="fa-solid fa-file-lines text-[8px]"></i>
+                                <span>Acta</span>
+                            </a>
+                        @endif
                     </div>
 
                     <!-- Card Body -->
@@ -161,15 +171,26 @@
                             {{ $video->title }}
                         </h3>
 
-                        <div class="flex items-center justify-between text-[10px] text-stone-400 dark:text-stone-500 font-bold pt-1.5 border-t border-stone-100 dark:border-stone-800/80">
-                            <span class="flex items-center gap-1">
-                                <i class="fa-regular fa-clock"></i>
-                                {{ $video->published_at ? $video->published_at->format('d/m/Y') : '' }}
-                            </span>
-                            <span class="text-red-600 dark:text-red-400 font-extrabold flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
-                                <span>Veure</span>
-                                <i class="fa-solid fa-chevron-right text-[8px]"></i>
-                            </span>
+                        <div class="space-y-2 pt-1.5 border-t border-stone-100 dark:border-stone-800/80">
+                            <div class="flex items-center justify-between text-[10px] text-stone-400 dark:text-stone-500 font-bold">
+                                <span class="flex items-center gap-1">
+                                    <i class="fa-regular fa-clock"></i>
+                                    {{ $video->published_at ? $video->published_at->format('d/m/Y') : '' }}
+                                </span>
+                                <span class="text-red-600 dark:text-red-400 font-extrabold flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
+                                    <span>Veure</span>
+                                    <i class="fa-solid fa-chevron-right text-[8px]"></i>
+                                </span>
+                            </div>
+
+                            @if($video->idMatch)
+                                <a href="/acta/{{ $video->idMatch }}/{{ urlencode($video->title) }}" 
+                                   onclick="event.stopPropagation();"
+                                   class="w-full py-1 px-2 rounded-lg bg-primary/10 hover:bg-primary text-primary hover:text-primary-text font-black text-[10px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all border border-primary/20 shadow-2xs">
+                                    <i class="fa-solid fa-file-lines text-[9px]"></i>
+                                    <span>Veure Acta</span>
+                                </a>
+                            @endif
                         </div>
                     </div>
 
@@ -255,11 +276,19 @@
     <div class="relative w-full max-w-4xl bg-stone-900 border border-stone-800 rounded-3xl overflow-hidden shadow-2xl">
         
         <!-- Modal Header -->
-        <div class="flex items-center justify-between p-4 px-6 border-b border-stone-800 bg-stone-950">
-            <h3 id="videoModalTitle" class="text-xs md:text-sm font-black text-white truncate pr-4"></h3>
-            <button onclick="closeVideoModal()" class="w-8 h-8 rounded-full bg-stone-800 text-stone-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer" aria-label="Tancar">
-                <i class="fa-solid fa-xmark text-sm"></i>
-            </button>
+        <div class="flex items-center justify-between p-4 px-6 border-b border-stone-800 bg-stone-950 gap-3">
+            <h3 id="videoModalTitle" class="text-xs md:text-sm font-black text-white truncate"></h3>
+            
+            <div class="flex items-center gap-2.5 flex-shrink-0">
+                <a id="videoModalActaBtn" href="#" class="hidden items-center gap-1.5 px-3 py-1 rounded-xl bg-primary text-primary-text font-black text-[11px] uppercase tracking-wider shadow-sm hover:brightness-110 transition-all">
+                    <i class="fa-solid fa-file-lines text-xs"></i>
+                    <span>Veure Acta</span>
+                </a>
+
+                <button onclick="closeVideoModal()" class="w-8 h-8 rounded-full bg-stone-800 text-stone-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer" aria-label="Tancar">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
         </div>
 
         <!-- Video Player iFrame Container (16:9) -->
@@ -270,14 +299,25 @@
 </div>
 
 <script>
-    function openVideoModal(youtubeId, title) {
+    function openVideoModal(youtubeId, title, matchId) {
         const modal = document.getElementById('videoModal');
         const iframe = document.getElementById('videoModalIframe');
         const titleEl = document.getElementById('videoModalTitle');
+        const actaBtn = document.getElementById('videoModalActaBtn');
 
         if (modal && iframe) {
             titleEl.textContent = title || 'Vídeo';
             iframe.src = 'https://www.youtube.com/embed/' + youtubeId + '?autoplay=1';
+            
+            if (matchId && matchId !== '') {
+                actaBtn.href = '/acta/' + matchId + '/' + encodeURIComponent(title || 'partit');
+                actaBtn.classList.remove('hidden');
+                actaBtn.classList.add('inline-flex');
+            } else {
+                actaBtn.classList.add('hidden');
+                actaBtn.classList.remove('inline-flex');
+            }
+
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             document.body.style.overflow = 'hidden';

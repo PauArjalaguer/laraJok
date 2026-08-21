@@ -42,13 +42,15 @@ class CompeticioController extends Controller
     {
         $id = $request->id;
         $matchGetInfoById = Matches::matchGetInfoById($id);
+        $matchVideo = \App\Models\Video::where('idMatch', $id)->first();
 
         return view(
             'acta',
             [
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
                 'userSavedData' => User::userSavedData(),
-                'matchGetInfoById' => $matchGetInfoById
+                'matchGetInfoById' => $matchGetInfoById,
+                'matchVideo' => $matchVideo
             ]
         );
     }

@@ -42,7 +42,7 @@ class AiService
         $matchDate = $header->matchDate ?? '';
         $referee = trim($header->referee ?? '');
 
-        // Comprovem si és una categoria formativa (Benjamí / Prebenjamí / Minibenjamí / Escola)
+        // Comprovem si és una categoria formativa (Aleví / Benjamí / Prebenjamí / Minibenjamí / Escola)
         $searchStrings = [
             $header->categoryName ?? '',
             $header->leagueName ?? '',
@@ -51,7 +51,7 @@ class AiService
             $header->teamName2 ?? ''
         ];
         $combinedText = mb_strtolower(implode(' ', $searchStrings), 'UTF-8');
-        $isFormativeCategory = (bool)preg_match('/(benjam|prebenjam|minibenjam|escola|iniciaci)/iu', $combinedText);
+        $isFormativeCategory = (bool)preg_match('/(alevi|aleví|alevin|benjam|prebenjam|minibenjam|escola|iniciaci)/iu', $combinedText);
 
         // Detalls dels jugadors
         $localGoals = [];
@@ -112,7 +112,7 @@ class AiService
             (!empty($referee) ? "- Àrbitre/s: {$referee}\n" : "");
 
         if ($isFormativeCategory) {
-            $prompt .= "- Tipus de categoria: Categoria formativa (Benjamí / Prebenjamí). NO s'han d'esmentar golejadors individuals, ja que a l'acta s'assignen tots a un únic jugador.\n";
+            $prompt .= "- Tipus de categoria: Categoria formativa (Aleví / Benjamí / Prebenjamí). NO s'han d'esmentar golejadors individuals, ja que a l'acta s'assignen tots a un únic jugador.\n";
         } else {
             $prompt .= "- Gols de {$localTeam}: " . (!empty($localGoals) ? implode(', ', $localGoals) : "Cap gol registrat a l'acta") . "\n" .
                 "- Gols de {$visitorTeam}: " . (!empty($visitorGoals) ? implode(', ', $visitorGoals) : "Cap gol registrat a l'acta") . "\n";
@@ -312,7 +312,7 @@ class AiService
 
                     if (!empty($text)) {
                         $cleaned = trim($text);
-                        $cleaned = preg_replace('/^[^\w\*#]+/u', '', $cleaned);
+                        $cleaned = preg_replace('/^[^\w\*#\{\[]+/u', '', $cleaned);
                         return $cleaned;
                     }
                 }
@@ -427,5 +427,219 @@ class AiService
 
         Log::error("OpenRouter API Error: " . $response->status() . " - " . $response->body());
         return null;
+    }
+
+    /**
+     * Identifica el partit (idMatch) d'un vídeo de YouTube a partir del títol, descripció i miniatura.
+     */
+    public function matchVideoToMatch($video): ?int
+    {
+        $title = $video->title ?? '';
+        $description = $video->description ?? '';
+        $publishedAt = $video->published_at ? \Carbon\Carbon::parse($video->published_at) : null;
+        $thumbnailUrl = $video->thumbnail_url ?? '';
+
+        // 1. Extracció de dades del títol i descripció
+        $prompt = "Analitza el següent títol i descripció d'un vídeo de YouTube d'un partit d'hoquei patins:\n\n" .
+            "TÍTOL: {$title}\n" .
+            "DESCRIPCIÓ: {$description}\n" .
+            ($publishedAt ? "DATA PUBLICACIÓ: {$publishedAt->format('Y-m-d')}\n" : "") .
+            "Extreu les dades en JSON pur (sense markdown) amb els camps:\n" .
+            "- local (nom equip local)\n" .
+            "- visitor (nom equip visitant)\n" .
+            "- localResult (int o null)\n" .
+            "- visitorResult (int o null)\n" .
+            "- round (int o null)\n" .
+            "- group (string o null)\n" .
+            "- date (string format YYYY-MM-DD o MM-DD o null)";
+
+        $json = $this->generateText($prompt, "Retorna ÚNICAMENT un objecte JSON sense comentaris ni markdown.");
+        $extracted = $this->parseJsonSafe($json);
+
+        // 2. Si no hi ha categoria/grup ni resultat i tenim thumbnail, fem servir visió multimodal
+        if ((empty($extracted['group']) && empty($extracted['localResult'])) && !empty($thumbnailUrl)) {
+            $visionData = $this->analyzeThumbnailWithVision($thumbnailUrl);
+            if (!empty($visionData)) {
+                $extracted = array_merge($extracted ?? [], array_filter($visionData));
+            }
+        }
+
+        if (empty($extracted['local']) || empty($extracted['visitor'])) {
+            return null;
+        }
+
+        return $this->findMatchInDatabase($extracted, $publishedAt);
+    }
+
+    /**
+     * Analitza una miniatura amb la visió multimodal de Gemini
+     */
+    public function analyzeThumbnailWithVision(string $thumbnailUrl): ?array
+    {
+        $apiKey = config('services.ai.gemini.api_key');
+        if (empty($apiKey)) return null;
+
+        try {
+            $imgData = @file_get_contents($thumbnailUrl);
+            if (!$imgData) return null;
+
+            $base64 = base64_encode($imgData);
+            $modelsToTry = ['gemini-3.6-flash', 'gemini-3.7-flash', 'gemini-3.5-flash'];
+
+            foreach ($modelsToTry as $m) {
+                $url = "https://generativelanguage.googleapis.com/v1beta/models/{$m}:generateContent?key={$apiKey}";
+                $payload = [
+                    'contents' => [
+                        [
+                            'parts' => [
+                                [
+                                    'text' => "Llegeix el text visible a la miniatura d'aquest partit d'hoquei patins. " .
+                                              "Extreu en format JSON pur: local (equip local), visitor (equip visitant), group (categoria esportiva com Tercera Catalana, Juvenil, etc.), round (jornada si n'hi ha)."
+                                ],
+                                [
+                                    'inline_data' => [
+                                        'mime_type' => 'image/jpeg',
+                                        'data' => $base64
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ];
+
+                $res = Http::timeout(25)->post($url, $payload);
+                if ($res->successful()) {
+                    $parts = $res->json()['candidates'][0]['content']['parts'] ?? [];
+                    $text = '';
+                    foreach ($parts as $p) {
+                        if (empty($p['thought'])) {
+                            $text .= $p['text'] ?? '';
+                        }
+                    }
+                    return $this->parseJsonSafe($text);
+                }
+            }
+        } catch (\Exception $e) {
+            Log::warning("Error analitzant thumbnail: " . $e->getMessage());
+        }
+
+        return null;
+    }
+
+    /**
+     * Cerca el partit coincident a la base de dades
+     */
+    protected function findMatchInDatabase(array $extracted, ?\Carbon\Carbon $publishedAt): ?int
+    {
+        $local = trim($extracted['local'] ?? '');
+        $visitor = trim($extracted['visitor'] ?? '');
+
+        // Netejem paraules genèriques per cercar millor
+        $cleanWords = function($name) {
+            $cleaned = preg_replace('/(club|patí|pati|ch|cp|ce|hc|esportiu|hoquei|de|del|d\')/iu', ' ', $name);
+            $words = array_filter(explode(' ', trim($cleaned)));
+            return !empty($words) ? implode(' ', $words) : $name;
+        };
+
+        $localKey = $cleanWords($local);
+        $visKey = $cleanWords($visitor);
+
+        $query = \Illuminate\Support\Facades\DB::table('matches')
+            ->join('teams as t1', 'matches.idLocal', '=', 't1.idTeam')
+            ->join('teams as t2', 'matches.idVisitor', '=', 't2.idTeam')
+            ->leftJoin('phases', 'phases.idGroup', '=', 'matches.idGroup')
+            ->leftJoin('leagues', 'matches.idLeague', '=', 'leagues.idLeague')
+            ->leftJoin('categories', 'leagues.idCategory', '=', 'categories.idCategory')
+            ->select('matches.idMatch', 't1.teamName as local', 't2.teamName as visitor', 'localResult', 'visitorResult', 'matchDate', 'matches.idRound', 'phases.groupName', 'categories.categoryName', 'leagues.leagueName');
+
+        // Condició d'equips
+        $query->where(function($q) use ($localKey, $visKey) {
+            $q->where(function($sub) use ($localKey, $visKey) {
+                $sub->where('t1.teamName', 'like', "%{$localKey}%")
+                    ->where('t2.teamName', 'like', "%{$visKey}%");
+            })->orWhere(function($sub) use ($localKey, $visKey) {
+                $sub->where('t1.teamName', 'like', "%{$visKey}%")
+                    ->where('t2.teamName', 'like', "%{$localKey}%");
+            });
+        });
+
+        // Condició de jornada si està disponible
+        if (!empty($extracted['round'])) {
+            $query->where('matches.idRound', (int)$extracted['round']);
+        }
+
+        // Condició de resultat si està disponible
+        if (isset($extracted['localResult']) && isset($extracted['visitorResult']) && $extracted['localResult'] !== null && $extracted['visitorResult'] !== null) {
+            $lr = (int)$extracted['localResult'];
+            $vr = (int)$extracted['visitorResult'];
+            $query->where(function($q) use ($lr, $vr) {
+                $q->where(function($sub) use ($lr, $vr) {
+                    $sub->where('localResult', $lr)->where('visitorResult', $vr);
+                })->orWhere(function($sub) use ($lr, $vr) {
+                    $sub->where('localResult', $vr)->where('visitorResult', $lr);
+                });
+            });
+        }
+
+        // Condició de categoria si s'ha extret
+        if (!empty($extracted['group'])) {
+            $groupKey = trim($extracted['group']);
+            // Agafem la primera paraula clau de categoria (ex: Juvenil, Benjamí, Tercera...)
+            if (preg_match('/(tercera|segona|primera|juvenil|infantil|alevi|aleví|benjami|benjamí|prebenjami|prebenjamí|ok|plata|or)/iu', $groupKey, $mCat)) {
+                $cat = $mCat[1];
+                $query->where(function($q) use ($cat) {
+                    $q->where('phases.groupName', 'like', "%{$cat}%")
+                      ->orWhere('categories.categoryName', 'like', "%{$cat}%")
+                      ->orWhere('leagues.leagueName', 'like', "%{$cat}%");
+                });
+            }
+        }
+
+        // Condició de data si el vídeo té data de publicació (busquem en un marge de +/- 15 dies)
+        if ($publishedAt) {
+            $startDate = $publishedAt->copy()->subDays(15)->format('Y-m-d');
+            $endDate = $publishedAt->copy()->addDays(5)->format('Y-m-d');
+            $query->whereBetween('matches.matchDate', [$startDate, $endDate]);
+        }
+
+        $candidates = $query->orderBy('matches.matchDate', 'desc')->get();
+
+        if ($candidates->count() === 1) {
+            return $candidates->first()->idMatch;
+        }
+
+        // Si hi ha múltiples candidats i tenim data exacta
+        if ($candidates->count() > 1 && $publishedAt) {
+            // Busquem el més proper en data anterior a la publicació
+            foreach ($candidates as $c) {
+                if ($c->matchDate <= $publishedAt->format('Y-m-d')) {
+                    return $c->idMatch;
+                }
+            }
+            return $candidates->first()->idMatch;
+        }
+
+        return null;
+    }
+
+    /**
+     * Neteja i parseja JSON de forma segura
+     */
+    protected function parseJsonSafe(?string $text): ?array
+    {
+        if (empty($text)) return null;
+
+        $clean = preg_replace('/^```(?:json)?\s*/i', '', trim($text));
+        $clean = preg_replace('/\s*```$/i', '', $clean);
+        $clean = preg_replace('/^[^\w\*#\{\[]+/u', '', $clean);
+
+        $jsonStart = strpos($clean, '{');
+        $jsonEnd = strrpos($clean, '}');
+        if ($jsonStart !== false && $jsonEnd !== false) {
+            $clean = substr($clean, $jsonStart, $jsonEnd - $jsonStart + 1);
+        }
+
+        $data = json_decode($clean, true);
+        return is_array($data) ? $data : null;
     }
 }

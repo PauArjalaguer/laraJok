@@ -13,6 +13,8 @@ class Video extends Model
 
     protected $fillable = [
         'video_channel_id',
+        'idMatch',
+        'match_tries',
         'youtube_id',
         'title',
         'description',
@@ -24,6 +26,11 @@ class Video extends Model
     protected $casts = [
         'published_at' => 'datetime',
     ];
+
+    public function match()
+    {
+        return $this->belongsTo(Matches::class, 'idMatch', 'idMatch');
+    }
 
     public function channel()
     {
