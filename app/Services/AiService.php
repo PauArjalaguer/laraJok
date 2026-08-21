@@ -439,18 +439,29 @@ class AiService
         $publishedAt = $video->published_at ? \Carbon\Carbon::parse($video->published_at) : null;
         $thumbnailUrl = $video->thumbnail_url ?? '';
 
+        $channelName = '';
+        if (isset($video->channel) && $video->channel) {
+            $channelName = $video->channel->name ?? '';
+        } elseif (!empty($video->video_channel_id)) {
+            $channelName = \App\Models\VideoChannel::where('id', $video->video_channel_id)->value('name') ?? '';
+        }
+
+        $channelInfo = !empty($channelName) ? "CANAL DE YOUTUBE: {$channelName}\n" : "";
+
         // 1. Extracció de dades del títol i descripció
         $prompt = "Analitza el següent títol i descripció d'un vídeo de YouTube d'un partit d'hoquei patins:\n\n" .
+            $channelInfo .
             "TÍTOL: {$title}\n" .
             "DESCRIPCIÓ: {$description}\n" .
             ($publishedAt ? "DATA PUBLICACIÓ: {$publishedAt->format('Y-m-d')}\n" : "") .
+            (!empty($channelName) ? "NOTA: Si al títol només s'esmenta una categoria i un sol equip rival (ex: 'FEM 13 2_5 CH CALDES' o 'Júnior vs Vic'), tingues en compte que el canal pertany al club del canal ('{$channelName}'), de manera que l'altre equip és aquest mateix club.\n\n" : "\n") .
             "Extreu les dades en JSON pur (sense markdown) amb els camps:\n" .
             "- local (nom equip local)\n" .
             "- visitor (nom equip visitant)\n" .
             "- localResult (int o null)\n" .
             "- visitorResult (int o null)\n" .
             "- round (int o null)\n" .
-            "- group (string o null)\n" .
+            "- group (string o null, ex: FEM 13, Benjamí, etc.)\n" .
             "- date (string format YYYY-MM-DD o MM-DD o null)";
 
         $json = $this->generateText($prompt, "Retorna ÚNICAMENT un objecte JSON sense comentaris ni markdown.");
@@ -461,6 +472,15 @@ class AiService
             $visionData = $this->analyzeThumbnailWithVision($thumbnailUrl);
             if (!empty($visionData)) {
                 $extracted = array_merge($extracted ?? [], array_filter($visionData));
+            }
+        }
+
+        // 3. Fallback d'equip utilitzant el canal si només s'ha detectat un equip
+        if (!empty($channelName)) {
+            if (empty($extracted['local']) && !empty($extracted['visitor'])) {
+                $extracted['local'] = $channelName;
+            } elseif (!empty($extracted['local']) && empty($extracted['visitor'])) {
+                $extracted['visitor'] = $channelName;
             }
         }
 
@@ -534,15 +554,14 @@ class AiService
         $local = trim($extracted['local'] ?? '');
         $visitor = trim($extracted['visitor'] ?? '');
 
-        // Netejem paraules genèriques per cercar millor
-        $cleanWords = function($name) {
+        $extractMainClubWord = function($name) {
             $cleaned = preg_replace('/(club|patí|pati|ch|cp|ce|hc|esportiu|hoquei|de|del|d\')/iu', ' ', $name);
-            $words = array_filter(explode(' ', trim($cleaned)));
-            return !empty($words) ? implode(' ', $words) : $name;
+            $words = array_values(array_filter(explode(' ', trim($cleaned))));
+            return !empty($words) ? $words[0] : $name;
         };
 
-        $localKey = $cleanWords($local);
-        $visKey = $cleanWords($visitor);
+        $localKey = $extractMainClubWord($local);
+        $visKey = $extractMainClubWord($visitor);
 
         $query = \Illuminate\Support\Facades\DB::table('matches')
             ->join('teams as t1', 'matches.idLocal', '=', 't1.idTeam')
@@ -552,7 +571,7 @@ class AiService
             ->leftJoin('categories', 'leagues.idCategory', '=', 'categories.idCategory')
             ->select('matches.idMatch', 't1.teamName as local', 't2.teamName as visitor', 'localResult', 'visitorResult', 'matchDate', 'matches.idRound', 'phases.groupName', 'categories.categoryName', 'leagues.leagueName');
 
-        // Condició d'equips
+        // Condició d'equips flexible
         $query->where(function($q) use ($localKey, $visKey) {
             $q->where(function($sub) use ($localKey, $visKey) {
                 $sub->where('t1.teamName', 'like', "%{$localKey}%")
@@ -595,8 +614,27 @@ class AiService
             }
         }
 
-        // Condició de data si el vídeo té data de publicació (busquem en un marge de +/- 15 dies)
-        if ($publishedAt) {
+        // Condició de data exacta si s'ha extret de la descripció/títol
+        if (!empty($extracted['date'])) {
+            $parsedMatchDate = null;
+            try {
+                $rawDate = trim($extracted['date']);
+                // Si només té DD/MM o DD-MM i tenim l'any de publicació
+                if (preg_match('/^(\d{1,2})[\/\-](\d{1,2})$/', $rawDate, $dm)) {
+                    $year = $publishedAt ? $publishedAt->year : date('Y');
+                    $parsedMatchDate = sprintf('%04d-%02d-%02d', $year, $dm[2], $dm[1]);
+                } elseif (preg_match('/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/', $rawDate, $ymd)) {
+                    $parsedMatchDate = sprintf('%04d-%02d-%02d', $ymd[1], $ymd[2], $ymd[3]);
+                } elseif (preg_match('/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/', $rawDate, $dmy)) {
+                    $parsedMatchDate = sprintf('%04d-%02d-%02d', $dmy[3], $dmy[2], $dmy[1]);
+                }
+            } catch (\Exception $e) {}
+
+            if ($parsedMatchDate) {
+                $query->where('matches.matchDate', $parsedMatchDate);
+            }
+        } elseif ($publishedAt) {
+            // Si no hi ha data de partit especificada, busquem en un marge de +/- 15 dies respecte a la publicació
             $startDate = $publishedAt->copy()->subDays(15)->format('Y-m-d');
             $endDate = $publishedAt->copy()->addDays(5)->format('Y-m-d');
             $query->whereBetween('matches.matchDate', [$startDate, $endDate]);

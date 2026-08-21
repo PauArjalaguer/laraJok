@@ -42,7 +42,7 @@ class MatchVideosToMatchesCommand extends Command
         }
 
         if ($specificId) {
-            $videos = Video::where('id', $specificId)->get();
+            $videos = Video::with('channel')->where('id', $specificId)->get();
         } else {
             // Obtenim la data del partit mes antic a la base de dades per no processar videos anteriors
             $oldestMatchDate = \Illuminate\Support\Facades\DB::table('matches')
@@ -54,7 +54,8 @@ class MatchVideosToMatchesCommand extends Command
             $minAllowedDate = $oldestMatchDate ? \Carbon\Carbon::parse($oldestMatchDate)->subDays(15)->format('Y-m-d') : null;
 
             // Nomes processem videos amb idMatch null, que no hagin superat el maxim de reintents i posteriors a la data minima
-            $query = Video::whereNull('idMatch')
+            $query = Video::with('channel')
+                ->whereNull('idMatch')
                 ->where('match_tries', '<', $maxTries);
 
             if ($minAllowedDate) {
