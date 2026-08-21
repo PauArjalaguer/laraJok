@@ -41,14 +41,73 @@ class CompeticioController extends Controller
     public static function acta(Request $request)
     {
         $id = $request->id;
+        $matchGetInfoById = Matches::matchGetInfoById($id);
+
         return view(
             'acta',
             [
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
                 'userSavedData' => User::userSavedData(),
-                'matchGetInfoById' => Matches::matchGetInfoById($id)
+                'matchGetInfoById' => $matchGetInfoById
             ]
         );
+    }
+
+    public function generarCronica(Request $request, $id)
+    {
+        $matchGetInfoById = Matches::matchGetInfoById($id);
+
+        if ($matchGetInfoById->isEmpty()) {
+            return response()->json(['success' => false, 'message' => 'Partit no trobat'], 404);
+        }
+
+        $first = $matchGetInfoById->first();
+
+        // 1. Si ja té crònica guardada, la retornem immediatament
+        if (!empty(trim($first->cronica ?? ''))) {
+            return response()->json([
+                'success' => true,
+                'cronica' => $first->cronica,
+                'html' => \Illuminate\Support\Str::markdown($first->cronica)
+            ]);
+        }
+
+        // 2. Comprovem si hi ha acta oficial disponible (més d'1 fila i amb dades de jugadors)
+        $hasActa = ($matchGetInfoById->count() > 1 && !empty($first->idPlayer));
+        $hasScore = ($first->localResult !== null && $first->localResult !== '' && $first->visitorResult !== null && $first->visitorResult !== '');
+
+        if (!$hasActa || !$hasScore) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No hi ha acta disponible o el partit no té resultat.'
+            ]);
+        }
+
+        // 3. Generem la crònica amb AiService
+        try {
+            $aiService = app(\App\Services\AiService::class);
+            $generatedCronica = $aiService->generateMatchChronicle($matchGetInfoById);
+
+            if (!empty($generatedCronica)) {
+                Matches::saveCronica($id, $generatedCronica);
+                return response()->json([
+                    'success' => true,
+                    'cronica' => $generatedCronica,
+                    'html' => \Illuminate\Support\Str::markdown($generatedCronica)
+                ]);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'No s\'ha pogut generar la crònica.'
+            ]);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Error generarCronica AJAX partit {$id}: " . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error intern del servidor.'
+            ], 500);
+        }
     }
     public static function llistat()
     {

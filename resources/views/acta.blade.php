@@ -141,7 +141,7 @@
 </div>
 
 <!-- Match Table Partial -->
-<div class="w-full">
+<div class="w-full mb-6">
     @if($matchGetInfoById->count()>1)
         @include('partials.acta_match_table', ['matchData' => $matchGetInfoById])
     @else
@@ -151,5 +151,108 @@
         </div>
     @endif
 </div>
+
+<!-- Match Chronicle (IA) sota la taula -->
+@php
+    $hasActa = ($matchGetInfoById->count() > 1 && !empty($matchGetInfoById[0]->idPlayer));
+    $hasCronica = !empty(trim($matchGetInfoById[0]->cronica ?? ''));
+@endphp
+
+@if($hasCronica)
+    <div id="cronica-card" class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl p-5 md:p-8 shadow-xs font-display mb-6">
+        <div class="flex items-center justify-between gap-3 border-b border-stone-100 dark:border-stone-800 pb-4 mb-5">
+            <div class="flex items-center gap-2.5">
+                <span class="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-sm font-black shadow-xs">
+                    <i class="fa-solid fa-newspaper"></i>
+                </span>
+                <div>
+                    <h3 class="text-base md:text-lg font-black text-stone-900 dark:text-white tracking-tight">
+                        Crònica del Partit
+                    </h3>
+                    <p class="text-[11px] font-semibold text-stone-400 dark:text-stone-500">
+                        Resum generat a partir de les dades oficials de l'acta
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="prose prose-stone dark:prose-invert max-w-none text-stone-700 dark:text-stone-300 text-sm md:text-base leading-relaxed font-sans [&>p]:mb-4 [&>h2]:text-lg [&>h2]:font-black [&>h2]:mb-2 [&>h3]:text-base [&>h3]:font-black [&>h3]:mb-2 [&>strong]:text-stone-900 dark:[&>strong]:text-white [&_a]:text-primary [&_a]:font-bold [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-stone-900 dark:hover:[&_a]:text-white transition-colors">
+            {!! Illuminate\Support\Str::markdown($matchGetInfoById[0]->cronica) !!}
+        </div>
+    </div>
+@elseif($hasActa)
+    <div id="cronica-card" class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl p-5 md:p-8 shadow-xs font-display mb-6">
+        <div class="flex items-center justify-between gap-3 border-b border-stone-100 dark:border-stone-800 pb-4 mb-5">
+            <div class="flex items-center gap-2.5">
+                <span class="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-sm font-black shadow-xs">
+                    <i class="fa-solid fa-newspaper"></i>
+                </span>
+                <div>
+                    <h3 class="text-base md:text-lg font-black text-stone-900 dark:text-white tracking-tight">
+                        Crònica del Partit
+                    </h3>
+                    <p class="text-[11px] font-semibold text-stone-400 dark:text-stone-500">
+                        Resum generat a partir de les dades oficials de l'acta
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estat de càrrega asíncrona -->
+        <div id="cronica-loading" class="flex flex-col items-center justify-center py-6 text-center text-stone-500 dark:text-stone-400">
+            <div class="inline-flex items-center gap-3 bg-stone-50 dark:bg-stone-850 border border-stone-200 dark:border-stone-700/80 rounded-2xl px-5 py-3 shadow-xs">
+                <i class="fa-solid fa-circle-notch fa-spin text-primary text-base"></i>
+                <span class="text-xs md:text-sm font-bold text-stone-700 dark:text-stone-200">
+                    S'està redactant la crònica del partit...
+                </span>
+            </div>
+        </div>
+
+        <!-- Contingut injectat un cop generat -->
+        <div id="cronica-content" class="hidden prose prose-stone dark:prose-invert max-w-none text-stone-700 dark:text-stone-300 text-sm md:text-base leading-relaxed font-sans [&>p]:mb-4 [&>h2]:text-lg [&>h2]:font-black [&>h2]:mb-2 [&>h3]:text-base [&>h3]:font-black [&>h3]:mb-2 [&>strong]:text-stone-900 dark:[&>strong]:text-white [&_a]:text-primary [&_a]:font-bold [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-stone-900 dark:hover:[&_a]:text-white transition-colors">
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            function loadCronica() {
+                const matchId = "{{ $matchGetInfoById[0]->idMatch }}";
+                if (!matchId) return;
+
+                fetch('/acta/' + matchId + '/generar-cronica')
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
+                    .then(data => {
+                        const loadingEl = document.getElementById('cronica-loading');
+                        const contentEl = document.getElementById('cronica-content');
+                        const cardEl = document.getElementById('cronica-card');
+
+                        if (data && data.success && data.html) {
+                            if (loadingEl) loadingEl.classList.add('hidden');
+                            if (contentEl) {
+                                contentEl.innerHTML = data.html;
+                                contentEl.classList.remove('hidden');
+                            }
+                        } else {
+                            if (cardEl) cardEl.remove();
+                        }
+                    })
+                    .catch(err => {
+                        console.warn("No s'ha pogut carregar la crònica:", err);
+                        const cardEl = document.getElementById('cronica-card');
+                        if (cardEl) cardEl.remove();
+                    });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', loadCronica);
+            } else {
+                loadCronica();
+            }
+        })();
+    </script>
+@endif
 @endsection
 

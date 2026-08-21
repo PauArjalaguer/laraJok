@@ -1,5 +1,5 @@
 <?php
-$mysqli = new mysqli("localhost", "root", "", "patinscat");
+$mysqli = new mysqli("localhost", "root", "", "patinscat_2");
 
 // Check connection
 if ($mysqli->connect_errno) {

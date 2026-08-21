@@ -35,4 +35,24 @@ return [
         'api_key' => env('YOUTUBE_API_KEY'),
     ],
 
+    'ai' => [
+        'provider' => env('AI_PROVIDER', 'gemini'),
+        'gemini' => [
+            'api_key' => env('GEMINI_API_KEY'),
+            'model' => env('AI_MODEL', 'gemini-2.5-flash'),
+        ],
+        'groq' => [
+            'api_key' => env('GROQ_API_KEY'),
+            'model' => env('AI_MODEL', 'deepseek-r1-distill-llama-70b'),
+        ],
+        'deepseek' => [
+            'api_key' => env('DEEPSEEK_API_KEY'),
+            'model' => env('AI_MODEL', 'deepseek-chat'),
+        ],
+        'openrouter' => [
+            'api_key' => env('OPENROUTER_API_KEY'),
+            'model' => env('AI_MODEL', 'deepseek/deepseek-r1:free'),
+        ],
+    ],
+
 ];

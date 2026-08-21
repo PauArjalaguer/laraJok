@@ -275,6 +275,6 @@ limit 0,50
 ");
 
 while ($row = mysqli_fetch_array($result)) {
-    //echo $row['idLeague']." - ";
+    echo $row['idLeague']." - ";
     parseMatch($row['idMatch'], $row['idLeague'], $mysqli);
 }
