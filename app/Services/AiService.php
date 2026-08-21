@@ -432,7 +432,7 @@ class AiService
     /**
      * Identifica el partit (idMatch) d'un vídeo de YouTube a partir del títol, descripció i miniatura.
      */
-    public function matchVideoToMatch($video): ?int
+    public function matchVideoToMatch($video, array &$trace = []): ?int
     {
         $title = $video->title ?? '';
         $description = $video->description ?? '';
@@ -445,6 +445,19 @@ class AiService
         } elseif (!empty($video->video_channel_id)) {
             $channelName = \App\Models\VideoChannel::where('id', $video->video_channel_id)->value('name') ?? '';
         }
+
+        $trace = [
+            'video_id' => $video->id,
+            'title' => $title,
+            'channel' => $channelName,
+            'published_at' => $publishedAt ? $publishedAt->format('Y-m-d H:i') : null,
+            'vision_used' => false,
+            'extracted' => [],
+            'filters' => [],
+            'candidates' => [],
+            'selected_id' => null,
+            'status' => 'PENDING'
+        ];
 
         $channelInfo = !empty($channelName) ? "CANAL DE YOUTUBE: {$channelName}\n" : "";
 
@@ -471,6 +484,7 @@ class AiService
         if ((empty($extracted['group']) && empty($extracted['localResult'])) && !empty($thumbnailUrl)) {
             $visionData = $this->analyzeThumbnailWithVision($thumbnailUrl);
             if (!empty($visionData)) {
+                $trace['vision_used'] = true;
                 $extracted = array_merge($extracted ?? [], array_filter($visionData));
             }
         }
@@ -484,11 +498,19 @@ class AiService
             }
         }
 
+        $trace['extracted'] = $extracted ?? [];
+
         if (empty($extracted['local']) || empty($extracted['visitor'])) {
+            $trace['status'] = 'MISSING_TEAMS';
+            $trace['reason'] = "No s'han pogut identificar els dos equips del partit.";
             return null;
         }
 
-        return $this->findMatchInDatabase($extracted, $publishedAt);
+        $matchedId = $this->findMatchInDatabase($extracted, $publishedAt, $trace);
+        $trace['selected_id'] = $matchedId;
+        $trace['status'] = $matchedId ? 'MATCHED' : 'NO_MATCH_FOUND';
+
+        return $matchedId;
     }
 
     /**
@@ -549,7 +571,7 @@ class AiService
     /**
      * Cerca el partit coincident a la base de dades
      */
-    protected function findMatchInDatabase(array $extracted, ?\Carbon\Carbon $publishedAt): ?int
+    protected function findMatchInDatabase(array $extracted, ?\Carbon\Carbon $publishedAt, array &$trace = []): ?int
     {
         $local = trim($extracted['local'] ?? '');
         $visitor = trim($extracted['visitor'] ?? '');
@@ -562,6 +584,9 @@ class AiService
 
         $localKey = $extractMainClubWord($local);
         $visKey = $extractMainClubWord($visitor);
+
+        $trace['filters']['local_key'] = $localKey;
+        $trace['filters']['visitor_key'] = $visKey;
 
         $query = \Illuminate\Support\Facades\DB::table('matches')
             ->join('teams as t1', 'matches.idLocal', '=', 't1.idTeam')
@@ -584,13 +609,16 @@ class AiService
 
         // Condició de jornada si està disponible
         if (!empty($extracted['round'])) {
-            $query->where('matches.idRound', (int)$extracted['round']);
+            $r = (int)$extracted['round'];
+            $query->where('matches.idRound', $r);
+            $trace['filters']['round'] = $r;
         }
 
         // Condició de resultat si està disponible
         if (isset($extracted['localResult']) && isset($extracted['visitorResult']) && $extracted['localResult'] !== null && $extracted['visitorResult'] !== null) {
             $lr = (int)$extracted['localResult'];
             $vr = (int)$extracted['visitorResult'];
+            $trace['filters']['score'] = "{$lr}-{$vr}";
             $query->where(function($q) use ($lr, $vr) {
                 $q->where(function($sub) use ($lr, $vr) {
                     $sub->where('localResult', $lr)->where('visitorResult', $vr);
@@ -603,9 +631,9 @@ class AiService
         // Condició de categoria si s'ha extret
         if (!empty($extracted['group'])) {
             $groupKey = trim($extracted['group']);
-            // Agafem la primera paraula clau de categoria (ex: Juvenil, Benjamí, Tercera...)
-            if (preg_match('/(tercera|segona|primera|juvenil|infantil|alevi|aleví|benjami|benjamí|prebenjami|prebenjamí|ok|plata|or)/iu', $groupKey, $mCat)) {
+            if (preg_match('/(tercera|segona|primera|juvenil|infantil|alevi|aleví|benjami|benjamí|prebenjami|prebenjamí|fem|ok|plata|or)/iu', $groupKey, $mCat)) {
                 $cat = $mCat[1];
+                $trace['filters']['category_token'] = $cat;
                 $query->where(function($q) use ($cat) {
                     $q->where('phases.groupName', 'like', "%{$cat}%")
                       ->orWhere('categories.categoryName', 'like', "%{$cat}%")
@@ -619,7 +647,6 @@ class AiService
             $parsedMatchDate = null;
             try {
                 $rawDate = trim($extracted['date']);
-                // Si només té DD/MM o DD-MM i tenim l'any de publicació
                 if (preg_match('/^(\d{1,2})[\/\-](\d{1,2})$/', $rawDate, $dm)) {
                     $year = $publishedAt ? $publishedAt->year : date('Y');
                     $parsedMatchDate = sprintf('%04d-%02d-%02d', $year, $dm[2], $dm[1]);
@@ -631,16 +658,27 @@ class AiService
             } catch (\Exception $e) {}
 
             if ($parsedMatchDate) {
+                $trace['filters']['exact_date'] = $parsedMatchDate;
                 $query->where('matches.matchDate', $parsedMatchDate);
             }
         } elseif ($publishedAt) {
-            // Si no hi ha data de partit especificada, busquem en un marge de +/- 15 dies respecte a la publicació
             $startDate = $publishedAt->copy()->subDays(15)->format('Y-m-d');
             $endDate = $publishedAt->copy()->addDays(5)->format('Y-m-d');
+            $trace['filters']['date_range'] = "{$startDate} .. {$endDate}";
             $query->whereBetween('matches.matchDate', [$startDate, $endDate]);
         }
 
         $candidates = $query->orderBy('matches.matchDate', 'desc')->get();
+
+        foreach ($candidates as $c) {
+            $trace['candidates'][] = [
+                'idMatch' => $c->idMatch,
+                'match' => "{$c->local} ({$c->localResult}) - ({$c->visitorResult}) {$c->visitor}",
+                'date' => $c->matchDate,
+                'round' => $c->idRound,
+                'group' => $c->groupName
+            ];
+        }
 
         if ($candidates->count() === 1) {
             return $candidates->first()->idMatch;
@@ -648,7 +686,6 @@ class AiService
 
         // Si hi ha múltiples candidats i tenim data exacta
         if ($candidates->count() > 1 && $publishedAt) {
-            // Busquem el més proper en data anterior a la publicació
             foreach ($candidates as $c) {
                 if ($c->matchDate <= $publishedAt->format('Y-m-d')) {
                     return $c->idMatch;

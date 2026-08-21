@@ -84,37 +84,79 @@ class MatchVideosToMatchesCommand extends Command
         foreach ($videos as $index => $video) {
             $current = $index + 1;
             $triesCount = (int)$video->match_tries;
-            $this->line("[{$current}/{$total}] Analitzant Video #{$video->id} (intent {$triesCount}/{$maxTries}): '{$video->title}'...");
+            $channelLabel = $video->channel ? " (Canal: {$video->channel->name})" : "";
+            $this->line("\n==================================================");
+            $this->line("[{$current}/{$total}] Analitzant Video #{$video->id}: '{$video->title}'{$channelLabel}");
+
+            $trace = [];
 
             try {
-                $matchedId = $aiService->matchVideoToMatch($video);
+                $matchedId = $aiService->matchVideoToMatch($video, $trace);
+
+                // Mostrem el trace de la lògica pas a pas
+                $ext = $trace['extracted'] ?? [];
+                $extStr = [];
+                if (!empty($ext['local'])) $extStr[] = "Local: '{$ext['local']}'";
+                if (!empty($ext['visitor'])) $extStr[] = "Visitant: '{$ext['visitor']}'";
+                if (!empty($ext['group'])) $extStr[] = "Grup/Cat: '{$ext['group']}'";
+                if (isset($ext['localResult']) && $ext['localResult'] !== null) $extStr[] = "Resultat: {$ext['localResult']}-{$ext['visitorResult']}";
+                if (!empty($ext['round'])) $extStr[] = "Jornada: {$ext['round']}";
+                if (!empty($ext['date'])) $extStr[] = "Data: {$ext['date']}";
+
+                $this->comment("  ├─ [IA Extracció] " . (!empty($extStr) ? implode(' | ', $extStr) : "No s'han extret dades estructurades"));
+                if (!empty($trace['vision_used'])) {
+                    $this->comment("  ├─ [Visió Multimodal] S'ha analitzat la miniatura (thumbnail) per desambiguar la categoria.");
+                }
+
+                $fil = $trace['filters'] ?? [];
+                $filStr = [];
+                if (!empty($fil['local_key'])) $filStr[] = "local LIKE '%{$fil['local_key']}%'";
+                if (!empty($fil['visitor_key'])) $filStr[] = "visitor LIKE '%{$fil['visitor_key']}%'";
+                if (!empty($fil['exact_date'])) $filStr[] = "data: {$fil['exact_date']}";
+                if (!empty($fil['date_range'])) $filStr[] = "rang: {$fil['date_range']}";
+                if (!empty($fil['category_token'])) $filStr[] = "cat: '{$fil['category_token']}'";
+                if (!empty($fil['score'])) $filStr[] = "marcador: {$fil['score']}";
+
+                $this->comment("  ├─ [Cerca SQL] " . (!empty($filStr) ? implode(', ', $filStr) : "Sense filtres SQL suficients"));
+
+                $candidates = $trace['candidates'] ?? [];
+                $candCount = count($candidates);
+                $this->comment("  ├─ [Candidats BD] {$candCount} partits trobats a la base de dades:");
+                foreach ($candidates as $c) {
+                    $this->line("  │    • #{$c['idMatch']}: {$c['match']} | Data: {$c['date']} | Grup: {$c['group']}");
+                }
 
                 if ($matchedId) {
                     $video->update([
                         'idMatch' => $matchedId,
                         'match_tries' => $triesCount + 1
                     ]);
-                    $this->info("  -> VINCULAT EXITOSAMENT AMB PARTIT ID: {$matchedId}");
+                    $this->info("  └─ [ÈXIT] Vinculat automàticament amb el partit ID: #{$matchedId}");
                     $matchedCount++;
                 } else {
                     $video->increment('match_tries');
                     $newTries = $triesCount + 1;
                     if ($newTries >= $maxTries) {
-                        $this->warn("  -> No s'ha trobat partit coincident. Ha assolit el limit de {$maxTries} reintents (no es tornara a provar).");
+                        $this->warn("  └─ [DESCARTAT] No s'ha trobat coincidència unívoca. Ha assolit el límit de {$maxTries} intent/s.");
                     } else {
-                        $this->warn("  -> No s'ha trobat partit coincident. Reintents restants: " . ($maxTries - $newTries));
+                        $this->warn("  └─ [SENSE PARTIT] No s'ha trobat coincidència unívoca. Reintents restants: " . ($maxTries - $newTries));
                     }
                 }
+
+                \Illuminate\Support\Facades\Log::info("MatchVideoToActa Trace Video #{$video->id}", $trace);
+
             } catch (\Exception $e) {
                 $video->increment('match_tries');
-                $this->error("  -> Error analitzant video #{$video->id}: " . $e->getMessage());
+                $this->error("  └─ [ERROR] " . $e->getMessage());
+                \Illuminate\Support\Facades\Log::error("MatchVideoToActa Error Video #{$video->id}: " . $e->getMessage(), ['trace' => $trace]);
             }
 
             // Pausa de cortesia per respectar rate limits
             usleep(300000);
         }
 
-        $this->info("Proces completat: {$matchedCount} de {$total} videos vinculats a les seves actes.");
+        $this->line("\n==================================================");
+        $this->info("Procés completat: {$matchedCount} de {$total} vídeos vinculats a les seves actes.");
 
         return 0;
     }
