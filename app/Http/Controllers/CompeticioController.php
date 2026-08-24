@@ -44,15 +44,69 @@ class CompeticioController extends Controller
         $matchGetInfoById = Matches::matchGetInfoById($id);
         $matchVideo = \App\Models\Video::where('idMatch', $id)->first();
 
+        $weatherForecast = null;
+        if ($matchGetInfoById->isNotEmpty()) {
+            $header = $matchGetInfoById->first();
+            if (!empty($header->lat) && !empty($header->lon)) {
+                $weatherService = app(\App\Services\WeatherService::class);
+                $weatherForecast = $weatherService->getForecastForMatch($header->lat, $header->lon, $header->matchDate, $header->matchHour);
+            }
+        }
+
         return view(
             'acta',
             [
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
                 'userSavedData' => User::userSavedData(),
                 'matchGetInfoById' => $matchGetInfoById,
-                'matchVideo' => $matchVideo
+                'matchVideo' => $matchVideo,
+                'weatherForecast' => $weatherForecast
             ]
         );
+    }
+
+    public function generarGuiaPavello(Request $request, $idPlace)
+    {
+        $place = \App\Models\Pavellons::find($idPlace);
+
+        if (!$place) {
+            return response()->json(['success' => false, 'message' => 'Pavelló no trobat'], 404);
+        }
+
+        // 1. Si ja té la guia guardada, la retornem a l'instant
+        if (!empty($place->guide_info)) {
+            return response()->json([
+                'success' => true,
+                'guide' => $place->guide_info,
+                'html' => \Illuminate\Support\Str::markdown($place->guide_info)
+            ]);
+        }
+
+        // 2. Generem la guia amb la IA
+        try {
+            $aiService = app(\App\Services\AiService::class);
+            $localTeam = $request->get('localTeam', 'l\'equip local');
+            $guideMarkdown = $aiService->generatePavelloGuide($place, $localTeam);
+
+            if (!empty($guideMarkdown)) {
+                return response()->json([
+                    'success' => true,
+                    'guide' => $guideMarkdown,
+                    'html' => \Illuminate\Support\Str::markdown($guideMarkdown)
+                ]);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'No s\'ha pogut generar la guia del pavelló.'
+            ]);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Error generarGuiaPavello AJAX pavello {$idPlace}: " . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error intern del servidor.'
+            ], 500);
+        }
     }
 
     public function generarCronica(Request $request, $id)

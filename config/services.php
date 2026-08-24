@@ -39,11 +39,11 @@ return [
         'provider' => env('AI_PROVIDER', 'gemini'),
         'gemini' => [
             'api_key' => env('GEMINI_API_KEY'),
-            'model' => env('AI_MODEL', 'gemini-2.5-flash'),
+            'model' => env('AI_MODEL', 'gemini-3.1-flash-lite'),
         ],
         'groq' => [
             'api_key' => env('GROQ_API_KEY'),
-            'model' => env('AI_MODEL', 'deepseek-r1-distill-llama-70b'),
+            'model' => env('AI_MODEL', 'openai/gpt-oss-120b'),
         ],
         'deepseek' => [
             'api_key' => env('DEEPSEEK_API_KEY'),

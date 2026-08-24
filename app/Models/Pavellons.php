@@ -10,6 +10,17 @@ class Pavellons extends Model
 {
     use HasFactory;
     protected $table = 'places';
+    protected $primaryKey = 'idPlace';
+    public $timestamps = false;
+
+    protected $fillable = [
+        'idPlace',
+        'placeName',
+        'placeAddress',
+        'lat',
+        'lon',
+        'guide_info'
+    ];
 
     public function matches()
     {

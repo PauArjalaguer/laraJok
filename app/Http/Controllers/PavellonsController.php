@@ -9,6 +9,8 @@ use App\Models\Merchandisings;
 use App\Models\User;
 use App\Models\Matches;
 use App\Models\Pavellons;
+use App\Services\WeatherService;
+
 class PavellonsController extends Controller
 {
     public function index()
@@ -18,20 +20,35 @@ class PavellonsController extends Controller
             [
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
                 'userSavedData' => User::userSavedData(),
-                'pavellons' => Pavellons::whereNotNull('lat')->with('matches') ->get()
+                'pavellons' => Pavellons::whereNotNull('lat')->with('matches')->get()
             ]
         );
     }
-    public function detall($idPavello, $label)
+
+    public function detall($idPavello, $label = null)
     {
+        $pavello = Pavellons::findOrFail($idPavello);
+        $weatherService = app(WeatherService::class);
+
+        $weatherForecast = null;
+        if (!empty($pavello->lat) && !empty($pavello->lon)) {
+            $weatherForecast = $weatherService->getForecastForMatch(
+                (float)$pavello->lat,
+                (float)$pavello->lon,
+                date('Y-m-d'),
+                '18:00:00'
+            );
+        }
+
         return view(
             'pavello',
             [
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
                 'userSavedData' => User::userSavedData(),
-                'partits_pavello' => Matches::matchesListFromIdPavello($idPavello)
+                'pavello' => $pavello,
+                'partits_pavello' => Matches::matchesListFromIdPavello($idPavello),
+                'weatherForecast' => $weatherForecast
             ]
         );
     }
-
 }

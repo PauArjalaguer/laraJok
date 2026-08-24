@@ -119,21 +119,27 @@
             @endif
         </div>
 
-        <!-- Action Buttons (Pavelló & Acta) -->
-        @if(isset($match->lat) || $isPlayed)
-            <div class="flex items-center gap-2 mt-3 pt-1">
-                @if(isset($match->lat))
+        <!-- Action Buttons (+ Informació o Pavelló/Acta) -->
+        <div class="flex items-center gap-2 mt-3 pt-1">
+            @if(!$isPlayed)
+                <a href="/acta/{{$match->idMatch}}/{{urlencode($match->localTeam)}}-{{urlencode($match->visitorTeam)}}" class="group flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-stone-100 hover:bg-primary text-stone-800 hover:text-primary-text dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary dark:hover:text-primary-text font-display text-[11px] font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
+                    <i class="fa-solid fa-circle-info text-stone-500 group-hover:text-primary-text dark:text-white dark:group-hover:text-primary-text transition-colors"></i> + Informació
+                </a>
+            @else
+                @if(!empty($match->idPlace))
+                    <a href="/pavellons/{{ $match->idPlace }}/{{ urlencode($match->placeName ?? 'pavello') }}" class="group flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-stone-100 hover:bg-primary text-stone-800 hover:text-primary-text dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary dark:hover:text-primary-text font-display text-[11px] font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
+                        <i class="fa-solid fa-building text-stone-500 group-hover:text-primary-text dark:text-white dark:group-hover:text-primary-text transition-colors"></i> Pavelló
+                    </a>
+                @elseif(isset($match->lat))
                     <a href="{{ $mapUrl }}" target="_blank" class="group flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-stone-100 hover:bg-primary text-stone-800 hover:text-primary-text dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary dark:hover:text-primary-text font-display text-[11px] font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
                         <i class="fa-solid fa-location-dot text-stone-500 group-hover:text-primary-text dark:text-white dark:group-hover:text-primary-text transition-colors"></i> Pavelló
                     </a>
                 @endif
-                @if($isPlayed)
-                    <a href="/acta/{{$match->idMatch}}/{{urlencode($match->localTeam)}}-{{urlencode($match->visitorTeam)}}" class="group flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-stone-100 hover:bg-primary text-stone-800 hover:text-primary-text dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary dark:hover:text-primary-text font-display text-[11px] font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
-                        <i class="fa-solid fa-file-lines text-stone-500 group-hover:text-primary-text dark:text-white dark:group-hover:text-primary-text transition-colors"></i> Acta
-                    </a>
-                @endif
-            </div>
-        @endif
+                <a href="/acta/{{$match->idMatch}}/{{urlencode($match->localTeam)}}-{{urlencode($match->visitorTeam)}}" class="group flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-stone-100 hover:bg-primary text-stone-800 hover:text-primary-text dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-primary dark:hover:text-primary-text font-display text-[11px] font-extrabold uppercase tracking-wider rounded-full transition-all border border-stone-200/80 dark:border-stone-800 shadow-xs">
+                    <i class="fa-solid fa-file-lines text-stone-500 group-hover:text-primary-text dark:text-white dark:group-hover:text-primary-text transition-colors"></i> Acta
+                </a>
+            @endif
+        </div>
 
         <!-- Prediction Bar -->
         @if($match->idMatch > 1000000)

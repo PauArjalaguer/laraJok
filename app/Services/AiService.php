@@ -249,7 +249,7 @@ class AiService
     protected function callGemini(string $prompt, ?string $systemInstruction = null): ?string
     {
         $apiKey = config('services.ai.gemini.api_key');
-        $primaryModel = config('services.ai.gemini.model', 'gemini-3.5-flash');
+        $primaryModel = config('services.ai.gemini.model', 'gemini-3.1-flash-lite');
 
         if (empty($apiKey)) {
             Log::warning("AiService: No s'ha configurat la clau GEMINI_API_KEY.");
@@ -258,10 +258,11 @@ class AiService
 
         $modelsToTry = array_unique([
             $primaryModel,
-            'gemini-3.5-flash',
+            'gemini-3.1-flash-lite',
+            'gemini-flash-latest',
             'gemini-3.5-flash-lite',
-            'gemini-3.7-flash',
-            'gemini-3.6-flash'
+            'gemini-3.6-flash',
+            'gemini-3.5-flash'
         ]);
 
         foreach ($modelsToTry as $model) {
@@ -276,7 +277,7 @@ class AiService
                     ]
                 ],
                 'generationConfig' => [
-                    'temperature' => 0.3,
+                    'temperature' => 0.1,
                     'maxOutputTokens' => 3000,
                 ]
             ];
@@ -317,9 +318,14 @@ class AiService
                     }
                 }
 
+                if ($response->status() === 429) {
+                    $this->notifyAiError("Gemini ({$model})", "Límit de quotes excedit (HTTP 429): " . $response->body(), ['model' => $model]);
+                }
+
                 Log::warning("Gemini model {$model} no disponible ({$response->status()}), provant següent...");
             } catch (\Exception $ex) {
                 Log::warning("Gemini error amb {$model}: " . $ex->getMessage());
+                $this->notifyAiError("Gemini Exception ({$model})", $ex->getMessage(), ['model' => $model]);
             }
         }
 
@@ -327,16 +333,24 @@ class AiService
     }
 
     /**
-     * Crida a Groq Cloud
+     * Crida a Groq Cloud (amb suport multimodels i fallback automàtic)
      */
     protected function callGroq(string $prompt, ?string $systemInstruction = null): ?string
     {
         $apiKey = config('services.ai.groq.api_key');
-        $model = config('services.ai.groq.model', 'deepseek-r1-distill-llama-70b');
+        $primaryModel = config('services.ai.groq.model', 'openai/gpt-oss-120b');
 
         if (empty($apiKey)) {
+            Log::warning("AiService: No s'ha configurat la clau GROQ_API_KEY.");
             return null;
         }
+
+        $modelsToTry = array_unique([
+            $primaryModel,
+            'openai/gpt-oss-120b',
+            'openai/gpt-oss-20b',
+            'qwen/qwen3.6-27b'
+        ]);
 
         $messages = [];
         if (!empty($systemInstruction)) {
@@ -344,20 +358,38 @@ class AiService
         }
         $messages[] = ['role' => 'user', 'content' => $prompt];
 
-        $response = Http::timeout(30)
-            ->withToken($apiKey)
-            ->post("https://api.groq.com/openai/v1/chat/completions", [
-                'model' => $model,
-                'messages' => $messages,
-                'temperature' => 0.2,
-                'max_tokens' => 800,
-            ]);
+        foreach ($modelsToTry as $model) {
+            try {
+                $response = Http::timeout(30)
+                    ->withToken($apiKey)
+                    ->post("https://api.groq.com/openai/v1/chat/completions", [
+                        'model' => $model,
+                        'messages' => $messages,
+                        'temperature' => 0.0,
+                        'max_tokens' => 3000,
+                    ]);
 
-        if ($response->successful()) {
-            return trim($response->json()['choices'][0]['message']['content'] ?? '');
+                if ($response->successful()) {
+                    $content = $response->json()['choices'][0]['message']['content'] ?? '';
+                    // Si el model inclou etiquetes <think>...</think>, les retirem
+                    $cleaned = preg_replace('/<think>.*?<\/think>/s', '', $content);
+                    $cleaned = trim($cleaned);
+                    if (!empty($cleaned)) {
+                        return $cleaned;
+                    }
+                }
+
+                if ($response->status() === 429) {
+                    $this->notifyAiError("Groq ({$model})", "Límit de peticions excedit: " . $response->body(), ['model' => $model]);
+                }
+
+                Log::warning("Groq model {$model} no disponible ({$response->status()}), provant següent...");
+            } catch (\Exception $ex) {
+                Log::warning("Groq error amb {$model}: " . $ex->getMessage());
+                $this->notifyAiError("Groq Exception ({$model})", $ex->getMessage(), ['model' => $model]);
+            }
         }
 
-        Log::error("Groq API Error: " . $response->status() . " - " . $response->body());
         return null;
     }
 
@@ -828,5 +860,83 @@ class AiService
         }
 
         return $data;
+    }
+
+    /**
+     * Genera la Guia d'Aficionat Visitant per a un pavelló
+     */
+    public function generatePavelloGuide($place, ?string $teamLocal = null): ?string
+    {
+        if (empty($place)) {
+            return null;
+        }
+
+        $placeName = $place->placeName ?? 'Pavelló';
+        $address = $place->placeAddress ?? '';
+        $team = $teamLocal ?? 'l\'equip local';
+
+        $prompt = "Ets un guia rigorós i especialista en instal·lacions d'hoquei patins i geografia de Catalunya.\n" .
+            "Genera una GUIA D'AFICIONAT VISITANT pràctica, sòbria i 100% VERIFICABLE per a les famílies que viatgen a jugar o veure un partit al següent pavelló:\n\n" .
+            "PAVELLÓ: {$placeName}\n" .
+            "ADREÇA: {$address}\n" .
+            "EQUIP LOCAL: {$team}\n\n" .
+            "DIRECTIVES DE RIGOR I VERIFICACIÓ STRICTES (ZERO INVENTADES):\n" .
+            "1. NO ESCRIGUIS RES QUE NO PUGUIS VERIFICAR AL 100%. Si no saps una dada amb total certesa, OMET-LA directament.\n" .
+            "2. PROHIBIT inventar-se noms de bars, cafeteries, restaurants, tarifes d'aparcament, números de línies de bus o protocols ficticis.\n" .
+            "3. Carreteres: cita ÚNICAMENT les vies principals reals i oficials per accedir al municipi segons la comarca ({$address}).\n" .
+            "4. Instal·lació: descriu exclusivament elements estàndard i reals d'un pavelló municipal català per a hoquei sobre patins (pista coberta, graderia per al públic, roba d'abric recomanada a l'hivern).\n" .
+            "5. Pla de dia / Turisme: menciona exclusivament elements geogràfics, naturals o patrimonials reals, oficials i coneguts del municipi (ex: espais naturals, parcs principals, muntanyes o monuments històrics indiscutibles).\n" .
+            "6. Sigues concís, útil i clar (punts breus i concrets).\n\n" .
+            "Escriu en català, en Markdown polit amb aquests 4 apartats:\n" .
+            "### 🚗 Arribada i Mobilitat\n" .
+            "### 🏟️ La Instal·lació i la Pista\n" .
+            "### ☕ Cafeteries i Serveis (< 1 km)\n" .
+            "### 🌿 Què veure i visitar als voltants (Pla de dia)\n\n" .
+            "Retorna ÚNICAMENT el text Markdown en català, sense introduccions genèriques ni comiats.";
+
+        $system = "Ets un guia rigorós d'instal·lacions esportives de Catalunya. Apliques tolerància zero a les invencions i només redactes fets 100% contrastables.";
+
+        $guideMarkdown = $this->generateText($prompt, $system);
+
+        if (!empty($guideMarkdown)) {
+            if (!empty($place->idPlace)) {
+                \Illuminate\Support\Facades\DB::table('places')
+                    ->where('idPlace', $place->idPlace)
+                    ->update(['guide_info' => $guideMarkdown]);
+            }
+            return $guideMarkdown;
+        }
+
+        return null;
+    }
+
+    /**
+     * Envia un correu d'alerta d'error a jok@jok.cat
+     */
+    public function notifyAiError(string $service, string $message, array $context = []): void
+    {
+        try {
+            $cacheKey = 'ai_err_mail_' . md5($service . substr($message, 0, 50));
+            if (\Illuminate\Support\Facades\Cache::has($cacheKey)) {
+                return;
+            }
+            \Illuminate\Support\Facades\Cache::put($cacheKey, true, 1200);
+
+            $body = "S'ha produït una incidència al servei d'Intel·ligència Artificial de laraJok:\n\n";
+            $body .= "Servei / Model: " . $service . "\n";
+            $body .= "Data i Hora: " . now()->format('d/m/Y H:i:s') . "\n";
+            $body .= "Detall de l'Error: " . $message . "\n\n";
+            if (!empty($context)) {
+                $body .= "Context Tècnic:\n" . json_encode($context, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . "\n\n";
+            }
+            $body .= "---\nMissatge generat automàticament des de laraJok";
+
+            \Illuminate\Support\Facades\Mail::raw($body, function ($msg) use ($service) {
+                $msg->to('jok@jok.cat')
+                    ->subject("[ALERTA IA laraJok] Incidència a {$service}");
+            });
+        } catch (\Exception $ex) {
+            Log::warning("No s'ha pogut enviar el mail d'alerta d'IA a jok@jok.cat: " . $ex->getMessage());
+        }
     }
 }
