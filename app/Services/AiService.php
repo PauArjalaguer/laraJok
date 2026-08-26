@@ -923,7 +923,7 @@ class AiService
     }
 
     /**
-     * Envia un correu d'alerta d'error a jok@jok.cat incloent quina funció i paràmetres han fet saltar l'avís
+     * Envia un correu d'alerta d'error a jok@jok.cat incloent quina funció, IDs (partit/vídeo/pavelló), URL i client han fet saltar l'avís
      */
     public function notifyAiError(string $service, string $message, array $context = []): void
     {
@@ -934,13 +934,40 @@ class AiService
             }
             \Illuminate\Support\Facades\Cache::put($cacheKey, true, 1200);
 
-            // Analitzem la pila d'execució per detectar la funció d'origen i els seus arguments
+            // 1. Detectem el context de la petició (Web HTTP o Consola CLI / Cron)
+            $isCli = app()->runningInConsole();
+            $requestUrl = null;
+            $referer = null;
+            $ip = null;
+            $userAgent = null;
+            $cliCommand = null;
+
+            if ($isCli) {
+                $cliCommand = !empty($_SERVER['argv']) ? implode(' ', $_SERVER['argv']) : 'Execució CLI / Cron';
+            } else {
+                try {
+                    $req = request();
+                    if ($req) {
+                        $requestUrl = $req->fullUrl();
+                        $referer = $req->header('referer');
+                        $ip = $req->ip();
+                        $userAgent = $req->userAgent();
+                    }
+                } catch (\Throwable $t) {}
+            }
+
+            // 2. Analitzem la pila d'execució per detectar la funció d'origen i els seus arguments
             $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 15);
             $callerFunction = 'Desconeguda';
             $callerFile = 'Desconegut';
             $callerLine = 0;
             $callerArgs = [];
             $callStack = [];
+
+            $detectedMatchId = null;
+            $detectedPlaceId = null;
+            $detectedVideoId = null;
+            $detectedVideoTitle = null;
 
             $ignoreMethods = [
                 'notifyAiError',
@@ -951,7 +978,11 @@ class AiService
                 'callOpenRouter',
                 'generateText',
                 'generateVision',
-                'generateEmbedding'
+                'generateEmbedding',
+                'invoke',
+                'invokeArgs',
+                'call_user_func',
+                'call_user_func_array'
             ];
 
             foreach ($backtrace as $index => $frame) {
@@ -971,19 +1002,93 @@ class AiService
                     $callerLine = $line;
                     $callerArgs = $this->formatArgumentsForLog($args);
                 }
+
+                // Intentem extreure IDs de qualsevol frame de la crida
+                foreach ($args as $arg) {
+                    if ($arg instanceof \Illuminate\Support\Collection && $arg->isNotEmpty()) {
+                        $first = $arg->first();
+                        if (is_object($first)) {
+                            if (empty($detectedMatchId) && isset($first->idMatch)) $detectedMatchId = $first->idMatch;
+                            if (empty($detectedPlaceId) && isset($first->idPlace)) $detectedPlaceId = $first->idPlace;
+                        }
+                    } elseif (is_object($arg)) {
+                        if (empty($detectedMatchId) && isset($arg->idMatch)) $detectedMatchId = $arg->idMatch;
+                        if (empty($detectedPlaceId) && isset($arg->idPlace)) $detectedPlaceId = $arg->idPlace;
+                        if (empty($detectedVideoId) && isset($arg->id) && (str_contains($class, 'Video') || str_contains($function, 'Video') || isset($arg->youtube_id))) {
+                            $detectedVideoId = $arg->id;
+                            if (isset($arg->title)) $detectedVideoTitle = $arg->title;
+                        }
+                    } elseif (is_array($arg)) {
+                        if (empty($detectedMatchId) && isset($arg['idMatch'])) $detectedMatchId = $arg['idMatch'];
+                        if (empty($detectedPlaceId) && isset($arg['idPlace'])) $detectedPlaceId = $arg['idPlace'];
+                        if (empty($detectedVideoId) && isset($arg['video_id'])) $detectedVideoId = $arg['video_id'];
+                    } elseif (is_scalar($arg)) {
+                        if (empty($detectedMatchId) && (str_contains($function, 'Cronica') || str_contains($function, 'acta') || str_contains($function, 'Match')) && is_numeric($arg) && strlen((string)$arg) >= 4) {
+                            $detectedMatchId = (string)$arg;
+                        }
+                        if (empty($detectedPlaceId) && str_contains($function, 'Pavello') && is_numeric($arg)) {
+                            $detectedPlaceId = (string)$arg;
+                        }
+                    }
+                }
+            }
+
+            // Si tenim context de request, comprovem paràmetres de ruta
+            if (!$isCli && request()) {
+                if (!$detectedMatchId && request()->route('id') && str_contains(request()->path(), 'acta')) {
+                    $detectedMatchId = request()->route('id');
+                }
+                if (!$detectedPlaceId && (request()->route('id') || request()->route('idPlace')) && str_contains(request()->path(), 'pavello')) {
+                    $detectedPlaceId = request()->route('id') ?? request()->route('idPlace');
+                }
             }
 
             $body = "S'ha produït una incidència al servei d'Intel·ligència Artificial de laraJok:\n\n";
+
             $body .= "===================================================\n";
-            $body .= "📍 DETALLS DE LA CRIDA QUE L'HA FET SALTAR\n";
+            $body .= "🎯 IDENTIFICADORS I ENLLAÇOS CLAU\n";
             $body .= "===================================================\n";
-            $body .= "Funció / Mètode: " . $callerFunction . "\n";
+            if ($detectedMatchId) {
+                $body .= "🆔 ID Partit: " . $detectedMatchId . "\n";
+                $body .= "🔗 Enllaç Acta: https://jok.cat/acta/" . $detectedMatchId . "\n";
+            }
+            if ($detectedPlaceId) {
+                $body .= "🏟️ ID Pavelló: " . $detectedPlaceId . "\n";
+                $body .= "🔗 Enllaç Pavelló: https://jok.cat/pavellons/" . $detectedPlaceId . "\n";
+            }
+            if ($detectedVideoId) {
+                $body .= "📹 ID Vídeo: " . $detectedVideoId . ($detectedVideoTitle ? " ({$detectedVideoTitle})" : "") . "\n";
+            }
+            if (!$detectedMatchId && !$detectedPlaceId && !$detectedVideoId) {
+                $body .= "Sense identificadors específics detectats a la crida.\n";
+            }
+
+            $body .= "\n===================================================\n";
+            $body .= "🌐 ORIGEN DE LA PETICIÓ\n";
+            $body .= "===================================================\n";
+            if ($isCli) {
+                $body .= "Tipus: Execució per Consola / Cron (CLI)\n";
+                $body .= "Comandament: " . $cliCommand . "\n";
+            } else {
+                $body .= "Tipus: Petició Web (HTTP AJAX / Visita)\n";
+                $body .= "URL de la petició: " . ($requestUrl ?? 'N/A') . "\n";
+                if ($referer) {
+                    $body .= "Pàgina d'origen (Referer): " . $referer . "\n";
+                }
+                $body .= "IP del client: " . ($ip ?? 'Desconeguda') . "\n";
+                $body .= "Navegador / Bot (User-Agent):\n" . ($userAgent ?? 'Desconegut') . "\n";
+            }
+
+            $body .= "\n===================================================\n";
+            $body .= "📍 FUNCIÓ I PARÀMETRES DETALLATS\n";
+            $body .= "===================================================\n";
+            $body .= "Funció desencadenant: " . $callerFunction . "\n";
             if ($callerFile !== 'Desconegut') {
                 $body .= "Fitxer i Línia: " . basename($callerFile) . " (línia {$callerLine})\n";
-                $body .= "Ruta completa: " . $callerFile . "\n";
+                $body .= "Ruta: " . $callerFile . "\n";
             }
             if (!empty($callerArgs)) {
-                $body .= "\nParàmetres / Arguments rebuts:\n";
+                $body .= "\nParàmetres rebuts per la funció:\n";
                 foreach ($callerArgs as $key => $val) {
                     $paramLabel = is_string($key) ? $key : "Paràmetre #" . ($key + 1);
                     $body .= "  • {$paramLabel}: {$val}\n";
@@ -1010,10 +1115,11 @@ class AiService
 
             $body .= "\n---\nMissatge generat automàticament des de laraJok";
 
-            \Illuminate\Support\Facades\Mail::raw($body, function ($msg) use ($service, $callerFunction) {
+            \Illuminate\Support\Facades\Mail::raw($body, function ($msg) use ($service, $callerFunction, $detectedMatchId, $detectedVideoId) {
                 $shortCaller = class_basename($callerFunction);
+                $extraTag = $detectedMatchId ? " [Partit {$detectedMatchId}]" : ($detectedVideoId ? " [Vídeo {$detectedVideoId}]" : "");
                 $msg->to('jok@jok.cat')
-                    ->subject("[ALERTA IA laraJok] Error a {$service} (des de {$shortCaller})");
+                    ->subject("[ALERTA IA laraJok]{$extraTag} Error a {$service} (des de {$shortCaller})");
             });
         } catch (\Exception $ex) {
             Log::warning("No s'ha pogut enviar el mail d'alerta d'IA a jok@jok.cat: " . $ex->getMessage());
@@ -1034,12 +1140,24 @@ class AiService
             } elseif (is_scalar($arg)) {
                 $str = (string)$arg;
                 $formatted[$key] = mb_strlen($str) > 250 ? mb_substr($str, 0, 250) . '... (longitud: ' . mb_strlen($str) . ' caràcters)' : $str;
+            } elseif ($arg instanceof \Illuminate\Support\Collection) {
+                $count = $arg->count();
+                $first = $arg->first();
+                $preview = '';
+                if (is_object($first)) {
+                    $pArr = [];
+                    foreach (['idMatch', 'teamName', 'teamName2', 'localTeam', 'visitorTeam', 'matchDate'] as $k) {
+                        if (isset($first->$k)) $pArr[$k] = $first->$k;
+                    }
+                    $preview = ' ' . json_encode($pArr, JSON_UNESCAPED_UNICODE);
+                }
+                $formatted[$key] = "Collection({$count} items){$preview}";
             } elseif (is_object($arg)) {
                 $class = get_class($arg);
                 if (method_exists($arg, 'toArray')) {
                     $attrs = $arg->toArray();
                     $preview = [];
-                    foreach (['idPlace', 'placeName', 'placeAddress', 'idMatch', 'teamName', 'playerName', 'id', 'title'] as $k) {
+                    foreach (['idPlace', 'placeName', 'placeAddress', 'idMatch', 'teamName', 'playerName', 'id', 'title', 'youtube_id'] as $k) {
                         if (isset($attrs[$k])) {
                             $preview[$k] = $attrs[$k];
                         }
