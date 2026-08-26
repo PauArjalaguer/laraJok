@@ -319,13 +319,19 @@ class AiService
                 }
 
                 if ($response->status() === 429) {
-                    $this->notifyAiError("Gemini ({$model})", "Límit de quotes excedit (HTTP 429): " . $response->body(), ['model' => $model]);
+                    $this->notifyAiError("Gemini ({$model})", "Límit de quotes excedit (HTTP 429): " . $response->body(), [
+                        'model' => $model,
+                        'prompt_preview' => mb_substr($prompt, 0, 300) . (mb_strlen($prompt) > 300 ? '...' : '')
+                    ]);
                 }
 
                 Log::warning("Gemini model {$model} no disponible ({$response->status()}), provant següent...");
             } catch (\Exception $ex) {
                 Log::warning("Gemini error amb {$model}: " . $ex->getMessage());
-                $this->notifyAiError("Gemini Exception ({$model})", $ex->getMessage(), ['model' => $model]);
+                $this->notifyAiError("Gemini Exception ({$model})", $ex->getMessage(), [
+                    'model' => $model,
+                    'prompt_preview' => mb_substr($prompt, 0, 300) . (mb_strlen($prompt) > 300 ? '...' : '')
+                ]);
             }
         }
 
@@ -380,13 +386,19 @@ class AiService
                 }
 
                 if ($response->status() === 429) {
-                    $this->notifyAiError("Groq ({$model})", "Límit de peticions excedit: " . $response->body(), ['model' => $model]);
+                    $this->notifyAiError("Groq ({$model})", "Límit de peticions excedit: " . $response->body(), [
+                        'model' => $model,
+                        'prompt_preview' => mb_substr($prompt, 0, 300) . (mb_strlen($prompt) > 300 ? '...' : '')
+                    ]);
                 }
 
                 Log::warning("Groq model {$model} no disponible ({$response->status()}), provant següent...");
             } catch (\Exception $ex) {
                 Log::warning("Groq error amb {$model}: " . $ex->getMessage());
-                $this->notifyAiError("Groq Exception ({$model})", $ex->getMessage(), ['model' => $model]);
+                $this->notifyAiError("Groq Exception ({$model})", $ex->getMessage(), [
+                    'model' => $model,
+                    'prompt_preview' => mb_substr($prompt, 0, 300) . (mb_strlen($prompt) > 300 ? '...' : '')
+                ]);
             }
         }
 
@@ -911,7 +923,7 @@ class AiService
     }
 
     /**
-     * Envia un correu d'alerta d'error a jok@jok.cat
+     * Envia un correu d'alerta d'error a jok@jok.cat incloent quina funció i paràmetres han fet saltar l'avís
      */
     public function notifyAiError(string $service, string $message, array $context = []): void
     {
@@ -922,21 +934,128 @@ class AiService
             }
             \Illuminate\Support\Facades\Cache::put($cacheKey, true, 1200);
 
+            // Analitzem la pila d'execució per detectar la funció d'origen i els seus arguments
+            $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 15);
+            $callerFunction = 'Desconeguda';
+            $callerFile = 'Desconegut';
+            $callerLine = 0;
+            $callerArgs = [];
+            $callStack = [];
+
+            $ignoreMethods = [
+                'notifyAiError',
+                'callGemini',
+                'callGroq',
+                'callOllama',
+                'callDeepSeek',
+                'callOpenRouter',
+                'generateText',
+                'generateVision',
+                'generateEmbedding'
+            ];
+
+            foreach ($backtrace as $index => $frame) {
+                $class = $frame['class'] ?? '';
+                $function = $frame['function'] ?? '';
+                $file = $frame['file'] ?? '';
+                $line = $frame['line'] ?? 0;
+                $args = $frame['args'] ?? [];
+
+                $methodName = $class ? "{$class}::{$function}" : $function;
+                $callStack[] = "#{$index} " . ($file ? basename($file) . ":{$line}" : '') . " -> {$methodName}()";
+
+                // Detectem la primera funció de negoci rellevant de la crida
+                if ($callerFunction === 'Desconeguda' && !in_array($function, $ignoreMethods)) {
+                    $callerFunction = $methodName;
+                    $callerFile = $file;
+                    $callerLine = $line;
+                    $callerArgs = $this->formatArgumentsForLog($args);
+                }
+            }
+
             $body = "S'ha produït una incidència al servei d'Intel·ligència Artificial de laraJok:\n\n";
+            $body .= "===================================================\n";
+            $body .= "📍 DETALLS DE LA CRIDA QUE L'HA FET SALTAR\n";
+            $body .= "===================================================\n";
+            $body .= "Funció / Mètode: " . $callerFunction . "\n";
+            if ($callerFile !== 'Desconegut') {
+                $body .= "Fitxer i Línia: " . basename($callerFile) . " (línia {$callerLine})\n";
+                $body .= "Ruta completa: " . $callerFile . "\n";
+            }
+            if (!empty($callerArgs)) {
+                $body .= "\nParàmetres / Arguments rebuts:\n";
+                foreach ($callerArgs as $key => $val) {
+                    $paramLabel = is_string($key) ? $key : "Paràmetre #" . ($key + 1);
+                    $body .= "  • {$paramLabel}: {$val}\n";
+                }
+            }
+
+            $body .= "\n===================================================\n";
+            $body .= "⚠️ INCIDÈNCIA I SERVEI D'IA\n";
+            $body .= "===================================================\n";
             $body .= "Servei / Model: " . $service . "\n";
             $body .= "Data i Hora: " . now()->format('d/m/Y H:i:s') . "\n";
-            $body .= "Detall de l'Error: " . $message . "\n\n";
-            if (!empty($context)) {
-                $body .= "Context Tècnic:\n" . json_encode($context, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . "\n\n";
-            }
-            $body .= "---\nMissatge generat automàticament des de laraJok";
+            $body .= "Detall de l'Error:\n" . $message . "\n";
 
-            \Illuminate\Support\Facades\Mail::raw($body, function ($msg) use ($service) {
+            if (!empty($context)) {
+                $body .= "\nContext Tècnic Addicional:\n" . json_encode($context, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . "\n";
+            }
+
+            if (!empty($callStack)) {
+                $body .= "\n===================================================\n";
+                $body .= "🥞 PILA D'EXECUCIÓ (BACKTRACE)\n";
+                $body .= "===================================================\n";
+                $body .= implode("\n", array_slice($callStack, 0, 8)) . "\n";
+            }
+
+            $body .= "\n---\nMissatge generat automàticament des de laraJok";
+
+            \Illuminate\Support\Facades\Mail::raw($body, function ($msg) use ($service, $callerFunction) {
+                $shortCaller = class_basename($callerFunction);
                 $msg->to('jok@jok.cat')
-                    ->subject("[ALERTA IA laraJok] Incidència a {$service}");
+                    ->subject("[ALERTA IA laraJok] Error a {$service} (des de {$shortCaller})");
             });
         } catch (\Exception $ex) {
             Log::warning("No s'ha pogut enviar el mail d'alerta d'IA a jok@jok.cat: " . $ex->getMessage());
         }
+    }
+
+    /**
+     * Formateja de manera llegible i segura els arguments d'una funció per a notificacions
+     */
+    protected function formatArgumentsForLog(array $args): array
+    {
+        $formatted = [];
+        foreach ($args as $key => $arg) {
+            if (is_null($arg)) {
+                $formatted[$key] = 'NULL';
+            } elseif (is_bool($arg)) {
+                $formatted[$key] = $arg ? 'true' : 'false';
+            } elseif (is_scalar($arg)) {
+                $str = (string)$arg;
+                $formatted[$key] = mb_strlen($str) > 250 ? mb_substr($str, 0, 250) . '... (longitud: ' . mb_strlen($str) . ' caràcters)' : $str;
+            } elseif (is_object($arg)) {
+                $class = get_class($arg);
+                if (method_exists($arg, 'toArray')) {
+                    $attrs = $arg->toArray();
+                    $preview = [];
+                    foreach (['idPlace', 'placeName', 'placeAddress', 'idMatch', 'teamName', 'playerName', 'id', 'title'] as $k) {
+                        if (isset($attrs[$k])) {
+                            $preview[$k] = $attrs[$k];
+                        }
+                    }
+                    $formatted[$key] = "{$class} " . (!empty($preview) ? json_encode($preview, JSON_UNESCAPED_UNICODE) : "(objecte)");
+                } else {
+                    $formatted[$key] = "{$class} (objecte)";
+                }
+            } elseif (is_array($arg)) {
+                $count = count($arg);
+                $preview = json_encode(array_slice($arg, 0, 3), JSON_UNESCAPED_UNICODE);
+                $formatted[$key] = "Array({$count} elements): " . (mb_strlen($preview) > 150 ? mb_substr($preview, 0, 150) . '...' : $preview);
+            } else {
+                $formatted[$key] = gettype($arg);
+            }
+        }
+        return $formatted;
     }
 }
