@@ -936,25 +936,16 @@ class AiService
 
             // 1. Detectem el context de la petició (Web HTTP o Consola CLI / Cron)
             $isCli = app()->runningInConsole();
-            $requestUrl = null;
-            $referer = null;
-            $ip = null;
-            $userAgent = null;
-            $cliCommand = null;
+            $req = null;
+            try {
+                $req = request();
+            } catch (\Throwable $t) {}
 
-            if ($isCli) {
-                $cliCommand = !empty($_SERVER['argv']) ? implode(' ', $_SERVER['argv']) : 'Execució CLI / Cron';
-            } else {
-                try {
-                    $req = request();
-                    if ($req) {
-                        $requestUrl = $req->fullUrl();
-                        $referer = $req->header('referer');
-                        $ip = $req->ip();
-                        $userAgent = $req->userAgent();
-                    }
-                } catch (\Throwable $t) {}
-            }
+            $requestUrl = ($req && method_exists($req, 'fullUrl')) ? $req->fullUrl() : null;
+            $referer = ($req && method_exists($req, 'header')) ? $req->header('referer') : null;
+            $ip = ($req && method_exists($req, 'ip')) ? $req->ip() : null;
+            $userAgent = ($req && method_exists($req, 'userAgent')) ? $req->userAgent() : null;
+            $cliCommand = ($isCli && !empty($_SERVER['argv'])) ? implode(' ', $_SERVER['argv']) : null;
 
             // 2. Analitzem la pila d'execució per detectar la funció d'origen i els seus arguments
             $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 15);
@@ -1066,17 +1057,17 @@ class AiService
             $body .= "\n===================================================\n";
             $body .= "🌐 ORIGEN DE LA PETICIÓ\n";
             $body .= "===================================================\n";
-            if ($isCli) {
-                $body .= "Tipus: Execució per Consola / Cron (CLI)\n";
-                $body .= "Comandament: " . $cliCommand . "\n";
-            } else {
+            if (!empty($requestUrl) && (!$isCli || str_contains($requestUrl, 'http'))) {
                 $body .= "Tipus: Petició Web (HTTP AJAX / Visita)\n";
-                $body .= "URL de la petició: " . ($requestUrl ?? 'N/A') . "\n";
+                $body .= "URL de la petició: " . $requestUrl . "\n";
                 if ($referer) {
                     $body .= "Pàgina d'origen (Referer): " . $referer . "\n";
                 }
                 $body .= "IP del client: " . ($ip ?? 'Desconeguda') . "\n";
-                $body .= "Navegador / Bot (User-Agent):\n" . ($userAgent ?? 'Desconegut') . "\n";
+                $body .= "User-Agent:\n  " . $this->parseUserAgent($userAgent) . "\n";
+            } else {
+                $body .= "Tipus: Execució per Consola / Cron (CLI)\n";
+                $body .= "Comandament: " . ($cliCommand ?? 'N/A') . "\n";
             }
 
             $body .= "\n===================================================\n";
@@ -1175,5 +1166,30 @@ class AiService
             }
         }
         return $formatted;
+    }
+
+    /**
+     * Identifica el tipus de client (Bot/Rastrejador, Mòbil, Ordinador) a partir del User-Agent
+     */
+    protected function parseUserAgent(?string $ua): string
+    {
+        if (empty($ua)) {
+            return 'Desconegut / No informat';
+        }
+
+        $type = '👤 Usuari Navegador';
+        if (preg_match('/(googlebot|bingbot|yandexbot|duckduckbot|baiduspider|ahrefsbot|semrushbot|dotbot|crawler|spider|robot|facebookexternalhit|whatsapp|telegrambot)/i', $ua, $matches)) {
+            $type = "🤖 BOT / RASTREJADOR (" . ucfirst($matches[1]) . ")";
+        } elseif (preg_match('/(iphone|ipad|ipod)/i', $ua)) {
+            $type = '📱 Mòbil / Tablet (iOS - Apple)';
+        } elseif (preg_match('/android/i', $ua)) {
+            $type = '📱 Mòbil (Android)';
+        } elseif (preg_match('/windows/i', $ua)) {
+            $type = '💻 Ordinador (Windows)';
+        } elseif (preg_match('/macintosh|mac os x/i', $ua)) {
+            $type = '💻 Ordinador (macOS)';
+        }
+
+        return "{$type}\n  Cadena completa: {$ua}";
     }
 }
