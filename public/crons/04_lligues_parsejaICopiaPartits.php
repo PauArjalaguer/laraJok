@@ -228,8 +228,13 @@ include("curl.php");
                                         echo "<br />$sql";
 
                                         $timestamp_fecha = strtotime($matchDate);
-                                        $mysqli->query($sql);
-                                        $mysqli->query("UPDATE leagues SET lastUpdated=now() where idLeague=$idLliga");
+                                        try{
+                                            $mysqli->query($sql);
+                                            $mysqli->query("UPDATE leagues SET lastUpdated=now() where idLeague=$idLliga");
+                                        }catch (Exception $e) {
+                                            // Código que se ejecuta si ocurre una excepción
+                                            echo "Ocurrió un error: " . $e->getMessage();
+                                        }
                                     }
                                 }
                                 echo "\n</div>";
