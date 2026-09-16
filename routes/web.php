@@ -5,6 +5,7 @@ use App\Http\Controllers\ClubsController;
 use App\Http\Controllers\CompeticioController;
 use App\Http\Controllers\FecapaController;
 use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\LeaguesController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\MatchesController;
 use App\Http\Controllers\AnuncisController;
@@ -57,6 +58,11 @@ Route::get('/dashboard/videos', [VideoController::class, 'dashboard'])->middlewa
 Route::post('/dashboard/videos/channel', [VideoController::class, 'storeChannel'])->middleware(['auth', 'verified'])->name('dashboard.videos.channel.store');
 Route::get('/dashboard/videos/channel/delete/{id}', [VideoController::class, 'deleteChannel'])->middleware(['auth', 'verified'])->name('dashboard.videos.channel.delete');
 Route::post('/dashboard/videos/sync', [VideoController::class, 'sync'])->middleware(['auth', 'verified'])->name('dashboard.videos.sync');
+
+// dashboard lligues
+Route::get('/dashboard/leagues', [LeaguesController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard.leagues');
+Route::post('/dashboard/leagues/update-category', [LeaguesController::class, 'updateCategory'])->middleware(['auth', 'verified'])->name('dashboard.leagues.update-category');
+Route::post('/dashboard/leagues/create-category', [LeaguesController::class, 'createCategory'])->middleware(['auth', 'verified'])->name('dashboard.leagues.create-category');
 
 //dashboard noticies
 Route::get('/dashboard/news/new/', [NewsController::class,'create'])->middleware(['auth', 'verified'])->name('dashboard.news.new');

@@ -34,6 +34,9 @@
                     <x-nav-link :href="route('dashboard.videos')" :active="request()->routeIs('dashboard.videos*')">
                         Vídeos
                     </x-nav-link>
+                    <x-nav-link :href="route('dashboard.leagues')" :active="request()->routeIs('dashboard.leagues*')">
+                        Lligues
+                    </x-nav-link>
                     @endif
                 </div>
             </div>
@@ -101,6 +104,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('dashboard.merchandising')" :active="request()->routeIs('dashboard.merchandising')">
                 Merchandising
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('dashboard.leagues')" :active="request()->routeIs('dashboard.leagues*')">
+                Lligues
             </x-responsive-nav-link>
             @endif
         </div>

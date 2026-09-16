@@ -12,6 +12,15 @@ use Illuminate\Support\Facades\Log;
 class Leagues extends Model
 {
     use HasFactory;
+
+    protected $primaryKey = 'idLeague';
+    public $timestamps = false;
+    protected $fillable = ['leagueName', 'idSeason', 'idCategory', 'lastUpdated'];
+
+    public function category()
+    {
+        return $this->belongsTo(Categories::class, 'idCategory', 'idCategory');
+    }
     public static function leaguesList()
     {
         $cacheKey = 'leaguesList';
