@@ -10,17 +10,32 @@ use App\Models\User;
 use App\Models\Matches;
 use App\Models\Pavellons;
 use App\Services\WeatherService;
+use Illuminate\Support\Facades\DB;
 
 class PavellonsController extends Controller
 {
     public function index()
     {
+        // Última temporada: mateix criteri que l'Agenda (idSeason màxim de leagues)
+        $maxSeason = DB::table('leagues')->max('idSeason');
+
+        $pavellons = Pavellons::whereNotNull('lat')
+            ->whereExists(function ($q) use ($maxSeason) {
+                $q->select(DB::raw(1))
+                    ->from('matches as m')
+                    ->join('leagues as l', 'l.idLeague', '=', 'm.idLeague')
+                    ->whereColumn('m.idPlace', 'places.idPlace')
+                    ->where('l.idSeason', $maxSeason);
+            })
+            ->with('matches')
+            ->get();
+
         return view(
             'pavellons',
             [
                 'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
                 'userSavedData' => User::userSavedData(),
-                'pavellons' => Pavellons::whereNotNull('lat')->with('matches')->get()
+                'pavellons' => $pavellons
             ]
         );
     }

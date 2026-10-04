@@ -32,6 +32,39 @@
     </div>
 </div>
 
+<!-- MAPA DE PAVELLONS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+<style>
+    #pavellonsMap { height: 460px; z-index: 0; }
+    @media (max-width: 768px) { #pavellonsMap { height: 340px; } }
+    .jok-pin { background: transparent; border: 0; }
+    .jok-pin .pin {
+        width: 26px; height: 26px; border-radius: 50% 50% 50% 0;
+        transform: rotate(-45deg); background: #1c1917; border: 2px solid #fff;
+        box-shadow: 0 2px 6px rgba(0,0,0,.35); display: flex; align-items: center; justify-content: center;
+        transition: transform .15s ease;
+    }
+    .jok-pin .pin::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #fff; }
+    .jok-pin.has-matches .pin { background: #dc2626; }
+    html.dark .jok-pin:not(.has-matches) .pin { background: #e7e5e4; border-color: #1c1917; }
+    html.dark .jok-pin:not(.has-matches) .pin::after { background: #1c1917; }
+    .jok-pin:hover .pin { transform: rotate(-45deg) scale(1.15); }
+    .jok-user .dot { width: 16px; height: 16px; border-radius: 50%; background: #2563eb; border: 3px solid #fff; box-shadow: 0 0 0 6px rgba(37,99,235,.25); }
+    .leaflet-popup-content-wrapper { border-radius: 16px; padding: 0; }
+    .leaflet-popup-content { margin: 14px 16px; font-family: inherit; min-width: 200px; }
+    html.dark .leaflet-popup-content-wrapper, html.dark .leaflet-popup-tip { background: #1c1917; color: #f5f5f4; }
+    html.dark .leaflet-container { background: #121215; }
+    #pavellonsMap .leaflet-tile-pane { filter: grayscale(.85) contrast(.95) brightness(1.03); }
+    html.dark #pavellonsMap .leaflet-tile-pane { filter: grayscale(1) invert(1) brightness(.85) contrast(.9); }
+</style>
+<div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl overflow-hidden shadow-xs mb-6 font-display">
+    <div id="pavellonsMap"></div>
+    <div class="flex items-center gap-4 px-4 py-2.5 text-[11px] font-bold text-stone-500 dark:text-stone-400 border-t border-stone-100 dark:border-stone-800">
+        <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#dc2626]"></span> Partits avui</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#1c1917] dark:bg-stone-300"></span> Sense partits avui</span>
+    </div>
+</div>
+
 <!-- PAVELLES TABLE CONTAINER -->
 <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl overflow-hidden shadow-xs mb-6 font-display">
     <div class="overflow-x-auto">
@@ -56,8 +89,101 @@
     La distància es calcula en quilòmetres lineals respecte la teva ubicació actual. Les adreces s'obtenen de forma automatitzada; assegura't de confirmar-les abans de desplaçar-te al pavelló.
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
     const pavellons = @json($pavellonsJson);
+
+    // ---------- MAPA ----------
+    let pavMap = null;
+    let userMarker = null;
+    const pavMarkers = {}; // id -> marker
+
+    function escapeHtml(s) {
+        return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    function popupHtml(p) {
+        const detailUrl = `/pavellons/${p.id}/${encodeURIComponent(p.placeName)}`;
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const mapUrl = isIOS
+            ? `https://maps.apple.com/?q=${p.placeLat},${p.placeLon}`
+            : `https://www.google.com/maps/search/?api=1&query=${p.placeLat},${p.placeLon}`;
+        const matchesBadge = p.matches > 0
+            ? `<span style="display:inline-block;background:#dc2626;color:#fff;font-weight:900;font-size:10px;padding:2px 8px;border-radius:999px;margin-top:6px">${p.matches} partits avui</span>`
+            : '';
+        return `
+            <div style="font-size:12px;line-height:1.35">
+                <a href="${detailUrl}" style="font-weight:900;font-size:14px;color:inherit;text-decoration:none">${escapeHtml(p.placeName)}</a>
+                <div style="opacity:.7;margin-top:2px">${escapeHtml(p.placeAddress)}</div>
+                ${matchesBadge}
+                <div style="display:flex;gap:6px;margin-top:10px">
+                    <a href="${detailUrl}" style="flex:1;text-align:center;background:#1c1917;color:#fff;font-weight:800;padding:6px 8px;border-radius:999px;text-decoration:none">Veure pavelló</a>
+                    <a href="${mapUrl}" target="_blank" rel="noopener" style="flex:1;text-align:center;border:1px solid #d6d3d1;color:inherit;font-weight:800;padding:6px 8px;border-radius:999px;text-decoration:none">Com anar-hi</a>
+                </div>
+            </div>`;
+    }
+
+    function initMap() {
+        if (typeof L === 'undefined' || !document.getElementById('pavellonsMap')) return;
+
+        pavMap = L.map('pavellonsMap', { scrollWheelZoom: false }).setView([41.7, 1.75], 8);
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>',
+            maxZoom: 19
+        }).addTo(pavMap);
+
+        // Activa el zoom amb roda només després de clicar el mapa (evita segrestar l'scroll)
+        pavMap.on('click', () => pavMap.scrollWheelZoom.enable());
+        pavMap.on('mouseout', () => pavMap.scrollWheelZoom.disable());
+
+        const bounds = [];
+        pavellons.forEach(p => {
+            if (!p.placeLat || !p.placeLon) return;
+            const icon = L.divIcon({
+                className: 'jok-pin' + (p.matches > 0 ? ' has-matches' : ''),
+                html: '<div class="pin"></div>',
+                iconSize: [26, 26],
+                iconAnchor: [13, 30],
+                popupAnchor: [0, -28]
+            });
+            const marker = L.marker([p.placeLat, p.placeLon], {
+                icon,
+                title: p.placeName,
+                zIndexOffset: p.matches > 0 ? 1000 : 0
+            }).bindPopup(popupHtml(p)).addTo(pavMap);
+            marker._searchText = `${p.placeName} ${p.placeAddress}`.toLowerCase();
+            pavMarkers[p.id] = marker;
+            bounds.push([p.placeLat, p.placeLon]);
+        });
+
+        if (bounds.length) pavMap.fitBounds(bounds, { padding: [30, 30], maxZoom: 12 });
+    }
+
+    function filterMarkers(query) {
+        if (!pavMap) return;
+        const visible = [];
+        Object.values(pavMarkers).forEach(m => {
+            const show = !query || m._searchText.includes(query);
+            if (show) {
+                if (!pavMap.hasLayer(m)) m.addTo(pavMap);
+                visible.push(m.getLatLng());
+            } else if (pavMap.hasLayer(m)) {
+                pavMap.removeLayer(m);
+            }
+        });
+        if (query && visible.length) pavMap.fitBounds(visible, { padding: [30, 30], maxZoom: 13 });
+    }
+
+    function showUserOnMap(coords) {
+        if (!pavMap) return;
+        const ll = [coords.lat, coords.lon];
+        if (userMarker) { userMarker.setLatLng(ll); return; }
+        userMarker = L.marker(ll, {
+            icon: L.divIcon({ className: 'jok-user', html: '<div class="dot"></div>', iconSize: [16, 16], iconAnchor: [8, 8] }),
+            zIndexOffset: 2000
+        }).bindPopup('<strong>Ets aquí</strong>').addTo(pavMap);
+    }
 
     function calcularDistancia(lat1, lon1, lat2, lon2) {
         const R = 6371;
@@ -179,18 +305,23 @@
         } else if (noResultsTr) {
             noResultsTr.style.display = 'none';
         }
+
+        filterMarkers(query);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        initMap();
         renderPavellons(null);
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    renderPavellons({
+                    const coords = {
                         lat: position.coords.latitude,
                         lon: position.coords.longitude
-                    });
+                    };
+                    renderPavellons(coords);
+                    showUserOnMap(coords);
                 },
                 (error) => {},
                 { timeout: 5000 }
