@@ -35,24 +35,59 @@
 <!-- MAPA DE PAVELLONS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 <style>
-    #pavellonsMap { height: 460px; z-index: 0; }
+    #pavellonsMap { height: 460px; z-index: 0; font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
     @media (max-width: 768px) { #pavellonsMap { height: 340px; } }
+
+    /* Pins: gris apagat per defecte, fosc (color principal) si hi ha partits avui */
     .jok-pin { background: transparent; border: 0; }
     .jok-pin .pin {
-        width: 26px; height: 26px; border-radius: 50% 50% 50% 0;
-        transform: rotate(-45deg); background: #1c1917; border: 2px solid #fff;
-        box-shadow: 0 2px 6px rgba(0,0,0,.35); display: flex; align-items: center; justify-content: center;
+        width: 22px; height: 22px; border-radius: 50% 50% 50% 0;
+        transform: rotate(-45deg); background: #a8a29e; border: 2px solid #fff;
+        box-shadow: 0 2px 6px rgba(0,0,0,.25); display: flex; align-items: center; justify-content: center;
         transition: transform .15s ease;
     }
-    .jok-pin .pin::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #fff; }
-    .jok-pin.has-matches .pin { background: #dc2626; }
-    html.dark .jok-pin:not(.has-matches) .pin { background: #e7e5e4; border-color: #1c1917; }
-    html.dark .jok-pin:not(.has-matches) .pin::after { background: #1c1917; }
+    .jok-pin .pin::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #fff; }
+    .jok-pin.has-matches .pin { width: 28px; height: 28px; background: var(--color-primary, #1e293b); box-shadow: 0 3px 10px rgba(0,0,0,.35); }
+    .jok-pin.has-matches .pin::after { width: 9px; height: 9px; }
+    html.dark .jok-pin .pin { background: #57534e; border-color: #1c1917; }
+    html.dark .jok-pin .pin::after { background: #1c1917; }
+    html.dark .jok-pin.has-matches .pin { background: #f5f5f4; }
     .jok-pin:hover .pin { transform: rotate(-45deg) scale(1.15); }
     .jok-user .dot { width: 16px; height: 16px; border-radius: 50%; background: #2563eb; border: 3px solid #fff; box-shadow: 0 0 0 6px rgba(37,99,235,.25); }
-    .leaflet-popup-content-wrapper { border-radius: 16px; padding: 0; }
-    .leaflet-popup-content { margin: 14px 16px; font-family: inherit; min-width: 200px; }
-    html.dark .leaflet-popup-content-wrapper, html.dark .leaflet-popup-tip { background: #1c1917; color: #f5f5f4; }
+
+    /* Popup */
+    #pavellonsMap .leaflet-popup-content-wrapper {
+        border-radius: 18px; padding: 0; border: 1px solid #e7e5e4;
+        box-shadow: 0 10px 30px -8px rgba(0,0,0,.25);
+    }
+    #pavellonsMap .leaflet-popup-content {
+        margin: 0; padding: 16px 18px 14px; box-sizing: border-box;
+        font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; font-size: 12px; line-height: 1.4; color: #1c1917;
+    }
+    #pavellonsMap .leaflet-popup-close-button { top: 8px; right: 8px; width: 22px; height: 22px; font-size: 18px; color: #a8a29e; }
+    #pavellonsMap .leaflet-popup-close-button:hover { color: #1c1917; }
+    .jok-popup-title { display: block; padding-right: 18px; font-weight: 800; font-size: 14px; line-height: 1.25; letter-spacing: -.01em; color: inherit !important; text-decoration: none; }
+    .jok-popup-title:hover { text-decoration: underline; text-underline-offset: 2px; }
+    .jok-popup-address { margin-top: 4px; font-size: 11px; font-weight: 500; color: #78716c; }
+    .jok-popup-badge { display: inline-flex; align-items: center; gap: 5px; margin-top: 10px; padding: 3px 9px; border-radius: 999px; background: #f5f5f4; border: 1px solid #e7e5e4; color: #1c1917; font-size: 10px; font-weight: 800; }
+    .jok-popup-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--color-primary, #1e293b); }
+    .jok-popup-actions { display: flex; gap: 6px; margin-top: 12px; }
+    .jok-popup-actions a { flex: 1; text-align: center; padding: 7px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; text-decoration: none; transition: background-color .15s ease; }
+    .jok-popup-btn-primary { background: var(--color-primary, #1e293b); color: var(--color-primary-text, #fff) !important; }
+    .jok-popup-btn-primary:hover { background: var(--color-primary-hover, #334155); }
+    .jok-popup-btn-ghost { border: 1px solid #e7e5e4; color: #1c1917 !important; }
+    .jok-popup-btn-ghost:hover { background: #f5f5f4; }
+
+    html.dark #pavellonsMap .leaflet-popup-content-wrapper, html.dark #pavellonsMap .leaflet-popup-tip { background: #1c1917; border-color: #292524; }
+    html.dark #pavellonsMap .leaflet-popup-content { color: #f5f5f4; }
+    html.dark .jok-popup-address { color: #a8a29e; }
+    html.dark .jok-popup-badge { background: #292524; border-color: #44403c; color: #f5f5f4; }
+    html.dark .jok-popup-badge::before { background: #f5f5f4; }
+    html.dark .jok-popup-btn-primary { background: #f5f5f4; color: #1c1917 !important; }
+    html.dark .jok-popup-btn-primary:hover { background: #e7e5e4; }
+    html.dark .jok-popup-btn-ghost { border-color: #44403c; color: #f5f5f4 !important; }
+    html.dark .jok-popup-btn-ghost:hover { background: #292524; }
+
     html.dark .leaflet-container { background: #121215; }
     #pavellonsMap .leaflet-tile-pane { filter: grayscale(.85) contrast(.95) brightness(1.03); }
     html.dark #pavellonsMap .leaflet-tile-pane { filter: grayscale(1) invert(1) brightness(.85) contrast(.9); }
@@ -60,8 +95,8 @@
 <div class="bg-white dark:bg-[#121215] border border-stone-200 dark:border-stone-800/90 rounded-3xl overflow-hidden shadow-xs mb-6 font-display">
     <div id="pavellonsMap"></div>
     <div class="flex items-center gap-4 px-4 py-2.5 text-[11px] font-bold text-stone-500 dark:text-stone-400 border-t border-stone-100 dark:border-stone-800">
-        <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#dc2626]"></span> Partits avui</span>
-        <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#1c1917] dark:bg-stone-300"></span> Sense partits avui</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-primary dark:bg-stone-100"></span> Partits avui</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-stone-400 dark:bg-stone-600"></span> Sense partits avui</span>
     </div>
 </div>
 
@@ -109,18 +144,25 @@
             ? `https://maps.apple.com/?q=${p.placeLat},${p.placeLon}`
             : `https://www.google.com/maps/search/?api=1&query=${p.placeLat},${p.placeLon}`;
         const matchesBadge = p.matches > 0
-            ? `<span style="display:inline-block;background:#dc2626;color:#fff;font-weight:900;font-size:10px;padding:2px 8px;border-radius:999px;margin-top:6px">${p.matches} partits avui</span>`
+            ? `<span class="jok-popup-badge">${p.matches} ${p.matches === 1 ? 'partit' : 'partits'} avui</span>`
             : '';
         return `
-            <div style="font-size:12px;line-height:1.35">
-                <a href="${detailUrl}" style="font-weight:900;font-size:14px;color:inherit;text-decoration:none">${escapeHtml(p.placeName)}</a>
-                <div style="opacity:.7;margin-top:2px">${escapeHtml(p.placeAddress)}</div>
+            <div>
+                <a href="${detailUrl}" class="jok-popup-title">${escapeHtml(toTitle(p.placeName))}</a>
+                <div class="jok-popup-address">${escapeHtml(p.placeAddress)}</div>
                 ${matchesBadge}
-                <div style="display:flex;gap:6px;margin-top:10px">
-                    <a href="${detailUrl}" style="flex:1;text-align:center;background:#1c1917;color:#fff;font-weight:800;padding:6px 8px;border-radius:999px;text-decoration:none">Veure pavelló</a>
-                    <a href="${mapUrl}" target="_blank" rel="noopener" style="flex:1;text-align:center;border:1px solid #d6d3d1;color:inherit;font-weight:800;padding:6px 8px;border-radius:999px;text-decoration:none">Com anar-hi</a>
+                <div class="jok-popup-actions">
+                    <a href="${detailUrl}" class="jok-popup-btn-primary">Veure pavelló</a>
+                    <a href="${mapUrl}" target="_blank" rel="noopener" class="jok-popup-btn-ghost">Com anar-hi</a>
                 </div>
             </div>`;
+    }
+
+    // Converteix noms en majúscules ("PAVELLÓ D ESPORTS") a format títol
+    function toTitle(s) {
+        const str = String(s ?? '');
+        if (str !== str.toUpperCase()) return str;
+        return str.toLowerCase().replace(/(^|[\s\-'’(])(\p{L})/gu, (m, sep, ch) => sep + ch.toUpperCase());
     }
 
     function initMap() {
@@ -151,7 +193,7 @@
                 icon,
                 title: p.placeName,
                 zIndexOffset: p.matches > 0 ? 1000 : 0
-            }).bindPopup(popupHtml(p)).addTo(pavMap);
+            }).bindPopup(popupHtml(p), { minWidth: 250, maxWidth: 250 }).addTo(pavMap);
             marker._searchText = `${p.placeName} ${p.placeAddress}`.toLowerCase();
             pavMarkers[p.id] = marker;
             bounds.push([p.placeLat, p.placeLon]);
