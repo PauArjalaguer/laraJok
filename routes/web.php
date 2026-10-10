@@ -7,6 +7,7 @@ use App\Http\Controllers\FecapaController;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\MatchesController;
+use App\Http\Controllers\MatchesControlController;
 use App\Http\Controllers\AnuncisController;
 use App\Http\Controllers\MerchandisingsController;
 use App\Http\Controllers\NewsController;
@@ -57,6 +58,12 @@ Route::get('/dashboard/videos', [VideoController::class, 'dashboard'])->middlewa
 Route::post('/dashboard/videos/channel', [VideoController::class, 'storeChannel'])->middleware(['auth', 'verified'])->name('dashboard.videos.channel.store');
 Route::get('/dashboard/videos/channel/delete/{id}', [VideoController::class, 'deleteChannel'])->middleware(['auth', 'verified'])->name('dashboard.videos.channel.delete');
 Route::post('/dashboard/videos/sync', [VideoController::class, 'sync'])->middleware(['auth', 'verified'])->name('dashboard.videos.sync');
+
+// dashboard control de partits obsolets
+Route::get('/dashboard/control-partits', [MatchesControlController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard.matches.control');
+Route::delete('/dashboard/control-partits/partit/{idMatch}', [MatchesControlController::class, 'destroyMatch'])->middleware(['auth', 'verified'])->name('dashboard.matches.control.match.delete');
+Route::delete('/dashboard/control-partits/partit/{idMatch}/grup', [MatchesControlController::class, 'destroyMatchAndGroup'])->middleware(['auth', 'verified'])->name('dashboard.matches.control.match-group.delete');
+Route::delete('/dashboard/control-partits/grup/{idGroup}', [MatchesControlController::class, 'destroyGroup'])->middleware(['auth', 'verified'])->name('dashboard.matches.control.group.delete');
 
 //dashboard noticies
 Route::get('/dashboard/news/new/', [NewsController::class,'create'])->middleware(['auth', 'verified'])->name('dashboard.news.new');

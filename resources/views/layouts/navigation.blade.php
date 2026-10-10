@@ -34,6 +34,9 @@
                     <x-nav-link :href="route('dashboard.videos')" :active="request()->routeIs('dashboard.videos*')">
                         Vídeos
                     </x-nav-link>
+                    <x-nav-link :href="route('dashboard.matches.control')" :active="request()->routeIs('dashboard.matches.control*')">
+                        Control Partits
+                    </x-nav-link>
                     @endif
                 </div>
             </div>
@@ -101,6 +104,11 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('dashboard.merchandising')" :active="request()->routeIs('dashboard.merchandising')">
                 Merchandising
+            </x-responsive-nav-link>
+            @endif
+            @if(Auth::user()->idRole==1)
+            <x-responsive-nav-link :href="route('dashboard.matches.control')" :active="request()->routeIs('dashboard.matches.control*')">
+                Control Partits
             </x-responsive-nav-link>
             @endif
         </div>
