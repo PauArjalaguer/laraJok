@@ -18,6 +18,51 @@ class Matches extends Model
     public $timestamps = false;
     protected $dateFormat = 'U';
 
+    /**
+     * Retorna una abreviatura curta de la categoria per a espais reduïts (p.ex. el calendari).
+     * Si no hi ha categoria coneguda, intenta deduir-la del nom de la lliga.
+     */
+    public static function categoryShort(?string $categoryName, ?string $leagueName = null): string
+    {
+        $map = [
+            'nacional catalana masculina' => 'NAC',
+            'nacional catalana femenina'  => 'NAC F',
+            'primera catalana masculina'  => '1a CAT',
+            'segona catalana masculina'   => '2a CAT',
+            'tercera catalana masculina'  => '3a CAT',
+            'primera catalana femenina'   => '1a CAT F',
+            'segona catalana femenina'    => '2a CAT F',
+            'junior'                      => 'JUN',
+            'juvenil'                     => 'JUV',
+            'infantil'                    => 'INF',
+            'alevi'                       => 'ALE',
+            'benjami'                     => 'BEN',
+            'prebenjami'                  => 'PREB',
+            'fem 19'                      => 'F19',
+            'fem 17'                      => 'F17',
+            'fem 15'                      => 'F15',
+            'fem 13'                      => 'F13',
+            'fem 11'                      => 'F11',
+            'minifem'                     => 'MINIF',
+            'veterans'                    => 'VET',
+            'golden cat'                  => 'GOLD',
+            'youth goldencat masculi'     => 'Y-GOLD',
+            'frit ravich lliga catalana'  => 'LLIGA CAT',
+            'fase de grups lliga catalana plata' => 'LC PLATA',
+        ];
+
+        $normalize = fn($s) => trim(mb_strtolower(\Illuminate\Support\Str::ascii((string) $s)));
+
+        $key = $normalize($categoryName);
+        if ($key !== '' && isset($map[$key])) {
+            return $map[$key];
+        }
+
+        // Categoria desconeguda o "Altres": usem el nom de la lliga escurçat
+        $fallback = $leagueName ?: $categoryName;
+        return $fallback ? \Illuminate\Support\Str::limit(trim($fallback), 12, '…') : '';
+    }
+
     public static function getTeamFormByGroup($idGroup)
     {
         $allMatches = DB::table('matches')

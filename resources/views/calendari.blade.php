@@ -79,7 +79,13 @@
                         <div class="mt-1 space-y-1 overflow-y-auto pr-1">
                             @foreach($partits_del_dia as $partit)
                                 <div class="text-[11px] bg-white border border-gray-200 rounded p-1 shadow-sm hover:bg-gray-100 transition">
-                                    <span class="font-semibold">{{substr($partit->matchHour,0,5)}}</span>
+                                    @php $catShort = \App\Models\Matches::categoryShort($partit->categoryName ?? null, $partit->leagueName ?? null); @endphp
+                                    <div class="flex items-center justify-between gap-1">
+                                        <span class="font-semibold">{{substr($partit->matchHour,0,5)}}</span>
+                                        @if($catShort)
+                                            <span class="shrink-0 px-1 rounded bg-neutral-700 text-white text-[9px] font-bold leading-4 tracking-tight" title="{{ $partit->categoryName ?? $partit->leagueName }}">{{ $catShort }}</span>
+                                        @endif
+                                    </div>
                                     {{ Str::title(strtolower($partit->localTeam)) }} - {{ Str::title(strtolower($partit->visitorTeam)) }}
                                 </div>
                             @endforeach
