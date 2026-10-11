@@ -64,16 +64,23 @@ function parseLeague($idLliga, $mysqli)
                 
                 /*Busco partits jugats i posició per veure si hi ha hagut canvis */
                 $sql_ant="select played, position from classifications where idClassification=$idClassification";
-                $res_ant =  $mysqli->query($sql_ant);
-                $row_ant = mysqli_fetch_assoc($res_ant);
-                echo "<hr />Posicio anterior";
-                print_r($row_ant);
-                  echo "<hr />";
-                if($row_ant['position']!=$position){
-                    $prevPosition = $row_ant['position'];
-                }else{
-                    $prevPosition = $position;
+                try{
+                    $res_ant =  $mysqli->query($sql_ant);
+                    $row_ant = mysqli_fetch_assoc($res_ant);
+                    echo "<hr />Posicio anterior";
+                    print_r($row_ant);
+                    echo "<hr />";
+                    if($row_ant['position']!=$position){
+                        $prevPosition = $row_ant['position'];
+                    }else{
+                        echo "2";
+                        $prevPosition = $position;
+                    }
+                }catch (Exception $e) {
+                    echo 'Caught exception: ',  $e->getMessage(), "\n";
                 }
+                
+                if(!$prevPosition){$prevPosition=$position;}
 
                 $sql2 = "insert into classifications (idClassification,idTeam,points,position,played,won, draw, lost, goalsMade, goalsReceived, idLeague, idGroup, prevPosition) values 
                 ($idClassification,$idTeam,$points,$position,$played,$won, $draw, $lost, $gA, $gC, $idLliga, $idGroup,$prevPosition) ON DUPLICATE KEY 
@@ -89,7 +96,7 @@ function parseLeague($idLliga, $mysqli)
         }
     }
 }
-$result =$result = $mysqli->query("select idLeague from leagues where idSeason=39  order by lastupdated desc, idLeague desc limit 0,100");
+$result =$result = $mysqli->query("select idLeague from leagues where idSeason=41  order by lastupdated desc, idLeague desc limit 0,100");
 while ($row = mysqli_fetch_array($result)) {
     //echo $row['idLeague']." - ";
     parseLeague($row['idLeague'], $mysqli);
@@ -98,4 +105,4 @@ while ($row = mysqli_fetch_array($result)) {
 //parseLeague(2228, $mysqli);
 ?>
 
-<script> setTimeout(() => window.location.replace("01_lligues_copiaIndexdeLligues.php"), 1115000);</script>
+<script> //setTimeout(() => window.location.replace("01_lligues_copiaIndexdeLligues.php"), 1115000);</script>
