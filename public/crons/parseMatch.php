@@ -19,14 +19,118 @@ ini_set('display_errors', 1);
 //include("curl.php");
 include("cnx/c.php");
 
+/**
+ * Descarrega la fitxa de temporada d'un jugador a FECAPA.
+ * Ex: https://www.server2.sidgad.es/fecapa/profiles/fecapa_profileseason_62764_1_41.php
+ * Important: sense la capçalera Origin el servidor retorna buit.
+ */
+function getPlayerProfile($idPlayer, $idSeason)
+{
+    $url = "https://www.server2.sidgad.es/fecapa/profiles/fecapa_profileseason_" . intval($idPlayer) . "_1_" . intval($idSeason) . ".php";
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, ['idm' => 1, 'idc' => $idSeason]);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Origin: http://server2.sidgad.es',
+        'Referer: http://server2.sidgad.es',
+        'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    ]);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+    $response = curl_exec($ch);
+    curl_close($ch);
+    return $response ?: null;
+}
+
+/**
+ * Acta buida (problema de FECAPA): recorrem els jugadors del partit i
+ * agafem gols i targetes de la seva fitxa de temporada.
+ * De pas, guardem la data de naixement del jugador.
+ */
+function fixMatchFromPlayerProfiles($idMatch, $mysqli)
+{
+    $idMatch = intval($idMatch);
+    $res = $mysqli->query("select l.idSeason from matches m join leagues l on l.idLeague=m.idLeague where m.idMatch=$idMatch");
+    $row = $res ? mysqli_fetch_array($res) : null;
+    if (!$row || !$row['idSeason']) {
+        echo "<br />No trobo la temporada del partit $idMatch";
+        return;
+    }
+    $idSeason = intval($row['idSeason']);
+    echo "<br /><b>ACTA BUIDA al partit $idMatch -> recupero dades de les fitxes de jugador (temporada $idSeason)</b>";
+    // Les dades del partit canvien: eliminem la crònica generada per IA
+    $mysqli->query("update matches set cronica=NULL where idMatch=$idMatch");
+
+    $players = $mysqli->query("select idPlayer from player_match where idMatch=$idMatch");
+    while ($p = mysqli_fetch_array($players)) {
+        $idPlayer = intval($p['idPlayer']);
+        $response = getPlayerProfile($idPlayer, $idSeason);
+        if (!$response) {
+            echo "<br />&nbsp;&nbsp;Fitxa buida pel jugador $idPlayer";
+            continue;
+        }
+
+        // Data de naixement
+        if (preg_match('/Data de Naixement:?.*?(\d{2})\/(\d{2})\/(\d{4})/s', $response, $m)) {
+            $birthDate = $m[3] . "-" . $m[2] . "-" . $m[1];
+            try {
+                $mysqli->query("update players set birthDate='$birthDate' where idPlayer=$idPlayer");
+            } catch (Exception $ex) {
+                echo " -> Algo ha passat al guardar la data de naixement del jugador $idPlayer";
+            }
+        }
+
+        // Fila del partit: date, local, resultat, visitant, link(idp), G, As, FD, PE, BL, VER
+        $dom = new DOMDocument('1.0');
+        if (!@$dom->loadHTML('<?xml encoding="UTF-8">' . $response)) {
+            continue;
+        }
+        $xpath = new DomXPath($dom);
+        $links = $xpath->query("//a[contains(@class,'game_report') and @idp='$idMatch']");
+        if ($links->length == 0) {
+            echo "<br />&nbsp;&nbsp;El jugador $idPlayer no té el partit $idMatch a la fitxa";
+            continue;
+        }
+        $tr = $links[0];
+        while ($tr && $tr->nodeName != 'tr') {
+            $tr = $tr->parentNode;
+        }
+        if (!$tr) {
+            continue;
+        }
+        $tds = $tr->getElementsByTagName('td');
+        if ($tds->length < 11) {
+            continue;
+        }
+        $gols     = intval(trim($tds[5]->nodeValue));
+        $directes = intval(trim($tds[7]->nodeValue));
+        $penalti  = intval(trim($tds[8]->nodeValue));
+        $blue     = intval(trim($tds[9]->nodeValue));
+        $red      = intval(trim($tds[10]->nodeValue));
+
+        echo "<br />&nbsp;&nbsp;Jugador $idPlayer: $gols gols, $blue blaves, $red vermelles";
+        try {
+            $mysqli->query("update player_match set goals=$gols, blue=$blue, red=$red, directes=$directes, penalti=$penalti, updated=now()
+                where idPlayer=$idPlayer and idMatch=$idMatch");
+        } catch (Exception $ex) {
+            echo " -> Algo ha passat al actualitzar el jugador $idPlayer al partit $idMatch";
+        }
+    }
+}
+
 function parseMatch($idMatch, $idLeague, $mysqli)
 {
     echo "select idLocal, idVisitor from matches where idMatch=" . $idMatch;
-    $result =   $mysqli->query("select idLocal, idVisitor from matches where idMatch=" . $idMatch);
+    $result =   $mysqli->query("select idLocal, idVisitor, localResult, visitorResult from matches where idMatch=" . $idMatch);
     $row = mysqli_fetch_array($result);
     $idLocal = $row['idLocal'];
     $idVisitor = $row['idVisitor'];
+    $totalResult = intval($row['localResult']) + intval($row['visitorResult']);
+    $totalGols = 0;
     $mysqli->query("delete from  player_match where idMatch=" . $idMatch);
+    // Refem l'acta: eliminem la crònica generada per IA perquè es torni a generar amb les dades noves
+    $mysqli->query("update matches set cronica=NULL where idMatch=" . intval($idMatch));
     $dom   = new DOMDocument('1.0');
     $url = "https://www.server2.sidgad.es/fecapa/fecapa_gr_" . $idMatch . "_1.php";
     //  $url="https://www.server2.sidgad.es/fecapa/fecapa_gr_83612_1.php";
@@ -139,6 +243,7 @@ function parseMatch($idMatch, $idLeague, $mysqli)
                     $gols = trim($players->childNodes[11]->nodeValue);
                     if (strlen($gols) > 0) {
                         $gols = $players->childNodes[11]->nodeValue;
+                        $totalGols += intval($gols);
                         echo " HA MARCAT $gols GOLS ";
                     } else {
                         $gols = 0;
@@ -204,6 +309,7 @@ function parseMatch($idMatch, $idLeague, $mysqli)
                      $gols = trim($players->childNodes[11]->nodeValue);
                       if (strlen($gols) > 0) {
                         $gols = $players->childNodes[11]->nodeValue;
+                        $totalGols += intval($gols);
                         echo " HA MARCAT $gols GOLS ";
                     } else {
                         $gols = 0;
@@ -252,11 +358,33 @@ LIMIT 1;";
                 }
                 $a++;
             }
+
+            // Acta buida: cap gol ni cap falta però el resultat no és 0-0
+            if ($totalGols == 0 && intval($faltesLocal) == 0 && intval($faltesVisitant) == 0 && $totalResult > 0) {
+                fixMatchFromPlayerProfiles($idMatch, $mysqli);
+            }
         }
     }
     $mysqli->query("update matches set updatedTries=updatedTries+1, updated=now() where idMatch=" . $idMatch);
 }
 // parseMatch(58169, $mysqli);
+
+// Mode reparació: parseMatch.php?fixEmpty=1 -> partits ja guardats amb l'acta buida
+if (isset($_GET['fixEmpty'])) {
+    $result = $mysqli->query("select m.idMatch from matches m
+        where m.matchDate<NOW()
+          and m.localFaults=0 and m.visitorFaults=0
+          and (m.localResult + m.visitorResult) > 0
+          and exists (select 1 from player_match pm where pm.idMatch=m.idMatch)
+          and (select coalesce(sum(goals),0) from player_match pm where pm.idMatch=m.idMatch)=0
+          and not exists (select 1 from player_match pm where pm.idMatch=m.idMatch and pm.updated is not null)
+        order by m.matchDate desc
+        limit 0,15");
+    while ($row = mysqli_fetch_array($result)) {
+        fixMatchFromPlayerProfiles($row['idMatch'], $mysqli);
+    }
+    exit;
+}
 
 //$result = $mysqli->query("select idMatch from matches where idMatch not in(select idMatch from player_match) and idMatch not in (37857,82928,82916,82900,82944,82116,76210,83048,83065,83065,83085,83082) ORDER BY downloadedtime desc limit 0,50");
 
