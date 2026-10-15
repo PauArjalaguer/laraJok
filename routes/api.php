@@ -4,6 +4,7 @@ use App\Http\Controllers\MatchesController;
 use App\Http\Controllers\ScrapingController;
 use App\Http\Controllers\ScrapingFCF;
 use App\Http\Controllers\FecapaController;
+use App\Http\Controllers\ExternalAppController;
 use App\Models\Agenda;
 use App\Models\Classifications;
 use App\Models\Clubs;
@@ -164,4 +165,61 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get("scrapingFCF/teams",function(){
     return ScrapingFCF::scrapeTeams();
 });
+
+// ═══════════════════════════════════════════════════════════════
+// FECAPA CRONS → FecapaController
+// Substitueixen els php directes de public/crons/
+// ═══════════════════════════════════════════════════════════════
+
+// 02 — Insereix/actualitza lligues de FECAPA a la BD
+// Equivalent: public/crons/02_lligues_insertaLLiguesaDDBB.php
 Route::get('/fecapa/gestio_lligues', [FecapaController::class, 'gestio_lligues']);
+
+// 04 — Parseja calendaris: grups, equips i partits  (cada 10 min al crontab)
+// Equivalent: public/crons/04_lligues_parsejaICopiaPartits.php
+// Params opcionals: ?idLeague=XXX&force=1&idSeason=41
+Route::get('/fecapa/parseja_partits', [FecapaController::class, 'parseja_partits']);
+
+// 07 — Actualitza resultats dels partits del dia  (cada 1 min al crontab)
+// Equivalent: public/crons/07_actualitzaPartits.php
+// Params opcionals: ?force=1
+Route::get('/fecapa/actualitza_partits', [FecapaController::class, 'actualitza_partits']);
+
+// 06 — Parseja classificacions de cada lliga  (hourly 15min al crontab)
+// Equivalent: public/crons/06_classificacions_parseja.php
+// Params opcionals: ?idLeague=XXX
+Route::get('/fecapa/parseja_classificacions', [FecapaController::class, 'parseja_classificacions']);
+
+// parseMatch — Parseja acta del partit: jugadors, arbitre, faltes  (hourly 40min al crontab)
+// Equivalent: public/crons/parseMatch.php
+Route::get('/fecapa/parseja_acta_partits', [FecapaController::class, 'parseja_acta_partits']);
+
+// parseTeams — Actualitza idCategory i idSeason dels equips
+// Equivalent: public/crons/parseTeams.php
+Route::get('/fecapa/parseja_equips', [FecapaController::class, 'parseja_equips']);
+
+// parseClubsAndPlaces — Parseja clubs i pavellons de l'agenda FECAPA
+// Equivalent: public/crons/parseClubsAndPlaces.php
+Route::get('/fecapa/parseja_clubs_i_pavellons', [FecapaController::class, 'parseja_clubs_i_pavellons']);
+
+// Post-cron cleanup manual: recalcula idCategory, phases, equips, etc.
+Route::get('/fecapa/post_cron_cleanup', [FecapaController::class, 'post_cron_cleanup']);
+
+// ═══════════════════════════════════════════════════════════════
+// EXTERNAL APPS API (COPweb, club websites, mobile apps)
+// ═══════════════════════════════════════════════════════════════
+Route::prefix('external')->group(function () {
+    Route::get('/propers_partits', [ExternalAppController::class, 'propersPartits']);
+    Route::get('/resultats', [ExternalAppController::class, 'resultats']);
+    Route::get('/tots_partits', [ExternalAppController::class, 'totsElsPartits']);
+    Route::get('/partits', [ExternalAppController::class, 'partits']);
+    Route::get('/classificacions', [ExternalAppController::class, 'classificacions']);
+    Route::get('/equips', [ExternalAppController::class, 'equips']);
+    Route::get('/equip', [ExternalAppController::class, 'equip']);
+    Route::get('/lligues', [ExternalAppController::class, 'lligues']);
+    Route::get('/noticies', [ExternalAppController::class, 'noticies']);
+    Route::get('/croniques', [ExternalAppController::class, 'croniques']);
+    Route::get('/search', [ExternalAppController::class, 'search']);
+    Route::get('/multimedia', [ExternalAppController::class, 'multimedia']);
+});
+
