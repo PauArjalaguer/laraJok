@@ -69,8 +69,6 @@ class Matches extends Model
             ->where('idGroup', $idGroup)
             ->whereNotNull('localResult')
             ->whereNotNull('visitorResult')
-            ->where('localResult', '!=', '')
-            ->where('visitorResult', '!=', '')
             ->orderBy('matchDate', 'desc')
             ->get();
 
