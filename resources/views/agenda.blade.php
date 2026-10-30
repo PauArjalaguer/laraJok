@@ -14,7 +14,7 @@
         <!-- SEARCH INPUT -->
         <div class="relative w-full md:w-80">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
-            <input type="text" id="searchInput" placeholder="Cerca equip, competició o data..." class="w-full pl-9 pr-4 py-2 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-900 dark:text-white border border-stone-200 dark:border-stone-800 focus:outline-none focus:border-[#1c1917] dark:focus:border-[#1c1917] text-xs font-display font-medium shadow-xs transition-colors" oninput="filterAgenda()" />
+            <input type="text" id="searchInput" value="{{ request('q') }}" placeholder="Cerca equip, competició o data..." class="w-full pl-9 pr-4 py-2 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-900 dark:text-white border border-stone-200 dark:border-stone-800 focus:outline-none focus:border-[#1c1917] dark:focus:border-[#1c1917] text-xs font-display font-medium shadow-xs transition-colors" oninput="filterAgenda()" />
         </div>
     </div>
 </div>
@@ -34,7 +34,7 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-stone-100 dark:divide-stone-800/80">
-                @foreach($agenda as $match)
+                @forelse($agenda as $match)
                 @php
                     $localName = App\Http\Controllers\TeamsController::teamFormat($match->localTeamName);
                     $visitorName = App\Http\Controllers\TeamsController::teamFormat($match->visitorTeamName);
@@ -107,45 +107,82 @@
                         </a>
                     </td>
                 </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<script>
-    function filterAgenda() {
-        const query = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
-        const rows = document.querySelectorAll('#agendaTable tbody tr.agenda-row');
-        let visibleCount = 0;
-
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            if (text.includes(query)) {
-                row.style.display = '';
-                visibleCount++;
-            } else {
-                row.style.display = 'none';
-            }
-        });
-
-        let noResultsTr = document.getElementById('noResultsAgenda');
-        if (visibleCount === 0 && rows.length > 0) {
-            if (!noResultsTr) {
-                noResultsTr = document.createElement('tr');
-                noResultsTr.id = 'noResultsAgenda';
-                noResultsTr.innerHTML = `
+                @empty
+                <tr id="noResultsAgenda">
                     <td colspan="6" class="p-8 text-center text-xs font-bold text-stone-500 dark:text-stone-400">
                         <i class="fa-solid fa-magnifying-glass text-2xl text-stone-400 mb-2 block"></i>
                         No s'ha trobat cap partit que coincideixi amb la cerca.
                     </td>
-                `;
-                document.querySelector('#agendaTable tbody').appendChild(noResultsTr);
-            }
-            noResultsTr.style.display = '';
-        } else if (noResultsTr) {
-            noResultsTr.style.display = 'none';
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    <div id="agenda-loading-trigger" data-next-url="{{ $agenda->nextPageUrl() }}" class="py-6 flex justify-center">
+        @if($agenda->hasMorePages())
+            <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-stone-900 dark:border-white"></div>
+        @endif
+    </div>
+</div>
+
+<script>
+    let nextPageUrl = document.getElementById('agenda-loading-trigger')?.dataset.nextUrl || '';
+    let loading = false;
+    let searchTimer = null;
+
+    const trigger = document.getElementById('agenda-loading-trigger');
+    const tbody = document.querySelector('#agendaTable tbody');
+
+    const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !loading && nextPageUrl) {
+            loadMoreAgenda();
         }
+    }, { rootMargin: '200px' });
+
+    if (trigger && nextPageUrl) observer.observe(trigger);
+
+    async function loadMoreAgenda() {
+        loading = true;
+        try {
+            const res = await fetch(nextPageUrl);
+            const html = await res.text();
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+            doc.querySelectorAll('#agendaTable tbody tr.agenda-row').forEach(tr => tbody.appendChild(tr));
+            nextPageUrl = doc.getElementById('agenda-loading-trigger')?.dataset.nextUrl || '';
+            if (!nextPageUrl && trigger) {
+                trigger.innerHTML = '';
+                observer.unobserve(trigger);
+            }
+        } finally {
+            loading = false;
+        }
+    }
+
+    function filterAgenda() {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(async () => {
+            const q = (document.getElementById('searchInput')?.value || '').trim();
+            const url = new URL(window.location.href);
+            q ? url.searchParams.set('q', q) : url.searchParams.delete('q');
+            url.searchParams.delete('page');
+            window.history.replaceState({}, '', url);
+
+            loading = true;
+            try {
+                const res = await fetch(url);
+                const html = await res.text();
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+                tbody.innerHTML = doc.querySelector('#agendaTable tbody').innerHTML;
+                nextPageUrl = doc.getElementById('agenda-loading-trigger')?.dataset.nextUrl || '';
+                if (trigger) {
+                    trigger.innerHTML = doc.getElementById('agenda-loading-trigger')?.innerHTML || '';
+                    if (nextPageUrl) observer.observe(trigger);
+                    else observer.unobserve(trigger);
+                }
+            } finally {
+                loading = false;
+            }
+        }, 300);
     }
 </script>
 @endsection

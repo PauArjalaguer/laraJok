@@ -10,11 +10,11 @@ class Agenda extends Model
 {
     use HasFactory;
 
-    public static function get()
+    public static function get(?string $search = null, ?int $perPage = null)
     {
         $maxSeason = DB::table('leagues')->max('idSeason');
 
-        $agenda = DB::table('matches as m')
+        $query = DB::table('matches as m')
             ->select([
                 'm.idMatch',
                 'm.matchDate',
@@ -42,10 +42,22 @@ class Agenda extends Model
             ->leftJoin('clubs as c2', 'c2.idClub', '=', 't2.idClub')
             ->where('l.idSeason', $maxSeason)
             ->where('m.matchDate', '>=', date('Y-m-d'))
+            ->when($search, function ($q, $s) {
+                if (preg_match('/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/', $s, $m)) {
+                    $s = sprintf('%04d-%02d-%02d', $m[3], $m[2], $m[1]);
+                } elseif (preg_match('/^(\d{1,2})\/(\d{1,2})$/', $s, $m)) {
+                    $s = sprintf('-%02d-%02d', $m[2], $m[1]);
+                }
+                $q->where(function ($sub) use ($s) {
+                    $sub->where('t1.teamName', 'like', "%{$s}%")
+                        ->orWhere('t2.teamName', 'like', "%{$s}%")
+                        ->orWhere('p.groupName', 'like', "%{$s}%")
+                        ->orWhere('m.matchDate', 'like', "%{$s}%");
+                });
+            })
             ->orderBy('m.matchDate', 'asc')
-            ->orderBy('m.matchHour', 'asc')
-            ->get();
+            ->orderBy('m.matchHour', 'asc');
 
-        return $agenda;
+        return $perPage ? $query->simplePaginate($perPage)->withQueryString() : $query->get();
     }
 }

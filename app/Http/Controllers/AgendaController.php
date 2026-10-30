@@ -12,10 +12,10 @@ use Illuminate\Http\Request;
 
 class AgendaController extends Controller
 {
-   public function index()
+   public function index(Request $request)
    {
       return view('agenda', [
-         'agenda' => Agenda::get(),
+         'agenda' => Agenda::get($request->query('q'), 60),
          'userSavedData' => User::userSavedData(),
          'merchandisingList' => Merchandisings::merchandisingReturnFiveRandomItems(),
       ]);
