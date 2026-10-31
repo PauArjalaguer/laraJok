@@ -6,8 +6,6 @@ include("curl.php");
 $dom   = new DOMDocument('1.0');
 $url = "https://server2.sidgad.es/fecapa/00_fecapa_agenda_1.php";
 $curled = getCurl($url);
-$html = $dom->loadHTMLFile(mb_convert_encoding($url, 'HTML-ENTITIES', 'UTF-8'));
-
 $html = $dom->loadHTML($curled);
 $dom->preserveWhiteSpace = true;
 $xpath = new DomXPath($dom);

@@ -16,7 +16,7 @@ function cleanName($s)
 
 error_reporting(0);
 ini_set('display_errors', 1);
-//include("curl.php");
+include("curl.php");
 include("cnx/c.php");
 
 /**
@@ -27,19 +27,7 @@ include("cnx/c.php");
 function getPlayerProfile($idPlayer, $idSeason)
 {
     $url = "https://www.server2.sidgad.es/fecapa/profiles/fecapa_profileseason_" . intval($idPlayer) . "_1_" . intval($idSeason) . ".php";
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, ['idm' => 1, 'idc' => $idSeason]);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Origin: http://server2.sidgad.es',
-        'Referer: http://server2.sidgad.es',
-        'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-    ]);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 20);
-    $response = curl_exec($ch);
-    curl_close($ch);
+    $response = getCurl($url);
     return $response ?: null;
 }
 
@@ -133,35 +121,8 @@ function parseMatch($idMatch, $idLeague, $mysqli)
     $mysqli->query("update matches set cronica=NULL where idMatch=" . intval($idMatch));
     $dom   = new DOMDocument('1.0');
     $url = "https://www.server2.sidgad.es/fecapa/fecapa_gr_" . $idMatch . "_1.php";
-    //  $url="https://www.server2.sidgad.es/fecapa/fecapa_gr_83612_1.php";
-    //$curled = getCurl("https://www.server2.sidgad.es/fecapa/fecapa_gr_".$idMatch."_1.php");
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, true);
-    $postData = [
-        'idm' => 1,
-        'idc' => $idLeague,
-        'idp' => $idMatch,
-        'tab' => 'tab_ficha_resumen'
-    ];
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-    // Set the headers
-    $headers = [
-        'Host: server2.sidgad.es',
-        'Origin: http://server2.sidgad.es',
-        'Referer: http://server2.sidgad.es',
-        'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-        'Content-Type: text/html; charset=UTF-8'
-    ];
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec($ch);
+    $response = getCurl($url);
 
-    /*  if (curl_errno($ch)) {
-        echo 'cURL error: ' . curl_error($ch);
-    } else {
-        return $response;
-    } */
     if ($response) {
         $html = $dom->loadHTML($response);
         print_r($html);
